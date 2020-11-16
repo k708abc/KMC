@@ -23,30 +23,27 @@ from pptx.util import Inches, Pt
 input_params: Dict[str, float] = {}
 
 def update_values():
+    input_params["Unit_length"] = float(entry_unit_length.get())
+    input_params["Number_of_z_units"] = float(entry_zunit.get())
+    input_params["Temperature"] = float(entry_temperature.get())
+    input_params["kbt"] = float(entry_temperature.get())*8.617e-5
+    input_params["deposition_rate"] = float(entry_dep_rate.get())
+    input_params["deposition_time"] = float(entry_dep_time.get())
+    input_params["post_anneal"] = float(entry_post_anneal.get())
     input_params["prefactor"] = float(entry_prefactor.get())
-    input_params[""]
-
-
-
-    # calculate deposition speed
-    nl = int(entry_num_cell.get())
-    d_rate = float(entry_dep_rate.get())  # ML/min
-    d_rate = d_rate / 60  # ML/s
-    NBL = 2 * nl * nl  # atoms/ML
-    d_rate = d_rate * NBL  # atoms/s
-
-    text_AgSi_rates["text"] = str("{:.5f}".format(cal_rate(float(entry_AgSi.get()))))
-    text_Si12_rates["text"] = str("{:.5f}".format(cal_rate(float(entry_Si12.get()))))
-    text_Si23_rates["text"] = str("{:.5f}".format(cal_rate(float(entry_Si23.get()))))
-    text_Si34_rates["text"] = str("{:.5f}".format(cal_rate(float(entry_Si34.get()))))
-    text_Si45_rates["text"] = str("{:.5f}".format(cal_rate(float(entry_Si45.get()))))
-    text_Si56_rates["text"] = str("{:.5f}".format(cal_rate(float(entry_Si56.get()))))
-    text_Si_intra_rates["text"] = str("{:.5f}".format(cal_rate(float(entry_Si_intra.get()))))
-    text_Si_inter_rates["text"] = str(
-        "{:.5f}".format(cal_rate(float(entry_Si_intra.get())))
-    )
-    text_Agtp_rates["text"] = str("{:.5f}".format(cal_rate(float(entry_Ag_top.get()))))
-    text_dep_atom_persec["text"] = str("{:.5f}".format(d_rate))
+    # calculate deposition speed in atoms/sec
+    unit_length = int(entry_unit_length.get())
+    deposition_rate = float(entry_dep_rate.get())  # ML/min
+    deposition_rate = deposition_rate/60  # ML/s
+    atoms_in_BL = 2 *unit_length**2  # atoms/ML
+    deposition_rate = deposition_rate*atoms_in_BL  # atoms/s
+    input_params["Atoms_in_BL"] = float(atoms_in_BL)
+    input_params["dep_rate_(atom/s)"] = float(deposition_rate)
+    text_dep_atom_persec["text"] = str("{:.5f}".format(deposition_rate))
+    #update rates
+    for i in range(len(rates_list)):
+        rates_list[i]["text"] = str("{:.5f}".format(cal_rate(float(bonding_entry_list[i].get()))))
+    #
     root.update()
 
 
@@ -701,8 +698,9 @@ def rec_atoms():
 
 
 def cal_rate(E):
-    global kbt, pre
-    rate = pre * math.exp(E / kbt)
+    pre = input_params["prefactor"]
+    kbt = input_params["kbt"]
+    rate = pre * math.exp(E/kbt)
     return rate
 
 
@@ -1972,7 +1970,7 @@ if __name__ == "__main__":
     arx: List[int] = [0, 20, 140, 200, 300, 380, 500, 560, 660]
     ary: List[int] = [0, 20, 50, 100, 130, 160, 0, 190, 220, 250, 280, 310]
     #Initial values
-    Number_of_cells = 5
+    Unit_length = 5
     Number_of_z_units = 5
     Temperature = 550
     kbt = Temperature * 8.617e-5
@@ -2000,13 +1998,13 @@ if __name__ == "__main__":
     root.title("kMC_Si")
     root.geometry("800x550")
     #
-    text_num_cell = tkinter.Label(root, text="Number of cells")
-    text_num_cell.place(x=arx[1], y=ary[1])
-    entry_num_cell = tkinter.Entry(root, text="Number of cells", width=7)
-    entry_num_cell.place(x=arx[2], y=ary[1])
-    entry_num_cell.delete(0, tkinter.END)
-    entry_num_cell.insert(tkinter.END, Number_of_cells)
-    entry_num_cell.bind("<Return>", update)
+    text_unit_length = tkinter.Label(root, text="Number of cells")
+    text_unit_length.place(x=arx[1], y=ary[1])
+    entry_unit_length = tkinter.Entry(root, text="Number of cells", width=7)
+    entry_unit_length.place(x=arx[2], y=ary[1])
+    entry_unit_length.delete(0, tkinter.END)
+    entry_unit_length.insert(tkinter.END, Unit_length)
+    entry_unit_length.bind("<Return>", update)
     #
     text_zunit = tkinter.Label(root, text="Z units")
     text_zunit.place(x=arx[3], y=ary[1])
@@ -2016,13 +2014,13 @@ if __name__ == "__main__":
     entry_zunit.insert(tkinter.END, Number_of_z_units)
     entry_zunit.bind("<Return>", update)
     #
-    text_kbT = tkinter.Label(root, text="T (K)")
-    text_kbT.place(x=arx[5], y=ary[1])
-    entry_kbT = tkinter.Entry(root, text="T (K)", width=7)
-    entry_kbT.place(x=arx[6], y=ary[1])
-    entry_kbT.delete(0, tkinter.END)
-    entry_kbT.insert(tkinter.END, Temperature)
-    entry_kbT.bind("<Return>", update)
+    text_temperature = tkinter.Label(root, text="T (K)")
+    text_temperature.place(x=arx[5], y=ary[1])
+    entry_temperature = tkinter.Entry(root, text="T (K)", width=7)
+    entry_temperature.place(x=arx[6], y=ary[1])
+    entry_temperature.delete(0, tkinter.END)
+    entry_temperature.insert(tkinter.END, Temperature)
+    entry_temperature.bind("<Return>", update)
     #
     text_kbt = tkinter.Label(root, text="kbT")
     text_kbt.place(x=arx[7], y=ary[1])
