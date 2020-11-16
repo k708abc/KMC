@@ -19,12 +19,8 @@ from PIL import Image, ImageGrab
 from pptx import Presentation
 from pptx.util import Inches, Pt
 
-from Modules import tk_set
-
-
 input_params: Dict[str, float] = {}
 
-"""
 def update_values():
     input_params["Unit_length"] = float(entry_unit_length.get())
     input_params["Number_of_z_units"] = float(entry_zunit.get())
@@ -48,12 +44,12 @@ def update_values():
         rates_list[i]["text"] = str("{:.5f}".format(cal_rate(float(bonding_entry_list[i].get()))))
     #
     root.update()
-"""
 
-"""
+
+
 def update(event):
     update_values()
-"""
+
 
 def show_current():
     global atom_set, lattice, c_num, max_layer
@@ -1994,10 +1990,6 @@ if __name__ == "__main__":
     input_params["record_name"] = "KMC"
     input_params["record_image_every"] = 10
     input_params["comments"] = "No comment"
-    #Form GUI
-    tk_set.GUI_set()
-
-    """
     #For adjusting the position of entries
     arx: List[int] = [0, 20, 140, 200, 300, 380, 500, 560, 660]
     ary: List[int] = [0, 20, 50, 100, 130, 160, 0, 190, 220, 250, 280, 310]
@@ -2242,7 +2234,7 @@ if __name__ == "__main__":
     #
     text_coverage = tkinter.Label(root, text="Coverage")
     text_coverage.place(x=670, y=ary[11] + 35)
-    """
+
     #
     button_start = tkinter.Button(
         root, text="Start", command=button_start_clicked, height=1, width=20
@@ -2255,3 +2247,4 @@ if __name__ == "__main__":
     button_close.place(x=180, y=ary[11])
     update_values()
     root.mainloop()
+    
