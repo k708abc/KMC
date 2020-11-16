@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 
-from typing import List
+from typing import List, Dict
 import tkinter as tk
 import tkinter.ttk as ttk
 
 
 class Window(ttk.Frame):
+    kb_eV = 8.617e-5
+    padWE: Dict = dict(sticky=(tk.W, tk.E), padx="0.5m", pady="0.5m")
+
     def __init__(self, master):
         super().__init__(master, padding=2)
         self.create_variables()
@@ -15,7 +18,6 @@ class Window(ttk.Frame):
         self.create_frame_memos()
         self.create_frame_buttons()
         self.create_frame_bar()
-        #
 
     def create_variables(self):
         pass
@@ -70,7 +72,7 @@ class Window(ttk.Frame):
         self.temperautre_energy_label = ttk.Label(self.frame_basics, text="kbT")
         temperature = self.temperature.get()
         self.temperautre_energy = ttk.Label(
-            self.frame_basics, text="{:.3g}".format(float(temperature) * 8.617e-5)
+            self.frame_basics, text="{:.3g}".format(float(temperature) * self.kb_eV)
         )
         # The second row
         self.deposition_rate_label = ttk.Label(
@@ -93,24 +95,23 @@ class Window(ttk.Frame):
     def create_layout_basic(self):
         """Frame for number of cell, Z unit, ..."""
         # the first row
-        padWE = dict(sticky=(tk.W, tk.E), padx="0.5m", pady="0.5m")
-        self.n_cell_label.grid(row=0, column=0, **padWE)
-        self.n_cell.grid(row=0, column=1, **padWE)
-        self.z_unit_label.grid(row=0, column=2, **padWE)
-        self.z_unit.grid(row=0, column=3, **padWE)
-        self.temperature_label.grid(row=0, column=4, **padWE)
-        self.temperature.grid(row=0, column=5, **padWE)
-        self.temperautre_energy_label.grid(row=0, column=6, **padWE)
-        self.temperautre_energy.grid(row=0, column=7, **padWE)
+        self.n_cell_label.grid(row=0, column=0, **self.padWE)
+        self.n_cell.grid(row=0, column=1, **self.padWE)
+        self.z_unit_label.grid(row=0, column=2, **self.padWE)
+        self.z_unit.grid(row=0, column=3, **self.padWE)
+        self.temperature_label.grid(row=0, column=4, **self.padWE)
+        self.temperature.grid(row=0, column=5, **self.padWE)
+        self.temperautre_energy_label.grid(row=0, column=6, **self.padWE)
+        self.temperautre_energy.grid(row=0, column=7, **self.padWE)
         # the second row
-        self.deposition_rate_label.grid(row=1, column=0, **padWE)
-        self.deposition_rate.grid(row=1, column=1, **padWE)
-        self.deposition_time_label.grid(row=1, column=2, **padWE)
-        self.deposition_time.grid(row=1, column=3, **padWE)
-        self.postanneal_time_label.grid(row=1, column=4, **padWE)
-        self.postanneal_time.grid(row=1, column=5, **padWE)
-        self.prefactor_label.grid(row=1, column=6, **padWE)
-        self.prefactor.grid(row=1, column=7, **padWE)
+        self.deposition_rate_label.grid(row=1, column=0, **self.padWE)
+        self.deposition_rate.grid(row=1, column=1, **self.padWE)
+        self.deposition_time_label.grid(row=1, column=2, **self.padWE)
+        self.deposition_time.grid(row=1, column=3, **self.padWE)
+        self.postanneal_time_label.grid(row=1, column=4, **self.padWE)
+        self.postanneal_time.grid(row=1, column=5, **self.padWE)
+        self.prefactor_label.grid(row=1, column=6, **self.padWE)
+        self.prefactor.grid(row=1, column=7, **self.padWE)
 
     def create_widgets_energies(self):
         labels: List[str] = [
@@ -136,15 +137,14 @@ class Window(ttk.Frame):
             self.energylabels.append(ttk.Label(self.frame_energies, text=label))
 
     def create_layout_energies(self):
-        padWE = dict(sticky=(tk.W, tk.E), padx="0.5m", pady="0.5m")
         for i, energylabel in enumerate(self.energylabels):
-            energylabel.grid(row=0, column=i, **padWE)
+            energylabel.grid(row=0, column=i, **self.padWE)
         self.energy_label0 = ttk.Label(self.frame_energies, text="Energy  (eV)")
-        self.energy_label0.grid(row=1, column=0, **padWE)
+        self.energy_label0.grid(row=1, column=0, **self.padWE)
         for i, energy_entry in enumerate(self.energies):
             energy_entry.grid(row=1, column=i + 1)
         self.rate_bond_label = ttk.Label(self.frame_energies, text="Rates/bond")
-        self.rate_bond_label.grid(row=2, **padWE)
+        self.rate_bond_label.grid(row=2, **self.padWE)
 
     def create_widgets_checks(self):
         self.bln_tr = tk.BooleanVar()
@@ -160,17 +160,16 @@ class Window(ttk.Frame):
         self.bln_defect = tk.BooleanVar()
         self.bln_defect.set(True)
         self.chk_defect_label = ttk.Label(
-            self.frame_checks, text="Keep defect in first layer"
+            self.frame_checks, text="Keep defect in the first layer"
         )
         self.chk_defect = ttk.Checkbutton(self.frame_checks, variable=self.bln_defect)
 
     def create_layout_checks(self):
-        padWE = dict(sticky=(tk.W, tk.E), padx="2.5m", pady="1.5m")
-        self.chk_transformation_label.grid(row=0, column=0, **padWE)
-        self.chk_transformation.grid(row=0, column=1, **padWE)
-        self.transformation.grid(row=0, column=2, **padWE)
-        self.chk_defect_label.grid(row=1, column=0, **padWE)
-        self.chk_defect.grid(row=1, column=1, **padWE)
+        self.chk_transformation_label.grid(row=0, column=0, **self.padWE)
+        self.chk_transformation.grid(row=0, column=1, **self.padWE)
+        self.transformation.grid(row=0, column=2, **self.padWE)
+        self.chk_defect_label.grid(row=1, column=0, **self.padWE)
+        self.chk_defect.grid(row=1, column=1, **self.padWE)
 
     def create_widgets_records(self):
         self.record_label = tk.Label(self.frame_records, text="Record")
@@ -184,19 +183,17 @@ class Window(ttk.Frame):
         self.comments.insert(tk.END, "No comments")
 
     def create_layout_records(self):
-        padWE = dict(sticky=(tk.W, tk.E), padx="0.5m", pady="1.5m")
-        self.record_label.grid(row=0, column=0, **padWE)
-        self.record.grid(row=0, column=1, **padWE)
-        self.image_rec_label.grid(row=0, column=2, **padWE)
-        self.image_rec.grid(row=0, column=3, **padWE)
-        self.comments_label.grid(row=1, column=0, **padWE)
-        self.comments.grid(row=1, column=1, columnspan=3, **padWE)
+        self.record_label.grid(row=0, column=0, **self.padWE)
+        self.record.grid(row=0, column=1, **self.padWE)
+        self.image_rec_label.grid(row=0, column=2, **self.padWE)
+        self.image_rec.grid(row=0, column=3, **self.padWE)
+        self.comments_label.grid(row=1, column=0, **self.padWE)
+        self.comments.grid(row=1, column=1, columnspan=3, **self.padWE)
 
     def create_widgets_buttons(self):
-        # padWE = dict(sticky=(tk.W, tk.E), padx="0.5m", pady="2.5m")
         self.start = tk.Button(self.frame_buttons, text="Start", command=None, width=20)
         self.close = tk.Button(
-            self.frame_buttons, text="close", command=self.close, width=20
+            self.frame_buttons, text="close", command=self.close_function, width=20
         )
 
     def create_layout_buttons(self):
@@ -218,7 +215,7 @@ class Window(ttk.Frame):
         self.progress_label.grid(row=0, pady=15)
         self.progress_bar.grid(pady=20)
 
-    def close(self):
+    def close_function(self):
         # plt.close("all")  <<< FIXME
         self.quit()
 
