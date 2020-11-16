@@ -407,93 +407,90 @@ def lattice_form():
         for j in range(0, unit_length):
             for k in range(0, maxz):
                 bond_with = []
-                zv = int(k%6)
+                z_judge = int(k%6)
                 ul_m = unit_length - 1
-
-
-
-
-                if zv == 0:
-                    if i == 0 and k == 0:
-                        bonds_t = [[ml, 0, z + 1], [0, ml, z + 1], [0, 0, z + 1]]
+                if z_judge == 0:
+                    if i == 0 and j == 0:
+                        bond_with = [[ul_m, 0, k + 1], [0, ul_m, k + 1], [0, 0, k + 1]]
                     elif i == 0:
-                        bonds_t = [[ml, k, z + 1], [0, k - 1, z + 1], [0, k, z + 1]]
-                    elif k == 0:
-                        bonds_t = [[i - 1, 0, z + 1], [i, ml, z + 1], [i, 0, z + 1]]
+                        bond_with = [[ul_m, j, k + 1], [0, j - 1, k + 1], [0, j, k + 1]]
+                    elif j == 0:
+                        bond_with = [[i - 1, 0, k + 1], [i, ul_m, k + 1], [i, 0, k + 1]]
                     else:
-                        bonds_t = [[i - 1, k, z + 1], [i, k - 1, z + 1], [i, k, z + 1]]
-                    if z != 0:
-                        bonds_t.append([i, k, z - 1])
+                        bond_with = [[i - 1, j, k + 1], [i, j - 1, k + 1], [i, j, k + 1]]
+                    if k != 0:
+                        bond_with.append([i, j, k - 1])
                     else:
                         pass
-                elif zv == 1:
-                    if i == ml and k == ml:
-                        bonds_t = [[ml, 0, z - 1], [0, ml, z - 1], [ml, ml, z - 1]]
-                    elif i == ml:
-                        bonds_t = [[ml, k + 1, z - 1], [0, k, z - 1], [ml, k, z - 1]]
-                    elif k == ml:
-                        bonds_t = [[i + 1, ml, z - 1], [i, 0, z - 1], [i, ml, z - 1]]
+                elif z_judge == 1:
+                    if i == ul_m and j == ul_m:
+                        bond_with = [[ul_m, 0, k - 1], [0, ul_m, k - 1], [ul_m, ul_m, k - 1]]
+                    elif i == ul_m:
+                        bond_with = [[ul_m, j + 1, k - 1], [0, j, k - 1], [ul_m, j, k - 1]]
+                    elif j == ul_m:
+                        bond_with = [[i + 1, ul_m, k - 1], [i, 0, k - 1], [i, ul_m, k - 1]]
                     else:
-                        bonds_t = [[i + 1, k, z - 1], [i, k + 1, z - 1], [i, k, z - 1]]
-                    bonds_t.append([i, k, z + 1])
-                elif zv == 2:
-                    if i == 0 and k == 0:
-                        bonds_t = [[ml, 0, z + 1], [0, ml, z + 1], [0, 0, z + 1]]
+                        bond_with = [[i + 1, j, k - 1], [i, j + 1, k - 1], [i, j, k - 1]]
+                    bond_with.append([i, j, k + 1])
+                elif z_judge == 2:
+                    if i == 0 and j == 0:
+                        bond_with = [[ul_m, 0, k + 1], [0, ul_m, k + 1], [0, 0, k + 1]]
                     elif i == 0:
-                        bonds_t = [[ml, k, z + 1], [0, k - 1, z + 1], [0, k, z + 1]]
-                    elif k == 0:
-                        bonds_t = [[i - 1, 0, z + 1], [i, ml, z + 1], [i, 0, z + 1]]
+                        bond_with = [[ul_m, j, k + 1], [0, j - 1, k + 1], [0, j, k + 1]]
+                    elif j == 0:
+                        bond_with = [[i - 1, 0, k + 1], [i, ul_m, k + 1], [i, 0, k + 1]]
                     else:
-                        bonds_t = [[i - 1, k, z + 1], [i, k - 1, z + 1], [i, k, z + 1]]
-                    bonds_t.append([i, k, z - 1])
-                elif zv == 3:
-                    if i == ml and k == ml:
-                        bonds_t = [[ml, 0, z - 1], [0, ml, z - 1], [ml, ml, z - 1]]
-                    elif i == ml:
-                        bonds_t = [[ml, k + 1, z - 1], [0, k, z - 1], [ml, k, z - 1]]
-                    elif k == ml:
-                        bonds_t = [[i + 1, ml, z - 1], [i, 0, z - 1], [i, ml, z - 1]]
+                        bond_with = [[i - 1, j, k + 1], [i, j - 1, k + 1], [i, j, k + 1]]
+                    bond_with.append([i, j, k - 1])
+                elif z_judge == 3:
+                    if i == ul_m and j == ul_m:
+                        bond_with = [[ul_m, 0, k - 1], [0, ul_m, k - 1], [ul_m, ul_m, k - 1]]
+                    elif i == ul_m:
+                        bond_with = [[ul_m, j + 1, k - 1], [0, j, k - 1], [ul_m, j, k - 1]]
+                    elif j == ul_m:
+                        bond_with = [[i + 1, ul_m, k - 1], [i, 0, k - 1], [i, ul_m, k - 1]]
                     else:
-                        bonds_t = [[i + 1, k, z - 1], [i, k + 1, z - 1], [i, k, z - 1]]
-                    bonds_t.append([i, k, z + 1])
-                elif zv == 4:
-                    if i == ml and k == ml:
-                        bonds_t = [[ml, 0, z + 1], [0, ml, z + 1], [0, 0, z + 1]]
-                    elif i == ml:
-                        bonds_t = [[0, k, z + 1], [0, k + 1, z + 1], [ml, k + 1, z + 1]]
-                    elif k == ml:
-                        bonds_t = [[i + 1, 0, z + 1], [i, 0, z + 1], [i + 1, ml, z + 1]]
+                        bond_with = [[i + 1, j, k - 1], [i, j + 1, k - 1], [i, j, k - 1]]
+                    bond_with.append([i, j, k + 1])
+                elif z_judge == 4:
+                    if i == ul_m and j == ul_m:
+                        bond_with = [[ul_m, 0, k + 1], [0, ul_m, k + 1], [0, 0, k + 1]]
+                    elif i == ul_m:
+                        bond_with = [[0, j, k + 1], [0, j + 1, k + 1], [ul_m, j + 1, k + 1]]
+                    elif j == ul_m:
+                        bond_with = [[i + 1, 0, k + 1], [i, 0, k + 1], [i + 1, ul_m, k + 1]]
                     else:
-                        bonds_t = [
-                            [i + 1, k, z + 1],
-                            [i + 1, k + 1, z + 1],
-                            [i, k + 1, z + 1],
+                        bond_with = [
+                            [i + 1, j, k + 1],
+                            [i + 1, j + 1, k + 1],
+                            [i, j + 1, k + 1],
                         ]
-                    bonds_t.append([i, k, z - 1])
-                elif zv == 5:
-                    if i == 0 and k == 0:
-                        bonds_t = [[ml, ml, z - 1], [0, ml, z - 1], [ml, 0, z - 1]]
+                    bond_with.append([i, j, k - 1])
+                elif z_judge == 5:
+                    if i == 0 and j == 0:
+                        bond_with = [[ul_m, ul_m, k - 1], [0, ul_m, k - 1], [ul_m, 0, k - 1]]
                     elif i == 0:
-                        bonds_t = [
-                            [0, k - 1, z - 1],
-                            [ml, k, z - 1],
-                            [ml, k - 1, z - 1],
+                        bond_with = [
+                            [0, j - 1, k - 1],
+                            [ul_m, j, k - 1],
+                            [ul_m, j - 1, k - 1],
                         ]
-                    elif k == 0:
-                        bonds_t = [
-                            [i, ml, z - 1],
-                            [i - 1, ml, z - 1],
-                            [i - 1, 0, z - 1],
+                    elif j == 0:
+                        bond_with = [
+                            [i, ul_m, k - 1],
+                            [i - 1, ul_m, k - 1],
+                            [i - 1, 0, k - 1],
                         ]
                     else:
-                        bonds_t = [
-                            [i - 1, k, z - 1],
-                            [i, k - 1, z - 1],
-                            [i - 1, k - 1, z - 1],
+                        bond_with = [
+                            [i - 1, j, k - 1],
+                            [i, j - 1, k - 1],
+                            [i - 1, j - 1, k - 1],
                         ]
-                    bonds_t.append([i, k, z + 1])
-                bonds[i][k].append(bonds_t)
-
+                    bond_with.append([i, j, k + 1])
+                #
+                atom_index = str(i) + str(j) + str(k)
+                bonds[atom_index] = bond_with
 
 def lattice_form_check():
     global lattice, atom_set, bonds, nl, zl
