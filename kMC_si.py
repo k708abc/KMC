@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import numpy as np
 import copy
 import math
 import time
@@ -1793,7 +1792,7 @@ def hist_formation(bx, n):
     for i in range(len(numbers)):
         lay.append(i + 1)
 
-    left = np.arange(len(numbers))
+    left: List[int] = list(range(numbers))
 
     bx.barh(left, numbers)
     bx.set_yticks(left)
