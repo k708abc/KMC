@@ -18,12 +18,12 @@ from pptx import Presentation
 from pptx.util import Inches, Pt
 
 input_params: Dict[str, float] = {}
-lattice: Dict[list] = {}
-atom_set: Dict[int] = {}
-bonds: Dict[list] = {}
-event: Dict[list] = {}
-event_time: Dict[list] = {}
-event_time_tot: Dict[float] = {}
+lattice: Dict[str, list] = {}
+atom_set: Dict[str, int] = {}
+bonds: Dict[str, list] = {}
+event: Dict[str, list] = {}
+event_time: Dict[str, list] = {}
+event_time_tot: Dict[str, float] = {}
 
 
 def update_values():
@@ -325,40 +325,16 @@ def show_current():
 
 def lattice_form():
     #global lattice, atom_set, bonds, event, event_time, event_tot, maxz, max_atom
-    unit_length = input_params["Unit_length"]
-    z_units = input_params["Number_of_z_units"]
+    unit_length = int(input_params["Unit_length"])
+    z_units = int(input_params["Number_of_z_units"])
     zd1 = input_params["intra_distance"]
     zd2 = input_params["inter_distance"]
-
-
     lattice_first = []
-    """
-    lattice = []
-    atom_set = []
-    bonds = []
-    event = []
-    event_tot = []
-    event_time = []
-    """
-
     # Calculating the position of atoms in the first unit in z (first 3 BL)
     for i in range(0, unit_length):
-        #lattice.append([])
         lattice_first.append([])
-        #atom_set.append([])
-        #bonds.append([])
-        #event.append([])
-        #event_tot.append([])
-        #event_time.append([])
         for k in range(0, unit_length):
-            #lattice[-1].append([])
             lattice_first[-1].append([])
-            #atom_set[-1].append([])
-            #bonds[-1].append([])
-            #event[-1].append([])
-            #event_tot[-1].append([])
-            #event_time[-1].append([])
-
             unit_pos = [i, k, 0]  # coodination of the unit cell
             # 6 atoms in a unit in z direction
             # first BL
@@ -370,11 +346,8 @@ def lattice_form():
             # Third BL
             atom5 = [atom4[0], atom4[1], atom4[2] + zd2]
             atom6 = [atom1[0], atom1[1], atom5[2] + zd1]
-
             # latice_first: coodination of all atoms
-            # lattice_num_first: numerization of atoms
             lattice_first[-1][-1].extend([atom1, atom2, atom3, atom4, atom5, atom6])
-
     # Calculating the position of all atoms
     for i in range(0, unit_length):
         for j in range(0, unit_length):
@@ -393,15 +366,8 @@ def lattice_form():
                     event[atom_index] = []
                     event_time[atom_index] = []
                     event_time_tot[atom_index] = 0
-
-
-
-    # lattice: coodination of an atom at [i,k,z]
     maxz = z_units*6 - 1
     input_params["maxz"] = maxz
-
-
-
     # Search for bonding atoms for all the atoms
     for i in range(0, unit_length):
         for j in range(0, unit_length):
@@ -493,78 +459,75 @@ def lattice_form():
                 bonds[atom_index] = bond_with
 
 def lattice_form_check():
-    global lattice, atom_set, bonds, nl, zl
-
+    #For tsting lattice_form
     lattice_form()
-
+    unit_length = int(input_params["Unit_length"])
+    maxz = int(input_params["maxz"])
+    #drawing range
     min_x = -1
-    max_x = (unit_x[0] + unit_y[0]) * nl + 1
+    max_x = (unit_x[0] + unit_y[0]) * unit_length + 1
     min_y = -1
-    max_y = (unit_x[1] + unit_y[1]) * nl + 1
-
-    x = []
-    y = []
-    b = []
-
-    for z in range(len(lattice[0][0])):
-        x.append([])
-        y.append([])
-        b.append([])
-
-        for i in range(len(lattice)):
-            for k in range(len(lattice[i])):
-                xp = lattice[i][k][z][0] * unit_x[0] + lattice[i][k][z][1] * unit_y[0]
-                yp = lattice[i][k][z][0] * unit_x[1] + lattice[i][k][z][1] * unit_y[1]
-
-                x[-1].append(xp)
-                y[-1].append(yp)
-                for u in bonds[i][k][z]:
-
-                    if u[2] >= len(lattice[0][0]):
+    max_y = (unit_x[1] + unit_y[1]) * unit_length + 1
+    x_list = []
+    y_list = []
+    bond_list = []
+    #
+    for k in range(maxz):
+        x_list.append([])
+        y_list.append([])
+        bond_list.append([])
+        for i in range(unit_length):
+            for j in range(unit_length):
+                atom_index = str(i) + str(j) + str(k)
+                atom_pos = lattice[atom_index]
+                #
+                xpos = atom_pos[0] * unit_x[0] + atom_pos[1] * unit_y[0]
+                ypos = atom_pos[0] * unit_x[1] + atom_pos[1] * unit_y[1]
+                #
+                x_list[-1].append(xpos)
+                y_list[-1].append(ypos)
+                bond_with = bonds[atom_index]
+                for u in bond_with:
+                    if u[2] >= maxz:
                         pass
                     else:
-                        xb = (
-                            lattice[u[0]][u[1]][u[2]][0] * unit_x[0]
-                            + lattice[u[0]][u[1]][u[2]][1] * unit_y[0]
+                        atom_index_bond = str(u[0]) + str(u[1]) + str(u[2])
+                        atom_pos_bond = lattice[atom_index_bond]
+                        xpos_b = (
+                            atom_pos_bond[0] * unit_x[0]
+                            + atom_pos_bond[1] * unit_y[0]
                         )
-                        yb = (
-                            lattice[u[0]][u[1]][u[2]][0] * unit_x[1]
-                            + lattice[u[0]][u[1]][u[2]][1] * unit_y[1]
+                        ypos_b = (
+                            atom_pos_bond[0] * unit_x[1]
+                            + atom_pos_bond[1] * unit_y[1]
                         )
 
-                        b[-1].append([[xp, yp], [xb, yb]])
-
-    # first BL
-
-    BL_num = 4
-
+                        bond_list[-1].append([[xpos, ypos], [xpos_b, ypos_b]])
+    # input BL number to be checked
+    BL_num = 3
+    #
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.set(xlim=(min_x, max_x), ylim=(min_y, max_y))
-
     # Draw repeatition unit
-    l1 = mlines.Line2D([0, unit_x[0] * nl], [0, 0], c="black")
-    l2 = mlines.Line2D([unit_x[0] * nl, max_x - 1], [0, max_y - 1], c="black")
-    l3 = mlines.Line2D([max_x - 1, unit_y[0] * nl], [max_y - 1, max_y - 1], c="black")
-    l4 = mlines.Line2D([unit_y[0] * nl, 0], [max_y - 1, 0], c="black")
+    l1 = mlines.Line2D([0, unit_x[0] * unit_length], [0, 0], c="black")
+    l2 = mlines.Line2D([unit_x[0] * unit_length, max_x - 1], [0, max_y - 1], c="black")
+    l3 = mlines.Line2D([max_x - 1, unit_y[0] * unit_length], [max_y - 1, max_y - 1], c="black")
+    l4 = mlines.Line2D([unit_y[0] * unit_length, 0], [max_y - 1, 0], c="black")
     ax.add_line(l1)
     ax.add_line(l2)
     ax.add_line(l3)
     ax.add_line(l4)
-
     # draw bonding
-    for d in b[BL_num * 2]:
+    for d in bond_list[BL_num * 2]:
         l = mlines.Line2D([d[0][0], d[1][0]], [d[0][1], d[1][1]])
         ax.add_line(l)
-
-    for d in b[BL_num * 2 + 1]:
+    for d in bond_list[BL_num * 2 + 1]:
         l = mlines.Line2D([d[0][0], d[1][0]], [d[0][1], d[1][1]])
         ax.add_line(l)
-
     # draw atoms
-    ax.scatter(x[BL_num * 2], y[BL_num * 2], c="b", s=30)
-    ax.scatter(x[BL_num * 2 + 1], y[BL_num * 2 + 1], c="r", s=30)
-
+    ax.scatter(x_list[BL_num * 2], y_list[BL_num * 2], c="b", s=30)
+    ax.scatter(x_list[BL_num * 2 + 1], y_list[BL_num * 2 + 1], c="r", s=30)
     plt.show()
 
 
@@ -1964,8 +1927,8 @@ def cal_start():
 
 
 def button_start_clicked():
-    # lattice_form_check()
-    cal_start()
+    lattice_form_check()
+    #cal_start()
 
 def button_close_clicked():
     plt.close("all")
