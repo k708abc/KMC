@@ -4,13 +4,11 @@ import numpy as np
 import copy
 import math
 import time
-import tkinter
 from typing import List, Dict
 import tkinter as tk
 from tkinter import ttk
 import os
 import random
-import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import matplotlib.patches as pat
 import matplotlib.lines as mlines
@@ -20,6 +18,13 @@ from pptx import Presentation
 from pptx.util import Inches, Pt
 
 input_params: Dict[str, float] = {}
+lattice: Dict[list] = {}
+atom_set: Dict[int] = {}
+bonds: Dict[list] = {}
+event: Dict[list] = {}
+event_time: Dict[list] = {}
+event_time_tot: Dict[float] = {}
+
 
 def update_values():
     input_params["Unit_length"] = float(entry_unit_length.get())
@@ -45,10 +50,9 @@ def update_values():
     #
     root.update()
 
-
-
 def update(event):
     update_values()
+
 
 
 def show_current():
@@ -320,34 +324,40 @@ def show_current():
 
 
 def lattice_form():
-    global lattice, atom_set, bonds, nl, zl, event, event_time, event_tot, maxz, max_atom
-    nl = int(entry_1.get())
-    zl = int(entry_zunit.get())
+    #global lattice, atom_set, bonds, event, event_time, event_tot, maxz, max_atom
+    unit_length = input_params["Unit_length"]
+    z_units = input_params["Number_of_z_units"]
+    zd1 = input_params["intra_distance"]
+    zd2 = input_params["inter_distance"]
+
+
     lattice_first = []
+    """
     lattice = []
     atom_set = []
     bonds = []
     event = []
     event_tot = []
     event_time = []
-    maxz = 0
+    """
+
     # Calculating the position of atoms in the first unit in z (first 3 BL)
-    for i in range(0, nl):
-        lattice.append([])
+    for i in range(0, unit_length):
+        #lattice.append([])
         lattice_first.append([])
-        atom_set.append([])
-        bonds.append([])
-        event.append([])
-        event_tot.append([])
-        event_time.append([])
-        for k in range(0, nl):
-            lattice[-1].append([])
+        #atom_set.append([])
+        #bonds.append([])
+        #event.append([])
+        #event_tot.append([])
+        #event_time.append([])
+        for k in range(0, unit_length):
+            #lattice[-1].append([])
             lattice_first[-1].append([])
-            atom_set[-1].append([])
-            bonds[-1].append([])
-            event[-1].append([])
-            event_tot[-1].append([])
-            event_time[-1].append([])
+            #atom_set[-1].append([])
+            #bonds[-1].append([])
+            #event[-1].append([])
+            #event_tot[-1].append([])
+            #event_time[-1].append([])
 
             unit_pos = [i, k, 0]  # coodination of the unit cell
             # 6 atoms in a unit in z direction
@@ -366,34 +376,43 @@ def lattice_form():
             lattice_first[-1][-1].extend([atom1, atom2, atom3, atom4, atom5, atom6])
 
     # Calculating the position of all atoms
-    for i in range(len(lattice_first)):
-        for k in range(len(lattice_first[i])):
-            for u in range(0, zl):
-                for z in range(len(lattice_first[i][k])):
-                    lattice[i][k].append(
-                        [
-                            round(lattice_first[i][k][z][0], 5),
-                            round(lattice_first[i][k][z][1], 5),
-                            round(lattice_first[i][k][z][2] + u * 2.448, 5),
+    for i in range(0, unit_length):
+        for j in range(0, unit_length):
+            for k in range(0, z_units):
+                for l in range(len(lattice_first[i][k])):
+                    x_index = i
+                    y_index = j
+                    z_index = k*len(lattice_first[i][k]) + l
+                    atom_index = str(x_index) + str(y_index) + str(z_index)
+                    lattice[atom_index] = [
+                            round(lattice_first[i][j][l][0], 5),
+                            round(lattice_first[i][j][l][1], 5),
+                            round(lattice_first[i][j][l][2] + k * 2.448, 5),
                         ]
-                    )
+                    atom_set[atom_index] = 0
+                    event[atom_index] = []
+                    event_time[atom_index] = []
+                    event_time_tot[atom_index] = 0
 
-                    atom_set[i][k].append(0)
-                    event[i][k].append([])
-                    event_time[i][k].append([])
-                    event_tot[i][k].append(0)
+
 
     # lattice: coodination of an atom at [i,k,z]
-    maxz = len(lattice[0][0]) - 1
-    max_atom = maxz * nl * nl
+    maxz = z_units*6 - 1
+    input_params["maxz"] = maxz
+
+
 
     # Search for bonding atoms for all the atoms
-    for i in range(len(lattice)):
-        for k in range(len(lattice[i])):
-            for z in range(len(lattice[i][k])):
-                bonds_t = []
-                zv = int(z % 6)
-                ml = nl - 1
+    for i in range(0, unit_length):
+        for j in range(0, unit_length):
+            for k in range(0, maxz):
+                bond_with = []
+                zv = int(k%6)
+                ul_m = unit_length - 1
+
+
+
+
                 if zv == 0:
                     if i == 0 and k == 0:
                         bonds_t = [[ml, 0, z + 1], [0, ml, z + 1], [0, 0, z + 1]]
@@ -1819,7 +1838,7 @@ def figure_draw(n):
 
 def show_pictures():
     global canvas, imnum, fig
-    root_p = tkinter.Toplevel()
+    root_p = tk.Toplevel()
     root_p.geometry("650x630")
 
     def p1_clicked():
@@ -1846,23 +1865,23 @@ def show_pictures():
         text_p4["text"] = str(cov_rec[imnum])
         text_p6["text"] = str(imnum + 1) + "/" + str(len(cov_rec))
 
-    button_p1 = tkinter.Button(
+    button_p1 = tk.Button(
         root_p, text="Previous", command=p1_clicked, height=2, width=25
     )
     button_p1.place(x=30, y=560)
-    button_p2 = tkinter.Button(
+    button_p2 = tk.Button(
         root_p, text="Next", command=p2_clicked, height=2, width=25
     )
     button_p2.place(x=230, y=560)
-    text_p7 = tkinter.Label(root_p, text="Time: ", font=("", 16))
+    text_p7 = tk.Label(root_p, text="Time: ", font=("", 16))
     text_p7.place(x=30, y=500)
-    text_p8 = tkinter.Label(root_p, text=str(cov_rec[0]), font=("", 16))
+    text_p8 = tk.Label(root_p, text=str(cov_rec[0]), font=("", 16))
     text_p8.place(x=130, y=500)
-    text_p3 = tkinter.Label(root_p, text="Coverage: ", font=("", 16))
+    text_p3 = tk.Label(root_p, text="Coverage: ", font=("", 16))
     text_p3.place(x=230, y=500)
-    text_p4 = tkinter.Label(root_p, text=str(cov_rec[0]), font=("", 16))
+    text_p4 = tk.Label(root_p, text=str(cov_rec[0]), font=("", 16))
     text_p4.place(x=350, y=500)
-    text_p6 = tkinter.Label(root_p, text="1/" + str(len(cov_rec)), font=("", 16))
+    text_p6 = tk.Label(root_p, text="1/" + str(len(cov_rec)), font=("", 16))
     text_p6.place(x=450, y=500)
     imnum = len(cov_rec) - 1
     fig = plt.Figure()
@@ -1878,7 +1897,7 @@ def show_pictures():
         plt.close("all")
         root_p.destroy()
 
-    button_closep = tkinter.Button(
+    button_closep = tk.Button(
         root_p, text="Close", command=button_closep_clicked, height=2, width=25
     )
     button_closep.place(x=430, y=560)
@@ -1951,18 +1970,16 @@ def button_start_clicked():
     # lattice_form_check()
     cal_start()
 
-
 def button_close_clicked():
     plt.close("all")
     root.destroy()
-
 
 if __name__ == "__main__":
     unit_x: List[float] = [1, 0, 0]
     unit_y: List[float] = [0.5, 0.866, 0]
     unit_z: List[float] = [0, 0, 1]
-    #zd1 = 0.204
-    #zd2 = 0.612
+    input_params["intra_distance"] = 0.204
+    input_params["inter_distance"] = 0.612
     input_params["max_layer"] = 0
     #max_layer = 0
     input_params["Saved_images"] = 0    #Use instead of "c_num"
@@ -1998,143 +2015,143 @@ if __name__ == "__main__":
     root.title("kMC_Si")
     root.geometry("800x550")
     #
-    text_unit_length = tkinter.Label(root, text="Number of cells")
+    text_unit_length = tk.Label(root, text="Number of cells")
     text_unit_length.place(x=arx[1], y=ary[1])
-    entry_unit_length = tkinter.Entry(root, text="Number of cells", width=7)
+    entry_unit_length = tk.Entry(root, text="Number of cells", width=7)
     entry_unit_length.place(x=arx[2], y=ary[1])
-    entry_unit_length.delete(0, tkinter.END)
-    entry_unit_length.insert(tkinter.END, input_params["Unit_length"] )
+    entry_unit_length.delete(0, tk.END)
+    entry_unit_length.insert(tk.END, input_params["Unit_length"] )
     entry_unit_length.bind("<Return>", update)
     #
-    text_zunit = tkinter.Label(root, text="Z units")
+    text_zunit = tk.Label(root, text="Z units")
     text_zunit.place(x=arx[3], y=ary[1])
-    entry_zunit = tkinter.Entry(root, text="Z units", width=7)
+    entry_zunit = tk.Entry(root, text="Z units", width=7)
     entry_zunit.place(x=arx[4], y=ary[1])
-    entry_zunit.delete(0, tkinter.END)
-    entry_zunit.insert(tkinter.END, input_params["Number_of_z_units"])
+    entry_zunit.delete(0, tk.END)
+    entry_zunit.insert(tk.END, input_params["Number_of_z_units"])
     entry_zunit.bind("<Return>", update)
     #
-    text_temperature = tkinter.Label(root, text="T (K)")
+    text_temperature = tk.Label(root, text="T (K)")
     text_temperature.place(x=arx[5], y=ary[1])
-    entry_temperature = tkinter.Entry(root, text="T (K)", width=7)
+    entry_temperature = tk.Entry(root, text="T (K)", width=7)
     entry_temperature.place(x=arx[6], y=ary[1])
-    entry_temperature.delete(0, tkinter.END)
-    entry_temperature.insert(tkinter.END, input_params["Temperature"])
+    entry_temperature.delete(0, tk.END)
+    entry_temperature.insert(tk.END, input_params["Temperature"])
     entry_temperature.bind("<Return>", update)
     #
-    text_kbt = tkinter.Label(root, text="kbT")
+    text_kbt = tk.Label(root, text="kbT")
     text_kbt.place(x=arx[7], y=ary[1])
-    text_kbt = tkinter.Label(root, text=str("{:.3g}".format(input_params["kbt"])))
+    text_kbt = tk.Label(root, text=str("{:.3g}".format(input_params["kbt"])))
     text_kbt.place(x=arx[8], y=ary[1])
     #
-    text_dep_rate = tkinter.Label(root, text="dep_rate (ML/min)")
+    text_dep_rate = tk.Label(root, text="dep_rate (ML/min)")
     text_dep_rate.place(x=arx[1], y=ary[2])
-    entry_dep_rate = tkinter.Entry(root, text="dep_rate", width=7)
+    entry_dep_rate = tk.Entry(root, text="dep_rate", width=7)
     entry_dep_rate.place(x=arx[2], y=ary[2])
-    entry_dep_rate.delete(0, tkinter.END)
-    entry_dep_rate.insert(tkinter.END, input_params["deposition_rate"])
+    entry_dep_rate.delete(0, tk.END)
+    entry_dep_rate.insert(tk.END, input_params["deposition_rate"])
     entry_dep_rate.bind("<Return>", update)
     #
-    text_dep_atom_persec = tkinter.Label(root, text="0")
+    text_dep_atom_persec = tk.Label(root, text="0")
     text_dep_atom_persec.place(x=arx[2], y=ary[2] + 30)
     #
-    text_dep_time = tkinter.Label(root, text="Dep.time (min)")
+    text_dep_time = tk.Label(root, text="Dep.time (min)")
     text_dep_time.place(x=arx[3], y=ary[2])
-    entry_dep_time = tkinter.Entry(root, text="Dep.time", width=7)
+    entry_dep_time = tk.Entry(root, text="Dep.time", width=7)
     entry_dep_time.place(x=arx[4], y=ary[2])
-    entry_dep_time.delete(0, tkinter.END)
-    entry_dep_time.insert(tkinter.END, input_params["deposition_time"])
+    entry_dep_time.delete(0, tk.END)
+    entry_dep_time.insert(tk.END, input_params["deposition_time"])
     entry_dep_time.bind("<Return>", update)
     #
-    text_post_anneal = tkinter.Label(root, text="Post anneal (min)")
+    text_post_anneal = tk.Label(root, text="Post anneal (min)")
     text_post_anneal.place(x=arx[5], y=ary[2])
-    entry_post_anneal = tkinter.Entry(root, text="Post annealing", width=7)
+    entry_post_anneal = tk.Entry(root, text="Post annealing", width=7)
     entry_post_anneal.place(x=arx[6], y=ary[2])
-    entry_post_anneal.delete(0, tkinter.END)
-    entry_post_anneal.insert(tkinter.END, input_params["post_anneal"] )
+    entry_post_anneal.delete(0, tk.END)
+    entry_post_anneal.insert(tk.END, input_params["post_anneal"] )
     entry_post_anneal.bind("<Return>", update)
     #
-    text_prefactor = tkinter.Label(root, text="prefactor (1/s)")
+    text_prefactor = tk.Label(root, text="prefactor (1/s)")
     text_prefactor.place(x=arx[7], y=ary[2])
-    entry_prefactor = tkinter.Entry(root, text="Prefactor (1/s)", width=7)
+    entry_prefactor = tk.Entry(root, text="Prefactor (1/s)", width=7)
     entry_prefactor.place(x=arx[8], y=ary[2])
-    entry_prefactor.delete(0, tkinter.END)
-    entry_prefactor.insert(tkinter.END, '{:.1e}'.format(input_params["prefactor"]))
+    entry_prefactor.delete(0, tk.END)
+    entry_prefactor.insert(tk.END, '{:.1e}'.format(input_params["prefactor"]))
     entry_prefactor.bind("<Return>", update)    
     #set bonding parameters
-    text_bonding = tkinter.Label(root, text="Energy")
+    text_bonding = tk.Label(root, text="Energy")
     text_bonding.place(x=20, y=ary[4])
     # Ag-Si
-    text_AgSi = tkinter.Label(root, text="Ag-Si")
+    text_AgSi = tk.Label(root, text="Ag-Si")
     text_AgSi.place(x=100, y=ary[3])
-    entry_AgSi = tkinter.Entry(root, text="Ag-Si", width=7)
+    entry_AgSi = tk.Entry(root, text="Ag-Si", width=7)
     entry_AgSi.place(x=100, y=ary[4])
-    entry_AgSi.delete(0, tkinter.END)
-    entry_AgSi.insert(tkinter.END, input_params["bond_Ag_Si"] )
+    entry_AgSi.delete(0, tk.END)
+    entry_AgSi.insert(tk.END, input_params["bond_Ag_Si"] )
     entry_AgSi.bind("<Return>", update)
     # Si1-2
-    text_Si12 = tkinter.Label(root, text="Si(1-2)")
+    text_Si12 = tk.Label(root, text="Si(1-2)")
     text_Si12.place(x=180, y=ary[3])
-    entry_Si12 = tkinter.Entry(root, text="Si(1-2)", width=7)
+    entry_Si12 = tk.Entry(root, text="Si(1-2)", width=7)
     entry_Si12.place(x=180, y=ary[4])
-    entry_Si12.delete(0, tkinter.END)
-    entry_Si12.insert(tkinter.END, input_params["bond_Si1_Si2"])
+    entry_Si12.delete(0, tk.END)
+    entry_Si12.insert(tk.END, input_params["bond_Si1_Si2"])
     entry_Si12.bind("<Return>", update)
     # Si2-3
-    text_Si23 = tkinter.Label(root, text="Si(2-3)")
+    text_Si23 = tk.Label(root, text="Si(2-3)")
     text_Si23.place(x=260, y=ary[3])
-    entry_Si23 = tkinter.Entry(root, text="Si(2-3)", width=7)
+    entry_Si23 = tk.Entry(root, text="Si(2-3)", width=7)
     entry_Si23.place(x=260, y=ary[4])
-    entry_Si23.delete(0, tkinter.END)
-    entry_Si23.insert(tkinter.END, input_params["bond_Si2_Si3"])
+    entry_Si23.delete(0, tk.END)
+    entry_Si23.insert(tk.END, input_params["bond_Si2_Si3"])
     entry_Si23.bind("<Return>", update)
     # Si3-4
-    text_Si34 = tkinter.Label(root, text="Si(3-4)")
+    text_Si34 = tk.Label(root, text="Si(3-4)")
     text_Si34.place(x=340, y=ary[3])
-    entry_Si34 = tkinter.Entry(root, text="Si(3-4)", width=7)
+    entry_Si34 = tk.Entry(root, text="Si(3-4)", width=7)
     entry_Si34.place(x=340, y=ary[4])
-    entry_Si34.delete(0, tkinter.END)
-    entry_Si34.insert(tkinter.END, input_params["bond_Si3_Si4"])
+    entry_Si34.delete(0, tk.END)
+    entry_Si34.insert(tk.END, input_params["bond_Si3_Si4"])
     entry_Si34.bind("<Return>", update)
     # Si4-5
-    text_Si45 = tkinter.Label(root, text="Si(4-5)")
+    text_Si45 = tk.Label(root, text="Si(4-5)")
     text_Si45.place(x=420, y=ary[3])
-    entry_Si45 = tkinter.Entry(root, text="Si(4-5)", width=7)
+    entry_Si45 = tk.Entry(root, text="Si(4-5)", width=7)
     entry_Si45.place(x=420, y=ary[4])
-    entry_Si45.delete(0, tkinter.END)
-    entry_Si45.insert(tkinter.END, input_params["bond_Si4_Si5"])
+    entry_Si45.delete(0, tk.END)
+    entry_Si45.insert(tk.END, input_params["bond_Si4_Si5"])
     entry_Si45.bind("<Return>", update)
     # Si5-6
-    text_Si56 = tkinter.Label(root, text="Si(5-6)")
+    text_Si56 = tk.Label(root, text="Si(5-6)")
     text_Si56.place(x=500, y=ary[3])
-    entry_Si56 = tkinter.Entry(root, text="Si(5-6)", width=7)
+    entry_Si56 = tk.Entry(root, text="Si(5-6)", width=7)
     entry_Si56.place(x=500, y=ary[4])
-    entry_Si56.delete(0, tkinter.END)
-    entry_Si56.insert(tkinter.END, input_params["bond_Si5_Si6"])
+    entry_Si56.delete(0, tk.END)
+    entry_Si56.insert(tk.END, input_params["bond_Si5_Si6"])
     entry_Si56.bind("<Return>", update)
     # else intra layers
-    text_Si_intra = tkinter.Label(root, text="Si(intra)")
+    text_Si_intra = tk.Label(root, text="Si(intra)")
     text_Si_intra.place(x=580, y=ary[3])
-    entry_Si_intra = tkinter.Entry(root, text="Si(intra)", width=7)
+    entry_Si_intra = tk.Entry(root, text="Si(intra)", width=7)
     entry_Si_intra.place(x=580, y=ary[4])
-    entry_Si_intra.delete(0, tkinter.END)
-    entry_Si_intra.insert(tkinter.END, input_params["bond_Si_intra"])
+    entry_Si_intra.delete(0, tk.END)
+    entry_Si_intra.insert(tk.END, input_params["bond_Si_intra"])
     entry_Si_intra.bind("<Return>", update)
     # else inter layers
-    text_Si_inter = tkinter.Label(root, text="Si(inter)")
+    text_Si_inter = tk.Label(root, text="Si(inter)")
     text_Si_inter.place(x=660, y=ary[3])
-    entry_Si_inter = tkinter.Entry(root, text="Si(inter)", width=7)
+    entry_Si_inter = tk.Entry(root, text="Si(inter)", width=7)
     entry_Si_inter.place(x=660, y=ary[4])
-    entry_Si_inter.delete(0, tkinter.END)
-    entry_Si_inter.insert(tkinter.END, input_params["bond_Si_inter"])
+    entry_Si_inter.delete(0, tk.END)
+    entry_Si_inter.insert(tk.END, input_params["bond_Si_inter"])
     entry_Si_inter.bind("<Return>", update)
     # Agtop
-    text_Ag_top = tkinter.Label(root, text="Ag(top)")
+    text_Ag_top = tk.Label(root, text="Ag(top)")
     text_Ag_top.place(x=740, y=ary[3])
-    entry_Ag_top = tkinter.Entry(root, text="Ag(top)", width=7)
+    entry_Ag_top = tk.Entry(root, text="Ag(top)", width=7)
     entry_Ag_top.place(x=740, y=ary[4])
-    entry_Ag_top.delete(0, tkinter.END)
-    entry_Ag_top.insert(tkinter.END, input_params["bond_Ag_top"])
+    entry_Ag_top.delete(0, tk.END)
+    entry_Ag_top.insert(tk.END, input_params["bond_Ag_top"])
     entry_Ag_top.bind("<Return>", update)
     #bond entry lists
     bonding_entry_list = [
@@ -2142,34 +2159,34 @@ if __name__ == "__main__":
         entry_Si56, entry_Si_intra, entry_Si_inter
         ]
     # Reference rates
-    text_rates = tkinter.Label(root, text="Rates/bond")
+    text_rates = tk.Label(root, text="Rates/bond")
     text_rates.place(x=20, y=ary[5])
     # Ag-Si
-    text_AgSi_rates = tkinter.Label(root, text="0")
+    text_AgSi_rates = tk.Label(root, text="0")
     text_AgSi_rates.place(x=100, y=ary[5])
     # Si1-2
-    text_Si12_rates = tkinter.Label(root, text="0")
+    text_Si12_rates = tk.Label(root, text="0")
     text_Si12_rates.place(x=180, y=ary[5])
     # Si2-3
-    text_Si23_rates = tkinter.Label(root, text="0")
+    text_Si23_rates = tk.Label(root, text="0")
     text_Si23_rates.place(x=260, y=ary[5])
     # Si3-4
-    text_Si34_rates = tkinter.Label(root, text="0")
+    text_Si34_rates = tk.Label(root, text="0")
     text_Si34_rates.place(x=340, y=ary[5])
     # Si4-5
-    text_Si45_rates = tkinter.Label(root, text="0")
+    text_Si45_rates = tk.Label(root, text="0")
     text_Si45_rates.place(x=420, y=ary[5])
     # Si5-6
-    text_Si56_rates = tkinter.Label(root, text="0")
+    text_Si56_rates = tk.Label(root, text="0")
     text_Si56_rates.place(x=500, y=ary[5])
     # else between layers
-    text_Si_intra_rates = tkinter.Label(root, text="0")
+    text_Si_intra_rates = tk.Label(root, text="0")
     text_Si_intra_rates.place(x=580, y=ary[5])
     # else inter layers
-    text_Si_inter_rates = tkinter.Label(root, text="0")
+    text_Si_inter_rates = tk.Label(root, text="0")
     text_Si_inter_rates.place(x=660, y=ary[5])
     # Agtop
-    text_Agtp_rates = tkinter.Label(root, text="0")
+    text_Agtp_rates = tk.Label(root, text="0")
     text_Agtp_rates.place(x=740, y=ary[5])
     #rates list
     rates_list = [
@@ -2177,71 +2194,70 @@ if __name__ == "__main__":
         text_Si45_rates, text_Si56_rates, text_Si_intra_rates, text_Si_inter_rates
     ]
     #set transformation
-    bln_transformation = tkinter.BooleanVar()
+    bln_transformation = tk.BooleanVar()
     bln_transformation.set(True)
-    chk_transformation = tkinter.Checkbutton(root, variable=bln_transformation, text="Transformation")
+    chk_transformation = tk.Checkbutton(root, variable=bln_transformation, text="Transformation")
     chk_transformation.place(x=20, y=ary[7])
-    entry_transformation = tkinter.Entry(root, text="transformation", width=7)
+    entry_transformation = tk.Entry(root, text="transformation", width=7)
     entry_transformation.place(x=200, y=ary[7] + 5)
-    entry_transformation.delete(0, tkinter.END)
-    entry_transformation.insert(tkinter.END, input_params["transformation_energy"])
+    entry_transformation.delete(0, tk.END)
+    entry_transformation.insert(tk.END, input_params["transformation_energy"])
     entry_transformation.bind("<Return>", update)
     #set keep defects
-    bln_keep_defect = tkinter.BooleanVar()
+    bln_keep_defect = tk.BooleanVar()
     bln_keep_defect.set(True)
-    chk_keep_defect = tkinter.Checkbutton(
+    chk_keep_defect = tk.Checkbutton(
         root, variable=bln_keep_defect, text="Keep a defect in first layer"
     )
     chk_keep_defect.place(x=20, y=ary[8])
     #Set recording settings
-    text_record = tkinter.Label(root, text="Record")
+    text_record = tk.Label(root, text="Record")
     text_record.place(x=20, y=ary[9])
-    entry_record = tkinter.Entry(root, text="Name", width=50)
+    entry_record = tk.Entry(root, text="Name", width=50)
     entry_record.place(x=100, y=ary[9])
-    entry_record.delete(0, tkinter.END)
-    entry_record.insert(tkinter.END, input_params["record_name"])
+    entry_record.delete(0, tk.END)
+    entry_record.insert(tk.END, input_params["record_name"])
     #Image recording setting
-    text_img_every = tkinter.Label(root, text="Image rec. (%) :  ")
+    text_img_every = tk.Label(root, text="Image rec. (%) :  ")
     text_img_every.place(x=450, y=ary[9])
-    entry_img_every = tkinter.Entry(root, text="img", width=10)
+    entry_img_every = tk.Entry(root, text="img", width=10)
     entry_img_every.place(x=570, y=ary[9])
-    entry_img_every.delete(0, tkinter.END)
-    entry_img_every.insert(tkinter.END, input_params["record_image_every"])
+    entry_img_every.delete(0, tk.END)
+    entry_img_every.insert(tk.END, input_params["record_image_every"])
     #Set comments
-    text_comment = tkinter.Label(root, text="Comments")
+    text_comment = tk.Label(root, text="Comments")
     text_comment.place(x=20, y=ary[10])
-    entry_comment = tkinter.Entry(root, text="Comments", width=110)
+    entry_comment = tk.Entry(root, text="Comments", width=110)
     entry_comment.place(x=100, y=ary[10])
-    entry_comment.delete(0, tkinter.END)
-    entry_comment.insert(tkinter.END, input_params["comments"])
+    entry_comment.delete(0, tk.END)
+    entry_comment.insert(tk.END, input_params["comments"])
     #Set progress bar
     input_params["progress_value"] = 0
     progress_bar = ttk.Progressbar(root, orient=tk.HORIZONTAL, length=350, mode="determinate")
     progress_bar.configure(maximum=100, value=input_params["progress_value"])
     progress_bar.place(x=350, y=ary[11] + 5)
     #Other statuses
-    text_count_progress = tkinter.Label(root, text="Waiting")
+    text_count_progress = tk.Label(root, text="Waiting")
     text_count_progress.place(x=720, y=ary[11] + 5)
     #
-    text_time_progress = tkinter.Label(root, text="time (s)")
+    text_time_progress = tk.Label(root, text="time (s)")
     text_time_progress.place(x=370, y=ary[11] + 35)
     #
-    text_event = tkinter.Label(root, text="events")
+    text_event = tk.Label(root, text="events")
     text_event.place(x=470, y=ary[11] + 35)
     #
-    text_number_atoms = tkinter.Label(root, text="Num. atoms")
+    text_number_atoms = tk.Label(root, text="Num. atoms")
     text_number_atoms.place(x=570, y=ary[11] + 35)
     #
-    text_coverage = tkinter.Label(root, text="Coverage")
+    text_coverage = tk.Label(root, text="Coverage")
     text_coverage.place(x=670, y=ary[11] + 35)
-
     #
-    button_start = tkinter.Button(
+    button_start = tk.Button(
         root, text="Start", command=button_start_clicked, height=1, width=20
     )
     button_start.place(x=20, y=ary[11])
     #
-    button_close = tkinter.Button(
+    button_close = tk.Button(
         root, text="Close", command=button_close_clicked, height=1, width=20
     )
     button_close.place(x=180, y=ary[11])
