@@ -1159,7 +1159,7 @@ def rec_pos():
                         zp.append(lattice[i][k][z][2] / zl / 2.448)
                         num = num + 1
 
-        file_name = (
+        file_name: str = (
             entry_rec.get() + "_" + str(int(t_rec[n])) + "s" + "_" + str(n) + ".vasp"
         )
         file_data = open(file_name, "w")
@@ -1245,8 +1245,7 @@ def hist_rec():
 
 def ppt_form():
     global images, images_h
-    k = os.path.exists("Layer_analysis_results.pptx")
-    if k == True:
+    if os.path.exists("Layer_analysis_results.pptx"):
         prs = Presentation("Layer_analysis_results.pptx")
     else:
         prs = Presentation()
@@ -1961,9 +1960,9 @@ if __name__ == "__main__":
     root.title("kMC_Si_ver1")
     root.geometry("800x550")
     global unit_x, unit_y, unit_z, ims, max_layer
-    unit_x: List[float] = [1, 0, 0]
-    unit_y: List[float] = [0.5, 0.866, 0]
-    unit_z: List[float] = [0, 0, 1]
+    unit_x: List[float] = [1.0, 0.0, 0.0]
+    unit_y: List[float] = [0.5, math.sqrt(3)/2, 0.0]
+    unit_z: List[float] = [0, 0, 1.0]
     zd1 = 0.204
     zd2 = 0.612
     max_layer = 0
