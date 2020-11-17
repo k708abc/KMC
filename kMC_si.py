@@ -16,6 +16,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from PIL import Image, ImageGrab
 from pptx import Presentation
 from pptx.util import Inches, Pt
+from preference_window import Window
 
 input_params: Dict[str, float] = {}
 lattice: Dict[str, list] = {}
@@ -1934,10 +1935,27 @@ def button_close_clicked():
     plt.close("all")
     root.destroy()
 
+class App(Window):
+    def __init__(self, master):
+        super().__init__(master)
+
 if __name__ == "__main__":
     unit_x: List[float] = [1, 0, 0]
     unit_y: List[float] = [0.5, 0.866, 0]
     unit_z: List[float] = [0, 0, 1]
+
+    application = tk.Tk()
+    app = App(application)
+    app.run()
+
+    """
+    application = tk.Tk()
+    application.title("kMC_Si")
+    Window(application)
+    application.mainloop()
+    """
+
+    """
     input_params["intra_distance"] = 0.204
     input_params["inter_distance"] = 0.612
     input_params["max_layer"] = 0
@@ -2223,4 +2241,5 @@ if __name__ == "__main__":
     button_close.place(x=180, y=ary[11])
     update_values()
     root.mainloop()
+    """
     
