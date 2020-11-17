@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import numpy as np
 import copy
 import math
 import time
@@ -31,7 +30,7 @@ def update_values():
     input_params["Unit_length"] = float(entry_unit_length.get())
     input_params["Number_of_z_units"] = float(entry_zunit.get())
     input_params["Temperature"] = float(entry_temperature.get())
-    input_params["kbt"] = float(entry_temperature.get())*8.617e-5
+    input_params["kbt"] = float(entry_temperature.get()) * 8.617e-5
     input_params["deposition_rate"] = float(entry_dep_rate.get())
     input_params["deposition_time"] = float(entry_dep_time.get())
     input_params["post_anneal"] = float(entry_post_anneal.get())
@@ -39,15 +38,17 @@ def update_values():
     # calculate deposition speed in atoms/sec
     unit_length = int(entry_unit_length.get())
     deposition_rate = float(entry_dep_rate.get())  # ML/min
-    deposition_rate = deposition_rate/60  # ML/s
-    atoms_in_BL = 2 *unit_length**2  # atoms/ML
-    deposition_rate = deposition_rate*atoms_in_BL  # atoms/s
+    deposition_rate = deposition_rate / 60  # ML/s
+    atoms_in_BL = 2 * unit_length ** 2  # atoms/ML
+    deposition_rate = deposition_rate * atoms_in_BL  # atoms/s
     input_params["Atoms_in_BL"] = float(atoms_in_BL)
     input_params["dep_rate_(atom/s)"] = float(deposition_rate)
     text_dep_atom_persec["text"] = str("{:.5f}".format(deposition_rate))
-    #update rates
+    # update rates
     for i in range(len(rates_list)):
-        rates_list[i]["text"] = str("{:.5f}".format(cal_rate(float(bonding_entry_list[i].get()))))
+        rates_list[i]["text"] = str(
+            "{:.5f}".format(cal_rate(float(bonding_entry_list[i].get())))
+        )
     #
     root.update()
 
@@ -321,7 +322,7 @@ def show_current():
 
 
 def lattice_form():
-    #global lattice, atom_set, bonds, event, event_time, event_tot, maxz, max_atom
+    # global lattice, atom_set, bonds, event, event_time, event_tot, maxz, max_atom
     unit_length = int(input_params["Unit_length"])
     z_units = int(input_params["Number_of_z_units"])
     zd1 = input_params["intra_distance"]
@@ -352,25 +353,25 @@ def lattice_form():
                 for l in range(len(lattice_first[i][k])):
                     x_index = i
                     y_index = j
-                    z_index = k*len(lattice_first[i][k]) + l
+                    z_index = k * len(lattice_first[i][k]) + l
                     atom_index = str(x_index) + str(y_index) + str(z_index)
                     lattice[atom_index] = [
-                            round(lattice_first[i][j][l][0], 5),
-                            round(lattice_first[i][j][l][1], 5),
-                            round(lattice_first[i][j][l][2] + k * 2.448, 5),
-                        ]
+                        round(lattice_first[i][j][l][0], 5),
+                        round(lattice_first[i][j][l][1], 5),
+                        round(lattice_first[i][j][l][2] + k * 2.448, 5),
+                    ]
                     atom_set[atom_index] = 0
                     event[atom_index] = []
                     event_time[atom_index] = []
                     event_time_tot[atom_index] = 0
-    maxz = z_units*6 - 1
+    maxz = z_units * 6 - 1
     input_params["maxz"] = maxz
     # Search for bonding atoms for all the atoms
     for i in range(0, unit_length):
         for j in range(0, unit_length):
             for k in range(0, maxz):
                 bond_with = []
-                z_judge = int(k%6)
+                z_judge = int(k % 6)
                 ul_m = unit_length - 1
                 if z_judge == 0:
                     if i == 0 and j == 0:
@@ -380,20 +381,40 @@ def lattice_form():
                     elif j == 0:
                         bond_with = [[i - 1, 0, k + 1], [i, ul_m, k + 1], [i, 0, k + 1]]
                     else:
-                        bond_with = [[i - 1, j, k + 1], [i, j - 1, k + 1], [i, j, k + 1]]
+                        bond_with = [
+                            [i - 1, j, k + 1],
+                            [i, j - 1, k + 1],
+                            [i, j, k + 1],
+                        ]
                     if k != 0:
                         bond_with.append([i, j, k - 1])
                     else:
                         pass
                 elif z_judge == 1:
                     if i == ul_m and j == ul_m:
-                        bond_with = [[ul_m, 0, k - 1], [0, ul_m, k - 1], [ul_m, ul_m, k - 1]]
+                        bond_with = [
+                            [ul_m, 0, k - 1],
+                            [0, ul_m, k - 1],
+                            [ul_m, ul_m, k - 1],
+                        ]
                     elif i == ul_m:
-                        bond_with = [[ul_m, j + 1, k - 1], [0, j, k - 1], [ul_m, j, k - 1]]
+                        bond_with = [
+                            [ul_m, j + 1, k - 1],
+                            [0, j, k - 1],
+                            [ul_m, j, k - 1],
+                        ]
                     elif j == ul_m:
-                        bond_with = [[i + 1, ul_m, k - 1], [i, 0, k - 1], [i, ul_m, k - 1]]
+                        bond_with = [
+                            [i + 1, ul_m, k - 1],
+                            [i, 0, k - 1],
+                            [i, ul_m, k - 1],
+                        ]
                     else:
-                        bond_with = [[i + 1, j, k - 1], [i, j + 1, k - 1], [i, j, k - 1]]
+                        bond_with = [
+                            [i + 1, j, k - 1],
+                            [i, j + 1, k - 1],
+                            [i, j, k - 1],
+                        ]
                     bond_with.append([i, j, k + 1])
                 elif z_judge == 2:
                     if i == 0 and j == 0:
@@ -403,25 +424,53 @@ def lattice_form():
                     elif j == 0:
                         bond_with = [[i - 1, 0, k + 1], [i, ul_m, k + 1], [i, 0, k + 1]]
                     else:
-                        bond_with = [[i - 1, j, k + 1], [i, j - 1, k + 1], [i, j, k + 1]]
+                        bond_with = [
+                            [i - 1, j, k + 1],
+                            [i, j - 1, k + 1],
+                            [i, j, k + 1],
+                        ]
                     bond_with.append([i, j, k - 1])
                 elif z_judge == 3:
                     if i == ul_m and j == ul_m:
-                        bond_with = [[ul_m, 0, k - 1], [0, ul_m, k - 1], [ul_m, ul_m, k - 1]]
+                        bond_with = [
+                            [ul_m, 0, k - 1],
+                            [0, ul_m, k - 1],
+                            [ul_m, ul_m, k - 1],
+                        ]
                     elif i == ul_m:
-                        bond_with = [[ul_m, j + 1, k - 1], [0, j, k - 1], [ul_m, j, k - 1]]
+                        bond_with = [
+                            [ul_m, j + 1, k - 1],
+                            [0, j, k - 1],
+                            [ul_m, j, k - 1],
+                        ]
                     elif j == ul_m:
-                        bond_with = [[i + 1, ul_m, k - 1], [i, 0, k - 1], [i, ul_m, k - 1]]
+                        bond_with = [
+                            [i + 1, ul_m, k - 1],
+                            [i, 0, k - 1],
+                            [i, ul_m, k - 1],
+                        ]
                     else:
-                        bond_with = [[i + 1, j, k - 1], [i, j + 1, k - 1], [i, j, k - 1]]
+                        bond_with = [
+                            [i + 1, j, k - 1],
+                            [i, j + 1, k - 1],
+                            [i, j, k - 1],
+                        ]
                     bond_with.append([i, j, k + 1])
                 elif z_judge == 4:
                     if i == ul_m and j == ul_m:
                         bond_with = [[ul_m, 0, k + 1], [0, ul_m, k + 1], [0, 0, k + 1]]
                     elif i == ul_m:
-                        bond_with = [[0, j, k + 1], [0, j + 1, k + 1], [ul_m, j + 1, k + 1]]
+                        bond_with = [
+                            [0, j, k + 1],
+                            [0, j + 1, k + 1],
+                            [ul_m, j + 1, k + 1],
+                        ]
                     elif j == ul_m:
-                        bond_with = [[i + 1, 0, k + 1], [i, 0, k + 1], [i + 1, ul_m, k + 1]]
+                        bond_with = [
+                            [i + 1, 0, k + 1],
+                            [i, 0, k + 1],
+                            [i + 1, ul_m, k + 1],
+                        ]
                     else:
                         bond_with = [
                             [i + 1, j, k + 1],
@@ -431,7 +480,11 @@ def lattice_form():
                     bond_with.append([i, j, k - 1])
                 elif z_judge == 5:
                     if i == 0 and j == 0:
-                        bond_with = [[ul_m, ul_m, k - 1], [0, ul_m, k - 1], [ul_m, 0, k - 1]]
+                        bond_with = [
+                            [ul_m, ul_m, k - 1],
+                            [0, ul_m, k - 1],
+                            [ul_m, 0, k - 1],
+                        ]
                     elif i == 0:
                         bond_with = [
                             [0, j - 1, k - 1],
@@ -455,12 +508,13 @@ def lattice_form():
                 atom_index = str(i) + str(j) + str(k)
                 bonds[atom_index] = bond_with
 
+
 def lattice_form_check():
-    #For tsting lattice_form
+    # For tsting lattice_form
     lattice_form()
     unit_length = int(input_params["Unit_length"])
     maxz = int(input_params["maxz"])
-    #drawing range
+    # drawing range
     min_x = -1
     max_x = (unit_x[0] + unit_y[0]) * unit_length + 1
     min_y = -1
@@ -491,12 +545,10 @@ def lattice_form_check():
                         atom_index_bond = str(u[0]) + str(u[1]) + str(u[2])
                         atom_pos_bond = lattice[atom_index_bond]
                         xpos_b = (
-                            atom_pos_bond[0] * unit_x[0]
-                            + atom_pos_bond[1] * unit_y[0]
+                            atom_pos_bond[0] * unit_x[0] + atom_pos_bond[1] * unit_y[0]
                         )
                         ypos_b = (
-                            atom_pos_bond[0] * unit_x[1]
-                            + atom_pos_bond[1] * unit_y[1]
+                            atom_pos_bond[0] * unit_x[1] + atom_pos_bond[1] * unit_y[1]
                         )
 
                         bond_list[-1].append([[xpos, ypos], [xpos_b, ypos_b]])
@@ -509,7 +561,9 @@ def lattice_form_check():
     # Draw repeatition unit
     l1 = mlines.Line2D([0, unit_x[0] * unit_length], [0, 0], c="black")
     l2 = mlines.Line2D([unit_x[0] * unit_length, max_x - 1], [0, max_y - 1], c="black")
-    l3 = mlines.Line2D([max_x - 1, unit_y[0] * unit_length], [max_y - 1, max_y - 1], c="black")
+    l3 = mlines.Line2D(
+        [max_x - 1, unit_y[0] * unit_length], [max_y - 1, max_y - 1], c="black"
+    )
     l4 = mlines.Line2D([unit_y[0] * unit_length, 0], [max_y - 1, 0], c="black")
     ax.add_line(l1)
     ax.add_line(l2)
@@ -1128,7 +1182,7 @@ def rec_pos():
                         zp.append(lattice[i][k][z][2] / zl / 2.448)
                         num = num + 1
 
-        file_name = (
+        file_name: str = (
             entry_rec.get() + "_" + str(int(t_rec[n])) + "s" + "_" + str(n) + ".vasp"
         )
         file_data = open(file_name, "w")
@@ -1214,8 +1268,7 @@ def hist_rec():
 
 def ppt_form():
     global images, images_h
-    k = os.path.exists("Layer_analysis_results.pptx")
-    if k == True:
+    if os.path.exists("Layer_analysis_results.pptx"):
         prs = Presentation("Layer_analysis_results.pptx")
     else:
         prs = Presentation()
@@ -1761,7 +1814,7 @@ def hist_formation(bx, n):
     for i in range(len(numbers)):
         lay.append(i + 1)
 
-    left = np.arange(len(numbers))
+    left: List[int] = list(range(numbers))
 
     bx.barh(left, numbers)
     bx.set_yticks(left)
@@ -1818,9 +1871,7 @@ def show_pictures():
         root_p, text="Previous", command=p1_clicked, height=2, width=25
     )
     button_p1.place(x=30, y=560)
-    button_p2 = tk.Button(
-        root_p, text="Next", command=p2_clicked, height=2, width=25
-    )
+    button_p2 = tk.Button(root_p, text="Next", command=p2_clicked, height=2, width=25)
     button_p2.place(x=230, y=560)
     text_p7 = tk.Label(root_p, text="Time: ", font=("", 16))
     text_p7.place(x=30, y=500)
@@ -1918,6 +1969,7 @@ def cal_start():
 class App(Window):
     def __init__(self, master):
         super().__init__(master)
+
 
 if __name__ == "__main__":
     unit_x: List[float] = [1, 0, 0]
