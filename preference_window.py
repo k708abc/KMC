@@ -218,10 +218,13 @@ class Window(ttk.Frame):
     def close_function(self):
         # plt.close("all")  <<< FIXME
         self.quit()
+    def run(self):
+        self.mainloop()
 
-
+"""
 if __name__ == "__main__":
     application = tk.Tk()
     application.title("kMC_Si")
     Window(application)
     application.mainloop()
+"""
