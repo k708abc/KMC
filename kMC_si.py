@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import numpy as np
 import copy
 import math
 import time
@@ -30,7 +29,7 @@ def update_values():
     input_params["Unit_length"] = float(entry_unit_length.get())
     input_params["Number_of_z_units"] = float(entry_zunit.get())
     input_params["Temperature"] = float(entry_temperature.get())
-    input_params["kbt"] = float(entry_temperature.get())*8.617e-5
+    input_params["kbt"] = float(entry_temperature.get()) * 8.617e-5
     input_params["deposition_rate"] = float(entry_dep_rate.get())
     input_params["deposition_time"] = float(entry_dep_time.get())
     input_params["post_anneal"] = float(entry_post_anneal.get())
@@ -38,21 +37,23 @@ def update_values():
     # calculate deposition speed in atoms/sec
     unit_length = int(entry_unit_length.get())
     deposition_rate = float(entry_dep_rate.get())  # ML/min
-    deposition_rate = deposition_rate/60  # ML/s
-    atoms_in_BL = 2 *unit_length**2  # atoms/ML
-    deposition_rate = deposition_rate*atoms_in_BL  # atoms/s
+    deposition_rate = deposition_rate / 60  # ML/s
+    atoms_in_BL = 2 * unit_length ** 2  # atoms/ML
+    deposition_rate = deposition_rate * atoms_in_BL  # atoms/s
     input_params["Atoms_in_BL"] = float(atoms_in_BL)
     input_params["dep_rate_(atom/s)"] = float(deposition_rate)
     text_dep_atom_persec["text"] = str("{:.5f}".format(deposition_rate))
-    #update rates
+    # update rates
     for i in range(len(rates_list)):
-        rates_list[i]["text"] = str("{:.5f}".format(cal_rate(float(bonding_entry_list[i].get()))))
+        rates_list[i]["text"] = str(
+            "{:.5f}".format(cal_rate(float(bonding_entry_list[i].get())))
+        )
     #
     root.update()
 
+
 def update(event):
     update_values()
-
 
 
 def show_current():
@@ -324,7 +325,7 @@ def show_current():
 
 
 def lattice_form():
-    #global lattice, atom_set, bonds, event, event_time, event_tot, maxz, max_atom
+    # global lattice, atom_set, bonds, event, event_time, event_tot, maxz, max_atom
     unit_length = int(input_params["Unit_length"])
     z_units = int(input_params["Number_of_z_units"])
     zd1 = input_params["intra_distance"]
@@ -355,25 +356,25 @@ def lattice_form():
                 for l in range(len(lattice_first[i][k])):
                     x_index = i
                     y_index = j
-                    z_index = k*len(lattice_first[i][k]) + l
+                    z_index = k * len(lattice_first[i][k]) + l
                     atom_index = str(x_index) + str(y_index) + str(z_index)
                     lattice[atom_index] = [
-                            round(lattice_first[i][j][l][0], 5),
-                            round(lattice_first[i][j][l][1], 5),
-                            round(lattice_first[i][j][l][2] + k * 2.448, 5),
-                        ]
+                        round(lattice_first[i][j][l][0], 5),
+                        round(lattice_first[i][j][l][1], 5),
+                        round(lattice_first[i][j][l][2] + k * 2.448, 5),
+                    ]
                     atom_set[atom_index] = 0
                     event[atom_index] = []
                     event_time[atom_index] = []
                     event_time_tot[atom_index] = 0
-    maxz = z_units*6 - 1
+    maxz = z_units * 6 - 1
     input_params["maxz"] = maxz
     # Search for bonding atoms for all the atoms
     for i in range(0, unit_length):
         for j in range(0, unit_length):
             for k in range(0, maxz):
                 bond_with = []
-                z_judge = int(k%6)
+                z_judge = int(k % 6)
                 ul_m = unit_length - 1
                 if z_judge == 0:
                     if i == 0 and j == 0:
@@ -383,20 +384,40 @@ def lattice_form():
                     elif j == 0:
                         bond_with = [[i - 1, 0, k + 1], [i, ul_m, k + 1], [i, 0, k + 1]]
                     else:
-                        bond_with = [[i - 1, j, k + 1], [i, j - 1, k + 1], [i, j, k + 1]]
+                        bond_with = [
+                            [i - 1, j, k + 1],
+                            [i, j - 1, k + 1],
+                            [i, j, k + 1],
+                        ]
                     if k != 0:
                         bond_with.append([i, j, k - 1])
                     else:
                         pass
                 elif z_judge == 1:
                     if i == ul_m and j == ul_m:
-                        bond_with = [[ul_m, 0, k - 1], [0, ul_m, k - 1], [ul_m, ul_m, k - 1]]
+                        bond_with = [
+                            [ul_m, 0, k - 1],
+                            [0, ul_m, k - 1],
+                            [ul_m, ul_m, k - 1],
+                        ]
                     elif i == ul_m:
-                        bond_with = [[ul_m, j + 1, k - 1], [0, j, k - 1], [ul_m, j, k - 1]]
+                        bond_with = [
+                            [ul_m, j + 1, k - 1],
+                            [0, j, k - 1],
+                            [ul_m, j, k - 1],
+                        ]
                     elif j == ul_m:
-                        bond_with = [[i + 1, ul_m, k - 1], [i, 0, k - 1], [i, ul_m, k - 1]]
+                        bond_with = [
+                            [i + 1, ul_m, k - 1],
+                            [i, 0, k - 1],
+                            [i, ul_m, k - 1],
+                        ]
                     else:
-                        bond_with = [[i + 1, j, k - 1], [i, j + 1, k - 1], [i, j, k - 1]]
+                        bond_with = [
+                            [i + 1, j, k - 1],
+                            [i, j + 1, k - 1],
+                            [i, j, k - 1],
+                        ]
                     bond_with.append([i, j, k + 1])
                 elif z_judge == 2:
                     if i == 0 and j == 0:
@@ -406,25 +427,53 @@ def lattice_form():
                     elif j == 0:
                         bond_with = [[i - 1, 0, k + 1], [i, ul_m, k + 1], [i, 0, k + 1]]
                     else:
-                        bond_with = [[i - 1, j, k + 1], [i, j - 1, k + 1], [i, j, k + 1]]
+                        bond_with = [
+                            [i - 1, j, k + 1],
+                            [i, j - 1, k + 1],
+                            [i, j, k + 1],
+                        ]
                     bond_with.append([i, j, k - 1])
                 elif z_judge == 3:
                     if i == ul_m and j == ul_m:
-                        bond_with = [[ul_m, 0, k - 1], [0, ul_m, k - 1], [ul_m, ul_m, k - 1]]
+                        bond_with = [
+                            [ul_m, 0, k - 1],
+                            [0, ul_m, k - 1],
+                            [ul_m, ul_m, k - 1],
+                        ]
                     elif i == ul_m:
-                        bond_with = [[ul_m, j + 1, k - 1], [0, j, k - 1], [ul_m, j, k - 1]]
+                        bond_with = [
+                            [ul_m, j + 1, k - 1],
+                            [0, j, k - 1],
+                            [ul_m, j, k - 1],
+                        ]
                     elif j == ul_m:
-                        bond_with = [[i + 1, ul_m, k - 1], [i, 0, k - 1], [i, ul_m, k - 1]]
+                        bond_with = [
+                            [i + 1, ul_m, k - 1],
+                            [i, 0, k - 1],
+                            [i, ul_m, k - 1],
+                        ]
                     else:
-                        bond_with = [[i + 1, j, k - 1], [i, j + 1, k - 1], [i, j, k - 1]]
+                        bond_with = [
+                            [i + 1, j, k - 1],
+                            [i, j + 1, k - 1],
+                            [i, j, k - 1],
+                        ]
                     bond_with.append([i, j, k + 1])
                 elif z_judge == 4:
                     if i == ul_m and j == ul_m:
                         bond_with = [[ul_m, 0, k + 1], [0, ul_m, k + 1], [0, 0, k + 1]]
                     elif i == ul_m:
-                        bond_with = [[0, j, k + 1], [0, j + 1, k + 1], [ul_m, j + 1, k + 1]]
+                        bond_with = [
+                            [0, j, k + 1],
+                            [0, j + 1, k + 1],
+                            [ul_m, j + 1, k + 1],
+                        ]
                     elif j == ul_m:
-                        bond_with = [[i + 1, 0, k + 1], [i, 0, k + 1], [i + 1, ul_m, k + 1]]
+                        bond_with = [
+                            [i + 1, 0, k + 1],
+                            [i, 0, k + 1],
+                            [i + 1, ul_m, k + 1],
+                        ]
                     else:
                         bond_with = [
                             [i + 1, j, k + 1],
@@ -434,7 +483,11 @@ def lattice_form():
                     bond_with.append([i, j, k - 1])
                 elif z_judge == 5:
                     if i == 0 and j == 0:
-                        bond_with = [[ul_m, ul_m, k - 1], [0, ul_m, k - 1], [ul_m, 0, k - 1]]
+                        bond_with = [
+                            [ul_m, ul_m, k - 1],
+                            [0, ul_m, k - 1],
+                            [ul_m, 0, k - 1],
+                        ]
                     elif i == 0:
                         bond_with = [
                             [0, j - 1, k - 1],
@@ -458,12 +511,13 @@ def lattice_form():
                 atom_index = str(i) + str(j) + str(k)
                 bonds[atom_index] = bond_with
 
+
 def lattice_form_check():
-    #For tsting lattice_form
+    # For tsting lattice_form
     lattice_form()
     unit_length = int(input_params["Unit_length"])
     maxz = int(input_params["maxz"])
-    #drawing range
+    # drawing range
     min_x = -1
     max_x = (unit_x[0] + unit_y[0]) * unit_length + 1
     min_y = -1
@@ -494,12 +548,10 @@ def lattice_form_check():
                         atom_index_bond = str(u[0]) + str(u[1]) + str(u[2])
                         atom_pos_bond = lattice[atom_index_bond]
                         xpos_b = (
-                            atom_pos_bond[0] * unit_x[0]
-                            + atom_pos_bond[1] * unit_y[0]
+                            atom_pos_bond[0] * unit_x[0] + atom_pos_bond[1] * unit_y[0]
                         )
                         ypos_b = (
-                            atom_pos_bond[0] * unit_x[1]
-                            + atom_pos_bond[1] * unit_y[1]
+                            atom_pos_bond[0] * unit_x[1] + atom_pos_bond[1] * unit_y[1]
                         )
 
                         bond_list[-1].append([[xpos, ypos], [xpos_b, ypos_b]])
@@ -512,7 +564,9 @@ def lattice_form_check():
     # Draw repeatition unit
     l1 = mlines.Line2D([0, unit_x[0] * unit_length], [0, 0], c="black")
     l2 = mlines.Line2D([unit_x[0] * unit_length, max_x - 1], [0, max_y - 1], c="black")
-    l3 = mlines.Line2D([max_x - 1, unit_y[0] * unit_length], [max_y - 1, max_y - 1], c="black")
+    l3 = mlines.Line2D(
+        [max_x - 1, unit_y[0] * unit_length], [max_y - 1, max_y - 1], c="black"
+    )
     l4 = mlines.Line2D([unit_y[0] * unit_length, 0], [max_y - 1, 0], c="black")
     ax.add_line(l1)
     ax.add_line(l2)
@@ -679,7 +733,7 @@ def rec_atoms():
 def cal_rate(E):
     pre = input_params["prefactor"]
     kbt = input_params["kbt"]
-    rate = pre * math.exp(E/kbt)
+    rate = pre * math.exp(E / kbt)
     return rate
 
 
@@ -1139,7 +1193,7 @@ def rec_pos():
                         zp.append(lattice[i][k][z][2] / zl / 2.448)
                         num = num + 1
 
-        file_name = (
+        file_name: str = (
             entry_rec.get() + "_" + str(int(t_rec[n])) + "s" + "_" + str(n) + ".vasp"
         )
         file_data = open(file_name, "w")
@@ -1225,8 +1279,7 @@ def hist_rec():
 
 def ppt_form():
     global images, images_h
-    k = os.path.exists("Layer_analysis_results.pptx")
-    if k == True:
+    if os.path.exists("Layer_analysis_results.pptx"):
         prs = Presentation("Layer_analysis_results.pptx")
     else:
         prs = Presentation()
@@ -1772,7 +1825,7 @@ def hist_formation(bx, n):
     for i in range(len(numbers)):
         lay.append(i + 1)
 
-    left = np.arange(len(numbers))
+    left: List[int] = list(range(numbers))
 
     bx.barh(left, numbers)
     bx.set_yticks(left)
@@ -1829,9 +1882,7 @@ def show_pictures():
         root_p, text="Previous", command=p1_clicked, height=2, width=25
     )
     button_p1.place(x=30, y=560)
-    button_p2 = tk.Button(
-        root_p, text="Next", command=p2_clicked, height=2, width=25
-    )
+    button_p2 = tk.Button(root_p, text="Next", command=p2_clicked, height=2, width=25)
     button_p2.place(x=230, y=560)
     text_p7 = tk.Label(root_p, text="Time: ", font=("", 16))
     text_p7.place(x=30, y=500)
@@ -1928,11 +1979,13 @@ def cal_start():
 
 def button_start_clicked():
     lattice_form_check()
-    #cal_start()
+    # cal_start()
+
 
 def button_close_clicked():
     plt.close("all")
     root.destroy()
+
 
 if __name__ == "__main__":
     unit_x: List[float] = [1, 0, 0]
@@ -1941,18 +1994,18 @@ if __name__ == "__main__":
     input_params["intra_distance"] = 0.204
     input_params["inter_distance"] = 0.612
     input_params["max_layer"] = 0
-    #max_layer = 0
-    input_params["Saved_images"] = 0    #Use instead of "c_num"
-    #Initial values
+    # max_layer = 0
+    input_params["Saved_images"] = 0  # Use instead of "c_num"
+    # Initial values
     input_params["Unit_length"] = 5
     input_params["Number_of_z_units"] = 5
-    input_params["Temperature"]  = 550
+    input_params["Temperature"] = 550
     input_params["kbt"] = input_params["Temperature"] * 8.617e-5
     input_params["deposition_rate"] = 0.4
     input_params["deposition_time"] = 5
     input_params["post_anneal"] = 0
-    input_params["prefactor"] = 1e+13
-    #bonding parameters
+    input_params["prefactor"] = 1e13
+    # bonding parameters
     input_params["bond_Ag_Si"] = -1.2
     input_params["bond_Si1_Si2"] = -1.2
     input_params["bond_Si2_Si3"] = -1.2
@@ -1963,11 +2016,11 @@ if __name__ == "__main__":
     input_params["bond_Si_inter"] = -1.2
     input_params["bond_Ag_top"] = -1.2
     input_params["transformation_energy"] = -1.0
-    #other inouts
+    # other inouts
     input_params["record_name"] = "KMC"
     input_params["record_image_every"] = 10
     input_params["comments"] = "No comment"
-    #For adjusting the position of entries
+    # For adjusting the position of entries
     arx: List[int] = [0, 20, 140, 200, 300, 380, 500, 560, 660]
     ary: List[int] = [0, 20, 50, 100, 130, 160, 0, 190, 220, 250, 280, 310]
     #
@@ -1980,7 +2033,7 @@ if __name__ == "__main__":
     entry_unit_length = tk.Entry(root, text="Number of cells", width=7)
     entry_unit_length.place(x=arx[2], y=ary[1])
     entry_unit_length.delete(0, tk.END)
-    entry_unit_length.insert(tk.END, input_params["Unit_length"] )
+    entry_unit_length.insert(tk.END, input_params["Unit_length"])
     entry_unit_length.bind("<Return>", update)
     #
     text_zunit = tk.Label(root, text="Z units")
@@ -2028,7 +2081,7 @@ if __name__ == "__main__":
     entry_post_anneal = tk.Entry(root, text="Post annealing", width=7)
     entry_post_anneal.place(x=arx[6], y=ary[2])
     entry_post_anneal.delete(0, tk.END)
-    entry_post_anneal.insert(tk.END, input_params["post_anneal"] )
+    entry_post_anneal.insert(tk.END, input_params["post_anneal"])
     entry_post_anneal.bind("<Return>", update)
     #
     text_prefactor = tk.Label(root, text="prefactor (1/s)")
@@ -2036,9 +2089,9 @@ if __name__ == "__main__":
     entry_prefactor = tk.Entry(root, text="Prefactor (1/s)", width=7)
     entry_prefactor.place(x=arx[8], y=ary[2])
     entry_prefactor.delete(0, tk.END)
-    entry_prefactor.insert(tk.END, '{:.1e}'.format(input_params["prefactor"]))
-    entry_prefactor.bind("<Return>", update)    
-    #set bonding parameters
+    entry_prefactor.insert(tk.END, "{:.1e}".format(input_params["prefactor"]))
+    entry_prefactor.bind("<Return>", update)
+    # set bonding parameters
     text_bonding = tk.Label(root, text="Energy")
     text_bonding.place(x=20, y=ary[4])
     # Ag-Si
@@ -2047,7 +2100,7 @@ if __name__ == "__main__":
     entry_AgSi = tk.Entry(root, text="Ag-Si", width=7)
     entry_AgSi.place(x=100, y=ary[4])
     entry_AgSi.delete(0, tk.END)
-    entry_AgSi.insert(tk.END, input_params["bond_Ag_Si"] )
+    entry_AgSi.insert(tk.END, input_params["bond_Ag_Si"])
     entry_AgSi.bind("<Return>", update)
     # Si1-2
     text_Si12 = tk.Label(root, text="Si(1-2)")
@@ -2113,11 +2166,17 @@ if __name__ == "__main__":
     entry_Ag_top.delete(0, tk.END)
     entry_Ag_top.insert(tk.END, input_params["bond_Ag_top"])
     entry_Ag_top.bind("<Return>", update)
-    #bond entry lists
+    # bond entry lists
     bonding_entry_list = [
-        entry_AgSi, entry_Si12, entry_Si23, entry_Si34, entry_Si45,
-        entry_Si56, entry_Si_intra, entry_Si_inter
-        ]
+        entry_AgSi,
+        entry_Si12,
+        entry_Si23,
+        entry_Si34,
+        entry_Si45,
+        entry_Si56,
+        entry_Si_intra,
+        entry_Si_inter,
+    ]
     # Reference rates
     text_rates = tk.Label(root, text="Rates/bond")
     text_rates.place(x=20, y=ary[5])
@@ -2148,55 +2207,65 @@ if __name__ == "__main__":
     # Agtop
     text_Agtp_rates = tk.Label(root, text="0")
     text_Agtp_rates.place(x=740, y=ary[5])
-    #rates list
+    # rates list
     rates_list = [
-        text_AgSi_rates, text_Si12_rates, text_Si23_rates, text_Si34_rates,
-        text_Si45_rates, text_Si56_rates, text_Si_intra_rates, text_Si_inter_rates
+        text_AgSi_rates,
+        text_Si12_rates,
+        text_Si23_rates,
+        text_Si34_rates,
+        text_Si45_rates,
+        text_Si56_rates,
+        text_Si_intra_rates,
+        text_Si_inter_rates,
     ]
-    #set transformation
+    # set transformation
     bln_transformation = tk.BooleanVar()
     bln_transformation.set(True)
-    chk_transformation = tk.Checkbutton(root, variable=bln_transformation, text="Transformation")
+    chk_transformation = tk.Checkbutton(
+        root, variable=bln_transformation, text="Transformation"
+    )
     chk_transformation.place(x=20, y=ary[7])
     entry_transformation = tk.Entry(root, text="transformation", width=7)
     entry_transformation.place(x=200, y=ary[7] + 5)
     entry_transformation.delete(0, tk.END)
     entry_transformation.insert(tk.END, input_params["transformation_energy"])
     entry_transformation.bind("<Return>", update)
-    #set keep defects
+    # set keep defects
     bln_keep_defect = tk.BooleanVar()
     bln_keep_defect.set(True)
     chk_keep_defect = tk.Checkbutton(
         root, variable=bln_keep_defect, text="Keep a defect in first layer"
     )
     chk_keep_defect.place(x=20, y=ary[8])
-    #Set recording settings
+    # Set recording settings
     text_record = tk.Label(root, text="Record")
     text_record.place(x=20, y=ary[9])
     entry_record = tk.Entry(root, text="Name", width=50)
     entry_record.place(x=100, y=ary[9])
     entry_record.delete(0, tk.END)
     entry_record.insert(tk.END, input_params["record_name"])
-    #Image recording setting
+    # Image recording setting
     text_img_every = tk.Label(root, text="Image rec. (%) :  ")
     text_img_every.place(x=450, y=ary[9])
     entry_img_every = tk.Entry(root, text="img", width=10)
     entry_img_every.place(x=570, y=ary[9])
     entry_img_every.delete(0, tk.END)
     entry_img_every.insert(tk.END, input_params["record_image_every"])
-    #Set comments
+    # Set comments
     text_comment = tk.Label(root, text="Comments")
     text_comment.place(x=20, y=ary[10])
     entry_comment = tk.Entry(root, text="Comments", width=110)
     entry_comment.place(x=100, y=ary[10])
     entry_comment.delete(0, tk.END)
     entry_comment.insert(tk.END, input_params["comments"])
-    #Set progress bar
+    # Set progress bar
     input_params["progress_value"] = 0
-    progress_bar = ttk.Progressbar(root, orient=tk.HORIZONTAL, length=350, mode="determinate")
+    progress_bar = ttk.Progressbar(
+        root, orient=tk.HORIZONTAL, length=350, mode="determinate"
+    )
     progress_bar.configure(maximum=100, value=input_params["progress_value"])
     progress_bar.place(x=350, y=ary[11] + 5)
-    #Other statuses
+    # Other statuses
     text_count_progress = tk.Label(root, text="Waiting")
     text_count_progress.place(x=720, y=ary[11] + 5)
     #
@@ -2223,4 +2292,3 @@ if __name__ == "__main__":
     button_close.place(x=180, y=ary[11])
     update_values()
     root.mainloop()
-    
