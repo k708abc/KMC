@@ -4,6 +4,7 @@ from typing import List, Dict
 import tkinter as tk
 import tkinter.ttk as ttk
 from cal_rates import cal_rate
+from calculation import cal_start
 
 init_values: Dict = dict(
     n_cell_init = 5, 
@@ -238,7 +239,7 @@ class Window(ttk.Frame):
         self.comments.grid(row=1, column=1, columnspan=3, **self.padWE)
 
     def create_widgets_buttons(self):
-        self.start = tk.Button(self.frame_buttons, text="Start", command=None, width=20)
+        self.start = tk.Button(self.frame_buttons, text="Start", command=self.start_function, width=20)
         self.close = tk.Button(
             self.frame_buttons, text="close", command=self.close_function, width=20
         )
@@ -279,6 +280,12 @@ class Window(ttk.Frame):
 
     def update_click(self ,event):
         self.update_values()
+
+    def start_function(self):
+        self.update_values()
+        cal_start()
+
+
 
 """
 if __name__ == "__main__":
