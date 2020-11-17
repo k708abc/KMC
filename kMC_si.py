@@ -677,9 +677,9 @@ def rec_atoms():
     t_rec.append(rel_time)
 
 
-def cal_rate(E):
-    pre = input_params["prefactor"]
-    kbt = input_params["kbt"]
+def cal_rate(pre, kbt, E):
+    #pre = input_params["prefactor"]
+    #kbt = input_params["kbt"]
     rate = pre * math.exp(E/kbt)
     return rate
 
@@ -1926,7 +1926,7 @@ def cal_start():
     # Show results
     show_pictures()
 
-
+"""
 def button_start_clicked():
     lattice_form_check()
     #cal_start()
@@ -1934,6 +1934,8 @@ def button_start_clicked():
 def button_close_clicked():
     plt.close("all")
     root.destroy()
+"""
+
 
 class App(Window):
     def __init__(self, master):
