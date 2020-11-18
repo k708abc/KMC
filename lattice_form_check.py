@@ -13,36 +13,33 @@ def check(input_params, lattice_v, bonds_v):  # 多分別モジュールの方�
     max_x = (unit_x[0] + unit_y[0]) * unit_length + 1
     min_y = -1
     max_y = (unit_x[1] + unit_y[1]) * unit_length + 1
-    x_list: List[float] = [[] for _ in range(maxz)]
-    y_list: List[float] = [[] for _ in range(maxz)]
-    bond_list: List[float] = [[] for _ in range(maxz)]
+    x_list: List[float] = [[] for _ in range(maxz + 1)]
+    y_list: List[float] = [[] for _ in range(maxz + 1)]
+    bond_list: List[float] = [[] for _ in range(maxz + 1)]
     #
-    for k in range(maxz):
-        for i in range(unit_length):
-            for j in range(unit_length):
-                atom_index = (i,j,k)
-                atom_pos = lattice_v[atom_index]
-                #
-                xpos = atom_pos[0] * unit_x[0] + atom_pos[1] * unit_y[0]
-                ypos = atom_pos[0] * unit_x[1] + atom_pos[1] * unit_y[1]
-                #
-                x_list[k].append(xpos)
-                y_list[k].append(ypos)
-                bond_with = bonds_v[atom_index]
-                for u in bond_with:
-                    if u[2] >= maxz:
-                        pass
-                    else:
-                        atom_index_bond = (u[0], u[1], u[2])
-                        atom_pos_bond = lattice_v[atom_index_bond]
-                        xpos_b = (
-                            atom_pos_bond[0] * unit_x[0] + atom_pos_bond[1] * unit_y[0]
-                        )
-                        ypos_b = (
-                            atom_pos_bond[0] * unit_x[1] + atom_pos_bond[1] * unit_y[1]
-                        )
+    for key, atom_pos in lattice_v.items():
+        xpos = atom_pos[0] * unit_x[0] + atom_pos[1] * unit_y[0]
+        ypos = atom_pos[0] * unit_x[1] + atom_pos[1] * unit_y[1]
+        x_list[key[2]].append(xpos)
+        y_list[key[2]].append(ypos)
+        bond_with = bonds_v[key]
 
-                        bond_list[k].append([[xpos, ypos], [xpos_b, ypos_b]])
+        for u in bond_with:
+            if u[2] >= maxz:
+                pass
+            else:
+                atom_index_bond = (u[0], u[1], u[2])
+                atom_pos_bond = lattice_v[atom_index_bond]
+                xpos_b = (
+                    atom_pos_bond[0] * unit_x[0] + atom_pos_bond[1] * unit_y[0]
+                )
+                ypos_b = (
+                    atom_pos_bond[0] * unit_x[1] + atom_pos_bond[1] * unit_y[1]
+                )
+
+                bond_list[key[2]].append([[xpos, ypos], [xpos_b, ypos_b]])
+
+
     # input BL number to be checked
     BL_num = 0
     #

@@ -2,13 +2,14 @@ from typing import List, Dict
 import math
 from InputParameter import Params
 from lattice_form_check import check
+import itertools
 
-lattice: Dict[str, list] = {}
-atom_set: Dict[str, int] = {}
-bonds: Dict[str, list] = {}
-event: Dict[str, list] = {}
-event_time: Dict[str, list] = {}
-event_time_tot: Dict[str, float] = {}
+lattice: Dict[tuple, list] = {}
+atom_set: Dict[tuple, int] = {}
+bonds: Dict[tuple, list] = {}
+event: Dict[tuple, list] = {}
+event_time: Dict[tuple, list] = {}
+event_time_tot: Dict[tuple, float] = {}
 
 def form_first_3BL(unit_length, zd1, zd2):
     lattice_first: List[float] = [
@@ -27,164 +28,158 @@ def form_first_3BL(unit_length, zd1, zd2):
     ]
     return lattice_first
 
-def lattice_full_layers(unit_length, z_units, lattice_first):
-    for i in range(unit_length):
-        for j in range(unit_length):
-            for k in range(z_units):
-                for l, first in enumerate(lattice_first[i][j]):
-                    atom_index = (i, j, k*6+l)  # it's better to use tuple than str
-                    lattice[atom_index] = [
-                        round(first[0], 5),
-                        round(first[1], 5),
-                        round(first[2] + k * 2.448, 5),  # what does this 2.448 mean?
-                    ]
-                    atom_set[atom_index] = 0
-                    event[atom_index] = []
-                    event_time[atom_index] = []
-                    event_time_tot[atom_index] = 0
+def lattice_full_layers(lattice_first):
+    for key in lattice:
+        lattice[key] = [
+            lattice_first[key[0]][key[1]][key[2]%6][0],
+            lattice_first[key[0]][key[1]][key[2]%6][1], 
+            lattice_first[key[0]][key[1]][key[2]%6][2] +2.448*key[2]//6
+            ]
+
 
 def search_bond(unit_length, maxz):
     # Search for bonding atoms for all the atoms
-    for i in range(unit_length):    #ここのfor loop意味が分からない。何してるの？
-        for j in range(unit_length):
-            for k in range(maxz):
-                bond_with = []  ## what does "bond_with" mean?
-                z_judge = k % 6
-                ul_m = unit_length - 1
-                if z_judge == 0:
-                    if i == 0 and j == 0:
-                        bond_with = [[ul_m, 0, k + 1], [0, ul_m, k + 1], [0, 0, k + 1]]
-                    elif i == 0:
-                        bond_with = [[ul_m, j, k + 1], [0, j - 1, k + 1], [0, j, k + 1]]
-                    elif j == 0:
-                        bond_with = [[i - 1, 0, k + 1], [i, ul_m, k + 1], [i, 0, k + 1]]
-                    else:
-                        bond_with = [
-                            [i - 1, j, k + 1],
-                            [i, j - 1, k + 1],
-                            [i, j, k + 1],
-                        ]
-                    if k != 0:
-                        bond_with.append([i, j, k - 1])
-                    else:
-                        pass
-                elif z_judge == 1:
-                    if i == j == ul_m:
-                        bond_with = [
-                            [ul_m, 0, k - 1],
-                            [0, ul_m, k - 1],
-                            [ul_m, ul_m, k - 1],
-                        ]
-                    elif i == ul_m:
-                        bond_with = [
-                            [ul_m, j + 1, k - 1],
-                            [0, j, k - 1],
-                            [ul_m, j, k - 1],
-                        ]
-                    elif j == ul_m:
-                        bond_with = [
-                            [i + 1, ul_m, k - 1],
-                            [i, 0, k - 1],
-                            [i, ul_m, k - 1],
-                        ]
-                    else:
-                        bond_with = [
-                            [i + 1, j, k - 1],
-                            [i, j + 1, k - 1],
-                            [i, j, k - 1],
-                        ]
-                    bond_with.append([i, j, k + 1])
-                elif z_judge == 2:
-                    if i == j == 0:
-                        bond_with = [[ul_m, 0, k + 1], [0, ul_m, k + 1], [0, 0, k + 1]]
-                    elif i == 0:
-                        bond_with = [[ul_m, j, k + 1], [0, j - 1, k + 1], [0, j, k + 1]]
-                    elif j == 0:
-                        bond_with = [[i - 1, 0, k + 1], [i, ul_m, k + 1], [i, 0, k + 1]]
-                    else:
-                        bond_with = [
-                            [i - 1, j, k + 1],
-                            [i, j - 1, k + 1],
-                            [i, j, k + 1],
-                        ]
-                    bond_with.append([i, j, k - 1])
-                elif z_judge == 3:
-                    if i == j == ul_m:
-                        bond_with = [
-                            [ul_m, 0, k - 1],
-                            [0, ul_m, k - 1],
-                            [ul_m, ul_m, k - 1],
-                        ]
-                    elif i == ul_m:
-                        bond_with = [
-                            [ul_m, j + 1, k - 1],
-                            [0, j, k - 1],
-                            [ul_m, j, k - 1],
-                        ]
-                    elif j == ul_m:
-                        bond_with = [
-                            [i + 1, ul_m, k - 1],
-                            [i, 0, k - 1],
-                            [i, ul_m, k - 1],
-                        ]
-                    else:
-                        bond_with = [
-                            [i + 1, j, k - 1],
-                            [i, j + 1, k - 1],
-                            [i, j, k - 1],
-                        ]
-                    bond_with.append([i, j, k + 1])
-                elif z_judge == 4:
-                    if i == j == ul_m:
-                        bond_with = [[ul_m, 0, k + 1], [0, ul_m, k + 1], [0, 0, k + 1]]
-                    elif i == ul_m:
-                        bond_with = [
-                            [0, j, k + 1],
-                            [0, j + 1, k + 1],
-                            [ul_m, j + 1, k + 1],
-                        ]
-                    elif j == ul_m:
-                        bond_with = [
-                            [i + 1, 0, k + 1],
-                            [i, 0, k + 1],
-                            [i + 1, ul_m, k + 1],
-                        ]
-                    else:
-                        bond_with = [
-                            [i + 1, j, k + 1],
-                            [i + 1, j + 1, k + 1],
-                            [i, j + 1, k + 1],
-                        ]
-                    bond_with.append([i, j, k - 1])
-                elif z_judge == 5:
-                    if i == j == 0:
-                        bond_with = [
-                            [ul_m, ul_m, k - 1],
-                            [0, ul_m, k - 1],
-                            [ul_m, 0, k - 1],
-                        ]
-                    elif i == 0:
-                        bond_with = [
-                            [0, j - 1, k - 1],
-                            [ul_m, j, k - 1],
-                            [ul_m, j - 1, k - 1],
-                        ]
-                    elif j == 0:
-                        bond_with = [
-                            [i, ul_m, k - 1],
-                            [i - 1, ul_m, k - 1],
-                            [i - 1, 0, k - 1],
-                        ]
-                    else:
-                        bond_with = [
-                            [i - 1, j, k - 1],
-                            [i, j - 1, k - 1],
-                            [i - 1, j - 1, k - 1],
-                        ]
-                    bond_with.append([i, j, k + 1])
-                #
-                atom_index = (i, j, k)
-                bonds[atom_index] = bond_with
+    for key in bonds:
+        bond_with = []
+        z_judge = key[2]%6
+        ul_m = unit_length - 1
+        i = key[0]
+        j = key[1]
+        k = key[2]
+
+        if z_judge == 0:
+            if i == 0 and j == 0:
+                bond_with = [[ul_m, 0, k + 1], [0, ul_m, k + 1], [0, 0, k + 1]]
+            elif i == 0:
+                bond_with = [[ul_m, j, k + 1], [0, j - 1, k + 1], [0, j, k + 1]]
+            elif j == 0:
+                bond_with = [[i - 1, 0, k + 1], [i, ul_m, k + 1], [i, 0, k + 1]]
+            else:
+                bond_with = [
+                    [i - 1, j, k + 1],
+                    [i, j - 1, k + 1],
+                    [i, j, k + 1],
+                ]
+            if k != 0:
+                bond_with.append([i, j, k - 1])
+            else:
+                pass
+        elif z_judge == 1:
+            if i == j == ul_m:
+                bond_with = [
+                    [ul_m, 0, k - 1],
+                    [0, ul_m, k - 1],
+                    [ul_m, ul_m, k - 1],
+                ]
+            elif i == ul_m:
+                bond_with = [
+                    [ul_m, j + 1, k - 1],
+                    [0, j, k - 1],
+                    [ul_m, j, k - 1],
+                ]
+            elif j == ul_m:
+                bond_with = [
+                    [i + 1, ul_m, k - 1],
+                    [i, 0, k - 1],
+                    [i, ul_m, k - 1],
+                ]
+            else:
+                bond_with = [
+                    [i + 1, j, k - 1],
+                    [i, j + 1, k - 1],
+                    [i, j, k - 1],
+                ]
+            bond_with.append([i, j, k + 1])
+        elif z_judge == 2:
+            if i == j == 0:
+                bond_with = [[ul_m, 0, k + 1], [0, ul_m, k + 1], [0, 0, k + 1]]
+            elif i == 0:
+                bond_with = [[ul_m, j, k + 1], [0, j - 1, k + 1], [0, j, k + 1]]
+            elif j == 0:
+                bond_with = [[i - 1, 0, k + 1], [i, ul_m, k + 1], [i, 0, k + 1]]
+            else:
+                bond_with = [
+                    [i - 1, j, k + 1],
+                    [i, j - 1, k + 1],
+                    [i, j, k + 1],
+                ]
+            bond_with.append([i, j, k - 1])
+        elif z_judge == 3:
+            if i == j == ul_m:
+                bond_with = [
+                    [ul_m, 0, k - 1],
+                    [0, ul_m, k - 1],
+                    [ul_m, ul_m, k - 1],
+                ]
+            elif i == ul_m:
+                bond_with = [
+                    [ul_m, j + 1, k - 1],
+                    [0, j, k - 1],
+                    [ul_m, j, k - 1],
+                ]
+            elif j == ul_m:
+                bond_with = [
+                    [i + 1, ul_m, k - 1],
+                    [i, 0, k - 1],
+                    [i, ul_m, k - 1],
+                ]
+            else:
+                bond_with = [
+                    [i + 1, j, k - 1],
+                    [i, j + 1, k - 1],
+                    [i, j, k - 1],
+                ]
+            bond_with.append([i, j, k + 1])
+        elif z_judge == 4:
+            if i == j == ul_m:
+                bond_with = [[ul_m, 0, k + 1], [0, ul_m, k + 1], [0, 0, k + 1]]
+            elif i == ul_m:
+                bond_with = [
+                    [0, j, k + 1],
+                    [0, j + 1, k + 1],
+                    [ul_m, j + 1, k + 1],
+                ]
+            elif j == ul_m:
+                bond_with = [
+                    [i + 1, 0, k + 1],
+                    [i, 0, k + 1],
+                    [i + 1, ul_m, k + 1],
+                ]
+            else:
+                bond_with = [
+                    [i + 1, j, k + 1],
+                    [i + 1, j + 1, k + 1],
+                    [i, j + 1, k + 1],
+                ]
+            bond_with.append([i, j, k - 1])
+        elif z_judge == 5:
+            if i == j == 0:
+                bond_with = [
+                    [ul_m, ul_m, k - 1],
+                    [0, ul_m, k - 1],
+                    [ul_m, 0, k - 1],
+                ]
+            elif i == 0:
+                bond_with = [
+                    [0, j - 1, k - 1],
+                    [ul_m, j, k - 1],
+                    [ul_m, j - 1, k - 1],
+                ]
+            elif j == 0:
+                bond_with = [
+                    [i, ul_m, k - 1],
+                    [i - 1, ul_m, k - 1],
+                    [i - 1, 0, k - 1],
+                ]
+            else:
+                bond_with = [
+                    [i - 1, j, k - 1],
+                    [i, j - 1, k - 1],
+                    [i - 1, j - 1, k - 1],
+                ]
+            bond_with.append([i, j, k + 1])
+        #
+        bonds[key] = bond_with
 
 
 def lattice_form(input_params):  # 　ここ長すぎるので、少なくとも3つか四つの関数に分ける。
@@ -195,14 +190,22 @@ def lattice_form(input_params):  # 　ここ長すぎるので、少なくとも
     zd1 = float(input_params.intra_distance)
     zd2 = float(input_params.inter_distance)
     #
+    for i in range(unit_length):
+        for j in range(unit_length):
+            for k in range(z_units*6):
+                lattice[(i,j,k)] = [] 
+                atom_set[(i,j,k)] = 0 
+                bonds[(i,j,k)] = [] 
+                event[(i,j,k)] = [] 
+                event_time[(i,j,k)] = [] 
+                event_time_tot[(i,j,k)] = 0.0 
+    #
     lattice_first = form_first_3BL(unit_length, zd1, zd2)
     #
-    lattice_full_layers(unit_length, z_units, lattice_first)
+    lattice_full_layers(lattice_first)
     #
     search_bond(unit_length, maxz)
     return lattice, bonds, atom_set, event, event_time, event_time_tot
-
-
 
 if __name__ == "__main__":
     init_values= Params()
