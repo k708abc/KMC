@@ -1,8 +1,7 @@
 from typing import List, Dict
 import math
-import matplotlib.pyplot as plt
-import matplotlib.lines as mlines
 from InputParameter import Params
+from lattice_form_check import check
 
 lattice: Dict[str, list] = {}
 atom_set: Dict[str, int] = {}
@@ -11,15 +10,7 @@ event: Dict[str, list] = {}
 event_time: Dict[str, list] = {}
 event_time_tot: Dict[str, float] = {}
 
-
-def lattice_form(input_params):  # 　ここ長すぎるので、少なくとも3つか四つの関数に分ける。
-    # 荒船だったら，多分5個ぐらい。
-    unit_length = int(input_params["n_cell_init"])
-    z_units = int(input_params["z_unit_init"])
-    maxz = z_units * 6 - 1
-    zd1 = float(input_params.intra_distance)
-    zd2 = float(input_params.inter_distance)
-    #
+def form_first_3BL(unit_length, zd1, zd2):
     lattice_first: List[float] = [
         [
             [
@@ -34,13 +25,14 @@ def lattice_form(input_params):  # 　ここ長すぎるので、少なくとも
         ]
         for i in range(unit_length)
     ]
-    #
+    return lattice_first
+
+def lattice_full_layers(unit_length, z_units, lattice_first):
     for i in range(unit_length):
         for j in range(unit_length):
             for k in range(z_units):
                 for l, first in enumerate(lattice_first[i][j]):
-                    atom_index = str(i) + str(j) + str(k * 6 + l)
-                    # atom_index = (i, j, k*6+l)  # it's better to use tuple than str
+                    atom_index = (i, j, k*6+l)  # it's better to use tuple than str
                     lattice[atom_index] = [
                         round(first[0], 5),
                         round(first[1], 5),
@@ -50,8 +42,10 @@ def lattice_form(input_params):  # 　ここ長すぎるので、少なくとも
                     event[atom_index] = []
                     event_time[atom_index] = []
                     event_time_tot[atom_index] = 0
+
+def search_bond(unit_length, maxz):
     # Search for bonding atoms for all the atoms
-    for i in range(unit_length):　　#ここのfor loop意味が分からない。何してるの？
+    for i in range(unit_length):    #ここのfor loop意味が分からない。何してるの？
         for j in range(unit_length):
             for k in range(maxz):
                 bond_with = []  ## what does "bond_with" mean?
@@ -189,83 +183,28 @@ def lattice_form(input_params):  # 　ここ長すぎるので、少なくとも
                         ]
                     bond_with.append([i, j, k + 1])
                 #
-                atom_index = str(i) + str(j) + str(k)
+                atom_index = (i, j, k)
                 bonds[atom_index] = bond_with
-    return lattice, bonds, atom_set, event, event_time, event_time_tot
 
 
-def lattice_visual(input_params, lattice_v, bonds_v):  # 多分別モジュールの方がいい。
-    unit_x: List[float] = [1, 0, 0]
-    unit_y: List[float] = [0.5, 0.866, 0]
+def lattice_form(input_params):  # 　ここ長すぎるので、少なくとも3つか四つの関数に分ける。
+    # 荒船だったら，多分5個ぐらい。
     unit_length = input_params.n_cell_init
     z_units = input_params.z_unit_init
     maxz = z_units * 6 - 1
-    # drawing range
-    min_x = -1
-    max_x = (unit_x[0] + unit_y[0]) * unit_length + 1
-    min_y = -1
-    max_y = (unit_x[1] + unit_y[1]) * unit_length + 1
-    x_list: List[float] = [[] for _ in range(maxz)]
-    y_list: List[float] = [[] for _ in range(maxz)]
-    bond_list: List[float] = [[] for _ in range(maxz)]
+    zd1 = float(input_params.intra_distance)
+    zd2 = float(input_params.inter_distance)
     #
-    for k in range(maxz):
-        for i in range(unit_length):
-            for j in range(unit_length):
-                atom_index = str(i) + str(j) + str(k)
-                atom_pos = lattice_v[atom_index]
-                #
-                xpos = atom_pos[0] * unit_x[0] + atom_pos[1] * unit_y[0]
-                ypos = atom_pos[0] * unit_x[1] + atom_pos[1] * unit_y[1]
-                #
-                x_list[k].append(xpos)
-                y_list[k].append(ypos)
-                bond_with = bonds_v[atom_index]
-                for u in bond_with:
-                    if u[2] >= maxz:
-                        pass
-                    else:
-                        atom_index_bond = str(u[0]) + str(u[1]) + str(u[2])
-                        atom_pos_bond = lattice_v[atom_index_bond]
-                        xpos_b = (
-                            atom_pos_bond[0] * unit_x[0] + atom_pos_bond[1] * unit_y[0]
-                        )
-                        ypos_b = (
-                            atom_pos_bond[0] * unit_x[1] + atom_pos_bond[1] * unit_y[1]
-                        )
+    lattice_first = form_first_3BL(unit_length, zd1, zd2)
+    #
+    lattice_full_layers(unit_length, z_units, lattice_first)
+    #
+    search_bond(unit_length, maxz)
+    return lattice, bonds, atom_set, event, event_time, event_time_tot
 
-                        bond_list[k].append([[xpos, ypos], [xpos_b, ypos_b]])
-    # input BL number to be checked
-    BL_num = 0
-    #
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    ax.set(xlim=(min_x, max_x), ylim=(min_y, max_y))
-    # Draw repeatition unit
-    l1 = mlines.Line2D([0, unit_x[0] * unit_length], [0, 0], c="black")
-    l2 = mlines.Line2D([unit_x[0] * unit_length, max_x - 1], [0, max_y - 1], c="black")
-    l3 = mlines.Line2D(
-        [max_x - 1, unit_y[0] * unit_length], [max_y - 1, max_y - 1], c="black"
-    )
-    l4 = mlines.Line2D([unit_y[0] * unit_length, 0], [max_y - 1, 0], c="black")
-    ax.add_line(l1)
-    ax.add_line(l2)
-    ax.add_line(l3)
-    ax.add_line(l4)
-    # draw bonding
-    for bond_i in bond_list[BL_num * 2]:
-        line = mlines.Line2D([bond_i[0][0], bond_i[1][0]], [bond_i[0][1], bond_i[1][1]])
-        ax.add_line(line)
-    for bond_i in bond_list[BL_num * 2 + 1]:
-        line = mlines.Line2D([bond_i[0][0], bond_i[1][0]], [bond_i[0][1], bond_i[1][1]])
-        ax.add_line(line)
-    # draw atoms
-    ax.scatter(x_list[BL_num * 2], y_list[BL_num * 2], c="b", s=30)
-    ax.scatter(x_list[BL_num * 2 + 1], y_list[BL_num * 2 + 1], c="r", s=30)
-    plt.show()
 
 
 if __name__ == "__main__":
     init_values= Params()
     lattice_formed = lattice_form(init_values)
-    lattice_visual(init_values, lattice_formed[0], lattice_formed[1])
+    check(init_values, lattice_formed[0], lattice_formed[1])
