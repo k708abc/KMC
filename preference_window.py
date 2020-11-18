@@ -6,35 +6,38 @@ import tkinter.ttk as ttk
 from collections import OrderedDict
 from cal_rates import rate
 from calculation import cal_start
+import time
+from lattice_form import lattice_form, lattice_visual
 
 init_values: Dict = dict(
-    n_cell_init=5,
-    z_unit_init=5,
-    temperature=550,
-    dep_rate=0.4,
-    dep_time=5,
-    post_anneal=0,
-    prefactor="1E+13",
-    AgSi=-1.4,
-    Si12=-1.3,
-    Si23=-1.4,
-    Si34=-1.4,
-    Si45=-1.2,
-    Si56=-1.4,
-    Si_intra=-1.4,
-    Si_inter=-1.4,
-    Agtop=-1.4,
-    transformation=-0.3,
-    record_name="KMC_Si_rec",
-    img_per=10,
-    comments="No comments",
+    n_cell_init = 5, 
+    z_unit_init = 5,
+    temperature = 550,
+    dep_rate = 0.4,
+    dep_time = 5,
+    post_anneal = 0,
+    prefactor = "1E+13",
+    AgSi = -1.4,
+    Si12 = -1.3,
+    Si23 = -1.4,
+    Si34 = -1.4,
+    Si45 = -1.2,
+    Si56 = -1.4,
+    Si_intra = -1.4,
+    Si_inter = -1.4,
+    Ag_top = -1.4,
+    transformation = -0.3,
+    record_name = "KMC_Si_rec",
+    img_per = 10,
+    comments = "No comments",
+    intra_distance = 0.25,
+    inter_distance = 0.22
 )
 
 
 class Window(ttk.Frame):
     kb_eV = 8.617e-5
-    padWE: Dict = dict(sticky=(tk.W, tk.E), padx=10, pady=2)
-
+    padWE: Dict = dict(sticky=(tk.W, tk.E), padx=15, pady=2)
     def __init__(self, master):
         super().__init__(master, padding=2)
         self.create_variables()
@@ -42,9 +45,12 @@ class Window(ttk.Frame):
         self.create_frame_energies()
         self.create_frame_checks()
         self.create_frame_memos()
+        self.create_method()
         self.create_frame_buttons()
+        self.create_frame_progress()
         self.create_frame_bar()
         master.title("KMC_Si")
+        self.update_values()
 
     def create_variables(self):
         pass
@@ -73,6 +79,12 @@ class Window(ttk.Frame):
         self.create_layout_records()
         self.frame_records.pack()
 
+    def create_method(self):
+        self.frame_method = ttk.Frame()
+        self.create_widgets_method()
+        self.create_layout_method()
+        self.frame_method.pack()
+
     def create_frame_buttons(self):
         self.frame_buttons = ttk.Frame()
         self.create_widgets_buttons()
@@ -81,9 +93,15 @@ class Window(ttk.Frame):
 
     def create_frame_bar(self):
         self.frame_bars = ttk.Frame()
-        self.create_widgets_progresses()
-        self.create_layout_progresses()
+        self.create_widgets_bar()
+        self.create_layout_bar()
         self.frame_bars.pack()
+
+    def create_frame_progress(self):
+        self.frame_progress = ttk.Frame()
+        self.create_widgets_progress()
+        self.create_layout_progress()
+        self.frame_progress.pack()
 
     def create_widgets_basics(self):
         # The first row
@@ -148,33 +166,24 @@ class Window(ttk.Frame):
         self.prefactor.grid(row=1, column=7, **self.padWE)
 
     def create_widgets_energies(self):
-        labels: List[str] = [
+        self.labels: List[str] = [
             "  ",
-            "Ag-Si",
-            "Si(1-2)",
-            "Si(2-3)",
-            "Si(3-4)",
-            "Si(4-5)",
-            "Si(5-6)",
-            "Si(intra)",
-            "Si(inter)",
-            "Ag(top)",
+            "AgSi",
+            "Si12",
+            "Si23",
+            "Si34",
+            "Si45",
+            "Si56",
+            "Si_intra",
+            "Si_inter",
+            "Ag_top",
         ]
         e_values: List[float] = [
-            init_values["AgSi"],
-            init_values["Si12"],
-            init_values["Si23"],
-            init_values["Si34"],
-            init_values["Si45"],
-            init_values["Si56"],
-            init_values["Si_intra"],
-            init_values["Si_inter"],
-            init_values["Agtop"],
-        ]
+            init_values[self.labels[i]] for i in range(1, 10)
+            ]
         self.energylabels = []
         self.energies = []
         self.rate_labels = []
-
         for _ in range(9):
             self.energies.append(
                 ttk.Entry(self.frame_energies, width=7)
@@ -183,12 +192,12 @@ class Window(ttk.Frame):
         for i, energy in enumerate(self.energies):  # 上で作成したentryそれぞれに値を格納
             energy.insert(tk.END, e_values[i])
             energy.bind("<Return>", self.update_click)
-        for label in labels:
+        for label in self.labels:
             self.energylabels.append(ttk.Label(self.frame_energies, text=label))
 
     def create_layout_energies(self):
-        self.update_values()
-        for i, energylabel in enumerate(self.energylabels):  # インデックスとリストの要素を同時に取得しループ
+        #self.update_values()
+        for i, energylabel in enumerate(self.energylabels):                 #インデックスとリストの要素を同時に取得しループ
             energylabel.grid(row=0, column=i, **self.padWE)
         self.energy_label0 = ttk.Label(self.frame_energies, text="Energy (eV)")
         self.energy_label0.grid(row=1, column=0, **self.padWE)
@@ -243,6 +252,17 @@ class Window(ttk.Frame):
         self.comments_label.grid(row=1, column=0, **self.padWE)
         self.comments.grid(row=1, column=1, columnspan=3, **self.padWE)
 
+    def create_widgets_method(self):
+        self.var_method = tk.StringVar()
+        method_list = ["Check lattice", "Null event", "Rejection free"]
+        self.method_label = tk.Label(self.frame_method, text = "Method")
+        self.method_cb = ttk.Combobox(self.frame_method, textvariable= self.var_method, values = method_list, state = "readonly")
+        self.method_cb.current(0)
+
+    def create_layout_method(self):
+        self.method_label.grid(row=0, column=0, **self.padWE)
+        self.method_cb.grid(row=0, column=1, **self.padWE)
+
     def create_widgets_buttons(self):
         self.start = tk.Button(
             self.frame_buttons, text="Start", command=self.start_function, width=20
@@ -255,9 +275,22 @@ class Window(ttk.Frame):
         self.start.grid(row=0, column=0)
         self.close.grid(row=0, column=1)
 
-    def create_widgets_progresses(self):
+    def create_widgets_progress(self):
+        self.progress_label = ttk.Label(self.frame_progress, text="Progress (%)")
+        self.progress_time = ttk.Label(self.frame_progress, text="Sim. time")
+        self.progress_coverage = ttk.Label(self.frame_progress, text="Coverage")
+        self.progress_atoms = ttk.Label(self.frame_progress, text="Num. atoms")
+        self.progress_events = ttk.Label(self.frame_progress, text="Num. events")
+
+    def create_layout_progress(self):
+        self.progress_label.grid(row=0, column=0, padx = 4,pady = 10)
+        self.progress_time.grid(row=0, column=1, padx = 4,pady = 10)
+        self.progress_coverage.grid(row=0, column=2, padx = 4,pady = 10)
+        self.progress_atoms.grid(row=0, column=3, padx = 4,pady = 10)
+        self.progress_events.grid(row=0, column=4, padx = 4,pady = 10)
+
+    def create_widgets_bar(self):
         self.pbval = 0
-        self.progress_label = ttk.Label(self.frame_bars, text="Progress...")
         self.progress_bar = ttk.Progressbar(
             self.frame_bars,
             orient=tk.HORIZONTAL,
@@ -266,8 +299,7 @@ class Window(ttk.Frame):
         )
         self.progress_bar.configure(maximum=100, value=self.pbval)
 
-    def create_layout_progresses(self):
-        self.progress_label.grid(row=0, pady=15)
+    def create_layout_bar(self):
         self.progress_bar.grid(pady=20)
 
     def close_function(self):
@@ -288,13 +320,54 @@ class Window(ttk.Frame):
                 )
             )
         self.update()
+        #update dictionaly
+        init_values["n_cell_init"] = self.n_cell.get()
+        init_values["z_unit_init"] = self.z_unit.get()
+        init_values["temperature"] = self.temperature.get()
+        init_values["dep_rate"] = self.deposition_rate.get()
+        init_values["dep_time"] = self.deposition_time.get()
+        init_values["post_anneal"] = self.postanneal_time.get()
+        init_values["prefactor"] = self.prefactor.get()
+        init_values["transformation"] = self.transformation.get()
+        init_values["record_name"] = self.record.get()
+        init_values["img_per"] = self.image_rec.get()
+        init_values["comments"] = self.comments.get()
+        init_values["kbt"] = kbt
+        for i in range(1,10):
+            init_values[self.labels[i]] = self.energies[i-1].get()
 
     def update_click(self, event):
         self.update_values()
 
+    def lattice_check(self):
+        lattice_formed = lattice_form(init_values)
+        lattice_visual(init_values, lattice_formed[0], lattice_formed[1])
+
     def start_function(self):
+        if self.var_method.get() == "Check lattice":
+            self.lattice_check()
+        elif self.var_method.get() == "Null event":
+            pass
+        elif self.var_method.get() == "Rejection free":
+            pass
+
+
+
+        """
         self.update_values()
-        cal_start()
+        self.progress_label["text"] = "Started"
+        self.progress_time["text"] = "0 s"
+        self.progress_coverage["text"] = "0 ML"
+        self.progress_atoms["text"] = "0 atoms"
+        self.progress_events["text"] = "0"
+        self.update()
+        start_time = time.time()
+
+        print(self.var_method.get())
+
+
+        #cal_start()
+        """
 
 
 if __name__ == "__main__":
