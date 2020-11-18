@@ -10,9 +10,11 @@ import time
 from lattice_form import lattice_form, lattice_visual
 from InputParameter import Params
 
+
 class Window(ttk.Frame):
     kb_eV = 8.617e-5
     padWE: Dict = dict(sticky=(tk.W, tk.E), padx=15, pady=2)
+
     def __init__(self, master):
         super().__init__(master, padding=2)
         self.init_value = Params()
@@ -162,15 +164,17 @@ class Window(ttk.Frame):
                 ttk.Entry(self.frame_energies, width=7)
             )  # entryを9つ生成。_が変数だが、使われていない。
             self.rate_labels.append(ttk.Label(self.frame_energies, text="0"))
-        for (energy, (key, val)) in zip(self.energies, self.init_value.binding_energies.items()):  # 上で作成したentryそれぞれに値を格納
+        for (energy, (key, val)) in zip(
+            self.energies, self.init_value.binding_energies.items()
+        ):  # 上で作成したentryそれぞれに値を格納
             energy.insert(tk.END, val)
             energy.bind("<Return>", self.update_click)
         for label in self.labels:
             self.energylabels.append(ttk.Label(self.frame_energies, text=label))
 
     def create_layout_energies(self):
-        #self.update_values()
-        for i, energylabel in enumerate(self.energylabels):                 #インデックスとリストの要素を同時に取得しループ
+        # self.update_values()
+        for i, energylabel in enumerate(self.energylabels):  # インデックスとリストの要素を同時に取得しループ
             energylabel.grid(row=0, column=i, **self.padWE)
         self.energy_label0 = ttk.Label(self.frame_energies, text="Energy (eV)")
         self.energy_label0.grid(row=1, column=0, **self.padWE)
@@ -228,8 +232,13 @@ class Window(ttk.Frame):
     def create_widgets_method(self):
         self.var_method = tk.StringVar()
         method_list = ["Check lattice", "Null event", "Rejection free"]
-        self.method_label = tk.Label(self.frame_method, text = "Method")
-        self.method_cb = ttk.Combobox(self.frame_method, textvariable= self.var_method, values = method_list, state = "readonly")
+        self.method_label = tk.Label(self.frame_method, text="Method")
+        self.method_cb = ttk.Combobox(
+            self.frame_method,
+            textvariable=self.var_method,
+            values=method_list,
+            state="readonly",
+        )
         self.method_cb.current(0)
 
     def create_layout_method(self):
@@ -256,11 +265,11 @@ class Window(ttk.Frame):
         self.progress_events = ttk.Label(self.frame_progress, text="Num. events")
 
     def create_layout_progress(self):
-        self.progress_label.grid(row=0, column=0, padx = 4,pady = 10)
-        self.progress_time.grid(row=0, column=1, padx = 4,pady = 10)
-        self.progress_coverage.grid(row=0, column=2, padx = 4,pady = 10)
-        self.progress_atoms.grid(row=0, column=3, padx = 4,pady = 10)
-        self.progress_events.grid(row=0, column=4, padx = 4,pady = 10)
+        self.progress_label.grid(row=0, column=0, padx=4, pady=10)
+        self.progress_time.grid(row=0, column=1, padx=4, pady=10)
+        self.progress_coverage.grid(row=0, column=2, padx=4, pady=10)
+        self.progress_atoms.grid(row=0, column=3, padx=4, pady=10)
+        self.progress_events.grid(row=0, column=4, padx=4, pady=10)
 
     def create_widgets_bar(self):
         self.pbval = 0
@@ -317,8 +326,6 @@ class Window(ttk.Frame):
         elif self.var_method.get() == "Rejection free":
             pass
 
-
-
         """
         self.update_values()
         self.progress_label["text"] = "Started"
@@ -335,10 +342,9 @@ class Window(ttk.Frame):
         #cal_start()
         """
 
-"""
+
 if __name__ == "__main__":
     application = tk.Tk()
     application.title("kMC_Si")
     Window(application)
     application.mainloop()
-"""
