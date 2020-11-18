@@ -6,6 +6,7 @@ import tkinter.ttk as ttk
 from cal_rates import cal_rate
 from calculation import cal_start
 import time
+from lattice_form import lattice_form, lattice_visual
 
 init_values: Dict = dict(
     n_cell_init = 5, 
@@ -27,7 +28,9 @@ init_values: Dict = dict(
     transformation = -0.3,
     record_name = "KMC_Si_rec",
     img_per = 10,
-    comments = "No comments"
+    comments = "No comments",
+    intra_distance = 0.25,
+    inter_distance = 0.22
 )
 
 class Window(ttk.Frame):
@@ -247,7 +250,7 @@ class Window(ttk.Frame):
 
     def create_widgets_method(self):
         self.var_method = tk.StringVar()
-        method_list = ["Check lattice","Null event", "Rejection free"]
+        method_list = ["Check lattice", "Null event", "Rejection free"]
         self.method_label = tk.Label(self.frame_method, text = "Method")
         self.method_cb = ttk.Combobox(self.frame_method, textvariable= self.var_method, values = method_list, state = "readonly")
         self.method_cb.current(0)
@@ -326,7 +329,21 @@ class Window(ttk.Frame):
     def update_click(self ,event):
         self.update_values()
 
+    def lattice_check(self):
+        lattice_formed = lattice_form(init_values)
+        lattice_visual(init_values, lattice_formed[0], lattice_formed[1])
+
     def start_function(self):
+        if self.var_method.get() == "Check lattice":
+            self.lattice_check()
+        elif self.var_method.get() == "Null event":
+            pass
+        elif self.var_method.get() == "Rejection free":
+            pass
+
+
+
+        """
         self.update_values()
         self.progress_label["text"] = "Started"
         self.progress_time["text"] = "0 s"
@@ -339,7 +356,8 @@ class Window(ttk.Frame):
         print(self.var_method.get())
 
 
-        cal_start()
+        #cal_start()
+        """
 
 
 
