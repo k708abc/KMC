@@ -1,5 +1,5 @@
 import math
 
-def cal_rate(pre, kbt, E):
-    rate = pre * math.exp(E/kbt)
-    return rate
+
+def rate(pre: float, kbt: float, energy: float) -> float:
+    return pre * math.exp(energy / kbt)
