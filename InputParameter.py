@@ -24,7 +24,6 @@ class Params:
         self.prefactor = "1E+13"
         self.binding_energies: OrderedDict[str, float] = OrderedDict()
         self.binding_energies["AgSi"] = -1.4
-        self.binding_energies["AgSi"] = -1.4
         self.binding_energies["Si12"] = -1.3
         self.binding_energies["Si23"] = -1.4
         self.binding_energies["Si34"] = -1.4
@@ -37,6 +36,8 @@ class Params:
         self.record_name = "KMC_Si_rec"
         self.img_per = 10
         self.comments = "No comments"
+        self.intra_distance = 0.23
+        self.inter_distance = 0.22
 
     @property
     def temperature_eV(self) -> float:
