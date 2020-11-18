@@ -5,6 +5,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from cal_rates import cal_rate
 from calculation import cal_start
+import time
 
 init_values: Dict = dict(
     n_cell_init = 5, 
@@ -39,6 +40,7 @@ class Window(ttk.Frame):
         self.create_frame_energies()
         self.create_frame_checks()
         self.create_frame_memos()
+        self.create_method()
         self.create_frame_buttons()
         self.create_frame_progress()
         self.create_frame_bar()
@@ -71,6 +73,12 @@ class Window(ttk.Frame):
         self.create_widgets_records()
         self.create_layout_records()
         self.frame_records.pack()
+
+    def create_method(self):
+        self.frame_method = ttk.Frame()
+        self.create_widgets_method()
+        self.create_layout_method()
+        self.frame_method.pack()
 
     def create_frame_buttons(self):
         self.frame_buttons = ttk.Frame()
@@ -237,6 +245,17 @@ class Window(ttk.Frame):
         self.comments_label.grid(row=1, column=0, **self.padWE)
         self.comments.grid(row=1, column=1, columnspan=3, **self.padWE)
 
+    def create_widgets_method(self):
+        self.var_method = tk.StringVar()
+        method_list = ["Check lattice","Null event", "Rejection free"]
+        self.method_label = tk.Label(self.frame_method, text = "Method")
+        self.method_cb = ttk.Combobox(self.frame_method, textvariable= self.var_method, values = method_list, state = "readonly")
+        self.method_cb.current(0)
+
+    def create_layout_method(self):
+        self.method_label.grid(row=0, column=0, **self.padWE)
+        self.method_cb.grid(row=0, column=1, **self.padWE)
+
     def create_widgets_buttons(self):
         self.start = tk.Button(self.frame_buttons, text="Start", command=self.start_function, width=20)
         self.close = tk.Button(
@@ -309,6 +328,17 @@ class Window(ttk.Frame):
 
     def start_function(self):
         self.update_values()
+        self.progress_label["text"] = "Started"
+        self.progress_time["text"] = "0 s"
+        self.progress_coverage["text"] = "0 ML"
+        self.progress_atoms["text"] = "0 atoms"
+        self.progress_events["text"] = "0"
+        self.update()
+        start_time = time.time()
+
+        print(self.var_method.get())
+
+
         cal_start()
 
 
