@@ -1,6 +1,7 @@
 from typing import List, Dict
 import matplotlib.pyplot as plt
 import matplotlib.lines as mlines
+from InputParameter import Params
 
 lattice: Dict[str, list] = {}
 atom_set: Dict[str, int] = {}
@@ -10,11 +11,12 @@ event_time: Dict[str, list] = {}
 event_time_tot: Dict[str, float] = {}
 
 def lattice_form (input_params):
-    unit_length = int(input_params["n_cell_init"])
-    z_units = int(input_params["z_unit_init"])
+
+    unit_length = input_params.n_cell_init
+    z_units = input_params.z_unit_init
     maxz = z_units * 6 - 1
-    zd1 = float(input_params["intra_distance"])
-    zd2 = float(input_params["inter_distance"])
+    zd1 = float(input_params.intra_distance)
+    zd2 = float(input_params.inter_distance)
     #
     lattice_first: List[float] = [
         [[
@@ -188,8 +190,8 @@ def lattice_form (input_params):
 def lattice_visual (input_params, lattice_v, bonds_v):
     unit_x: List[float] = [1, 0, 0]
     unit_y: List[float] = [0.5, 0.866, 0]
-    unit_length = int(input_params["n_cell_init"])
-    z_units = int(input_params["z_unit_init"])
+    unit_length = input_params.n_cell_init
+    z_units = input_params.z_unit_init
     maxz = z_units * 6 - 1
     # drawing range
     min_x = -1
@@ -257,30 +259,7 @@ def lattice_visual (input_params, lattice_v, bonds_v):
 
 """
 if __name__ == "__main__":
-    init_values: Dict = dict(
-        n_cell_init = 5, 
-        z_unit_init = 5,
-        temperature = 550,
-        dep_rate = 0.4,
-        dep_time = 5,
-        post_anneal = 0,
-        prefactor = "1E+13",
-        AgSi = -1.4,
-        Si12 = -1.3,
-        Si23 = -1.4,
-        Si34 = -1.4,
-        Si45 = -1.2,
-        Si56 = -1.4,
-        Si_intra = -1.4,
-        Si_inter = -1.4,
-        Ag_top = -1.4,
-        transformation = -0.3,
-        record_name = "KMC_Si_rec",
-        img_per = 10,
-        comments = "No comments",
-        intra_distance = 0.25,
-        inter_distance = 0.22
-    )
+    init_values= Params()
     lattice_formed = lattice_form(init_values)
     lattice_visual(init_values, lattice_formed[0], lattice_formed[1])
 """
