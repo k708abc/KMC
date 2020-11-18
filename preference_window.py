@@ -3,35 +3,37 @@
 from typing import List, Dict
 import tkinter as tk
 import tkinter.ttk as ttk
-from cal_rates import cal_rate
+from cal_rates import rate
 from calculation import cal_start
 
 init_values: Dict = dict(
-    n_cell_init = 5, 
-    z_unit_init = 5,
-    temperature = 550,
-    dep_rate = 0.4,
-    dep_time = 5,
-    post_anneal = 0,
-    prefactor = "1E+13",
-    AgSi = -1.4,
-    Si12 = -1.3,
-    Si23 = -1.4,
-    Si34 = -1.4,
-    Si45 = -1.2,
-    Si56 = -1.4,
-    Si_intra = -1.4,
-    Si_inter = -1.4,
-    Agtop = -1.4,
-    transformation = -0.3,
-    record_name = "KMC_Si_rec",
-    img_per = 10,
-    comments = "No comments"
+    n_cell_init=5,
+    z_unit_init=5,
+    temperature=550,
+    dep_rate=0.4,
+    dep_time=5,
+    post_anneal=0,
+    prefactor="1E+13",
+    AgSi=-1.4,
+    Si12=-1.3,
+    Si23=-1.4,
+    Si34=-1.4,
+    Si45=-1.2,
+    Si56=-1.4,
+    Si_intra=-1.4,
+    Si_inter=-1.4,
+    Agtop=-1.4,
+    transformation=-0.3,
+    record_name="KMC_Si_rec",
+    img_per=10,
+    comments="No comments",
 )
+
 
 class Window(ttk.Frame):
     kb_eV = 8.617e-5
     padWE: Dict = dict(sticky=(tk.W, tk.E), padx=10, pady=2)
+
     def __init__(self, master):
         super().__init__(master, padding=2)
         self.create_variables()
@@ -173,17 +175,19 @@ class Window(ttk.Frame):
         self.rate_labels = []
 
         for _ in range(9):
-            self.energies.append(ttk.Entry(self.frame_energies, width=7))   #entryを9つ生成。_が変数だが、使われていない。
+            self.energies.append(
+                ttk.Entry(self.frame_energies, width=7)
+            )  # entryを9つ生成。_が変数だが、使われていない。
             self.rate_labels.append(ttk.Label(self.frame_energies, text="0"))
-        for i, energy in enumerate(self.energies):                                        #上で作成したentryそれぞれに値を格納
+        for i, energy in enumerate(self.energies):  # 上で作成したentryそれぞれに値を格納
             energy.insert(tk.END, e_values[i])
             energy.bind("<Return>", self.update_click)
         for label in labels:
             self.energylabels.append(ttk.Label(self.frame_energies, text=label))
-        
+
     def create_layout_energies(self):
         self.update_values()
-        for i, energylabel in enumerate(self.energylabels):                 #インデックスとリストの要素を同時に取得しループ
+        for i, energylabel in enumerate(self.energylabels):  # インデックスとリストの要素を同時に取得しループ
             energylabel.grid(row=0, column=i, **self.padWE)
         self.energy_label0 = ttk.Label(self.frame_energies, text="Energy (eV)")
         self.energy_label0.grid(row=1, column=0, **self.padWE)
@@ -192,7 +196,7 @@ class Window(ttk.Frame):
         self.rate_bond_label = ttk.Label(self.frame_energies, text="Rates/bond")
         self.rate_bond_label.grid(row=2, **self.padWE)
         for i, ratelabel in enumerate(self.rate_labels):
-            ratelabel.grid(row=2, column=i+1)
+            ratelabel.grid(row=2, column=i + 1)
 
     def create_widgets_checks(self):
         self.bln_tr = tk.BooleanVar()
@@ -239,7 +243,9 @@ class Window(ttk.Frame):
         self.comments.grid(row=1, column=1, columnspan=3, **self.padWE)
 
     def create_widgets_buttons(self):
-        self.start = tk.Button(self.frame_buttons, text="Start", command=self.start_function, width=20)
+        self.start = tk.Button(
+            self.frame_buttons, text="Start", command=self.start_function, width=20
+        )
         self.close = tk.Button(
             self.frame_buttons, text="close", command=self.close_function, width=20
         )
@@ -266,19 +272,23 @@ class Window(ttk.Frame):
     def close_function(self):
         # plt.close("all")  <<< FIXME
         self.quit()
-    
+
     def run(self):
         self.mainloop()
 
     def update_values(self):
-        temperature = self.temperature.get()
+        temperature: str = self.temperature.get()
         kbt = float(temperature) * self.kb_eV
-        for i, energy in enumerate(self.energies):
-            rate = cal_rate(float(self.prefactor.get()), kbt, float(energy.get()))
-            self.rate_labels[i]["text"]= str("{:.3g}".format(rate))
+        for energy, rate_label in zip(self.energies, self.rate_labels):
+
+            rate_label["text"] = str(
+                "{:.3g}".format(
+                    rate(float(self.prefactor.get()), kbt, float(energy.get()))
+                )
+            )
         self.update()
 
-    def update_click(self ,event):
+    def update_click(self, event):
         self.update_values()
 
     def start_function(self):
@@ -286,11 +296,8 @@ class Window(ttk.Frame):
         cal_start()
 
 
-
-"""
 if __name__ == "__main__":
     application = tk.Tk()
     application.title("kMC_Si")
     Window(application)
     application.mainloop()
-"""
