@@ -36,8 +36,8 @@ class Params:
         self.record_name = "KMC_Si_rec"
         self.img_per = 10
         self.comments = "No comments"
-        self.intra_distance = 0.23
-        self.inter_distance = 0.22
+        self.intra_distance = 0.204
+        self.inter_distance = 0.612
 
     @property
     def temperature_eV(self) -> float:
