@@ -42,3 +42,10 @@ class Params:
     @property
     def temperature_eV(self) -> float:
         return self.temperature * 8.617e-5
+    @property
+    def atoms_in_BL(self) -> int:
+        return 2*(self.n_cell_init)**2
+    @property
+    def dep_rate_atoms_persec(self) -> float:
+        return self.dep_rate/60*self.atoms_in_BL
+    

@@ -301,6 +301,10 @@ class Window(ttk.Frame):
         self.init_value.prefactor = float(self.prefactor.get())
         for energy_entry, key in zip(self.energies, self.init_value.binding_energies):
             self.init_value.binding_energies[key] = float(energy_entry.get())
+        self.init_value.transformation = float(self.transformation.get())
+        self.init_value.record_name = str(self.record.get())
+        self.init_value.img_per = float(self.image_rec.get())
+        self.init_value.comments = str(self.comments.get())
         #
         kbt = self.init_value.temperature_eV
         self.temperautre_energy["text"] = "{:.3g}".format(kbt)
@@ -329,7 +333,6 @@ class Window(ttk.Frame):
             pass
 
         """
-        self.update_values()
         self.progress_label["text"] = "Started"
         self.progress_time["text"] = "0 s"
         self.progress_coverage["text"] = "0 ML"
