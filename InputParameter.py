@@ -48,4 +48,6 @@ class Params:
     @property
     def dep_rate_atoms_persec(self) -> float:
         return self.dep_rate/60*self.atoms_in_BL
-    
+    @property
+    def total_time(self) -> float:
+        return self.dep_time + self.post_anneal

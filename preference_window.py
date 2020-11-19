@@ -10,6 +10,7 @@ import time
 from lattice_form import lattice_form
 from lattice_form_check import check
 from InputParameter import Params
+from depsoition import deposit_an_atom
 
 
 class Window(ttk.Frame):
@@ -323,29 +324,51 @@ class Window(ttk.Frame):
         lattice_formed = lattice_form(self.init_value)
         check(self.init_value, lattice_formed[0], lattice_formed[1])
 
-    def start_function(self):
-        self.update_values()
-        if self.var_method.get() == "Check lattice":
-            self.lattice_check()
-        elif self.var_method.get() == "Null event":
-            pass
-        elif self.var_method.get() == "Rejection free":
-            pass
-
-        """
+    def start_setting(self):
         self.progress_label["text"] = "Started"
         self.progress_time["text"] = "0 s"
         self.progress_coverage["text"] = "0 ML"
         self.progress_atoms["text"] = "0 atoms"
         self.progress_events["text"] = "0"
+        self.pbval = 0
+        self.progress_bar.configure(value=self.pbval)
         self.update()
-        start_time = time.time()
+        self.start_time = time.time()
+        self.prog_time = 0
+        self.n_atoms = 0
+        self.n_events = 0
 
-        print(self.var_method.get())
+    def update_progress(self):
+        self.pbval = int(self.prog_time / self.init_value.total_time * 100)
+        self.progress_bar.configure(value=self.pbval)
+        self.progress_label["text"] = str(self.pbval) + " %"
+        self.progress_time["text"] = str("{:.2f}".format(self.prog_time)) + " s"
+        self.progress_coverage["text"] = (
+            str("{:.2f}".format(self.n_atoms / self.init_value.atoms_in_BL)) + " ML"
+        )
+        self.progress_atoms["text"] = str(self.n_atoms) + "atoms"
+        self.progress_events["text"] = str(self.n_events) + "events"
+        self.update()
 
+    def start_function(self):
+        self.update_values()
+        if self.var_method.get() == "Check lattice":
+            self.lattice_check()
 
-        #cal_start()
-        """
+        elif self.var_method.get() == "Null event":
+            self.start_setting()
+            lattice, bonds, atom_set, _, _, _ = lattice_form(self.init_value)
+            # return lattice, bonds, atom_set, event, event_time, event_time_tot
+            # put first and second atom
+            for _ in 2:
+                dep_pos, atom_type = deposit_an_atom(atom_set, bonds)
+                atom_set[dep_pos] = atom_type
+                self.n_atoms += 1
+                self.n_events += 1
+            self.update_progress()
+
+        elif self.var_method.get() == "Rejection free":
+            self.start_setting()
 
 
 if __name__ == "__main__":

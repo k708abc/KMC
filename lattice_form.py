@@ -2,7 +2,6 @@ from typing import List, Dict
 import math
 from InputParameter import Params
 from lattice_form_check import check
-import itertools
 
 lattice_first: Dict[tuple, list] = {}
 lattice: Dict[tuple, list] = {}
@@ -22,11 +21,12 @@ def reset_dicts():
     event_time.clear()
     event_time_tot.clear()
 
+
 def form_first_3BL(unit_length, zd1, zd2):
     for key in lattice_first:
         i = key[0]
         k = key[1]
-        lattice_first[key] =[
+        lattice_first[key] = [
             [i, k, 0],
             [i + 1 / 3.0, k + 1 / 3.0, zd1],
             [i + 1 / 3.0, k + 1 / 3.0, zd1 + zd2],
@@ -40,56 +40,55 @@ def lattice_full_layers(unit_height):
     for key in lattice:
         key_first = (key[0], key[1])
         lattice[key] = [
-            lattice_first[key_first][key[2]%6][0],
-            lattice_first[key_first][key[2]%6][1],
-            lattice_first[key_first][key[2]%6][2] + unit_height * key[2] // 6,
+            lattice_first[key_first][key[2] % 6][0],
+            lattice_first[key_first][key[2] % 6][1],
+            lattice_first[key_first][key[2] % 6][2] + unit_height * key[2] // 6,
         ]
     """六方晶系でSiを記述したとき、3BL分のハニカム構造がz方向の単位構造になります。
     この3BL分の単位格子の高さが2.448(nm)です。"""  # ←そういった細かい情報の結果ならば、コードにその旨書いておかないと絶対ダメ。
 
 
+def neighbor_points(i, j, k, z_judge, unit_length):
+    if z_judge == 0 or z_judge == 2:
+        neighbors = [
+            [(i - 1) % unit_length, j, k + 1],
+            [i, (j - 1) % unit_length, k + 1],
+            [i, j, k + 1],
+        ]
+        if k != 0:
+            neighbors.append([i, j, k - 1])
+    elif z_judge == 1 or z_judge == 3:
+        neighbors = [
+            [(i + 1) % unit_length, j, k - 1],
+            [i, (j + 1) % unit_length, k - 1],
+            [i, j, k - 1],
+            [i, j, k + 1],
+        ]
+    elif z_judge == 4:
+        neighbors = [
+            [(i + 1) % unit_length, j, k + 1],
+            [(i + 1) % unit_length, (j + 1) % unit_length, k + 1],
+            [i, (j + 1) % unit_length, k + 1],
+            [i, j, k - 1],
+        ]
+    elif z_judge == 5:
+        neighbors = [
+            [(i - 1) % unit_length, j, k - 1],
+            [i, (j - 1) % unit_length, k - 1],
+            [(i - 1) % unit_length, (j - 1) % unit_length, k - 1],
+            [i, j, k + 1],
+        ]
+    return neighbors
+
+
 def search_bond(unit_length):
     # Search for bonding atoms for all the atoms
     for key in bonds:
-        bond_with = []
         z_judge = key[2] % 6
         i = key[0]
         j = key[1]
         k = key[2]
-
-        if z_judge == 0 or z_judge == 2:
-            bond_with = [
-                [(i - 1)%unit_length, j, k + 1],
-                [i, (j - 1)%unit_length, k + 1],
-                [i, j, k + 1],
-            ]
-            if k != 0:
-                bond_with.append([i, j, k - 1])
-            else:
-                pass
-        elif z_judge == 1 or z_judge == 3:
-            bond_with = [
-                [(i + 1)%unit_length, j, k - 1],
-                [i, (j + 1)%unit_length, k - 1],
-                [i, j, k - 1],
-                [i, j, k + 1],
-            ]            
-        elif z_judge == 4:
-            bond_with = [
-                [(i + 1)%unit_length, j, k + 1],
-                [(i + 1)%unit_length, (j + 1)%unit_length, k + 1],
-                [i, (j + 1)%unit_length, k + 1],
-                [i, j, k - 1],
-            ]
-        elif z_judge == 5:
-            bond_with = [
-                [(i - 1)%unit_length, j, k - 1],
-                [i, (j - 1)%unit_length, k - 1],
-                [(i - 1)%unit_length, (j - 1)%unit_length, k - 1],
-                [i, j, k + 1],
-            ]
-        #
-        bonds[key] = bond_with
+        bonds[key] = neighbor_points(i, j, k, z_judge, unit_length)
 
 
 def lattice_form(input_params):  # 　ここ長すぎるので、少なくとも3つか四つの関数に分ける。
@@ -98,12 +97,12 @@ def lattice_form(input_params):  # 　ここ長すぎるので、少なくとも
     z_units = input_params.z_unit_init
     zd1 = float(input_params.intra_distance)
     zd2 = float(input_params.inter_distance)
-    unit_height = 3*(zd1 + zd2)
+    unit_height = 3 * (zd1 + zd2)
     reset_dicts()
     #
     for i in range(unit_length):
         for j in range(unit_length):
-            lattice_first[(i,j)] = []
+            lattice_first[(i, j)] = []
             for k in range(z_units * 6):
                 lattice[(i, j, k)] = []
                 atom_set[(i, j, k)] = 0

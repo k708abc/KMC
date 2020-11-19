@@ -5,12 +5,10 @@ import math
 import time
 from typing import List, Dict
 import tkinter as tk
-from tkinter import ttk
 import os
 import random
 import matplotlib.pyplot as plt
 import matplotlib.patches as pat
-import matplotlib.lines as mlines
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from PIL import Image, ImageGrab
 from pptx import Presentation
@@ -24,33 +22,6 @@ bonds: Dict[str, list] = {}
 event: Dict[str, list] = {}
 event_time: Dict[str, list] = {}
 event_time_tot: Dict[str, float] = {}
-
-
-def update_values():
-    input_params["Unit_length"] = float(entry_unit_length.get())
-    input_params["Number_of_z_units"] = float(entry_zunit.get())
-    input_params["Temperature"] = float(entry_temperature.get())
-    input_params["kbt"] = float(entry_temperature.get()) * 8.617e-5
-    input_params["deposition_rate"] = float(entry_dep_rate.get())
-    input_params["deposition_time"] = float(entry_dep_time.get())
-    input_params["post_anneal"] = float(entry_post_anneal.get())
-    input_params["prefactor"] = float(entry_prefactor.get())
-    # calculate deposition speed in atoms/sec
-    unit_length = int(entry_unit_length.get())
-    deposition_rate = float(entry_dep_rate.get())  # ML/min
-    deposition_rate = deposition_rate / 60  # ML/s
-    atoms_in_BL = 2 * unit_length ** 2  # atoms/ML
-    deposition_rate = deposition_rate * atoms_in_BL  # atoms/s
-    input_params["Atoms_in_BL"] = float(atoms_in_BL)
-    input_params["dep_rate_(atom/s)"] = float(deposition_rate)
-    text_dep_atom_persec["text"] = str("{:.5f}".format(deposition_rate))
-    # update rates
-    for i in range(len(rates_list)):
-        rates_list[i]["text"] = str(
-            "{:.5f}".format(cal_rate(float(bonding_entry_list[i].get())))
-        )
-    #
-    root.update()
 
 
 def show_current():
@@ -400,37 +371,6 @@ def deposition():
     atom_set[dep[0]][dep[1]][dep[2]] = st
 
 
-def params():
-    global pre, Eagsi, E12, E23, E34, E45, E56, Eintra, Einter, Eagtp, Etr, Vene, rec, rec1
-    global d_rate, NBL
-    pre = float(entry_pre.get())
-    Eagsi = float(entry_AgSi.get())
-    E12 = float(entry_Si12.get())
-    E23 = float(entry_Si23.get())
-    E34 = float(entry_Si34.get())
-    E45 = float(entry_Si45.get())
-    E56 = float(entry_Si56.get())
-    Eintra = float(entry_Siel.get())
-    Einter = float(entry_Sielin.get())
-    Eagtp = float(entry_Agtp.get())
-    Etr = float(entry_tr.get())
-
-    Vene = [E12, E23, E34, E45, E56, Eintra, Einter]
-    rec = float(entry_img.get())
-    rec1 = float(entry_img.get())
-
-    # calculate deposition speed
-    d_rate = float(entry_rate.get())  # ML/min
-    d_rate = d_rate / 60  # ML/s
-    NBL = 2 * nl * nl  # atoms/ML
-    d_rate = d_rate * NBL  # atoms/s
-
-    global ttime, dep_time
-    dep_time = float(entry_time.get()) * 60
-    post_time = float(entry_post.get()) * 60
-    ttime = dep_time + post_time
-
-
 def update_progress():
     text_time_c["text"] = str("{:.1f}".format(rel_time)) + " s"
     pbval = int(rel_time / ttime * 100)
@@ -464,6 +404,7 @@ def rec_atoms():
 
     cov_rec.append(cov)
     t_rec.append(rel_time)
+
 
 def update_events():
     global mod, event, event_time, event_tot, tot
@@ -1717,4 +1658,3 @@ if __name__ == "__main__":
     application = tk.Tk()
     app = App(application)
     app.run()
-
