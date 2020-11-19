@@ -7,7 +7,8 @@ from collections import OrderedDict
 from cal_rates import rate
 from calculation import cal_start
 import time
-from lattice_form import lattice_form, lattice_visual
+from lattice_form import lattice_form
+from lattice_form_check import check
 from InputParameter import Params
 
 
@@ -316,9 +317,10 @@ class Window(ttk.Frame):
 
     def lattice_check(self):
         lattice_formed = lattice_form(self.init_value)
-        lattice_visual(self.init_value, lattice_formed[0], lattice_formed[1])
+        check(self.init_value, lattice_formed[0], lattice_formed[1])
 
     def start_function(self):
+        self.update_values()
         if self.var_method.get() == "Check lattice":
             self.lattice_check()
         elif self.var_method.get() == "Null event":
