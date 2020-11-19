@@ -11,7 +11,9 @@ from lattice_form import lattice_form
 from lattice_form_check import check
 from InputParameter import Params
 from depsoition import deposit_an_atom
-
+from choose_site import choose_atom
+from judgement import judge_null
+from event_collection import get_events
 
 class Window(ttk.Frame):
     kb_eV = 8.617e-5
@@ -350,25 +352,56 @@ class Window(ttk.Frame):
         self.progress_events["text"] = str(self.n_events) + "events"
         self.update()
 
+    def det_normarize(self):
+        kbt = self.init_value.temperature_eV
+        fast_event = max[
+            rate(float(self.prefactor.get()), kbt, float(energy.get())) for energy in self.energies
+            ]
+        self.normarize = 10*fast_event
+
+    def null_event_kmc(self):
+        self.start_setting()
+        atom_set_pos: List[tuple] = [(-1, -1, -1)]
+        lattice, bonds, atom_set, _, _, _ = lattice_form(self.init_value)
+        # return lattice, bonds, atom_set, event, event_time, event_time_tot
+        # put first and second atom
+        for _ in 2:
+            dep_pos, atom_type = deposit_an_atom(atom_set, bonds)
+            atom_set[dep_pos] = atom_type
+            atom_set_pos.append(dep_pos)
+            self.n_atoms += 1
+            self.n_events += 1
+        self.update_progress()
+        self.det_normarize()
+        while self.prog_time <= self.init_value.total_time:
+            target = choose_atom(atom_set_pos)
+            if target == (-1, -1, -1):
+                # deposition
+                judge = judge_null(
+                    self.init_value.dep_rate_atoms_persec / self.normarize
+                    )
+                if judge == "success":
+                    self.prog_time += self.init_value.dep_rate_atoms_persec
+                    dep_pos, atom_type = deposit_an_atom(atom_set, bonds)
+                    atom_set[dep_pos] = atom_type
+                    atom_set_pos.append(dep_pos)
+                    self.n_atoms += 1
+                    self.n_events += 1
+            else:
+                events, rates = get_events(atom_set, bonds, target, self.init_value)
+
+
+
     def start_function(self):
         self.update_values()
         if self.var_method.get() == "Check lattice":
             self.lattice_check()
 
         elif self.var_method.get() == "Null event":
-            self.start_setting()
-            lattice, bonds, atom_set, _, _, _ = lattice_form(self.init_value)
-            # return lattice, bonds, atom_set, event, event_time, event_time_tot
-            # put first and second atom
-            for _ in 2:
-                dep_pos, atom_type = deposit_an_atom(atom_set, bonds)
-                atom_set[dep_pos] = atom_type
-                self.n_atoms += 1
-                self.n_events += 1
-            self.update_progress()
+            self.null_event_kmc()
 
         elif self.var_method.get() == "Rejection free":
-            self.start_setting()
+            pass
 
 
 if __name__ == "__main__":

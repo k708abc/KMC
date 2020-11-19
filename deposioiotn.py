@@ -6,7 +6,9 @@ import math
 def get_candidates(atom_set, bonds):
     candidate: List[tuple] = []
     for key, val in atom_set.items():
-        if key[2] == 0:
+        if val != 0:
+            pass
+        elif key[2] == 0:
             candidate.append(key)
         else:
             for bond in bonds[key]:
