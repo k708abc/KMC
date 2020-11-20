@@ -14,6 +14,8 @@ from depsoition import deposit_an_atom
 from choose_site import choose_atom
 from judgement import judge_null
 from event_collection import get_events
+from normarize_list import normarize_rate
+from weighted_choice import choice
 
 class Window(ttk.Frame):
     kb_eV = 8.617e-5
@@ -386,9 +388,23 @@ class Window(ttk.Frame):
                     atom_set[dep_pos] = atom_type
                     atom_set_pos.append(dep_pos)
                     self.n_atoms += 1
-                    self.n_events += 1
             else:
-                events, rates = get_events(atom_set, bonds, target, self.init_value)
+                events, rates = get_events(
+                    atom_set, bonds, target, self.init_value
+                    )
+                # Normarize rates
+                norm_rates = normarize_rate(rates, self.normarize)
+                # add null event
+                events.append(target)
+                # choose an event
+                move_atom = weight_choise(events, norm_rates)
+                # event progress
+                atom_set[move_atom] = atom_set[target]
+                atom_set[target] = 0
+            # end of an event
+            self.n_events += 1
+            self.update_progress()
+            
 
 
 
