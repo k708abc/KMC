@@ -69,27 +69,23 @@ def get_energy(atom_set, bonds, target, params):
 
 
 def get_filled_sites(atom_set, indexes):
-    surrounding = [
+    return [
         atom_nn for atom_nn in indexes if atom_set[atom_nn] != 0
         ]
-    return surrounding
 
 
 def get_empty_sites(atom_set, indexes):
-    empty = [
+    return [
         atom_nn for atom_nn in indexes if atom_set[atom_nn] == 0
         ]
-    return empty
 
 
 def get_aboves(indexes):
-    aboves = [(i[0], i[1], i[2] + 1) for i in indexes]
-    return aboves
+    return [(i[0], i[1], i[2] + 1) for i in indexes]
 
 
 def get_lowers_sites(indexes):
-    lowers = [(i[0], i[1], i[2] - 1) for i in indexes]
-    return lowers
+    return [(i[0], i[1], i[2] - 1) for i in indexes]
 
 
 # 移動後に原子が孤立するような移動は省く
