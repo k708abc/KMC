@@ -10,12 +10,13 @@ import time
 from lattice_form import lattice_form
 from lattice_form_check import check
 from InputParameter import Params
-from depsoition import deposit_an_atom
+from depsosition import deposit_an_atom
 from choose_site import choose_atom
 from judgement import judge_null
 from event_collection import get_events
 from normarize_list import normarize_rate
 from weighted_choice import choice
+
 
 class Window(ttk.Frame):
     kb_eV = 8.617e-5
@@ -356,10 +357,13 @@ class Window(ttk.Frame):
 
     def det_normarize(self):
         kbt = self.init_value.temperature_eV
-        fast_event = max[
-            rate(float(self.prefactor.get()), kbt, float(energy.get())) for energy in self.energies
+        fast_event = max(
+            [
+                rate(float(self.prefactor.get()), kbt, float(energy.get()))
+                for energy in self.energies
             ]
-        self.normarize = 10*fast_event
+        )
+        self.normarize = 10 * fast_event
 
     def null_event_kmc(self):
         self.start_setting()
@@ -381,7 +385,7 @@ class Window(ttk.Frame):
                 # deposition
                 judge = judge_null(
                     self.init_value.dep_rate_atoms_persec / self.normarize
-                    )
+                )
                 if judge == "success":
                     self.prog_time += self.init_value.dep_rate_atoms_persec
                     dep_pos, atom_type = deposit_an_atom(atom_set, bonds)
@@ -389,9 +393,7 @@ class Window(ttk.Frame):
                     atom_set_pos.append(dep_pos)
                     self.n_atoms += 1
             else:
-                events, rates = get_events(
-                    atom_set, bonds, target, self.init_value
-                    )
+                events, rates = get_events(atom_set, bonds, target, self.init_value)
                 # Normarize rates
                 norm_rates = normarize_rate(rates, self.normarize)
                 # add null event
@@ -404,9 +406,6 @@ class Window(ttk.Frame):
             # end of an event
             self.n_events += 1
             self.update_progress()
-            
-
-
 
     def start_function(self):
         self.update_values()
