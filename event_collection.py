@@ -69,15 +69,11 @@ def get_energy(atom_set, bonds, target, params):
 
 
 def get_filled_sites(atom_set, indexes):
-    return [
-        atom_nn for atom_nn in indexes if atom_set[atom_nn] != 0
-        ]
+    return [atom_nn for atom_nn in indexes if atom_set[atom_nn] != 0]
 
 
 def get_empty_sites(atom_set, indexes):
-    return [
-        atom_nn for atom_nn in indexes if atom_set[atom_nn] == 0
-        ]
+    return [atom_nn for atom_nn in indexes if atom_set[atom_nn] == 0]
 
 
 def get_aboves(indexes):
@@ -129,7 +125,7 @@ def possible_events(atom_set, bonds, target, params, energy, unit_length):
         (atom_x, (atom_y + 1) % unit_length, atom_z),
         ((atom_x + 1) % unit_length, (atom_y - 1) % unit_length, atom_z),
         ((atom_x - 1) % unit_length, (atom_y + 1) % unit_length, atom_z),
-        ]
+    ]
     # 最近接の空きサイト
     nn_empty = get_empty_sites(atom_set, bonds[target])
     # 次近接の空きサイト
@@ -179,7 +175,7 @@ def possible_events(atom_set, bonds, target, params, energy, unit_length):
             # 直下に原子があるおき
             else:
                 # 直下原子周辺の空きサイト
-                d_step_empty = get_empty_sites(atom_set, bonds[direct_below]])
+                d_step_empty = get_empty_sites(atom_set, bonds[direct_below])
                 # 直下原子の周辺空きサイト→候補
                 for empty in d_step_site:
                     events.append(empty)
@@ -197,7 +193,7 @@ def possible_events(atom_set, bonds, target, params, energy, unit_length):
                 # 移動後に隣接原子がある→候補
                 if len(cand_nn_atom) >= 1:
                     events.append(cand)
-                    rates.append(rate(energy))           
+                    rates.append(rate(energy))
     #
     # BLの上層原子
     # 次近接の真上か、最近接真上と次近接真上の共通サイト
@@ -274,6 +270,6 @@ def get_events(atom_set, bonds, target, params):
     # calculate possible events
     event_list, rate_list = possible_events(
         atom_set, bonds, target, params, energy, unit_length
-        )
+    )
 
     return event_list, rate_list

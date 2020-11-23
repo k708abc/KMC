@@ -10,7 +10,7 @@ import time
 from lattice_form import lattice_form
 from lattice_form_check import check
 from InputParameter import Params
-from depsosition import deposit_an_atom
+from deposition import deposit_an_atom
 from choose_site import choose_atom
 from judgement import judge_null
 from event_collection import get_events
