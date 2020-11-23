@@ -1,11 +1,14 @@
-from typing import List
+from typing import List, Tuple, Dict
 import random
 import math
 
 
-def get_candidates(atom_set, bonds):
-    candidate: List[tuple] = []
+def get_candidates(atom_set: Dict, bonds):
+    candidate: List[Tuple[int, int, int]] = []  #  リストの中身は into のタプルということでＯＫ？
     for key, val in atom_set.items():
+        # atom_set の key , val は何を意味しているの？
+        # key val では無くて、（繰り返しになりますが。）
+        # 変数名に意味を持たせるようにするのが大事です。直也のコード全般にいえることですが。
         if val != 0:
             pass
         elif key[2] == 0:
@@ -30,7 +33,7 @@ def judge_type(atom_set, bonds, dep_pos):
     return 2
 
 
-def deposit_an_atom(atom_set: dict, bonds: dict):
+def deposit_an_atom(atom_set: Dict, bonds: Dict):
     candidate = get_candidates(atom_set, bonds)
     dep_pos = dep_position(candidate)
     atom_type = judge_type(atom_set, bonds, dep_pos)
