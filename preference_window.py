@@ -11,7 +11,7 @@ import time
 from lattice_form import lattice_form
 from lattice_form_check import check
 from InputParameter import Params
-from depsoition import deposit_an_atom
+from deposition import deposit_an_atom
 from choose_site import choose_atom
 from judgement import judge_null
 from event_collection import get_events
@@ -364,10 +364,13 @@ class Window(ttk.Frame):
 
     def det_normarize(self):
         kbt = self.init_value.temperature_eV
-        fast_event = max[
-            rate(float(self.prefactor.get()), kbt, float(energy.get())) for energy in self.energies
+        fast_event = max(
+            [
+                rate(float(self.prefactor.get()), kbt, float(energy.get()))
+                for energy in self.energies
             ]
-        self.normarize = 10*fast_event
+        )
+        self.normarize = 10 * fast_event
 
     def record_position(self):
         self.pos_rec.append(copy.copy(self.atom_set))
@@ -395,7 +398,7 @@ class Window(ttk.Frame):
                 # deposition
                 judge = judge_null(
                     self.init_value.dep_rate_atoms_persec / self.normarize
-                    )
+                )
                 if judge == "success":
                     self.prog_time += self.init_value.dep_rate_atoms_persec
                     dep_pos, atom_type = deposit_an_atom(self.atom_set, bonds)
@@ -405,7 +408,7 @@ class Window(ttk.Frame):
             else:
                 events, rates = get_events(
                     self.atom_set, bonds, target, self.init_value
-                    )
+                )
                 # Normarize rates
                 norm_rates = normarize_rate(rates, self.normarize)
                 # add null event
@@ -437,17 +440,15 @@ class Window(ttk.Frame):
             self.lattice,
             self.init_value,
             minute,
-            second
-            )
+            second,
+        )
         elapsed_time = time.time() - self.start_time
         minute = math.floor(elapsed_time / 60)
         second = int(elapsed_time % 60)
-        self.progress_label["text"] = "Finished: " + str(minute) + " m" + str(second) + " s"   
+        self.progress_label["text"] = (
+            "Finished: " + str(minute) + " m" + str(second) + " s"
+        )
         self.update()
-
-
-
-        
 
     def start_function(self):
         self.update_values()

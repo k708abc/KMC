@@ -259,7 +259,7 @@ def show_current():
     file_name = entry_rec.get() + "_current_" + str(c_num) + ".png"
     fig.savefig(file_name)
 
-    # poscar
+    # poscar　　<< ここは poscar 作る関数を作る。
 
     xp = []
     yp = []
