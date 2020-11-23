@@ -3,6 +3,7 @@
 from typing import List, Dict
 import tkinter as tk
 import tkinter.ttk as ttk
+import copy
 from collections import OrderedDict
 from cal_rates import rate
 from calculation import cal_start
@@ -16,6 +17,8 @@ from judgement import judge_null
 from event_collection import get_events
 from normarize_list import normarize_rate
 from weighted_choice import choice
+from recording import record_data
+
 
 class Window(ttk.Frame):
     kb_eV = 8.617e-5
@@ -341,6 +344,11 @@ class Window(ttk.Frame):
         self.prog_time = 0
         self.n_atoms = 0
         self.n_events = 0
+        self.pos_rec: List[dict] = []
+        self.time_rec: List[float] = []
+        self.cov_rec: List[float] = []
+        self.rec_num = 0
+        self.time_of_record = self.init_value.interval
 
     def update_progress(self):
         self.pbval = int(self.prog_time / self.init_value.total_time * 100)
@@ -361,20 +369,26 @@ class Window(ttk.Frame):
             ]
         self.normarize = 10*fast_event
 
+    def record_position(self):
+        self.pos_rec.append(copy.copy(self.atom_set))
+        self.time_rec.append(self.prog_time)
+        self.cov_rec.append(self.n_atoms / self.init_value.atoms_in_BL)
+
     def null_event_kmc(self):
         self.start_setting()
         atom_set_pos: List[tuple] = [(-1, -1, -1)]
-        lattice, bonds, atom_set, _, _, _ = lattice_form(self.init_value)
+        self.lattice, bonds, self.atom_set, _, _, _ = lattice_form(self.init_value)
         # return lattice, bonds, atom_set, event, event_time, event_time_tot
         # put first and second atom
         for _ in 2:
-            dep_pos, atom_type = deposit_an_atom(atom_set, bonds)
-            atom_set[dep_pos] = atom_type
+            dep_pos, atom_type = deposit_an_atom(self.atom_set, bonds)
+            self.atom_set[dep_pos] = atom_type
             atom_set_pos.append(dep_pos)
             self.n_atoms += 1
             self.n_events += 1
         self.update_progress()
         self.det_normarize()
+        self.record_position()
         while self.prog_time <= self.init_value.total_time:
             target = choose_atom(atom_set_pos)
             if target == (-1, -1, -1):
@@ -384,13 +398,13 @@ class Window(ttk.Frame):
                     )
                 if judge == "success":
                     self.prog_time += self.init_value.dep_rate_atoms_persec
-                    dep_pos, atom_type = deposit_an_atom(atom_set, bonds)
-                    atom_set[dep_pos] = atom_type
+                    dep_pos, atom_type = deposit_an_atom(self.atom_set, bonds)
+                    self.atom_set[dep_pos] = atom_type
                     atom_set_pos.append(dep_pos)
                     self.n_atoms += 1
             else:
                 events, rates = get_events(
-                    atom_set, bonds, target, self.init_value
+                    self.atom_set, bonds, target, self.init_value
                     )
                 # Normarize rates
                 norm_rates = normarize_rate(rates, self.normarize)
@@ -399,14 +413,41 @@ class Window(ttk.Frame):
                 # choose an event
                 move_atom = weight_choise(events, norm_rates)
                 # event progress
-                atom_set[move_atom] = atom_set[target]
-                atom_set[target] = 0
+                self.atom_set[move_atom] = self.atom_set[target]
+                self.atom_set[target] = 0
             # end of an event
             self.n_events += 1
             self.update_progress()
-            
+            # recoding the positions in the middle
+            if self.prog_time >= self.time_of_record:
+                self.time_of_record += self.init_value.interval
+                self.record_position()
+
+        # end of the loop
+        self.record_position()
+        self.progress_label["text"] = str("Saving...")
+        self.update()
+        elapsed_time = time.time() - self.start_time
+        minute = math.floor(elapsed_time / 60)
+        second = int(elapsed_time % 60)
+        record_data(
+            self.pos_rec,
+            self.time_rec,
+            self.cov_rec,
+            self.lattice,
+            self.init_value,
+            minute,
+            second
+            )
+        elapsed_time = time.time() - self.start_time
+        minute = math.floor(elapsed_time / 60)
+        second = int(elapsed_time % 60)
+        self.progress_label["text"] = "Finished: " + str(minute) + " m" + str(second) + " s"   
+        self.update()
 
 
+
+        
 
     def start_function(self):
         self.update_values()
