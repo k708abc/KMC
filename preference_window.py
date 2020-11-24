@@ -4,9 +4,8 @@ from typing import List, Dict
 import tkinter as tk
 import tkinter.ttk as ttk
 import copy
-from collections import OrderedDict
+import math
 from cal_rates import rate
-from calculation import cal_start
 import time
 from lattice_form import lattice_form
 from lattice_form_check import check
@@ -414,7 +413,7 @@ class Window(ttk.Frame):
                 # add null event
                 events.append(target)
                 # choose an event
-                move_atom = weight_choise(events, norm_rates)
+                move_atom = choice(events, norm_rates)
                 # event progress
                 self.atom_set[move_atom] = self.atom_set[target]
                 self.atom_set[target] = 0

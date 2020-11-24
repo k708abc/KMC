@@ -1,23 +1,22 @@
-from typing import List
+from typing import List, Dict
 import matplotlib.pyplot as plt
 import matplotlib.patches as pat
 import math
 from record_ppt import rec_ppt
 
 
-def highest_z(pos):
+def highest_z(pos_all: List[dict]) -> int:
     maxz = 0
-    for positions in pos:
-        for key in positions:
-            if key[2] > maxz:
-                maxz = key[2]
+    for positions in pos_all:
+        for index, state in positions.items():
+            if (state != 0) and (index[2] > maxz):
+                maxz = index[2]
     return maxz
 
 
-def image_formaiton(pos, lattice, length, maxz):
+def image_formaiton(pos: Dict, lattice: Dict, length: int, maxz: int):
     unit_x: List[float] = [1, 0, 0]
     unit_y: List[float] = [0.5, 0.866, 0]
-    unit_z: List[float] = [0, 0, 1]
     fig = plt.figure()
     ax = fig.add_subplot(111)
     #
@@ -41,7 +40,6 @@ def image_formaiton(pos, lattice, length, maxz):
                 else:
                     xp = lattice[(x, y, z)][0]
                     yp = lattice[(x, y, z)][1]
-                    zp = lattice[(x, y, z)][2]
                     if z % 2 == 0:
                         t1x = (
                             xp * unit_x[0]
@@ -53,10 +51,8 @@ def image_formaiton(pos, lattice, length, maxz):
                             + yp * unit_y[1]
                             - (unit_x[1] + unit_y[1]) / 3
                         )
-
                         t2x = t1x + unit_x[0]
                         t2y = t1y + unit_x[1]
-
                         t3x = t1x + unit_y[0]
                         t3y = t1y + unit_y[1]
 
@@ -71,15 +67,13 @@ def image_formaiton(pos, lattice, length, maxz):
                             + yp * unit_y[1]
                             + (unit_x[1] + unit_y[1]) / 3
                         )
-
                         t2x = t1x - unit_x[0]
                         t2y = t1y - unit_x[1]
-
                         t3x = t1x - unit_y[0]
                         t3y = t1y - unit_y[1]
 
                     color_num = math.floor(z / 2) * 2
-                    if z == 1 or z == 0:
+                    if z in (0, 1):
                         color = [0, 1, 0]
                     else:
                         color = [color_num / maxz, 0, 1 - color_num / maxz]
@@ -90,7 +84,7 @@ def image_formaiton(pos, lattice, length, maxz):
 
                     ax.add_patch(p)
 
-                    if i == 0:
+                    if x == 0:
                         if z % 2 == 0:
                             t1x = (
                                 xp * unit_x[0]
@@ -135,7 +129,7 @@ def image_formaiton(pos, lattice, length, maxz):
                         )
                         ax.add_patch(p)
 
-                    if k == 0:
+                    if y == 0:
                         if z % 2 == 0:
                             t1x = (
                                 xp * unit_x[0]
@@ -180,7 +174,7 @@ def image_formaiton(pos, lattice, length, maxz):
                         )
                         ax.add_patch(p)
 
-                    if (i == 0) and (k == 0):
+                    if (x == 0) and (y == 0):
 
                         if z % 2 == 0:
                             t1x = (
@@ -255,16 +249,16 @@ def image_formaiton(pos, lattice, length, maxz):
     return fig
 
 
-def rec_img(img, name):
+def rec_img(img, name: str):
     img.savefig(name)
 
 
-def hist_formation(pos, maxz, n_BL):
+def hist_formation(pos: Dict, maxz: int, n_BL: int):
     hist: List[float] = [0 for _ in range(math.ceil(maxz / 2))]
     left: List[float] = [i for i in range(math.ceil(maxz / 2))]
     for pos_index, atom_state in pos.items():
         if atom_state != 0:
-            hist[pos_index[3] // 2] += 1 / n_BL * 100
+            hist[pos_index[2] // 2] += 1 / n_BL * 100
     fig = plt.figure()
     bx = fig.add_subplot(111)
     bx.barh(left, hist)
@@ -276,7 +270,7 @@ def hist_formation(pos, maxz, n_BL):
     return fig
 
 
-def rec_poscar(pos, unit_length, maxz, rec_name):
+def rec_poscar(pos: Dict, unit_length: int, maxz: int, rec_name: str):
     xp: list[float] = []
     yp: list[float] = []
     zp: list[float] = []
@@ -303,17 +297,24 @@ def rec_poscar(pos, unit_length, maxz, rec_name):
     file_data.close()
 
 
-def record_data(position, time, coverage, lattice, params, minute, second):
-    maxz = highest_z(position)
-    rec_num = 0
+def record_data(
+    pos_all: List[dict],
+    time: List,
+    coverage: List,
+    lattice: Dict,
+    params,
+    minute: int,
+    second: float,
+):
+    maxz = highest_z(pos_all)
     unit_length = params.n_cell_init
-    rec_name = params.record_name
+    rec_name_body = params.record_name
     n_BL = params.atoms_in_BL
     img_names: List[str] = []
     hist_names: List[str] = []
-    for pos_i, time_i, cov_i in zip(position, time, coverage):
+    for rec_num, (pos_i, time_i, cov_i) in enumerate(zip(pos_all, time, coverage)):
         rec_name = (
-            str(rec_name)
+            str(rec_name_body)
             + "_"
             + str(rec_num)
             + "_"
@@ -333,6 +334,6 @@ def record_data(position, time, coverage, lattice, params, minute, second):
         hist_names.append(hist_name + ".png")
         #
         poscar_name = rec_name + "_poscar.vasp"
-        rec_poscar(position, unit_length, maxz, poscar_name)
+        rec_poscar(pos_i, unit_length, maxz, poscar_name)
     #
     rec_ppt(params, minute, second, img_names, hist_names, time, coverage)

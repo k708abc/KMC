@@ -114,33 +114,6 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage):
     table.cell(1, 2).text = str('{:.3g}'.format(final_check))
     """
     #
-    """
-    width = height = Inches(1)
-    top = Inches(6)
-    left = Inches(0.5)
-    txBox = slide.shapes.add_textbox(left, top, width, height)
-    tf = txBox.text_frame
-    p = tf.add_paragraph()
-    p.text = params.comments
-    p.font.size = Pt(20)
-    # second slide
-    slide = prs.slides.add_slide(blank_slide_layout)
-    width = height = Inches(1)
-    top = Inches(-0.1)
-    left = Inches(0.5)
-    txBox = slide.shapes.add_textbox(left, top, width, height)
-    tf = txBox.text_frame
-    p = tf.add_paragraph()
-    p.text = "Results"
-    p.font.size = Pt(28)
-
-    #
-    # put images
-    left0 = 0.2
-    top0 = 0.7
-    height = Inches(2.5)
-    height_w = Inches(1)
-    """
     num_ims = len(img_names)
     imn = 0
     while imn < num_ims:
@@ -183,27 +156,6 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage):
                     imn = imn + 1
 
     # Third slide
-    """
-    slide = prs.slides.add_slide(blank_slide_layout)
-
-    width = height = Inches(1)
-    top = Inches(-0.1)
-    left = Inches(0.5)
-    txBox = slide.shapes.add_textbox(left, top, width, height)
-    tf = txBox.text_frame
-
-    p = tf.add_paragraph()
-    p.text = "Results: layer analysis"
-    p.font.size = Pt(28)
-
-    # put images
-
-    left0 = 0.2
-    top0 = 0.7
-    height = Inches(2)
-    height_w = Inches(1)
-    """
-
     num_ims = len(hist_names)
     imn = 0
     while imn < num_ims:

@@ -1,9 +1,9 @@
 import random
 
 
-def judge_null(success):
+def judge_null(success: float) -> str:
     if success > 1:
-        print("judge over 1")
+        print("Error: probablity over 1")
     null = 1 - success
     result = ["success", "failure"]
     weight = (success, null)

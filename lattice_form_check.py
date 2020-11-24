@@ -2,7 +2,8 @@ from typing import List, Dict
 import matplotlib.pyplot as plt
 import matplotlib.lines as mlines
 
-def check(input_params, lattice_v, bonds_v):  # 多分別モジュールの方がいい。
+
+def check(input_params, lattice_v, bonds_v):
     unit_x: List[float] = [1, 0, 0]
     unit_y: List[float] = [0.5, 0.866, 0]
     unit_length = input_params.n_cell_init
@@ -30,15 +31,10 @@ def check(input_params, lattice_v, bonds_v):  # 多分別モジュールの方�
             else:
                 atom_index_bond = (u[0], u[1], u[2])
                 atom_pos_bond = lattice_v[atom_index_bond]
-                xpos_b = (
-                    atom_pos_bond[0] * unit_x[0] + atom_pos_bond[1] * unit_y[0]
-                )
-                ypos_b = (
-                    atom_pos_bond[0] * unit_x[1] + atom_pos_bond[1] * unit_y[1]
-                )
+                xpos_b = atom_pos_bond[0] * unit_x[0] + atom_pos_bond[1] * unit_y[0]
+                ypos_b = atom_pos_bond[0] * unit_x[1] + atom_pos_bond[1] * unit_y[1]
 
                 bond_list[key[2]].append([[xpos, ypos], [xpos_b, ypos_b]])
-
 
     # input BL number to be checked
     BL_num = 0

@@ -1,8 +1,8 @@
-from typing import List
+from typing import List, Dict
 from cal_rates import rate
 
 
-def get_energy(atom_set, bonds, target, params):
+def total_energy(atom_set: Dict, bonds: Dict, target: tuple, params):
     z_judge = target[2]
     energy = 0
     if z_judge == 0:
@@ -25,7 +25,6 @@ def get_energy(atom_set, bonds, target, params):
                     energy += params.binding_energies["Si23"]
                 elif bond[2] == 3:
                     energy += params.binding_energies["Si34"]
-
     elif z_judge == 3:
         for bond in bonds[target]:
             if atom_set[bond] != 0:
@@ -33,7 +32,6 @@ def get_energy(atom_set, bonds, target, params):
                     energy += params.binding_energies["Si34"]
                 elif bond[2] == 4:
                     energy += params.binding_energies["Si45"]
-
     elif z_judge == 4:
         for bond in bonds[target]:
             if atom_set[bond] != 0:
@@ -41,7 +39,6 @@ def get_energy(atom_set, bonds, target, params):
                     energy += params.binding_energies["Si45"]
                 elif bond[2] == 5:
                     energy += params.binding_energies["Si56"]
-
     elif z_judge == 5:
         for bond in bonds[target]:
             if atom_set[bond] != 0:
@@ -49,7 +46,6 @@ def get_energy(atom_set, bonds, target, params):
                     energy += params.binding_energies["Si56"]
                 elif bond[2] == 6:
                     energy += params.binding_energies["Si_intra"]
-
     elif z_judge % 2 == 0:
         for bond in bonds[target]:
             if atom_set[bond] != 0:
@@ -57,7 +53,6 @@ def get_energy(atom_set, bonds, target, params):
                     energy += params.binding_energies["Si_intra"]
                 elif bond[2] == z_judge + 1:
                     energy += params.binding_energies["Si_inter"]
-
     elif z_judge % 2 == 1:
         for bond in bonds[target]:
             if atom_set[bond] != 0:
@@ -68,19 +63,19 @@ def get_energy(atom_set, bonds, target, params):
     return energy
 
 
-def get_filled_sites(atom_set, indexes):
+def find_filled_sites(atom_set, indexes):
     return [atom_nn for atom_nn in indexes if atom_set[atom_nn] != 0]
 
 
-def get_empty_sites(atom_set, indexes):
+def find_empty_sites(atom_set, indexes):
     return [atom_nn for atom_nn in indexes if atom_set[atom_nn] == 0]
 
 
-def get_aboves(indexes):
+def find_aboves(indexes):
     return [(i[0], i[1], i[2] + 1) for i in indexes]
 
 
-def get_lowers_sites(indexes):
+def find_lower_sites(indexes):
     return [(i[0], i[1], i[2] - 1) for i in indexes]
 
 
@@ -89,7 +84,7 @@ def judge_isolation(atom_set, bonds, target, nn_atom, events):
     rem_eve = []
     for check in nn_atom:
         # 隣接原子の周囲の原子数
-        nn_nn_atom = get_lowers_sites(atom_set, bonds[check])
+        nn_nn_atom = find_lower_sites(atom_set, bonds[check])
         # 二個以上なら移動後も孤立しない
         if len(nn_nn_atom) >= 2:
             pass
@@ -100,7 +95,7 @@ def judge_isolation(atom_set, bonds, target, nn_atom, events):
                 # 移動後も結合し続ける
                 if post_move in bonds[check]:
                     # 移動後のサイトの隣接原子
-                    post_nn_atom = get_filled_sites(atom_set, post_move)
+                    post_nn_atom = find_filled_sites(atom_set, post_move)
                     # ダイマーを形成（2原子で孤立）→孤立
                     if len(post_nn_atom) <= 1:
                         rem_eve.append(post_move)
@@ -110,7 +105,9 @@ def judge_isolation(atom_set, bonds, target, nn_atom, events):
     return rem_eve
 
 
-def possible_events(atom_set, bonds, target, params, energy, unit_length):
+def possible_events(
+    atom_set: Dict, bonds: Dict, target: tuple, params, energy: float, unit_length: int
+):
     events: List[tuple] = []
     rates: List[float] = []
     #
@@ -127,17 +124,17 @@ def possible_events(atom_set, bonds, target, params, energy, unit_length):
         ((atom_x - 1) % unit_length, (atom_y + 1) % unit_length, atom_z),
     ]
     # 最近接の空きサイト
-    nn_empty = get_empty_sites(atom_set, bonds[target])
+    nn_empty = find_empty_sites(atom_set, bonds[target])
     # 次近接の空きサイト
-    nnn_empty = get_empty_sites(atom_set, nnn_sites)
+    nnn_empty = find_empty_sites(atom_set, nnn_sites)
     # 最近接の存在原子
-    nn_atom = get_filled_sites(atom_set, bonds[target])
+    nn_atom = find_filled_sites(atom_set, bonds[target])
     #
     # BL内での移動
     # 最近接空きサイトへの移動
     for empty in nn_empty:
         # 最近接空きサイトの周辺原子
-        nn_nn_site = get_filled_sites(atom_set, bonds[empty])
+        nn_nn_site = find_filled_sites(atom_set, bonds[empty])
         # 移動先でも結合原子があるか、移動先がAg直上→候補
         if len(nn_nn_site) >= 2 or empty[2] == 0:
             events.append(empty)
@@ -145,7 +142,7 @@ def possible_events(atom_set, bonds, target, params, energy, unit_length):
     # 同高さの次近接への移動
     for empty in nnn_empty:
         # 次近接空きサイトの周辺原子
-        nn_nnn_site = get_filled_sites(atom_set, bonds[empty])
+        nn_nnn_site = find_filled_sites(atom_set, bonds[empty])
         # 移動後に隣接原子があるか、Ag直上のサイト→候補
         if len(nn_nnn_site) >= 1 or empty[2] == 0:
             events.append(empty)
@@ -157,7 +154,7 @@ def possible_events(atom_set, bonds, target, params, energy, unit_length):
         # BLを上る判定
         for filled in nn_atom:
             # 最近接原子の周囲原子
-            nn_nn_atom = get_filled_sites(atom_set, bonds[filled])
+            nn_nn_atom = find_filled_sites(atom_set, bonds[filled])
             # 隣接原子の上が空いていて、かつ隣接原子が別原子でも支えられている→候補
             if atom_set(bonds[filled][3]) == 0 and len(nn_nn_atom) >= 2:
                 events.append(filled)
@@ -175,21 +172,21 @@ def possible_events(atom_set, bonds, target, params, energy, unit_length):
             # 直下に原子があるおき
             else:
                 # 直下原子周辺の空きサイト
-                d_step_empty = get_empty_sites(atom_set, bonds[direct_below])
+                d_step_empty = find_empty_sites(atom_set, bonds[direct_below])
                 # 直下原子の周辺空きサイト→候補
-                for empty in d_step_site:
+                for empty in d_step_empty:
                     events.append(empty)
                     rates.append(rate(energy))
             # 次近接の下へも移動可能
             # 次近接空きサイト
-            nnn_empty = get_empty_sites(atom_set, nnn_sites)
+            nnn_empty = find_empty_sites(atom_set, nnn_sites)
             # 次近接空きサイト下サイト
-            nnn_lower_site = get_lowers_sites(nnn_empty)
+            nnn_lower_site = find_lower_sites(nnn_empty)
             # 次近接空きサイト下空きサイト
-            nnn_lower_empty = get_empty_sites(atom_set, nnn_lower_site)
+            nnn_lower_empty = find_empty_sites(atom_set, nnn_lower_site)
             for cand in nnn_lower_empty:
                 # 次近接空きサイト下空きサイトの周辺原子
-                cand_nn_atom = get_filled_sites(atom_set, bonds[cand])
+                cand_nn_atom = find_filled_sites(atom_set, bonds[cand])
                 # 移動後に隣接原子がある→候補
                 if len(cand_nn_atom) >= 1:
                     events.append(cand)
@@ -206,13 +203,13 @@ def possible_events(atom_set, bonds, target, params, energy, unit_length):
             pass
         else:
             # 次近接の原子
-            nnn_atoms = get_filled_sites(atom_set, nnn_sites)
+            nnn_atoms = find_filled_sites(atom_set, nnn_sites)
             # 次近接の直上サイト
-            nnn_above_site = get_aboves(nnn_atoms)
+            nnn_above_site = find_aboves(nnn_atoms)
             # 次近接の直上の空きサイト
-            nnn_above_empty = get_empty_sites(atom_set, nnn_above_site)
+            nnn_above_empty = find_empty_sites(atom_set, nnn_above_site)
             # 次近接直上の原子
-            nnn_above_atoms = get_filled_sites(atom_set, nnn_above_site)
+            nnn_above_atoms = find_filled_sites(atom_set, nnn_above_site)
             # 次近接原子直上の空きサイト→候補
             for above_empty in nnn_above_empty:
                 events.append(above_empty)
@@ -224,7 +221,7 @@ def possible_events(atom_set, bonds, target, params, energy, unit_length):
                 # 対象原子直上の結合サイト
                 dir_above_nn = bonds[direct_above]
                 # 共通項のサイトの抜出
-                common_site = list(set(above_filled) & set(dir_above_nn))
+                common_site = list(set(above_filled_nn) & set(dir_above_nn))
                 # 共通サイトに原子がない場合→候補
                 if atom_set[common_site[0]] == 0:
                     events.append(common_site[0])
@@ -235,14 +232,14 @@ def possible_events(atom_set, bonds, target, params, energy, unit_length):
             pass
         else:
             # 最近接の空きサイト
-            nn_empty = get_empty_sites(atom_set, bonds[target])
+            nn_empty = find_empty_sites(atom_set, bonds[target])
             # 最近接空きサイトの下サイト
-            nn_lower = get_lowers_sites(nn_empty)
+            nn_lower = find_lower_sites(nn_empty)
             # 最近接空きサイトの下空きサイト
-            nn_lower_enpty = get_empty_sites(atom_set, nn_lower)
+            nn_lower_enpty = find_empty_sites(atom_set, nn_lower)
             for cand in nn_lower_enpty:
                 # 候補サイトの周辺原子
-                cand_nn = get_filled_sites(atom_set, bonds[cand])
+                cand_nn = find_filled_sites(atom_set, bonds[cand])
                 # 候補サイト移動後何らかの結合がある→候補
                 if len(cand_nn) >= 1:
                     events.append(cand)
@@ -250,8 +247,8 @@ def possible_events(atom_set, bonds, target, params, energy, unit_length):
     # イベントリストから、孤立原子を生じるイベントを抽出
     remove = judge_isolation(atom_set, bonds, target, nn_atom, events)
     # 削除
-    event_f = []
-    rates_f = []
+    event_f: List = []
+    rates_f: List = []
     for eve, rat in zip(events, rates):
         if eve in remove:
             pass
@@ -261,12 +258,12 @@ def possible_events(atom_set, bonds, target, params, energy, unit_length):
     return event_f, rates_f
 
 
-def get_events(atom_set, bonds, target, params):
+def get_events(atom_set: Dict, bonds: Dict, target: tuple, params):
     event_list: List[tuple] = []
     rate_list: List[float] = []
-    unit_length = param.n_cell_init
+    unit_length = params.n_cell_init
     # calculate total energy
-    energy = get_energy(atom_set, bonds, target, params)
+    energy = total_energy(atom_set, bonds, target, params)
     # calculate possible events
     event_list, rate_list = possible_events(
         atom_set, bonds, target, params, energy, unit_length
