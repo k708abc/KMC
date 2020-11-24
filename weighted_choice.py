@@ -12,4 +12,4 @@ def choice(events: List, rates: List) -> tuple:
             return event
 
     if r_tot < tot:
-        raise RuntimeError("Something wrong happens. Check weighted choice.)
+        raise RuntimeError("Something wrong happens. Check weighted choice.")

@@ -13,7 +13,7 @@ from InputParameter import Params
 from deposition import deposit_an_atom
 from choose_site import choose_atom
 from judgement import judge_null
-from event_collection import get_events
+from event_collection import site_events
 from normarize_list import normarize_rate
 from weighted_choice import choice
 from recording import record_data
@@ -247,7 +247,7 @@ class Window(ttk.Frame):
             values=method_list,
             state="readonly",
         )
-        self.method_cb.current(0)
+        self.method_cb.current(1)
 
     def create_layout_method(self):
         self.method_label.grid(row=0, column=0, **self.padWE)
@@ -382,7 +382,7 @@ class Window(ttk.Frame):
         self.lattice, bonds, self.atom_set, _, _, _ = lattice_form(self.init_value)
         # return lattice, bonds, atom_set, event, event_time, event_time_tot
         # put first and second atom
-        for _ in 2:
+        for _ in range(2):
             dep_pos, atom_type = deposit_an_atom(self.atom_set, bonds)
             self.atom_set[dep_pos] = atom_type
             atom_set_pos.append(dep_pos)
@@ -405,7 +405,7 @@ class Window(ttk.Frame):
                     atom_set_pos.append(dep_pos)
                     self.n_atoms += 1
             else:
-                events, rates = get_events(
+                events, rates = site_events(
                     self.atom_set, bonds, target, self.init_value
                 )
                 # Normarize rates

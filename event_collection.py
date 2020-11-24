@@ -108,6 +108,8 @@ def judge_isolation(atom_set, bonds, target, nn_atom, events):
 def possible_events(
     atom_set: Dict, bonds: Dict, target: tuple, params, energy: float, unit_length: int
 ):
+    pre = float(params.prefactor)
+    kbt = params.temperature_eV
     events: List[tuple] = []
     rates: List[float] = []
     #
@@ -138,7 +140,7 @@ def possible_events(
         # 移動先でも結合原子があるか、移動先がAg直上→候補
         if len(nn_nn_site) >= 2 or empty[2] == 0:
             events.append(empty)
-            rates.append(rate(energy))
+            rates.append(rate(pre, kbt, energy))
     # 同高さの次近接への移動
     for empty in nnn_empty:
         # 次近接空きサイトの周辺原子
@@ -146,7 +148,7 @@ def possible_events(
         # 移動後に隣接原子があるか、Ag直上のサイト→候補
         if len(nn_nnn_site) >= 1 or empty[2] == 0:
             events.append(empty)
-            rates.append(rate(energy))
+            rates.append(rate(pre, kbt, energy))
     #
     # BLの上り下り
     # BLの下層原子
@@ -158,7 +160,7 @@ def possible_events(
             # 隣接原子の上が空いていて、かつ隣接原子が別原子でも支えられている→候補
             if atom_set(bonds[filled][3]) == 0 and len(nn_nn_atom) >= 2:
                 events.append(filled)
-                rates.append(rate(energy))
+                rates.append(rate(pre, kbt, energy))
         # BLを下る判定
         # Ag直上原子は下れない
         if atom_z == 0:
@@ -176,7 +178,7 @@ def possible_events(
                 # 直下原子の周辺空きサイト→候補
                 for empty in d_step_empty:
                     events.append(empty)
-                    rates.append(rate(energy))
+                    rates.append(rate(pre, kbt, energy))
             # 次近接の下へも移動可能
             # 次近接空きサイト
             nnn_empty = find_empty_sites(atom_set, nnn_sites)
@@ -190,7 +192,7 @@ def possible_events(
                 # 移動後に隣接原子がある→候補
                 if len(cand_nn_atom) >= 1:
                     events.append(cand)
-                    rates.append(rate(energy))
+                    rates.append(rate(pre, kbt, energy))
     #
     # BLの上層原子
     # 次近接の真上か、最近接真上と次近接真上の共通サイト
@@ -213,7 +215,7 @@ def possible_events(
             # 次近接原子直上の空きサイト→候補
             for above_empty in nnn_above_empty:
                 events.append(above_empty)
-                rates.append(rate(energy))
+                rates.append(rate(pre, kbt, energy))
             # 次近接直上に原子がある場合
             for above_filled in nnn_above_atoms:
                 # 次近接直上の結合サイト
@@ -225,7 +227,7 @@ def possible_events(
                 # 共通サイトに原子がない場合→候補
                 if atom_set[common_site[0]] == 0:
                     events.append(common_site[0])
-                    rates.append(rate(energy))
+                    rates.append(rate(pre, kbt, energy))
         #
         # BLを下る判定
         if atom_z == 1:
@@ -243,7 +245,7 @@ def possible_events(
                 # 候補サイト移動後何らかの結合がある→候補
                 if len(cand_nn) >= 1:
                     events.append(cand)
-                    rates.append(rate(energy))
+                    rates.append(rate(pre, kbt, energy))
     # イベントリストから、孤立原子を生じるイベントを抽出
     remove = judge_isolation(atom_set, bonds, target, nn_atom, events)
     # 削除
@@ -258,7 +260,7 @@ def possible_events(
     return event_f, rates_f
 
 
-def get_events(atom_set: Dict, bonds: Dict, target: tuple, params):
+def site_events(atom_set: Dict, bonds: Dict, target: tuple, params):
     event_list: List[tuple] = []
     rate_list: List[float] = []
     unit_length = params.n_cell_init

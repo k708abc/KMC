@@ -46,48 +46,56 @@ def lattice_full_layers(unit_height: int):
     この3BL分の単位格子の高さが2.448(nm)です。"""  # ←そういった細かい情報の結果ならば、コードにその旨書いておかないと絶対ダメ。
 
 
-def neighbor_points(index: tuple, z_judge: int, unit_length: int) -> List[List[int]]:
+def neighbor_points(
+    index: tuple, z_judge: int, unit_length: int, z_max: int
+) -> List[List[int]]:
     neighbors: List[List[int]]
     x, y, z = index
-    if z_judge in (0, 2):
+    if z == z_max:
         neighbors = [
-            [(x - 1) % unit_length, y, z + 1],
-            [x, (y - 1) % unit_length, z + 1],
-            [x, y, z + 1],
+            ((x - 1) % unit_length, y, z - 1),
+            (x, (y - 1) % unit_length, z - 1),
+            ((x - 1) % unit_length, (y - 1) % unit_length, z - 1),
+        ]
+    elif z_judge in (0, 2):
+        neighbors = [
+            ((x - 1) % unit_length, y, z + 1),
+            (x, (y - 1) % unit_length, z + 1),
+            (x, y, z + 1),
         ]
         if z != 0:
-            neighbors.append([x, y, z - 1])
+            neighbors.append((x, y, z - 1))
     elif z_judge in (1, 3):
         neighbors = [
-            [(x + 1) % unit_length, y, z - 1],
-            [x, (y + 1) % unit_length, z - 1],
-            [x, y, z - 1],
-            [x, y, z + 1],
+            ((x + 1) % unit_length, y, z - 1),
+            (x, (y + 1) % unit_length, z - 1),
+            (x, y, z - 1),
+            (x, y, z + 1),
         ]
     elif z_judge == 4:
         neighbors = [
-            [(x + 1) % unit_length, y, z + 1],
-            [(x + 1) % unit_length, (y + 1) % unit_length, z + 1],
-            [x, (y + 1) % unit_length, z + 1],
-            [x, y, z - 1],
+            ((x + 1) % unit_length, y, z + 1),
+            ((x + 1) % unit_length, (y + 1) % unit_length, z + 1),
+            (x, (y + 1) % unit_length, z + 1),
+            (x, y, z - 1),
         ]
     elif z_judge == 5:
         neighbors = [
-            [(x - 1) % unit_length, y, z - 1],
-            [x, (y - 1) % unit_length, z - 1],
-            [(x - 1) % unit_length, (y - 1) % unit_length, z - 1],
-            [x, y, z + 1],
+            ((x - 1) % unit_length, y, z - 1),
+            (x, (y - 1) % unit_length, z - 1),
+            ((x - 1) % unit_length, (y - 1) % unit_length, z - 1),
+            (x, y, z + 1),
         ]
     else:
         raise RuntimeError("Something wrong happens. check z_judge value")
     return neighbors
 
 
-def search_bond(unit_length: int):
+def search_bond(unit_length: int, z_max: int):
     # Search for bonding atoms for all the atoms
     for index in bonds:
         z_judge = index[2] % 6
-        bonds[index] = neighbor_points(index, z_judge, unit_length)
+        bonds[index] = neighbor_points(index, z_judge, unit_length, z_max)
 
 
 def lattice_form(input_params):  # 　ここ長すぎるので、少なくとも3つか四つの関数に分ける。
@@ -98,6 +106,7 @@ def lattice_form(input_params):  # 　ここ長すぎるので、少なくとも
     z_inter = float(input_params.inter_distance)
     unit_height = 3 * (z_intra + z_inter)
     reset_dicts()
+    z_max = z_units * 6 - 1
     #
     for i in range(unit_length):
         for j in range(unit_length):
@@ -114,7 +123,7 @@ def lattice_form(input_params):  # 　ここ長すぎるので、少なくとも
     #
     lattice_full_layers(unit_height)
     #
-    search_bond(unit_length)
+    search_bond(unit_length, z_max)
     return lattice, bonds, atom_set, event, event_time, event_time_tot
 
 
