@@ -45,14 +45,14 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage):
     table0.cell(0, 8).text = "transform"
     table0.cell(0, 9).text = "keep defect"
     table0.cell(0, 10).text = "Cal. time (s)"
-    table0.cell(1, 0).text = params.n_cell_init
-    table0.cell(1, 1).text = params.z_unit_init
-    table0.cell(1, 2).text = params.temperature
+    table0.cell(1, 0).text = str(params.n_cell_init)
+    table0.cell(1, 1).text = str(params.z_unit_init)
+    table0.cell(1, 2).text = str(params.temperature)
     table0.cell(1, 3).text = str("{:.3g}".format(params.temperature_eV))
-    table0.cell(1, 4).text = params.dep_rate
-    table0.cell(1, 5).text = params.dep_time
-    table0.cell(1, 6).text = params.post_anneal
-    table0.cell(1, 7).text = params.prefactor
+    table0.cell(1, 4).text = str(params.dep_rate)
+    table0.cell(1, 5).text = str(params.dep_time)
+    table0.cell(1, 6).text = str(params.post_anneal)
+    table0.cell(1, 7).text = str(params.prefactor)
     table0.cell(1, 8).text = "pass"
     table0.cell(1, 9).text = "pass"
     """
@@ -85,16 +85,16 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage):
     table.cell(0, 9).text = "Ag(top)"
     table.cell(0, 10).text = "Trans."
     table.cell(1, 0).text = "Energy"
-    table.cell(1, 1).text = params.binding_energies["AgSi"]
-    table.cell(1, 2).text = params.binding_energies["Si12"]
-    table.cell(1, 3).text = params.binding_energies["Si23"]
-    table.cell(1, 4).text = params.binding_energies["Si34"]
-    table.cell(1, 5).text = params.binding_energies["Si45"]
-    table.cell(1, 6).text = params.binding_energies["Si56"]
-    table.cell(1, 7).text = params.binding_energies["Si_intra"]
-    table.cell(1, 8).text = params.binding_energies["Si_inter"]
-    table.cell(1, 9).text = params.binding_energies["Agtop"]
-    table.cell(1, 10).text = params.transformation
+    table.cell(1, 1).text = str(params.binding_energies["AgSi"])
+    table.cell(1, 2).text = str(params.binding_energies["Si12"])
+    table.cell(1, 3).text = str(params.binding_energies["Si23"])
+    table.cell(1, 4).text = str(params.binding_energies["Si34"])
+    table.cell(1, 5).text = str(params.binding_energies["Si45"])
+    table.cell(1, 6).text = str(params.binding_energies["Si56"])
+    table.cell(1, 7).text = str(params.binding_energies["Si_intra"])
+    table.cell(1, 8).text = str(params.binding_energies["Si_inter"])
+    table.cell(1, 9).text = str(params.binding_energies["Agtop"])
+    table.cell(1, 10).text = str(params.transformation)
     #
     """
     left = Inches(0.5)

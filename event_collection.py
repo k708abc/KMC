@@ -84,7 +84,7 @@ def judge_isolation(atom_set, bonds, target, nn_atom, events):
     rem_eve = []
     for check in nn_atom:
         # 隣接原子の周囲の原子数
-        nn_nn_atom = find_lower_sites(atom_set, bonds[check])
+        nn_nn_atom = find_lower_sites(bonds[check])
         # 二個以上なら移動後も孤立しない
         if len(nn_nn_atom) >= 2:
             pass
@@ -158,7 +158,8 @@ def possible_events(
             # 最近接原子の周囲原子
             nn_nn_atom = find_filled_sites(atom_set, bonds[filled])
             # 隣接原子の上が空いていて、かつ隣接原子が別原子でも支えられている→候補
-            if atom_set(bonds[filled][3]) == 0 and len(nn_nn_atom) >= 2:
+            above_site = (filled[0], filled[1], filled[2] + 1)
+            if atom_set[above_site] == 0 and len(nn_nn_atom) >= 2:
                 events.append(filled)
                 rates.append(rate(pre, kbt, energy))
         # BLを下る判定

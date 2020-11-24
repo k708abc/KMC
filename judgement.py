@@ -6,6 +6,6 @@ def judge_null(success: float) -> str:
         print("Error: probablity over 1")
     null = 1 - success
     result = ["success", "failure"]
-    weight = (success, null)
+    weight = [success, null]
     judge = random.choices(result, weights=weight)
-    return judge
+    return judge[0]

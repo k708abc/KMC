@@ -4,14 +4,15 @@ import matplotlib.patches as pat
 import math
 from record_ppt import rec_ppt
 
-
+"""
 def highest_z(pos_all: List[dict]) -> int:
-    maxz = 0
+    maxz = 1
     for positions in pos_all:
         for index, state in positions.items():
             if (state != 0) and (index[2] > maxz):
                 maxz = index[2]
     return maxz
+"""
 
 
 def image_formaiton(pos: Dict, lattice: Dict, length: int, maxz: int):
@@ -306,7 +307,7 @@ def record_data(
     minute: int,
     second: float,
 ):
-    maxz = highest_z(pos_all)
+    maxz = params.z_unit_init * 6
     unit_length = params.n_cell_init
     rec_name_body = params.record_name
     n_BL = params.atoms_in_BL
@@ -325,13 +326,14 @@ def record_data(
         )
         #
         img = image_formaiton(pos_i, lattice, unit_length, maxz)
-        rec_img(img, rec_name)
-        img_names.append(rec_name + ".png")
+        img_name = rec_name + ".png"
+        rec_img(img, img_name)
+        img_names.append(img_name)
         #
         hist = hist_formation(pos_i, maxz, n_BL)
-        hist_name = rec_name + "_hist"
+        hist_name = rec_name + "_hist.png"
         rec_img(hist, hist_name)
-        hist_names.append(hist_name + ".png")
+        hist_names.append(hist_name)
         #
         poscar_name = rec_name + "_poscar.vasp"
         rec_poscar(pos_i, unit_length, maxz, poscar_name)
