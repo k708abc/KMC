@@ -105,8 +105,23 @@ def judge_isolation(atom_set, bonds, target, nn_atom, events):
     return rem_eve
 
 
+def judge_defect(target, events):
+    remove = []
+    for event in events:
+        if target[2] not in (0, 1) and event[2] in (0, 1):
+            remove.append(event)
+    return remove
+
+
 def possible_events(
-    atom_set: Dict, bonds: Dict, target: tuple, params, energy: float, unit_length: int
+    atom_set: Dict,
+    bonds: Dict,
+    target: tuple,
+    params,
+    energy: float,
+    unit_length: int,
+    defect,
+    empty_first: int,
 ):
     pre = float(params.prefactor)
     kbt = params.temperature_eV
@@ -249,6 +264,9 @@ def possible_events(
                     rates.append(rate(pre, kbt, energy))
     # イベントリストから、孤立原子を生じるイベントを抽出
     remove = judge_isolation(atom_set, bonds, target, nn_atom, events)
+    # first BLにデフェクトを残す場合
+    if (defect is True) and (empty_first == 1):
+        remove.extend(judge_defect(target, events))
     # 削除
     event_f: List = []
     rates_f: List = []
@@ -261,7 +279,9 @@ def possible_events(
     return event_f, rates_f
 
 
-def site_events(atom_set: Dict, bonds: Dict, target: tuple, params):
+def site_events(
+    atom_set: Dict, bonds: Dict, target: tuple, params, defect, empty_first: int
+):
     event_list: List[tuple] = []
     rate_list: List[float] = []
     unit_length = params.n_cell_init
@@ -269,7 +289,7 @@ def site_events(atom_set: Dict, bonds: Dict, target: tuple, params):
     energy = total_energy(atom_set, bonds, target, params)
     # calculate possible events
     event_list, rate_list = possible_events(
-        atom_set, bonds, target, params, energy, unit_length
+        atom_set, bonds, target, params, energy, unit_length, defect, empty_first
     )
 
     return event_list, rate_list

@@ -3,7 +3,9 @@ from pptx.util import Inches, Pt
 import os
 
 
-def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_name):
+def rec_ppt(
+    params, minute, second, img_names, hist_names, time, coverage, dir_name, defect
+):
     ppt_name = dir_name + "Layer_analysis_results.pptx"
     if os.path.exists(ppt_name):
         prs = Presentation(ppt_name)
@@ -55,7 +57,7 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     table0.cell(1, 6).text = str(params.post_anneal)
     table0.cell(1, 7).text = str("{:.1E}".format(params.prefactor))
     table0.cell(1, 8).text = "pass"
-    table0.cell(1, 9).text = "pass"
+    table0.cell(1, 9).text = str(defect)
     """
     if bln_tr.get() == True:
         table0.cell(1, 8).text = "on"

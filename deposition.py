@@ -34,8 +34,20 @@ def judge_type(atom_set: Dict, bonds: Dict, dep_pos: tuple) -> int:
     return 2
 
 
-def deposit_an_atom(atom_set: Dict, bonds: Dict) -> tuple:
+def remove_first(candidate) -> List:
+    candidate_new = []
+    for site in candidate:
+        if site[2] not in (0, 1):
+            candidate_new.append(site)
+    return candidate_new
+    # return [site in candidates if site[2] not in (0, 1)]
+
+
+def deposit_an_atom(atom_set: Dict, bonds: Dict, defect, empty_first: int) -> tuple:
     candidate = find_candidates(atom_set, bonds)
+    if (defect is True) and (empty_first == 1):
+        candidate = remove_first(candidate)
+
     dep_pos = dep_position(candidate)
     atom_type = judge_type(atom_set, bonds, dep_pos)
 

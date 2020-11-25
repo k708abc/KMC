@@ -10,8 +10,8 @@ def highest_z(pos_all: List[dict]) -> int:
     maxz = 1
     for positions in pos_all:
         for index, state in positions.items():
-            if (state != 0) and (index[2] > maxz):
-                maxz = index[2]
+            if (state != 0) and (index[2] + 1 > maxz):
+                maxz = index[2] + 1
     return maxz
 
 
@@ -84,7 +84,6 @@ def image_formaiton(pos: Dict, lattice: Dict, length: int, maxz: int):
                     p = pat.Polygon(
                         xy=[(t1x, t1y), (t2x, t2y), (t3x, t3y)], fc=color, ec=color
                     )
-
                     ax.add_patch(p)
 
                     if x == 0:
@@ -312,6 +311,7 @@ def record_data(
     params,
     minute: int,
     second: float,
+    defect,
 ):
     maxz = highest_z(pos_all)
     maxz_unit = params.z_unit_init * 6
@@ -348,4 +348,6 @@ def record_data(
         poscar_name = dir_name + rec_name + "_poscar.vasp"
         rec_poscar(pos_i, lattice, unit_length, maxz, poscar_name)
     #
-    rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_name)
+    rec_ppt(
+        params, minute, second, img_names, hist_names, time, coverage, dir_name, defect
+    )

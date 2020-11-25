@@ -347,6 +347,7 @@ class Window(ttk.Frame):
         self.prog_time = 0
         self.n_atoms = 0
         self.n_events = 0
+        self.empty_firstBL = self.init_value.atoms_in_BL
         self.pos_rec: List[dict] = []
         self.time_rec: List[float] = []
         self.cov_rec: List[float] = []
@@ -396,12 +397,18 @@ class Window(ttk.Frame):
         # return lattice, bonds, atom_set, event, event_time, event_time_tot
         # put first and second atom
         for _ in range(2):
-            dep_pos, atom_type = deposit_an_atom(self.atom_set, bonds)
+            dep_pos, atom_type = deposit_an_atom(
+                self.atom_set,
+                bonds,
+                self.bln_defect.get(),
+                self.empty_firstBL,
+            )
             self.atom_set[dep_pos] = atom_type
             atom_exist.append(dep_pos)
             self.n_atoms += 1
             self.n_events += 1
             self.prog_time += 1 / (self.init_value.dep_rate_atoms_persec)
+            self.empty_firstBL -= 1
         self.update_progress()
         self.det_normarize()
         self.record_position()
@@ -415,13 +422,26 @@ class Window(ttk.Frame):
                 )
                 if judge == "success":
                     self.prog_time += 1 / (self.init_value.dep_rate_atoms_persec)
-                    dep_pos, atom_type = deposit_an_atom(self.atom_set, bonds)
+                    dep_pos, atom_type = deposit_an_atom(
+                        self.atom_set,
+                        bonds,
+                        self.bln_defect.get(),
+                        self.empty_firstBL,
+                    )
+
                     self.atom_set[dep_pos] = atom_type
                     atom_exist.append(dep_pos)
                     self.n_atoms += 1
+                    if dep_pos[2] in (0, 1):
+                        self.empty_firstBL -= 1
             else:
                 events, rates = site_events(
-                    self.atom_set, bonds, target, self.init_value
+                    self.atom_set,
+                    bonds,
+                    target,
+                    self.init_value,
+                    self.bln_defect.get(),
+                    self.empty_firstBL,
                 )
                 # Normarize rates
                 norm_rates = normarize_rate(rates, self.normarize)
@@ -437,6 +457,11 @@ class Window(ttk.Frame):
                     self.atom_set[target] = 0
                     atom_exist.remove(target)
                     atom_exist.append(move_atom)
+                    if move_atom[2] in (0, 1):
+                        self.empty_firstBL -= 1
+                    if target[2] in (0, 1):
+                        self.empty_firstBL += 1
+
             # end of an event
             self.n_events += 1
             self.update_progress()
@@ -466,6 +491,7 @@ class Window(ttk.Frame):
             self.init_value,
             minute,
             second,
+            self.bln_defect.get(),
         )
         elapsed_time = time.time() - self.start_time
         minute = math.floor(elapsed_time / 60)
