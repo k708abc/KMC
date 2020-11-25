@@ -3,9 +3,10 @@ from pptx.util import Inches, Pt
 import os
 
 
-def rec_ppt(params, minute, second, img_names, hist_names, time, coverage):
-    if os.path.exists("Layer_analysis_results.pptx"):
-        prs = Presentation("Layer_analysis_results.pptx")
+def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_name):
+    ppt_name = dir_name + "Layer_analysis_results.pptx"
+    if os.path.exists(ppt_name):
+        prs = Presentation(ppt_name)
     else:
         prs = Presentation()
         prs.slide_height = Inches(7.5)
@@ -219,4 +220,4 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage):
 
     slide.shapes.add_picture(file_name, left, top, height=height)
     """
-    prs.save("Layer_analysis_results.pptx")
+    prs.save(ppt_name)

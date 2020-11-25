@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as pat
 import math
 from record_ppt import rec_ppt
+import os
 
 """
 def highest_z(pos_all: List[dict]) -> int:
@@ -298,6 +299,10 @@ def rec_poscar(pos: Dict, unit_length: int, maxz: int, rec_name: str):
     file_data.close()
 
 
+def dir_formarion(name: str):
+    os.makedirs(name, exist_ok=True)
+
+
 def record_data(
     pos_all: List[dict],
     time: List,
@@ -313,6 +318,9 @@ def record_data(
     n_BL = params.atoms_in_BL
     img_names: List[str] = []
     hist_names: List[str] = []
+    dir_name = params.record_name + "/"
+    dir_formarion(dir_name)
+
     for rec_num, (pos_i, time_i, cov_i) in enumerate(zip(pos_all, time, coverage)):
         rec_name = (
             str(rec_name_body)
@@ -326,16 +334,16 @@ def record_data(
         )
         #
         img = image_formaiton(pos_i, lattice, unit_length, maxz)
-        img_name = rec_name + ".png"
+        img_name = dir_name + rec_name + ".png"
         rec_img(img, img_name)
         img_names.append(img_name)
         #
         hist = hist_formation(pos_i, maxz, n_BL)
-        hist_name = rec_name + "_hist.png"
+        hist_name = dir_name + rec_name + "_hist.png"
         rec_img(hist, hist_name)
         hist_names.append(hist_name)
         #
-        poscar_name = rec_name + "_poscar.vasp"
+        poscar_name = dir_name + rec_name + "_poscar.vasp"
         rec_poscar(pos_i, unit_length, maxz, poscar_name)
     #
-    rec_ppt(params, minute, second, img_names, hist_names, time, coverage)
+    rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_name)
