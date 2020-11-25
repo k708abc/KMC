@@ -26,11 +26,11 @@ def form_first_3BL(unit_length: int, z_intra: float, z_inter: float):
         x, y = index
         lattice_first[index] = [
             [x, y, 0],
-            [x + 1 / 3.0, y + 1 / 3.0, z_inter],
-            [x + 1 / 3.0, y + 1 / 3.0, z_inter + z_intra],
-            [x + 2 / 3.0, y + 2 / 3.0, 2 * z_inter + z_intra],
+            [x + 1 / 3.0, y + 1 / 3.0, z_intra],
+            [x + 1 / 3.0, y + 1 / 3.0, z_intra + z_inter],
+            [x + 2 / 3.0, y + 2 / 3.0, 2 * z_intra + z_inter],
             [x + 2 / 3.0, y + 2 / 3.0, 2 * (z_inter + z_intra)],
-            [x, y, 2 * (z_inter + z_intra) + z_inter],  # for accuracy
+            [x, y, 2 * (z_inter + z_intra) + z_intra],  # for accuracy
         ]
 
 
@@ -40,7 +40,7 @@ def lattice_full_layers(unit_height: int):
         lattice[index] = [
             lattice_first[index_xy][index[2] % 6][0],
             lattice_first[index_xy][index[2] % 6][1],
-            lattice_first[index_xy][index[2] % 6][2] + unit_height * index[2] // 6,
+            lattice_first[index_xy][index[2] % 6][2] + unit_height * (index[2] // 6),
         ]
     """六方晶系でSiを記述したとき、3BL分のハニカム構造がz方向の単位構造になります。
     この3BL分の単位格子の高さが2.448(nm)です。"""  # ←そういった細かい情報の結果ならば、コードにその旨書いておかないと絶対ダメ。

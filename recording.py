@@ -5,7 +5,7 @@ import math
 from record_ppt import rec_ppt
 import os
 
-"""
+
 def highest_z(pos_all: List[dict]) -> int:
     maxz = 1
     for positions in pos_all:
@@ -13,7 +13,6 @@ def highest_z(pos_all: List[dict]) -> int:
             if (state != 0) and (index[2] > maxz):
                 maxz = index[2]
     return maxz
-"""
 
 
 def image_formaiton(pos: Dict, lattice: Dict, length: int, maxz: int):
@@ -74,11 +73,13 @@ def image_formaiton(pos: Dict, lattice: Dict, length: int, maxz: int):
                         t3x = t1x - unit_y[0]
                         t3y = t1y - unit_y[1]
 
-                    color_num = math.floor(z / 2) * 2
-                    if z in (0, 1):
+                    color_num = math.floor(z / 2) - 1
+                    maxz_BL = math.floor(maxz / 2) - 1
+
+                    if color_num == -1:
                         color = [0, 1, 0]
                     else:
-                        color = [color_num / maxz, 0, 1 - color_num / maxz]
+                        color = [color_num / maxz_BL, 0, 1 - color_num / maxz_BL]
 
                     p = pat.Polygon(
                         xy=[(t1x, t1y), (t2x, t2y), (t3x, t3y)], fc=color, ec=color
@@ -272,16 +273,16 @@ def hist_formation(pos: Dict, maxz: int, n_BL: int):
     return fig
 
 
-def rec_poscar(pos: Dict, unit_length: int, maxz: int, rec_name: str):
+def rec_poscar(pos: Dict, lattice: Dict, unit_length: int, maxz: int, rec_name: str):
     xp: list[float] = []
     yp: list[float] = []
     zp: list[float] = []
     atom_i = 0
     for index, atom_state in pos.items():
         if atom_state != 0:
-            xp.append(index[0] / unit_length)
-            yp.append(index[1] / unit_length)
-            zp.append(index[2] / maxz / 2.448)
+            xp.append(lattice[index][0] / unit_length)
+            yp.append(lattice[index][1] / unit_length)
+            zp.append(lattice[index][2] / maxz / 2.448)
             atom_i += 1
     file_data = open(rec_name, "w")
     file_data.write(rec_name + "\n")
@@ -312,7 +313,8 @@ def record_data(
     minute: int,
     second: float,
 ):
-    maxz = params.z_unit_init * 6
+    maxz = highest_z(pos_all)
+    maxz_unit = params.z_unit_init * 6
     unit_length = params.n_cell_init
     rec_name_body = params.record_name
     n_BL = params.atoms_in_BL
@@ -338,12 +340,12 @@ def record_data(
         rec_img(img, img_name)
         img_names.append(img_name)
         #
-        hist = hist_formation(pos_i, maxz, n_BL)
+        hist = hist_formation(pos_i, maxz_unit, n_BL)
         hist_name = dir_name + rec_name + "_hist.png"
         rec_img(hist, hist_name)
         hist_names.append(hist_name)
         #
         poscar_name = dir_name + rec_name + "_poscar.vasp"
-        rec_poscar(pos_i, unit_length, maxz, poscar_name)
+        rec_poscar(pos_i, lattice, unit_length, maxz, poscar_name)
     #
     rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_name)

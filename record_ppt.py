@@ -53,7 +53,7 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     table0.cell(1, 4).text = str(params.dep_rate)
     table0.cell(1, 5).text = str(params.dep_time)
     table0.cell(1, 6).text = str(params.post_anneal)
-    table0.cell(1, 7).text = str(params.prefactor)
+    table0.cell(1, 7).text = str("{:.1E}".format(params.prefactor))
     table0.cell(1, 8).text = "pass"
     table0.cell(1, 9).text = "pass"
     """

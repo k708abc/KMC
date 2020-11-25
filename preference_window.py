@@ -392,7 +392,7 @@ class Window(ttk.Frame):
         self.update_progress()
         self.det_normarize()
         self.record_position()
-        while self.prog_time <= self.init_value.total_time:
+        while self.prog_time < self.init_value.total_time:
             target = choose_atom(atom_exist)
             if target == (-1, -1, -1):
                 # deposition
@@ -451,7 +451,7 @@ class Window(ttk.Frame):
         minute = math.floor(elapsed_time / 60)
         second = int(elapsed_time % 60)
         self.progress_label["text"] = (
-            "Finished: " + str(minute) + " m" + str(second) + " s"
+            "Finished: " + str(minute) + " min " + str(second) + " s"
         )
         self.update()
 
