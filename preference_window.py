@@ -388,6 +388,7 @@ class Window(ttk.Frame):
             atom_exist.append(dep_pos)
             self.n_atoms += 1
             self.n_events += 1
+            self.prog_time += 1 / (self.init_value.dep_rate_atoms_persec)
         self.update_progress()
         self.det_normarize()
         self.record_position()
@@ -399,7 +400,7 @@ class Window(ttk.Frame):
                     self.init_value.dep_rate_atoms_persec / self.normarize
                 )
                 if judge == "success":
-                    self.prog_time += self.init_value.dep_rate_atoms_persec
+                    self.prog_time += 1 / (self.init_value.dep_rate_atoms_persec)
                     dep_pos, atom_type = deposit_an_atom(self.atom_set, bonds)
                     self.atom_set[dep_pos] = atom_type
                     atom_exist.append(dep_pos)
@@ -415,10 +416,13 @@ class Window(ttk.Frame):
                 # choose an event
                 move_atom = choice(events, norm_rates)
                 # event progress
-                self.atom_set[move_atom] = self.atom_set[target]
-                self.atom_set[target] = 0
-                atom_exist.remove(target)
-                atom_exist.append(move_atom)
+                if move_atom == target:
+                    pass
+                else:
+                    self.atom_set[move_atom] = self.atom_set[target]
+                    self.atom_set[target] = 0
+                    atom_exist.remove(target)
+                    atom_exist.append(move_atom)
             # end of an event
             self.n_events += 1
             self.update_progress()

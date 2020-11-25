@@ -53,7 +53,7 @@ class Params:
 
     @property
     def total_time(self) -> float:
-        return self.dep_time + self.post_anneal
+        return (self.dep_time + self.post_anneal) * 60
 
     @property
     def interval(self) -> float:
