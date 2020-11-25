@@ -271,6 +271,9 @@ class Window(ttk.Frame):
         self.progress_coverage = ttk.Label(self.frame_progress, text="Coverage")
         self.progress_atoms = ttk.Label(self.frame_progress, text="Num. atoms")
         self.progress_events = ttk.Label(self.frame_progress, text="Num. events")
+        self.progress_expectation = ttk.Label(
+            self.frame_progress, text="Expected Num. events"
+        )
 
     def create_layout_progress(self):
         self.progress_label.grid(row=0, column=0, padx=4, pady=10)
@@ -278,6 +281,7 @@ class Window(ttk.Frame):
         self.progress_coverage.grid(row=0, column=2, padx=4, pady=10)
         self.progress_atoms.grid(row=0, column=3, padx=4, pady=10)
         self.progress_events.grid(row=0, column=4, padx=4, pady=10)
+        self.progress_expectation.grid(row=0, column=5, padx=4, pady=10)
 
     def create_widgets_bar(self):
         self.pbval = 0
@@ -347,7 +351,8 @@ class Window(ttk.Frame):
         self.time_rec: List[float] = []
         self.cov_rec: List[float] = []
         self.rec_num = 0
-        self.time_of_record = self.init_value.interval
+        self.rec_num_atoms = self.init_value.rec_num_atom_interval
+        # self.time_of_record = self.init_value.interval
 
     def update_progress(self):
         self.pbval = int(self.prog_time / self.init_value.total_time * 100)
@@ -357,8 +362,8 @@ class Window(ttk.Frame):
         self.progress_coverage["text"] = (
             str("{:.2f}".format(self.n_atoms / self.init_value.atoms_in_BL)) + " ML"
         )
-        self.progress_atoms["text"] = str(self.n_atoms) + "atoms"
-        self.progress_events["text"] = str(self.n_events) + "events"
+        self.progress_atoms["text"] = str(self.n_atoms) + " atoms"
+        self.progress_events["text"] = str(self.n_events) + " events"
         self.update()
 
     def det_normarize(self):
@@ -376,6 +381,14 @@ class Window(ttk.Frame):
         self.time_rec.append(self.prog_time)
         self.cov_rec.append(self.n_atoms / self.init_value.atoms_in_BL)
 
+    def cal_expected_events(self):
+        dep_success = self.init_value.dep_rate_atoms_persec / self.normarize
+        num_atom_total = self.init_value.total_atoms + 1
+        num_events = 1 / dep_success * num_atom_total * num_atom_total / 2
+        self.progress_expectation["text"] = (
+            "Expectation: " + str(int(num_events)) + " events"
+        )
+
     def null_event_kmc(self):
         self.start_setting()
         atom_exist: List[tuple] = [(-1, -1, -1)]
@@ -392,7 +405,8 @@ class Window(ttk.Frame):
         self.update_progress()
         self.det_normarize()
         self.record_position()
-        while self.prog_time < self.init_value.total_time:
+        self.cal_expected_events()
+        while int(self.prog_time) <= int(self.init_value.total_time):
             target = choose_atom(atom_exist)
             if target == (-1, -1, -1):
                 # deposition
@@ -427,8 +441,14 @@ class Window(ttk.Frame):
             self.n_events += 1
             self.update_progress()
             # recoding the positions in the middle
-            if self.prog_time >= self.time_of_record:
+            """
+            if self.prog_time >= int(self.time_of_record):
                 self.time_of_record += self.init_value.interval
+                self.record_position()
+            """
+
+            if self.n_atoms >= self.rec_num_atoms:
+                self.rec_num_atoms += self.init_value.rec_num_atom_interval
                 self.record_position()
 
         # end of the loop

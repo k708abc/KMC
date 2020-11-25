@@ -58,3 +58,11 @@ class Params:
     @property
     def interval(self) -> float:
         return self.total_time * self.img_per / 100
+
+    @property
+    def total_atoms(self) -> int:
+        return int(self.dep_rate_atoms_persec * self.total_time)
+
+    @property
+    def rec_num_atom_interval(self) -> int:
+        return int(self.total_atoms * self.img_per / 100)
