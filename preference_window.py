@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import List, Dict
+from typing import List, Dict, Tuple
 import tkinter as tk
 import tkinter.ttk as ttk
 import copy
@@ -392,7 +392,7 @@ class Window(ttk.Frame):
 
     def null_event_kmc(self):
         self.start_setting()
-        atom_exist: List[tuple] = [(-1, -1, -1)]
+        atom_exist: List[Tuple[int, int, int]] = [(-1, -1, -1)]
         self.lattice, bonds, self.atom_set, _, _, _ = lattice_form(self.init_value)
         # return lattice, bonds, atom_set, event, event_time, event_time_tot
         # put first and second atom

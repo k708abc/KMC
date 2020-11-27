@@ -1,8 +1,8 @@
-from typing import List, Dict
+from typing import List, Dict, Tuple
 from cal_rates import rate
 
 
-def total_energy(atom_set: Dict, bonds: Dict, target: tuple, params):
+def total_energy(atom_set: Dict, bonds: Dict, target: Tuple, params):
     z_judge = target[2]
     energy = 0
     if z_judge == 0:
@@ -116,7 +116,7 @@ def judge_defect(target, events):
 def possible_events(
     atom_set: Dict,
     bonds: Dict,
-    target: tuple,
+    target: Tuple,
     params,
     energy: float,
     unit_length: int,
@@ -125,7 +125,7 @@ def possible_events(
 ):
     pre = float(params.prefactor)
     kbt = params.temperature_eV
-    events: List[tuple] = []
+    events: List[Tuple] = []
     rates: List[float] = []
     #
     atom_x = target[0]
@@ -280,9 +280,9 @@ def possible_events(
 
 
 def site_events(
-    atom_set: Dict, bonds: Dict, target: tuple, params, defect, empty_first: int
+    atom_set: Dict, bonds: Dict, target: Tuple, params, defect, empty_first: int
 ):
-    event_list: List[tuple] = []
+    event_list: List[Tuple] = []
     rate_list: List[float] = []
     unit_length = params.n_cell_init
     # calculate total energy

@@ -3,7 +3,7 @@ import random
 import math
 
 
-def find_candidates(atom_set: Dict, bonds: Dict) -> list:
+def find_candidates(atom_set: Dict, bonds: Dict) -> List:
     candidate: List[Tuple[int, int, int]] = []  # リストの中身は into のタプルということでＯＫ？→OKです
     for index, condition in atom_set.items():
         # atom_set の key , val は何を意味しているの？
@@ -22,13 +22,13 @@ def find_candidates(atom_set: Dict, bonds: Dict) -> list:
     return list(set(candidate))
 
 
-def dep_position(candidate: List) -> tuple:
+def dep_position(candidate: List) -> Tuple:
     random_n = random.random()
     num = math.floor(random_n * len(candidate))
     return candidate[num]
 
 
-def judge_type(atom_set: Dict, bonds: Dict, dep_pos: tuple) -> int:
+def judge_type(atom_set: Dict, bonds: Dict, dep_pos: Tuple) -> int:
     # 周囲の原子の様子等に応じて原子の状態を区別
     # silicene or diamond etc...
     return 2
@@ -43,7 +43,7 @@ def remove_first(candidate) -> List:
     # return [site in candidates if site[2] not in (0, 1)]
 
 
-def deposit_an_atom(atom_set: Dict, bonds: Dict, defect, empty_first: int) -> tuple:
+def deposit_an_atom(atom_set: Dict, bonds: Dict, defect, empty_first: int) -> Tuple:
     candidate = find_candidates(atom_set, bonds)
     if (defect is True) and (empty_first == 1):
         candidate = remove_first(candidate)
