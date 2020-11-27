@@ -377,7 +377,7 @@ class Window(ttk.Frame):
         )
         if self.bln_tr.get() is True:
             normarize = fast_event + rate(
-                float(self.prefactor.get()), kbt, float(self.transformation)
+                float(self.prefactor.get()), kbt, float(self.init_value.transformation)
             )
         else:
             normarize = 10 * fast_event
@@ -454,6 +454,7 @@ class Window(ttk.Frame):
                 norm_rates = normarize_rate(rates, self.normarize)
                 # add null event
                 events.append(target)
+                states.append(self.atom_set[target])
                 # choose an event
                 move_atom, new_state = choice(events, norm_rates, states)
                 # event progress

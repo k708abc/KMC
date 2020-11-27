@@ -282,8 +282,8 @@ def possible_events(
 
 
 def bond_energy(event, bond, params, atom_state):
-    z_event = event[3]
-    z_bond = bond[3]
+    z_event = event[2]
+    z_bond = bond[2]
     if atom_state == 2:
         if z_event in (1, 0) and z_bond in (1, 0):
             return params.binding_energies["Si12"]
@@ -306,8 +306,7 @@ def bond_energy(event, bond, params, atom_state):
         elif z_event % 2 == 1 and z_bond == z_event - 1:
             return params.binding_energies["Si_intra"]
         else:
-            print("Something wrong in 2D energy")
-            return 0
+            raise RuntimeError("Something wrong in 2D energy")
     else:
         if z_event % 2 == 0 and z_bond == z_event + 1:
             return params.binding_energies["Si_intra"]
@@ -318,7 +317,7 @@ def bond_energy(event, bond, params, atom_state):
         elif z_event % 2 == 1 and z_bond == z_event - 1:
             return params.binding_energies["Si_intra"]
         else:
-            print("Something wrong in 3D energy")
+            raise RuntimeError("Something wrong in 3D energy")
         return 0
 
 
@@ -364,8 +363,7 @@ def state_change_to_neighbor(atom_set, bonds, target, params):
     elif t_state == 3:
         return 2, change_rate
     else:
-        print("some error in state change")
-        return 2, change_rate
+        raise RuntimeError("Some error in state change to neighbor")
 
 
 def state_change_new(atom_set, bonds, target, params):
@@ -384,9 +382,13 @@ def state_change_new(atom_set, bonds, target, params):
         return 3, trans_rate
     # 3次元から2次元：周辺原子が少ないと起きやすい
     elif target_state == 3:
+        if neighbor_i == 0:
+            neighbor_i == 1
         E_trans = neighbor_i * params.transformation
         trans_rate = rate(pre, kbt, E_trans)
         return 2, trans_rate
+    else:
+        raise RuntimeError("Some error in state change to neighbor")
 
 
 def site_events(
@@ -414,17 +416,16 @@ def site_events(
         states = state_determinate(atom_set, bonds, event_list, params)
         # サイトの変わらない構造変化の設定
         # 隣接原子の状態による変化
-        rate, state = state_change_to_neighbor(atom_set, bonds, target, params)
+        state, rate = state_change_to_neighbor(atom_set, bonds, target, params)
         event_list.append(target)
         rate_list.append(rate)
         states.append(state)
         # 隣接原子の数による変化
-        rate, state = state_change_new(atom_set, bonds, target, params)
+        state, rate = state_change_new(atom_set, bonds, target, params)
         event_list.append(target)
         rate_list.append(rate)
         states.append(state)
 
     else:
         states = [2 in range(len(event_list))]
-
     return event_list, rate_list, states
