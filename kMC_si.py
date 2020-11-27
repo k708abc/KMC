@@ -645,7 +645,7 @@ class App(Window):
 
 if __name__ == "__main__":
     unit_x: List[float] = [1, 0, 0]
-    unit_y: List[float] = [0.5, 0.866, 0]
+    unit_y: List[float] = [0.5, math.sqrt(3) / 2, 0]
     unit_z: List[float] = [0, 0, 1]
     application = tk.Tk()
     app = App(application)

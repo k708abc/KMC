@@ -12,7 +12,7 @@ event_time: Dict[Tuple, List] = {}
 event_time_tot: Dict[Tuple, float] = {}
 
 
-def reset_dicts():
+def reset_dicts() -> None:
     lattice_first.clear()
     lattice.clear()
     atom_set.clear()
@@ -99,11 +99,11 @@ def search_bond(unit_length: int, z_max: int):
         bonds[index] = neighbor_points(index, z_judge, unit_length, z_max)
 
 
-def lattice_form(input_params):  # 　ここ長すぎるので、少なくとも3つか四つの関数に分ける。
+def lattice_form(input_params: Params):  # 　ここ長すぎるので、少なくとも3つか四つの関数に分ける。
     # 荒船だったら，多分5個ぐらい。
     unit_length: int = input_params.n_cell_init
     z_units: int = input_params.z_unit_init
-    z_intra: int = float(input_params.intra_distance)
+    z_intra: float = float(input_params.intra_distance)
     z_inter = float(input_params.inter_distance)
     unit_height = 3 * (z_intra + z_inter)
     reset_dicts()
@@ -121,9 +121,7 @@ def lattice_form(input_params):  # 　ここ長すぎるので、少なくとも
                 event_time_tot[(i, j, k)] = 0.0
     #
     form_first_3BL(unit_length, z_intra, z_inter)
-    #
     lattice_full_layers(unit_height)
-    #
     search_bond(unit_length, z_max)
     return lattice, bonds, atom_set, event, event_time, event_time_tot
 
