@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 from typing import List, Dict, Tuple
 from InputParameter import Params
 from lattice_form_check import check
@@ -47,7 +48,7 @@ def lattice_full_layers(unit_height: int):
 
 
 def neighbor_points(
-    index: tuple, z_judge: int, unit_length: int, z_max: int
+    index: Tuple, z_judge: int, unit_length: int, z_max: int
 ) -> List[List[int]]:
     neighbors: List[List[int]]
     x, y, z = index

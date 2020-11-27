@@ -2,7 +2,7 @@
 
 import math
 import time
-from typing import List, Dict
+from typing import List, Dict, Tuple
 import tkinter as tk
 import random
 import matplotlib.pyplot as plt
@@ -12,11 +12,11 @@ from PIL import Image, ImageGrab
 from preference_window import Window
 
 input_params: Dict[str, float] = {}
-lattice: Dict[str, list] = {}
+lattice: Dict[str, List] = {}
 atom_set: Dict[str, int] = {}
-bonds: Dict[str, list] = {}
-event: Dict[str, list] = {}
-event_time: Dict[str, list] = {}
+bonds: Dict[str, List] = {}
+event: Dict[str, List] = {}
+event_time: Dict[str, List] = {}
 event_time_tot: Dict[str, float] = {}
 
 

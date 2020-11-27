@@ -1,9 +1,9 @@
-from typing import List, Dict
+from typing import List, Dict, Tuple
 from cal_rates import rate
 import random
 
 
-def total_energy(atom_set: Dict, bonds: Dict, target: tuple, params):
+def total_energy(atom_set: Dict, bonds: Dict, target: Tuple, params):
     z_judge = target[2]
     energy = 0
     if z_judge == 0:
@@ -117,7 +117,7 @@ def judge_defect(target, events):
 def possible_events(
     atom_set: Dict,
     bonds: Dict,
-    target: tuple,
+    target: Tuple,
     params,
     energy: float,
     unit_length: int,
@@ -127,7 +127,7 @@ def possible_events(
 ):
     pre = float(params.prefactor)
     kbt = params.temperature_eV
-    events: List[tuple] = []
+    events: List[Tuple] = []
     rates: List[float] = []
     #
     atom_x = target[0]
@@ -392,13 +392,13 @@ def state_change_new(atom_set, bonds, target, params):
 def site_events(
     atom_set: Dict,
     bonds: Dict,
-    target: tuple,
+    target: Tuple,
     params,
     defect: bool,
     empty_first: int,
     trans: bool,
 ):
-    event_list: List[tuple] = []
+    event_list: List[Tuple] = []
     rate_list: List[float] = []
     unit_length = params.n_cell_init
     states: List[int] = []

@@ -1,8 +1,8 @@
 import random
-from typing import List
+from typing import List, Tuple
 
 
-def choice(events: List, rates: List, states: List) -> tuple:
+def choice(events: List, rates: List, states: List) -> Tuple:
     tot = sum(rates)
     r_tot = random.random() * tot
 
