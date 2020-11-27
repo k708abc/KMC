@@ -375,7 +375,13 @@ class Window(ttk.Frame):
                 for energy in self.energies
             ]
         )
-        self.normarize = 10 * fast_event
+        if self.bln_tr.get() is True:
+            normarize = fast_event + rate(
+                float(self.prefactor.get()), kbt, float(self.transformation)
+            )
+        else:
+            normarize = 10 * fast_event
+        self.normarize = normarize
 
     def record_position(self):
         self.pos_rec.append(copy.copy(self.atom_set))
@@ -435,25 +441,26 @@ class Window(ttk.Frame):
                     if dep_pos[2] in (0, 1):
                         self.empty_firstBL -= 1
             else:
-                events, rates = site_events(
+                events, rates, states = site_events(
                     self.atom_set,
                     bonds,
                     target,
                     self.init_value,
                     self.bln_defect.get(),
                     self.empty_firstBL,
+                    self.bln_tr.get(),
                 )
                 # Normarize rates
                 norm_rates = normarize_rate(rates, self.normarize)
                 # add null event
                 events.append(target)
                 # choose an event
-                move_atom = choice(events, norm_rates)
+                move_atom, new_state = choice(events, norm_rates, states)
                 # event progress
                 if move_atom == target:
-                    pass
+                    self.atom_set[target] = new_state
                 else:
-                    self.atom_set[move_atom] = self.atom_set[target]
+                    self.atom_set[move_atom] = new_state
                     self.atom_set[target] = 0
                     atom_exist.remove(target)
                     atom_exist.append(move_atom)
