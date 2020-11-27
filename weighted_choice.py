@@ -1,5 +1,5 @@
 import random
-from typing import List
+from typing import List, Tuple
 
 
 def choice(events: List, rates: List) -> Tuple:
