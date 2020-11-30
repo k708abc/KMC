@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 
 import math
-import time
-from typing import List, Dict, Tuple
 import tkinter as tk
-import random
-import matplotlib.pyplot as plt
-import matplotlib.patches as pat
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from PIL import Image, ImageGrab
 from preference_window import Window
+from typing import List
 
+# import time
+# from typing import List, Dict, Tuple
+# import random
+# import matplotlib.pyplot as plt
+# import matplotlib.patches as pat
+# from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+# from PIL import Image, ImageGrab
+
+
+"""
 input_params: Dict[str, float] = {}
 lattice: Dict[str, List] = {}
 atom_set: Dict[str, int] = {}
@@ -636,6 +640,7 @@ def cal_start():
     # calculation end
     # Show results
     show_pictures()
+"""
 
 
 class App(Window):
