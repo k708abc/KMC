@@ -23,7 +23,7 @@ class Window(ttk.Frame):
     kb_eV = 8.617e-5
     padWE: Dict = dict(sticky=(tk.W, tk.E), padx=15, pady=2)
 
-    def __init__(self, master) -> None:
+    def __init__(self, master):
         super().__init__(master, padding=2)
         self.init_value = Params()
         self.create_variables()
@@ -41,7 +41,7 @@ class Window(ttk.Frame):
     def create_variables(self):
         pass
 
-    def create_frame_basics(self) -> None:
+    def create_frame_basics(self):
         self.frame_basics = ttk.Frame()
         self.create_widgets_basics()
         self.create_layout_basic()
@@ -89,7 +89,7 @@ class Window(ttk.Frame):
         self.create_layout_progress()
         self.frame_progress.pack()
 
-    def create_widgets_basics(self) -> None:
+    def create_widgets_basics(self):
         # The first row
         self.n_cell_label = ttk.Label(self.frame_basics, text="Number of cell")
         self.n_cell = ttk.Entry(self.frame_basics, width=7)
@@ -129,7 +129,7 @@ class Window(ttk.Frame):
         self.prefactor.insert(tk.END, self.init_value.prefactor)
         self.prefactor.bind("<Return>", self.update_click)
 
-    def create_layout_basic(self) -> None:
+    def create_layout_basic(self):
         """Frame for number of cell, Z unit, ..."""
         # the first row
         self.n_cell_label.grid(row=0, column=0, **self.padWE)
@@ -150,7 +150,7 @@ class Window(ttk.Frame):
         self.prefactor_label.grid(row=1, column=6, **self.padWE)
         self.prefactor.grid(row=1, column=7, **self.padWE)
 
-    def create_widgets_energies(self) -> None:
+    def create_widgets_energies(self):
         self.labels: List[str] = [
             "  ",
             "AgSi",
@@ -180,7 +180,7 @@ class Window(ttk.Frame):
         for label in self.labels:
             self.energylabels.append(ttk.Label(self.frame_energies, text=label))
 
-    def create_layout_energies(self) -> None:
+    def create_layout_energies(self):
         # self.update_values()
         for i, energylabel in enumerate(self.energylabels):  # インデックスとリストの要素を同時に取得しループ
             energylabel.grid(row=0, column=i, **self.padWE)
@@ -193,9 +193,9 @@ class Window(ttk.Frame):
         for i, ratelabel in enumerate(self.rate_labels):
             ratelabel.grid(row=2, column=i + 1)
 
-    def create_widgets_checks(self) -> None:
+    def create_widgets_checks(self):
         self.bln_tr = tk.BooleanVar()
-        self.bln_tr.set(True)
+        self.bln_tr.set(self.init_value.trans_check)
         self.chk_transformation_label = ttk.Label(
             self.frame_checks, text="Transformation"
         )
@@ -205,20 +205,20 @@ class Window(ttk.Frame):
         self.transformation = ttk.Entry(self.frame_checks, width=7)
         self.transformation.insert(tk.END, self.init_value.transformation)
         self.bln_defect = tk.BooleanVar()
-        self.bln_defect.set(True)
+        self.bln_defect.set(self.init_value.keep_defect_check)
         self.chk_defect_label = ttk.Label(
             self.frame_checks, text="Keep defect in the first layer"
         )
         self.chk_defect = ttk.Checkbutton(self.frame_checks, variable=self.bln_defect)
 
-    def create_layout_checks(self) -> None:
+    def create_layout_checks(self):
         self.chk_transformation_label.grid(row=0, column=0, **self.padWE)
         self.chk_transformation.grid(row=0, column=1, **self.padWE)
         self.transformation.grid(row=0, column=2, **self.padWE)
         self.chk_defect_label.grid(row=1, column=0, **self.padWE)
         self.chk_defect.grid(row=1, column=1, **self.padWE)
 
-    def create_widgets_records(self) -> None:
+    def create_widgets_records(self):
         self.record_label = tk.Label(self.frame_records, text="Record")
         self.record = tk.Entry(self.frame_records, width=50)
         self.record.insert(tk.END, self.init_value.record_name)
@@ -229,7 +229,7 @@ class Window(ttk.Frame):
         self.comments = tk.Entry(self.frame_records, width=80)
         self.comments.insert(tk.END, self.init_value.comments)
 
-    def create_layout_records(self) -> None:
+    def create_layout_records(self):
         self.record_label.grid(row=0, column=0, **self.padWE)
         self.record.grid(row=0, column=1, **self.padWE)
         self.image_rec_label.grid(row=0, column=2, **self.padWE)
@@ -237,25 +237,23 @@ class Window(ttk.Frame):
         self.comments_label.grid(row=1, column=0, **self.padWE)
         self.comments.grid(row=1, column=1, columnspan=3, **self.padWE)
 
-    def create_widgets_method(self) -> None:
+    def create_widgets_method(self):
         self.var_method = tk.StringVar()
-        methods = ("Check lattice", "Null event", "Rejection free")
+        method_list = ["Check lattice", "Null event", "Rejection free"]
         self.method_label = tk.Label(self.frame_method, text="Method")
         self.method_cb = ttk.Combobox(
             self.frame_method,
             textvariable=self.var_method,
-            values=methods,
+            values=method_list,
             state="readonly",
         )
-        self.method_cb.current(
-            methods.index("Null event")
-        )  # としておいた方がいい。"1”だと何かわからなく成る。
+        self.method_cb.current(1)
 
-    def create_layout_method(self) -> None:
+    def create_layout_method(self):
         self.method_label.grid(row=0, column=0, **self.padWE)
         self.method_cb.grid(row=0, column=1, **self.padWE)
 
-    def create_widgets_buttons(self) -> None:
+    def create_widgets_buttons(self):
         self.start = tk.Button(
             self.frame_buttons, text="Start", command=self.start_function, width=20
         )
@@ -263,11 +261,11 @@ class Window(ttk.Frame):
             self.frame_buttons, text="close", command=self.close_function, width=20
         )
 
-    def create_layout_buttons(self) -> None:
+    def create_layout_buttons(self):
         self.start.grid(row=0, column=0)
         self.close.grid(row=0, column=1)
 
-    def create_widgets_progress(self) -> None:
+    def create_widgets_progress(self):
         self.progress_label = ttk.Label(self.frame_progress, text="Progress (%)")
         self.progress_time = ttk.Label(self.frame_progress, text="Sim. time")
         self.progress_coverage = ttk.Label(self.frame_progress, text="Coverage")
@@ -277,7 +275,7 @@ class Window(ttk.Frame):
             self.frame_progress, text="Expected Num. events"
         )
 
-    def create_layout_progress(self) -> None:
+    def create_layout_progress(self):
         self.progress_label.grid(row=0, column=0, padx=4, pady=10)
         self.progress_time.grid(row=0, column=1, padx=4, pady=10)
         self.progress_coverage.grid(row=0, column=2, padx=4, pady=10)
@@ -285,7 +283,7 @@ class Window(ttk.Frame):
         self.progress_events.grid(row=0, column=4, padx=4, pady=10)
         self.progress_expectation.grid(row=0, column=5, padx=4, pady=10)
 
-    def create_widgets_bar(self) -> None:
+    def create_widgets_bar(self):
         self.pbval = 0
         self.progress_bar = ttk.Progressbar(
             self.frame_bars,
@@ -295,16 +293,16 @@ class Window(ttk.Frame):
         )
         self.progress_bar.configure(maximum=100, value=self.pbval)
 
-    def create_layout_bar(self) -> None:
+    def create_layout_bar(self):
         self.progress_bar.grid(pady=20)
 
-    def close_function(self) -> None:
+    def close_function(self):
         self.quit()
 
-    def run(self) -> None:
+    def run(self):
         self.mainloop()
 
-    def update_values(self) -> None:
+    def update_values(self):
         self.init_value.n_cell_init = int(self.n_cell.get())
         self.init_value.z_unit_init = int(self.z_unit.get())
         self.init_value.temperature = float(self.temperature.get())
@@ -318,6 +316,8 @@ class Window(ttk.Frame):
         self.init_value.record_name = str(self.record.get())
         self.init_value.img_per = float(self.image_rec.get())
         self.init_value.comments = str(self.comments.get())
+        self.init_value.keep_defect_check = self.bln_defect.get()
+        self.init_value.trans_check = self.bln_tr.get()
         #
         kbt = self.init_value.temperature_eV
         self.temperautre_energy["text"] = "{:.3g}".format(kbt)
@@ -329,14 +329,14 @@ class Window(ttk.Frame):
             )
         self.update()
 
-    def update_click(self, event) -> None:
+    def update_click(self, event):
         self.update_values()
 
-    def lattice_check(self) -> None:
+    def lattice_check(self):
         lattice_formed = lattice_form(self.init_value)
         check(self.init_value, lattice_formed[0], lattice_formed[1])
 
-    def start_setting(self) -> None:
+    def start_setting(self):
         self.progress_label["text"] = "Started"
         self.progress_time["text"] = "0 s"
         self.progress_coverage["text"] = "0 ML"
@@ -357,7 +357,7 @@ class Window(ttk.Frame):
         self.rec_num_atoms = self.init_value.rec_num_atom_interval
         # self.time_of_record = self.init_value.interval
 
-    def update_progress(self) -> None:
+    def update_progress(self):
         self.pbval = int(self.prog_time / self.init_value.total_time * 100)
         self.progress_bar.configure(value=self.pbval)
         self.progress_label["text"] = str(self.pbval) + " %"
@@ -369,7 +369,7 @@ class Window(ttk.Frame):
         self.progress_events["text"] = str(self.n_events) + " events"
         self.update()
 
-    def det_normarize(self) -> None:
+    def det_normarize(self):
         kbt = self.init_value.temperature_eV
         fast_event = max(
             [
@@ -385,12 +385,12 @@ class Window(ttk.Frame):
             normarize = 10 * fast_event
         self.normarize = normarize
 
-    def record_position(self) -> None:
+    def record_position(self):
         self.pos_rec.append(copy.copy(self.atom_set))
         self.time_rec.append(self.prog_time)
         self.cov_rec.append(self.n_atoms / self.init_value.atoms_in_BL)
 
-    def cal_expected_events(self) -> None:
+    def cal_expected_events(self):
         dep_success = self.init_value.dep_rate_atoms_persec / self.normarize
         num_atom_total = self.init_value.total_atoms + 1
         num_events = 1 / dep_success * num_atom_total * num_atom_total / 2
@@ -398,18 +398,19 @@ class Window(ttk.Frame):
             "Expectation: " + str(int(num_events)) + " events"
         )
 
-    def null_event_kmc(self):  # 長過ぎ！　Helper function 作ってコンパクトにしないと見通し悪い。
+    def null_event_kmc(self):
         self.start_setting()
         atom_exist: List[Tuple[int, int, int]] = [(-1, -1, -1)]
         self.lattice, bonds, self.atom_set, _, _, _ = lattice_form(self.init_value)
         # return lattice, bonds, atom_set, event, event_time, event_time_tot
         # put first and second atom
-        for _ in range(2):  #  何故”2”なの？
+        for _ in range(2):
             dep_pos, atom_type = deposit_an_atom(
                 self.atom_set,
                 bonds,
                 self.bln_defect.get(),
                 self.empty_firstBL,
+                self.init_value,
             )
             self.atom_set[dep_pos] = atom_type
             atom_exist.append(dep_pos)
@@ -435,6 +436,7 @@ class Window(ttk.Frame):
                         bonds,
                         self.bln_defect.get(),
                         self.empty_firstBL,
+                        self.init_value,
                     )
 
                     self.atom_set[dep_pos] = atom_type

@@ -1,6 +1,7 @@
 from typing import List, Tuple, Dict
 import random
 import math
+from event_collection import state_after_move
 
 
 def find_candidates(atom_set: Dict, bonds: Dict) -> List:
@@ -28,10 +29,14 @@ def dep_position(candidate: List) -> Tuple:
     return candidate[num]
 
 
-def judge_type(atom_set: Dict, bonds: Dict, dep_pos: Tuple) -> int:
+def judge_type(atom_set: Dict, bonds: Dict, dep_pos: Tuple, params) -> int:
     # 周囲の原子の様子等に応じて原子の状態を区別
     # silicene or diamond etc...
-    return 2
+    if params.trans_check is True:
+        state = state_after_move(atom_set, bonds, dep_pos, params)
+        return state
+    else:
+        return 2
 
 
 def remove_first(candidate) -> List:
@@ -43,13 +48,15 @@ def remove_first(candidate) -> List:
     # return [site in candidates if site[2] not in (0, 1)]
 
 
-def deposit_an_atom(atom_set: Dict, bonds: Dict, defect, empty_first: int) -> Tuple:
+def deposit_an_atom(
+    atom_set: Dict, bonds: Dict, defect, empty_first: int, params
+) -> Tuple:
     candidate = find_candidates(atom_set, bonds)
     if (defect is True) and (empty_first == 1):
         candidate = remove_first(candidate)
 
     dep_pos = dep_position(candidate)
-    atom_type = judge_type(atom_set, bonds, dep_pos)
+    atom_type = judge_type(atom_set, bonds, dep_pos, params)
 
     # rejection free ではイベント更新を行うサイトのリストが必要（あとまわし）
     # 蒸着サイトと関係する周囲のサイト

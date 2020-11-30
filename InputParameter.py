@@ -38,6 +38,8 @@ class Params:
         self.comments = "No comments"
         self.intra_distance = 0.204
         self.inter_distance = 0.612
+        self.keep_defect_check = True
+        self.trans_check = True
 
     @property
     def temperature_eV(self) -> float:

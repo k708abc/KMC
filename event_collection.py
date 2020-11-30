@@ -332,6 +332,9 @@ def state_after_move(atom_set, bonds, event, params):
             E2 += bond_energy(event, bond, params, atom_set[bond])
         elif atom_set[bond] == 3:
             E3 += bond_energy(event, bond, params, atom_set[bond])
+
+    if E2 == E3 == 0:
+        E2 = -1  # 蒸着時、周辺原子がない場合2次元にする
     # 結合原子の状態ごとの速度定数を計算
     rates = [rate(pre, kbt, E2), rate(pre, kbt, E3)]
     states = [2, 3]
