@@ -2,8 +2,8 @@ from typing import List, Dict, Tuple
 from cal_rates import rate
 import random
 
-
-def total_energy(atom_set: Dict, bonds: Dict, target: Tuple, params):
+"""
+def total_energy_wo_trans(atom_set: Dict, bonds: Dict, target: Tuple, params):
     z_judge = target[2]
     energy = 0
     if z_judge == 0:
@@ -61,6 +61,110 @@ def total_energy(atom_set: Dict, bonds: Dict, target: Tuple, params):
                     energy += params.binding_energies["Si_inter"]
                 elif bond[2] == z_judge + 1:
                     energy += params.binding_energies["Si_intra"]
+    return energy
+"""
+
+
+def bond_energy_same_state(target, bond, params, atom_state):
+    z_target = target[2]
+    z_bond = bond[2]
+    if atom_state == 2:
+        if z_target in (1, 0) and z_bond in (1, 0):
+            return params.binding_energies["Si12"]
+        elif z_target in (1, 2) and z_bond in (1, 2):
+            return params.binding_energies["Si23"]
+        elif z_target in (2, 3) and z_bond in (2, 3):
+            return params.binding_energies["Si34"]
+        elif z_target in (3, 4) and z_bond in (3, 4):
+            return params.binding_energies["Si45"]
+        elif z_target in (4, 5) and z_bond in (4, 5):
+            return params.binding_energies["Si56"]
+        elif z_target in (5, 6) and z_bond in (5, 6):
+            return params.binding_energies["Si_intra"]
+        elif z_target % 2 == 0 and z_bond == z_target + 1:
+            return params.binding_energies["Si_intra"]
+        elif z_target % 2 == 0 and z_bond == z_target - 1:
+            return params.binding_energies["Si_inter"]
+        elif z_target % 2 == 1 and z_bond == z_target + 1:
+            return params.binding_energies["Si_inter"]
+        elif z_target % 2 == 1 and z_bond == z_target - 1:
+            return params.binding_energies["Si_intra"]
+        else:
+            raise RuntimeError("Something wrong in 2D energy")
+    else:
+        if z_target % 2 == 0 and z_bond == z_target + 1:
+            return params.binding_energies["Si_intra"]
+        elif z_target % 2 == 0 and z_bond == z_target - 1:
+            return params.binding_energies["Si_inter"]
+        elif z_target % 2 == 1 and z_bond == z_target + 1:
+            return params.binding_energies["Si_inter"]
+        elif z_target % 2 == 1 and z_bond == z_target - 1:
+            return params.binding_energies["Si_intra"]
+        else:
+            raise RuntimeError("Something wrong in 3D energy")
+        return 0
+
+
+def bond_energy_diff_state(target, bond, params):
+    z_target = target[2]
+    z_bond = bond[2]
+    if z_target in (1, 0) and z_bond in (1, 0):
+        return (
+            params.binding_energies["Si12"] + params.binding_energies["Si_inter"]
+        ) / 2
+    elif z_target in (1, 2) and z_bond in (1, 2):
+        return (
+            params.binding_energies["Si23"] + params.binding_energies["Si_intra"]
+        ) / 2
+    elif z_target in (2, 3) and z_bond in (2, 3):
+        return (
+            params.binding_energies["Si34"] + params.binding_energies["Si_inter"]
+        ) / 2
+    elif z_target in (3, 4) and z_bond in (3, 4):
+        return (
+            params.binding_energies["Si45"] + params.binding_energies["Si_intra"]
+        ) / 2
+    elif z_target in (4, 5) and z_bond in (4, 5):
+        return (
+            params.binding_energies["Si56"] + params.binding_energies["Si_inter"]
+        ) / 2
+    elif z_target in (5, 6) and z_bond in (5, 6):
+        return params.binding_energies["Si_intra"]
+    elif z_target % 2 == 0 and z_bond == z_target + 1:
+        return params.binding_energies["Si_intra"]
+    elif z_target % 2 == 0 and z_bond == z_target - 1:
+        return params.binding_energies["Si_inter"]
+    elif z_target % 2 == 1 and z_bond == z_target + 1:
+        return params.binding_energies["Si_inter"]
+    elif z_target % 2 == 1 and z_bond == z_target - 1:
+        return params.binding_energies["Si_intra"]
+    else:
+        raise RuntimeError("Something wrong in 2D energy")
+
+
+def total_energy_trans(atom_set: Dict, bonds: Dict, target: Tuple, params):
+    target_z = target[2]
+    target_state = atom_set[target]
+    energy = 0
+    if target_z == 0:
+        energy += params.binding_energies["AgSi"]
+    for bond in bonds[target]:
+        bond_state = atom_set[bond]
+        if bond_state not in (0, target_state):
+            energy += bond_energy_diff_state(target, bond, params)
+        elif bond_state == target_state:
+            energy += bond_energy_same_state(target, bond, params, target_state)
+    return energy
+
+
+def total_energy_wo_trans(atom_set: Dict, bonds: Dict, target: Tuple, params):
+    target_z = target[2]
+    energy = 0
+    if target_z == 0:
+        energy += params.binding_energies["AgSi"]
+    for bond in bonds[target]:
+        if atom_set[bond] != 0:
+            energy += bond_energy_same_state(target, bond, params, 2)
     return energy
 
 
@@ -281,6 +385,7 @@ def possible_events(
     return event_f, rates_f
 
 
+"""
 def bond_energy(event, bond, params, atom_state):
     z_event = event[2]
     z_bond = bond[2]
@@ -319,6 +424,7 @@ def bond_energy(event, bond, params, atom_state):
         else:
             raise RuntimeError("Something wrong in 3D energy")
         return 0
+"""
 
 
 def state_after_move(atom_set, bonds, event, params):
@@ -329,9 +435,9 @@ def state_after_move(atom_set, bonds, event, params):
     # 移動後の隣接原子の状態を確認
     for bond in bonds[event]:
         if atom_set[bond] == 2:
-            E2 += bond_energy(event, bond, params, atom_set[bond])
+            E2 += bond_energy_same_state(event, bond, params, atom_set[bond])
         elif atom_set[bond] == 3:
-            E3 += bond_energy(event, bond, params, atom_set[bond])
+            E3 += bond_energy_same_state(event, bond, params, atom_set[bond])
 
     if E2 == E3 == 0:
         E2 = -1  # 蒸着時、周辺原子がない場合2次元にする
@@ -359,7 +465,7 @@ def state_change_to_neighbor(atom_set, bonds, target, params):
     E_change = 0
     for bond in bonds[target]:
         if atom_set[bond] == t_state:
-            E_change += bond_energy(target, bond, params, t_state)
+            E_change += bond_energy_same_state(target, bond, params, t_state)
     change_rate = rate(pre, kbt, E_change)
     if t_state == 2:
         return 3, change_rate
@@ -408,7 +514,11 @@ def site_events(
     unit_length = params.n_cell_init
     states: List[int] = []
     # calculate total energy
-    energy = total_energy(atom_set, bonds, target, params)
+    if params.trans_check is False:
+        energy = total_energy_wo_trans(atom_set, bonds, target, params)
+    elif params.trans_check is True:
+        energy = total_energy_trans(atom_set, bonds, target, params)
+
     # calculate possible events
     event_list, rate_list = possible_events(
         atom_set, bonds, target, params, energy, unit_length, defect, empty_first, trans
@@ -430,5 +540,5 @@ def site_events(
         states.append(state)
 
     else:
-        states = [2 in range(len(event_list))]
+        states = [2 for _ in range(len(event_list))]
     return event_list, rate_list, states
