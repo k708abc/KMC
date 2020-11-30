@@ -1,5 +1,6 @@
 from typing import List, Dict, Tuple
 from cal_rates import rate
+import random
 
 
 def total_energy(atom_set: Dict, bonds: Dict, target: Tuple, params):
@@ -120,8 +121,9 @@ def possible_events(
     params,
     energy: float,
     unit_length: int,
-    defect,
+    defect: bool,
     empty_first: int,
+    trans: bool,
 ):
     pre = float(params.prefactor)
     kbt = params.temperature_eV
@@ -279,17 +281,151 @@ def possible_events(
     return event_f, rates_f
 
 
+def bond_energy(event, bond, params, atom_state):
+    z_event = event[2]
+    z_bond = bond[2]
+    if atom_state == 2:
+        if z_event in (1, 0) and z_bond in (1, 0):
+            return params.binding_energies["Si12"]
+        elif z_event in (1, 2) and z_bond in (1, 2):
+            return params.binding_energies["Si23"]
+        elif z_event in (2, 3) and z_bond in (2, 3):
+            return params.binding_energies["Si34"]
+        elif z_event in (3, 4) and z_bond in (3, 4):
+            return params.binding_energies["Si45"]
+        elif z_event in (4, 5) and z_bond in (4, 5):
+            return params.binding_energies["Si56"]
+        elif z_event in (5, 6) and z_bond in (5, 6):
+            return params.binding_energies["Si_intra"]
+        elif z_event % 2 == 0 and z_bond == z_event + 1:
+            return params.binding_energies["Si_intra"]
+        elif z_event % 2 == 0 and z_bond == z_event - 1:
+            return params.binding_energies["Si_inter"]
+        elif z_event % 2 == 1 and z_bond == z_event + 1:
+            return params.binding_energies["Si_inter"]
+        elif z_event % 2 == 1 and z_bond == z_event - 1:
+            return params.binding_energies["Si_intra"]
+        else:
+            raise RuntimeError("Something wrong in 2D energy")
+    else:
+        if z_event % 2 == 0 and z_bond == z_event + 1:
+            return params.binding_energies["Si_intra"]
+        elif z_event % 2 == 0 and z_bond == z_event - 1:
+            return params.binding_energies["Si_inter"]
+        elif z_event % 2 == 1 and z_bond == z_event + 1:
+            return params.binding_energies["Si_inter"]
+        elif z_event % 2 == 1 and z_bond == z_event - 1:
+            return params.binding_energies["Si_intra"]
+        else:
+            raise RuntimeError("Something wrong in 3D energy")
+        return 0
+
+
+def state_after_move(atom_set, bonds, event, params):
+    pre = float(params.prefactor)
+    kbt = params.temperature_eV
+    E2 = 0
+    E3 = 0
+    # 移動後の隣接原子の状態を確認
+    for bond in bonds[event]:
+        if atom_set[bond] == 2:
+            E2 += bond_energy(event, bond, params, atom_set[bond])
+        elif atom_set[bond] == 3:
+            E3 += bond_energy(event, bond, params, atom_set[bond])
+    # 結合原子の状態ごとの速度定数を計算
+    rates = [rate(pre, kbt, E2), rate(pre, kbt, E3)]
+    states = [2, 3]
+    # 速度定数の大きい状態を取りやすい
+    det_state = random.choices(states, weights=rates)
+    return det_state[0]
+
+
+def state_determinate(atom_set, bonds, event_list, params):
+    # 原子が動いた後の構造を設定
+    states: List[int] = []
+    for event in event_list:
+        state = state_after_move(atom_set, bonds, event, params)
+        states.append(state)
+    return states
+
+
+def state_change_to_neighbor(atom_set, bonds, target, params):
+    pre = float(params.prefactor)
+    kbt = params.temperature_eV
+    t_state = atom_set[target]
+    E_change = 0
+    for bond in bonds[target]:
+        if atom_set[bond] == t_state:
+            E_change += bond_energy(target, bond, params, t_state)
+    change_rate = rate(pre, kbt, E_change)
+    if t_state == 2:
+        return 3, change_rate
+    elif t_state == 3:
+        return 2, change_rate
+    else:
+        raise RuntimeError("Some error in state change to neighbor")
+
+
+def state_change_new(atom_set, bonds, target, params):
+    neighbor_i = 0
+    target_state = atom_set[target]
+    pre = float(params.prefactor)
+    kbt = params.temperature_eV
+    for bond in bonds[target]:
+        if atom_set[bond] != 0:
+            neighbor_i += 1
+    # エネルギーの設定については要再考
+    # 2次元から3次元：周辺原子が多いと起きやすい
+    if target_state == 2:
+        E_trans = (5 - neighbor_i) * params.transformation
+        trans_rate = rate(pre, kbt, E_trans)
+        return 3, trans_rate
+    # 3次元から2次元：周辺原子が少ないと起きやすい
+    elif target_state == 3:
+        if neighbor_i == 0:
+            neighbor_i == 1
+        E_trans = neighbor_i * params.transformation
+        trans_rate = rate(pre, kbt, E_trans)
+        return 2, trans_rate
+    else:
+        raise RuntimeError("Some error in state change to neighbor")
+
+
 def site_events(
-    atom_set: Dict, bonds: Dict, target: Tuple, params, defect, empty_first: int
+    atom_set: Dict,
+    bonds: Dict,
+    target: Tuple,
+    params,
+    defect: bool,
+    empty_first: int,
+    trans: bool,
 ):
     event_list: List[Tuple] = []
     rate_list: List[float] = []
     unit_length = params.n_cell_init
+    states: List[int] = []
     # calculate total energy
     energy = total_energy(atom_set, bonds, target, params)
     # calculate possible events
     event_list, rate_list = possible_events(
-        atom_set, bonds, target, params, energy, unit_length, defect, empty_first
+        atom_set, bonds, target, params, energy, unit_length, defect, empty_first, trans
     )
+    # event_list: List[tuple[int, int, int, int], rate_list: List[float]
+    if trans is True:
+        # 各イベントの構造判定
+        states = state_determinate(atom_set, bonds, event_list, params)
+        # サイトの変わらない構造変化の設定
+        # 隣接原子の状態による変化
+        state, rate = state_change_to_neighbor(atom_set, bonds, target, params)
+        event_list.append(target)
+        rate_list.append(rate)
+        states.append(state)
+        # 隣接原子の数による変化
+        state, rate = state_change_new(atom_set, bonds, target, params)
+        event_list.append(target)
+        rate_list.append(rate)
+        states.append(state)
 
-    return event_list, rate_list
+    else:
+        states = [2 in range(len(event_list))]
+    return event_list, rate_list, states
