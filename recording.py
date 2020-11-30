@@ -256,15 +256,21 @@ def rec_img(img, name: str):
 
 
 def hist_formation(pos: Dict, maxz: int, n_BL: int):
-    hist: List[float] = [0 for _ in range(math.ceil(maxz / 2))]
+    hist_2: List[float] = [0 for _ in range(math.ceil(maxz / 2))]
+    hist_3: List[float] = [0 for _ in range(math.ceil(maxz / 2))]
     left: List[float] = [i for i in range(math.ceil(maxz / 2))]
     for pos_index, atom_state in pos.items():
-        if atom_state != 0:
-            hist[pos_index[2] // 2] += 1 / n_BL * 100
+        if atom_state == 2:
+            hist_2[pos_index[2] // 2] += 1 / n_BL * 100
+        elif atom_state == 3:
+            hist_3[pos_index[2] // 2] += 1 / n_BL * 100
+
     fig = plt.figure()
     bx = fig.add_subplot(111)
-    bx.barh(left, hist)
+    bx.barh(left, hist_2, label="2D")
+    bx.barh(left, hist_3, left=hist_2, label="3D")
     bx.set_yticks(left)
+    bx.legend()
     # bx.set_yticklabels(lay)
     bx.set_xlabel("Coverage")
     bx.set_ylabel("layer number")
@@ -348,6 +354,4 @@ def record_data(
         poscar_name = dir_name + rec_name + "_poscar.vasp"
         rec_poscar(pos_i, lattice, unit_length, maxz, poscar_name)
     #
-    rec_ppt(
-        params, minute, second, img_names, hist_names, time, coverage, dir_name, defect
-    )
+    rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_name)
