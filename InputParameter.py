@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 """初期値も予め入力したい方式なら、クラス作っちゃった方が楽かも"""
 
-from typing import OrderedDict
+from collections import OrderedDict
 
 
 class Params:
