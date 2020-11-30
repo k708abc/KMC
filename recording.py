@@ -6,7 +6,7 @@ from record_ppt import rec_ppt
 import os
 
 
-def highest_z(pos_all: List[dict]) -> int:
+def highest_z(pos_all: List[Dict]) -> int:
     maxz = 1
     for positions in pos_all:
         for index, state in positions.items():
