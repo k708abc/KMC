@@ -22,7 +22,9 @@ def reset_dicts() -> None:
     event_time_tot.clear()
 
 
-def form_first_3BL(unit_length: int, z_intra: float, z_inter: float):
+def form_first_3BL(
+    unit_length: int, z_intra: float, z_inter: float
+):  # << index が引数でないのは変でない？
     for index in lattice_first:
         x, y = index
         lattice_first[index] = [
@@ -37,7 +39,7 @@ def form_first_3BL(unit_length: int, z_intra: float, z_inter: float):
 
 def lattice_full_layers(unit_height: int):
     for index in lattice:
-        index_xy = (index[0], index[1])
+        index_xy: Tuple[int, int] = (index[0], index[1])
         lattice[index] = [
             lattice_first[index_xy][index[2] % 6][0],
             lattice_first[index_xy][index[2] % 6][1],
@@ -48,9 +50,9 @@ def lattice_full_layers(unit_height: int):
 
 
 def neighbor_points(
-    index: Tuple, z_judge: int, unit_length: int, z_max: int
-) -> List[List[int]]:
-    neighbors: List[List[int]]
+    index: Tuple[int, int, int], z_judge: int, unit_length: int, z_max: int
+) -> List[Tuple[int, int, int]]:
+    neighbors: List[Tuple[int, int, int]]
     x, y, z = index
     if z == z_max:
         neighbors = [
@@ -92,7 +94,7 @@ def neighbor_points(
     return neighbors
 
 
-def search_bond(unit_length: int, z_max: int):
+def search_bond(unit_length: int, z_max: int):  # << index が引数でないのは変でない？
     # Search for bonding atoms for all the atoms
     for index in bonds:
         z_judge = index[2] % 6
