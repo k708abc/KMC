@@ -441,8 +441,8 @@ def state_after_move(atom_set, bonds, event, params):
 
     if E2 == E3 == 0:
         E2 = -1  # 蒸着時、周辺原子がない場合2次元にする
-    # 結合原子の状態ごとの速度定数を計算
-    rates = [rate(pre, kbt, E2), rate(pre, kbt, E3)]
+    # 結合原子の状態ごとの速度定数逆数を計算
+    rates = [rate(pre, kbt, -E2), rate(pre, kbt, -E3)]
     states = [2, 3]
     # 速度定数の大きい状態を取りやすい
     det_state = random.choices(states, weights=rates)

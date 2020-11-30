@@ -114,7 +114,7 @@ class Window(ttk.Frame):
         self.deposition_rate = ttk.Entry(self.frame_basics, width=7)
         self.deposition_rate.insert(tk.END, self.init_value.dep_rate)
         self.deposition_rate.bind("<Return>", self.update_click)
-        self.deposition_time_label = ttk.Label(self.frame_basics, text="Dep. time(min")
+        self.deposition_time_label = ttk.Label(self.frame_basics, text="Dep. time(min)")
         self.deposition_time = ttk.Entry(self.frame_basics, width=7)
         self.deposition_time.insert(tk.END, self.init_value.dep_time)
         self.deposition_time.bind("<Return>", self.update_click)
@@ -378,11 +378,11 @@ class Window(ttk.Frame):
             ]
         )
         if self.bln_tr.get() is True:
-            normarize = fast_event + rate(
+            normarize = 6 * fast_event + rate(
                 float(self.prefactor.get()), kbt, float(self.init_value.transformation)
             )
         else:
-            normarize = 10 * fast_event
+            normarize = 6 * fast_event
         self.normarize = normarize
 
     def record_position(self):
