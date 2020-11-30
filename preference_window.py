@@ -38,9 +38,6 @@ class Window(ttk.Frame):
         master.title("KMC_Si")
         self.update_values()
 
-    def create_variables(self):
-        pass
-
     def create_frame_basics(self) -> None:
         self.frame_basics = ttk.Frame()
         self.create_widgets_basics()
@@ -114,7 +111,9 @@ class Window(ttk.Frame):
         self.deposition_rate = ttk.Entry(self.frame_basics, width=7)
         self.deposition_rate.insert(tk.END, self.init_value.dep_rate)
         self.deposition_rate.bind("<Return>", self.update_click)
-        self.deposition_time_label = ttk.Label(self.frame_basics, text="Dep. time(min)")
+        self.deposition_time_label = ttk.Label(
+            self.frame_basics, text="Dep. time (min)"
+        )
         self.deposition_time = ttk.Entry(self.frame_basics, width=7)
         self.deposition_time.insert(tk.END, self.init_value.dep_time)
         self.deposition_time.bind("<Return>", self.update_click)
@@ -124,7 +123,7 @@ class Window(ttk.Frame):
         self.postanneal_time = ttk.Entry(self.frame_basics, width=7)
         self.postanneal_time.insert(tk.END, self.init_value.post_anneal)
         self.postanneal_time.bind("<Return>", self.update_click)
-        self.prefactor_label = ttk.Label(self.frame_basics, text="Prefactor(1/s)")
+        self.prefactor_label = ttk.Label(self.frame_basics, text="Prefactor (1/s)")
         self.prefactor = ttk.Entry(self.frame_basics, width=7)
         self.prefactor.insert(tk.END, self.init_value.prefactor)
         self.prefactor.bind("<Return>", self.update_click)
@@ -168,13 +167,11 @@ class Window(ttk.Frame):
         self.energies = []
         self.rate_labels = []
         for _ in range(9):
-            self.energies.append(
-                ttk.Entry(self.frame_energies, width=7)
-            )  # entryを9つ生成。_が変数だが、使われていない。
+            self.energies.append(ttk.Entry(self.frame_energies, width=7))
             self.rate_labels.append(ttk.Label(self.frame_energies, text="0"))
         for (energy, (key, val)) in zip(
             self.energies, self.init_value.binding_energies.items()
-        ):  # 上で作成したentryそれぞれに値を格納
+        ):
             energy.insert(tk.END, val)
             energy.bind("<Return>", self.update_click)
         for label in self.labels:
@@ -182,7 +179,7 @@ class Window(ttk.Frame):
 
     def create_layout_energies(self) -> None:
         # self.update_values()
-        for i, energylabel in enumerate(self.energylabels):  # インデックスとリストの要素を同時に取得しループ
+        for i, energylabel in enumerate(self.energylabels):
             energylabel.grid(row=0, column=i, **self.padWE)
         self.energy_label0 = ttk.Label(self.frame_energies, text="Energy (eV)")
         self.energy_label0.grid(row=1, column=0, **self.padWE)
@@ -239,7 +236,7 @@ class Window(ttk.Frame):
 
     def create_widgets_method(self) -> None:
         self.var_method = tk.StringVar()
-        methods = ("Check lattice", "Null event", "Rejection free")
+        methods = ("Null event", "Rejection free", "Simple 1D")
         self.method_label = tk.Label(self.frame_method, text="Method")
         self.method_cb = ttk.Combobox(
             self.frame_method,
@@ -332,10 +329,6 @@ class Window(ttk.Frame):
     def update_click(self, event) -> None:
         self.update_values()
 
-    def lattice_check(self) -> None:
-        lattice_formed = lattice_form(self.init_value)
-        check(self.init_value, lattice_formed[0], lattice_formed[1])
-
     def start_setting(self) -> None:
         self.progress_label["text"] = "Started"
         self.progress_time["text"] = "0 s"
@@ -355,7 +348,6 @@ class Window(ttk.Frame):
         self.cov_rec: List[float] = []
         self.rec_num = 0
         self.rec_num_atoms = 0
-        # self.time_of_record = self.init_value.interval
 
     def update_progress(self) -> None:
         self.n_events += 1
@@ -379,12 +371,11 @@ class Window(ttk.Frame):
             ]
         )
         if self.bln_tr.get() is True:
-            normarize = 6 * fast_event + rate(
+            self.normarize = 6 * fast_event + rate(
                 float(self.prefactor.get()), kbt, float(self.init_value.transformation)
             )
         else:
-            normarize = 6 * fast_event
-        self.normarize = normarize
+            self.normarize = 6 * fast_event
 
     def record_position(self) -> None:
         self.pos_rec.append(copy.copy(self.atom_set))
@@ -396,7 +387,7 @@ class Window(ttk.Frame):
         num_atom_total = self.init_value.total_atoms + 1
         num_events = 1 / dep_success * num_atom_total * num_atom_total / 2
         self.progress_expectation["text"] = (
-            "Expectation: " + str(int(num_events)) + " events"
+            "Expected: " + str(int(num_events)) + " events"
         )
 
     def update_after_deposition(self, dep_pos, atom_type):
@@ -501,11 +492,11 @@ class Window(ttk.Frame):
 
     def start_function(self):
         self.update_values()
-        if self.var_method.get() == "Check lattice":
-            self.lattice_check()
-        elif self.var_method.get() == "Null event":
+        if self.var_method.get() == "Null event":
             self.null_event_kmc()
         elif self.var_method.get() == "Rejection free":
+            pass
+        elif self.var_method.get() == "Simple 1D":
             pass
 
 
