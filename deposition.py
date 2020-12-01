@@ -2,23 +2,26 @@ from typing import List, Tuple, Dict
 import random
 import math
 from event_collection import state_after_move
+from read_examples import read_atom_set, read_bonds, read_lattice
+from InputParameter import Params
+from deposition_check import dep_check_poscar
 
 
 def find_candidates(atom_set: Dict, bonds: Dict) -> List:
     candidate: List[Tuple[int, int, int]] = []  # リストの中身は into のタプルということでＯＫ？→OKです
-    for index, condition in atom_set.items():
+    for atom_index, condition in atom_set.items():
         # atom_set の key , val は何を意味しているの？
         # key val では無くて、（繰り返しになりますが。）
         # 変数名に意味を持たせるようにするのが大事です。直也のコード全般にいえることですが。
         # 適宜修正します（川上）
         if condition != 0:
             pass
-        elif index[2] == 0:
-            candidate.append(index)
+        elif atom_index[2] == 0:
+            candidate.append(atom_index)
         else:
-            for bond in bonds[index]:
+            for bond in bonds[atom_index]:
                 if atom_set[bond] != 0:
-                    candidate.append(index)
+                    candidate.append(atom_index)
                     break
     return list(set(candidate))
 
@@ -62,3 +65,28 @@ def deposit_an_atom(
     # 蒸着サイトと関係する周囲のサイト
 
     return dep_pos, atom_type
+
+
+def highest_z(atom_set):
+    maxz = 1
+    for index, state in atom_set.items():
+        if (state != 0) and (index[2] + 1 > maxz):
+            maxz = index[2] + 1
+    return maxz
+
+
+if __name__ == "__main__":
+    defect = True
+    empty_first = 2
+    parameter = Params()
+    unit_length = parameter.n_cell_init
+    #
+    atom_set = read_atom_set()
+    bonds = read_bonds()
+    lattice = read_lattice()
+    maxz = highest_z(atom_set)
+    candidate = find_candidates(atom_set, bonds)
+    if (defect is True) and (empty_first == 1):
+        candidate = remove_first(candidate)
+    dep_check_poscar(atom_set, candidate, lattice, unit_length, maxz)
+    print("A poscar is formed to check the candidate of deposition")

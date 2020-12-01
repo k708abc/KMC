@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 from typing import List, Dict, Tuple
 from InputParameter import Params
-from lattice_form_check import check
+from lattice_form_check import check_lattice
 
 lattice_first: Dict[Tuple, List] = {}
 lattice: Dict[Tuple, List] = {}
@@ -25,9 +25,9 @@ def reset_dicts() -> None:
 def form_first_3BL(
     unit_length: int, z_intra: float, z_inter: float
 ):  # << index が引数でないのは変でない？
-    for index in lattice_first:
-        x, y = index
-        lattice_first[index] = [
+    for site in lattice_first:
+        x, y = site
+        lattice_first[site] = [
             [x, y, 0],
             [x + 1 / 3.0, y + 1 / 3.0, z_intra],
             [x + 1 / 3.0, y + 1 / 3.0, z_intra + z_inter],
@@ -38,22 +38,22 @@ def form_first_3BL(
 
 
 def lattice_full_layers(unit_height: int):
-    for index in lattice:
-        index_xy: Tuple[int, int] = (index[0], index[1])
-        lattice[index] = [
-            lattice_first[index_xy][index[2] % 6][0],
-            lattice_first[index_xy][index[2] % 6][1],
-            lattice_first[index_xy][index[2] % 6][2] + unit_height * (index[2] // 6),
+    for site in lattice:
+        site_xy: Tuple[int, int] = (site[0], site[1])
+        lattice[site] = [
+            lattice_first[site_xy][site[2] % 6][0],
+            lattice_first[site_xy][site[2] % 6][1],
+            lattice_first[site_xy][site[2] % 6][2] + unit_height * (site[2] // 6),
         ]
     """六方晶系でSiを記述したとき、3BL分のハニカム構造がz方向の単位構造になります。
     この3BL分の単位格子の高さが2.448(nm)です。"""  # ←そういった細かい情報の結果ならば、コードにその旨書いておかないと絶対ダメ。
 
 
 def neighbor_points(
-    index: Tuple[int, int, int], z_judge: int, unit_length: int, z_max: int
+    site_index: Tuple[int, int, int], z_judge: int, unit_length: int, z_max: int
 ) -> List[Tuple[int, int, int]]:
     neighbors: List[Tuple[int, int, int]]
-    x, y, z = index
+    x, y, z = site_index
     if z == z_max:
         neighbors = [
             ((x - 1) % unit_length, y, z - 1),
@@ -96,9 +96,9 @@ def neighbor_points(
 
 def search_bond(unit_length: int, z_max: int):  # << index が引数でないのは変でない？
     # Search for bonding atoms for all the atoms
-    for index in bonds:
-        z_judge = index[2] % 6
-        bonds[index] = neighbor_points(index, z_judge, unit_length, z_max)
+    for bond_site in bonds:
+        z_judge = bond_site[2] % 6
+        bonds[bond_site] = neighbor_points(bond_site, z_judge, unit_length, z_max)
 
 
 def lattice_form(input_params: Params):  # 　ここ長すぎるので、少なくとも3つか四つの関数に分ける。
@@ -106,7 +106,7 @@ def lattice_form(input_params: Params):  # 　ここ長すぎるので、少な�
     unit_length: int = input_params.n_cell_init
     z_units: int = input_params.z_unit_init
     z_intra: float = float(input_params.intra_distance)
-    z_inter = float(input_params.inter_distance)
+    z_inter: float = float(input_params.inter_distance)
     unit_height = 3 * (z_intra + z_inter)
     reset_dicts()
     z_max = z_units * 6 - 1
@@ -131,4 +131,4 @@ def lattice_form(input_params: Params):  # 　ここ長すぎるので、少な�
 if __name__ == "__main__":
     init_values = Params()
     lattice_formed = lattice_form(init_values)
-    check(init_values, lattice_formed[0], lattice_formed[1])
+    check_lattice(init_values, lattice_formed[0], lattice_formed[1])

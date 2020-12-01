@@ -8,7 +8,6 @@ import math
 from cal_rates import rate
 import time
 from lattice_form import lattice_form
-from lattice_form_check import check
 from InputParameter import Params
 from deposition import deposit_an_atom
 from choose_site import choose_atom
@@ -26,7 +25,6 @@ class Window(ttk.Frame):
     def __init__(self, master) -> None:
         super().__init__(master, padding=2)
         self.init_value = Params()
-        self.create_variables()
         self.create_frame_basics()
         self.create_frame_energies()
         self.create_frame_checks()
@@ -307,8 +305,10 @@ class Window(ttk.Frame):
         self.init_value.dep_time = float(self.deposition_time.get())
         self.init_value.post_anneal = float(self.postanneal_time.get())
         self.init_value.prefactor = float(self.prefactor.get())
-        for energy_entry, key in zip(self.energies, self.init_value.binding_energies):
-            self.init_value.binding_energies[key] = float(energy_entry.get())
+        for energy_entry, energy_key in zip(
+            self.energies, self.init_value.binding_energies
+        ):
+            self.init_value.binding_energies[energy_key] = float(energy_entry.get())
         self.init_value.transformation = float(self.transformation.get())
         self.init_value.record_name = str(self.record.get())
         self.init_value.img_per = float(self.image_rec.get())
@@ -472,7 +472,7 @@ class Window(ttk.Frame):
         self.det_normarize()
         self.cal_expected_events()
         """
-        最初に2原子置くのは、一原子のみが拡散する時間が無駄なためでしたが、
+        最初に2原子置くのは、1原子のみが拡散する時間が無駄なためでしたが、
         Null event methodでは微々たる差なので消しました
         """
         while int(self.prog_time) <= int(self.init_value.total_time):
@@ -487,6 +487,14 @@ class Window(ttk.Frame):
             if self.n_atoms >= self.rec_num_atoms:
                 self.rec_num_atoms += self.init_value.rec_num_atom_interval
                 self.record_position()
+
+            """
+            構造の途中確認用
+            if self.n_atoms == 20:
+                from record_for_test import rec_for_test
+
+                rec_for_test(self.atom_set, self.bonds, self.lattice)
+            """
         # end of the loop
         self.end_of_loop()
 

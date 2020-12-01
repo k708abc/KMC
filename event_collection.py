@@ -1,68 +1,9 @@
 from typing import List, Dict, Tuple
 from cal_rates import rate
 import random
-
-"""
-def total_energy_wo_trans(atom_set: Dict, bonds: Dict, target: Tuple, params):
-    z_judge = target[2]
-    energy = 0
-    if z_judge == 0:
-        energy += params.binding_energies["AgSi"]
-        for bond in bonds[target]:
-            if atom_set[bond] != 0:
-                energy += params.binding_energies["Si12"]
-    elif z_judge == 1:
-        energy += params.binding_energies["AgSi"]
-        for bond in bonds[target]:
-            if atom_set[bond] != 0:
-                if bond[2] == 0:
-                    energy += params.binding_energies["Si12"]
-                elif bond[2] == 2:
-                    energy += params.binding_energies["Si23"]
-    elif z_judge == 2:
-        for bond in bonds[target]:
-            if atom_set[bond] != 0:
-                if bond[2] == 1:
-                    energy += params.binding_energies["Si23"]
-                elif bond[2] == 3:
-                    energy += params.binding_energies["Si34"]
-    elif z_judge == 3:
-        for bond in bonds[target]:
-            if atom_set[bond] != 0:
-                if bond[2] == 2:
-                    energy += params.binding_energies["Si34"]
-                elif bond[2] == 4:
-                    energy += params.binding_energies["Si45"]
-    elif z_judge == 4:
-        for bond in bonds[target]:
-            if atom_set[bond] != 0:
-                if bond[2] == 3:
-                    energy += params.binding_energies["Si45"]
-                elif bond[2] == 5:
-                    energy += params.binding_energies["Si56"]
-    elif z_judge == 5:
-        for bond in bonds[target]:
-            if atom_set[bond] != 0:
-                if bond[2] == 4:
-                    energy += params.binding_energies["Si56"]
-                elif bond[2] == 6:
-                    energy += params.binding_energies["Si_intra"]
-    elif z_judge % 2 == 0:
-        for bond in bonds[target]:
-            if atom_set[bond] != 0:
-                if bond[2] == z_judge - 1:
-                    energy += params.binding_energies["Si_intra"]
-                elif bond[2] == z_judge + 1:
-                    energy += params.binding_energies["Si_inter"]
-    elif z_judge % 2 == 1:
-        for bond in bonds[target]:
-            if atom_set[bond] != 0:
-                if bond[2] == z_judge - 1:
-                    energy += params.binding_energies["Si_inter"]
-                elif bond[2] == z_judge + 1:
-                    energy += params.binding_energies["Si_intra"]
-    return energy
-"""
+from read_examples import read_lattice, read_bonds, read_atom_set
+from InputParameter import Params
+from event_collection_check import random_target, event_check_poscar
 
 
 def bond_energy_same_state(target, bond, params, atom_state):
@@ -385,48 +326,6 @@ def possible_events(
     return event_f, rates_f
 
 
-"""
-def bond_energy(event, bond, params, atom_state):
-    z_event = event[2]
-    z_bond = bond[2]
-    if atom_state == 2:
-        if z_event in (1, 0) and z_bond in (1, 0):
-            return params.binding_energies["Si12"]
-        elif z_event in (1, 2) and z_bond in (1, 2):
-            return params.binding_energies["Si23"]
-        elif z_event in (2, 3) and z_bond in (2, 3):
-            return params.binding_energies["Si34"]
-        elif z_event in (3, 4) and z_bond in (3, 4):
-            return params.binding_energies["Si45"]
-        elif z_event in (4, 5) and z_bond in (4, 5):
-            return params.binding_energies["Si56"]
-        elif z_event in (5, 6) and z_bond in (5, 6):
-            return params.binding_energies["Si_intra"]
-        elif z_event % 2 == 0 and z_bond == z_event + 1:
-            return params.binding_energies["Si_intra"]
-        elif z_event % 2 == 0 and z_bond == z_event - 1:
-            return params.binding_energies["Si_inter"]
-        elif z_event % 2 == 1 and z_bond == z_event + 1:
-            return params.binding_energies["Si_inter"]
-        elif z_event % 2 == 1 and z_bond == z_event - 1:
-            return params.binding_energies["Si_intra"]
-        else:
-            raise RuntimeError("Something wrong in 2D energy")
-    else:
-        if z_event % 2 == 0 and z_bond == z_event + 1:
-            return params.binding_energies["Si_intra"]
-        elif z_event % 2 == 0 and z_bond == z_event - 1:
-            return params.binding_energies["Si_inter"]
-        elif z_event % 2 == 1 and z_bond == z_event + 1:
-            return params.binding_energies["Si_inter"]
-        elif z_event % 2 == 1 and z_bond == z_event - 1:
-            return params.binding_energies["Si_intra"]
-        else:
-            raise RuntimeError("Something wrong in 3D energy")
-        return 0
-"""
-
-
 def state_after_move(atom_set, bonds, event, params):
     pre = float(params.prefactor)
     kbt = params.temperature_eV
@@ -472,6 +371,7 @@ def state_change_to_neighbor(atom_set, bonds, target, params):
     elif t_state == 3:
         return 2, change_rate
     else:
+        print("target state = " + str(t_state))
         raise RuntimeError("Some error in state change to neighbor")
 
 
@@ -542,3 +442,31 @@ def site_events(
     else:
         states = [2 for _ in range(len(event_list))]
     return event_list, rate_list, states
+
+
+def highest_z(atom_set):
+    maxz = 1
+    for index, state in atom_set.items():
+        if (state != 0) and (index[2] + 1 > maxz):
+            maxz = index[2] + 1
+    return maxz
+
+
+if __name__ == "__main__":
+    lattice = read_lattice()
+    atom_set = read_atom_set()
+    bonds = read_bonds()
+    parameters = Params()
+    unit_length = parameters.n_cell_init
+    maxz = highest_z(atom_set)
+    target = random_target(atom_set)
+    trans = True
+    defect = True
+    empty_first = 10
+    #
+    event_list, rate_list, states = site_events(
+        atom_set, bonds, target, parameters, defect, empty_first, trans
+    )
+    #
+    event_check_poscar(atom_set, event_list, lattice, unit_length, maxz, target)
+    print("A poscar for event check is formed.")

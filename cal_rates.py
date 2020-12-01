@@ -1,4 +1,5 @@
 import math
+from InputParameter import Params
 
 
 def rate(pre: float, kbt: float, energy: float) -> float:
@@ -19,3 +20,12 @@ def rate(pre: float, kbt: float, energy: float) -> float:
         reaction rate
     """
     return pre * math.exp(energy / kbt)
+
+
+if __name__ == "__main__":
+    init_values = Params()
+    pre = float(init_values.prefactor)
+    kbt = init_values.temperature_eV
+    print("Unit test")
+    energy = float(input("Input energy: "))
+    print(rate(pre, kbt, energy))
