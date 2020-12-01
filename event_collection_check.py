@@ -6,7 +6,8 @@ def random_target(atom_set):
     for index, state in atom_set.items():
         if state != 0:
             candidate.append(index)
-    return random.choice(candidate)
+    # return random.choice(candidate)
+    return candidate
 
 
 def event_check_poscar(atom_set, events, lattice, unit_length, maxz, target):
@@ -27,7 +28,8 @@ def event_check_poscar(atom_set, events, lattice, unit_length, maxz, target):
         zp.append(lattice[cand][2] / maxz / 2.448)
         eve_i += 1
     #
-    file_data = open("poscar_for_check_events.vasp", "w")
+    file_name = "Event_check/Check_events_" + str(target) + ".vasp"
+    file_data = open(file_name, "w")
     file_data.write("check events" + "\n")
     file_data.write("10" + "\n")
     file_data.write(str(unit_length) + "\t" + "0" + "\t" + "0" + "\n")

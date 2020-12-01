@@ -487,14 +487,14 @@ class Window(ttk.Frame):
             if self.n_atoms >= self.rec_num_atoms:
                 self.rec_num_atoms += self.init_value.rec_num_atom_interval
                 self.record_position()
-
             """
-            構造の途中確認用
-            if self.n_atoms == 20:
+            # 構造の途中確認用
+            if self.n_atoms == 60:
                 from record_for_test import rec_for_test
 
                 rec_for_test(self.atom_set, self.bonds, self.lattice)
             """
+
         # end of the loop
         self.end_of_loop()
 

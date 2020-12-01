@@ -4,6 +4,7 @@ import random
 from read_examples import read_lattice, read_bonds, read_atom_set
 from InputParameter import Params
 from event_collection_check import random_target, event_check_poscar
+import os
 
 
 def bond_energy_same_state(target, bond, params, atom_state):
@@ -222,7 +223,7 @@ def possible_events(
             # 隣接原子の上が空いていて、かつ隣接原子が別原子でも支えられている→候補
             above_site = (filled[0], filled[1], filled[2] + 1)
             if atom_set[above_site] == 0 and len(nn_nn_atom) >= 2:
-                events.append(filled)
+                events.append(above_site)
                 rates.append(rate(pre, kbt, energy))
         # BLを下る判定
         # Ag直上原子は下れない
@@ -459,14 +460,17 @@ if __name__ == "__main__":
     parameters = Params()
     unit_length = parameters.n_cell_init
     maxz = highest_z(atom_set)
-    target = random_target(atom_set)
     trans = True
     defect = True
     empty_first = 10
     #
-    event_list, rate_list, states = site_events(
-        atom_set, bonds, target, parameters, defect, empty_first, trans
-    )
-    #
-    event_check_poscar(atom_set, event_list, lattice, unit_length, maxz, target)
-    print("A poscar for event check is formed.")
+    dir_name = "Event_check/"
+    os.makedirs(dir_name, exist_ok=True)
+    target_cand = random_target(atom_set)
+    for target in target_cand:
+        event_list, rate_list, states = site_events(
+            atom_set, bonds, target, parameters, defect, empty_first, trans
+        )
+        #
+        event_check_poscar(atom_set, event_list, lattice, unit_length, maxz, target)
+    print("Poscars for event check are formed.")
