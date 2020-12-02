@@ -7,7 +7,7 @@ from InputParameter import Params
 from deposition_check import dep_check_poscar
 
 
-def find_candidates(atom_set: Dict, bonds: Dict) -> List:
+def find_candidates(atom_set: Dict, bonds: Dict) -> List[Tuple[int, int, int]]:
     candidate: List[Tuple[int, int, int]] = []  # リストの中身は into のタプルということでＯＫ？→OKです
     for atom_index, condition in atom_set.items():
         # atom_set の key , val は何を意味しているの？
@@ -26,7 +26,7 @@ def find_candidates(atom_set: Dict, bonds: Dict) -> List:
     return list(set(candidate))
 
 
-def dep_position(candidate: List) -> Tuple:
+def dep_position(candidate: List) -> Tuple[int, int, int]:
     random_n = random.random()
     num = math.floor(random_n * len(candidate))
     return candidate[num]
@@ -42,13 +42,12 @@ def judge_type(atom_set: Dict, bonds: Dict, dep_pos: Tuple, params) -> int:
         return 2
 
 
-def remove_first(candidate) -> List:
+def remove_first(candidate) -> List[Tuple]:
     candidate_new = []
     for site in candidate:
         if site[2] not in (0, 1):
             candidate_new.append(site)
     return candidate_new
-    # return [site in candidates if site[2] not in (0, 1)]
 
 
 def deposit_an_atom(
@@ -62,12 +61,12 @@ def deposit_an_atom(
     atom_type = judge_type(atom_set, bonds, dep_pos, params)
 
     # rejection free ではイベント更新を行うサイトのリストが必要（あとまわし）
-    # 蒸着サイトと関係する周囲のサイト
+    # そこでは、蒸着サイトと関係する周囲のサイトをイベント更新リストに入れる
 
     return dep_pos, atom_type
 
 
-def highest_z(atom_set):
+def highest_z(atom_set: Dict):
     maxz = 1
     for index, state in atom_set.items():
         if (state != 0) and (index[2] + 1 > maxz):
@@ -89,4 +88,6 @@ if __name__ == "__main__":
     if (defect is True) and (empty_first == 1):
         candidate = remove_first(candidate)
     dep_check_poscar(atom_set, candidate, lattice, unit_length, maxz)
+    print("Test candidates for depositing an atom")
+    print("candidates :" + str(candidate))
     print("A poscar is formed to check the candidate of deposition")

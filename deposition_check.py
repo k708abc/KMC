@@ -1,4 +1,9 @@
-def dep_check_poscar(atom_set, candidate, lattice, unit_length, maxz):
+from typing import List, Dict, Tuple
+
+
+def dep_check_poscar(
+    atom_set: Dict, candidate: List[Tuple], lattice: Dict, unit_length: int, maxz: int
+):
     xp: list[float] = []
     yp: list[float] = []
     zp: list[float] = []

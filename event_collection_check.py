@@ -1,16 +1,22 @@
-import random
+from typing import List, Dict, Tuple
 
 
-def random_target(atom_set):
+def random_target(atom_set: Dict):
     candidate = []
     for index, state in atom_set.items():
         if state != 0:
             candidate.append(index)
-    # return random.choice(candidate)
     return candidate
 
 
-def event_check_poscar(atom_set, events, lattice, unit_length, maxz, target):
+def event_check_poscar(
+    atom_set: Dict,
+    events: List,
+    lattice: Dict,
+    unit_length: int,
+    maxz: int,
+    target: Tuple,
+):
     xp: list[float] = [lattice[target][0] / unit_length]
     yp: list[float] = [lattice[target][1] / unit_length]
     zp: list[float] = [lattice[target][2] / maxz / 2.448]

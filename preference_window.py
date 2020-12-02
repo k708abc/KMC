@@ -315,6 +315,7 @@ class Window(ttk.Frame):
         self.init_value.comments = str(self.comments.get())
         self.init_value.keep_defect_check = self.bln_defect.get()
         self.init_value.trans_check = self.bln_tr.get()
+        self.record_middle = 0
         #
         kbt = self.init_value.temperature_eV
         self.temperautre_energy["text"] = "{:.3g}".format(kbt)
@@ -487,11 +488,13 @@ class Window(ttk.Frame):
             if self.n_atoms >= self.rec_num_atoms:
                 self.rec_num_atoms += self.init_value.rec_num_atom_interval
                 self.record_position()
+
             """
             # 構造の途中確認用
-            if self.n_atoms == 60:
+            if self.n_atoms == 80 and self.record_middle == 0:
                 from record_for_test import rec_for_test
 
+                self.record_middle = 1
                 rec_for_test(self.atom_set, self.bonds, self.lattice)
             """
 
