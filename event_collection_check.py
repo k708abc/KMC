@@ -17,9 +17,9 @@ def event_check_poscar(
     maxz: int,
     target: Tuple,
 ):
-    xp: list[float] = [lattice[target][0] / unit_length]
-    yp: list[float] = [lattice[target][1] / unit_length]
-    zp: list[float] = [lattice[target][2] / maxz / 2.448]
+    xp: List[float] = [lattice[target][0] / unit_length]
+    yp: List[float] = [lattice[target][1] / unit_length]
+    zp: List[float] = [lattice[target][2] / maxz / 2.448]
     atom_i = 0
     eve_i = 0
     for index, atom_state in atom_set.items():

@@ -4,9 +4,9 @@ from typing import List, Dict, Tuple
 def dep_check_poscar(
     atom_set: Dict, candidate: List[Tuple], lattice: Dict, unit_length: int, maxz: int
 ):
-    xp: list[float] = []
-    yp: list[float] = []
-    zp: list[float] = []
+    xp: List[float] = []
+    yp: List[float] = []
+    zp: List[float] = []
     atom_i = 0
     cand_i = 0
     for index, atom_state in atom_set.items():
