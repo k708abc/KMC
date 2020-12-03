@@ -268,6 +268,9 @@ class Window(ttk.Frame):
         self.progress_expectation = ttk.Label(
             self.frame_progress, text="Expected Num. events"
         )
+        self.expectd_cal_time = ttk.Label(
+            self.frame_progress, text="Expected cal. time"
+        )
 
     def create_layout_progress(self) -> None:
         self.progress_label.grid(row=0, column=0, padx=4, pady=10)
@@ -276,6 +279,7 @@ class Window(ttk.Frame):
         self.progress_atoms.grid(row=0, column=3, padx=4, pady=10)
         self.progress_events.grid(row=0, column=4, padx=4, pady=10)
         self.progress_expectation.grid(row=0, column=5, padx=4, pady=10)
+        self.expectd_cal_time.grid(row=0, column=6, padx=4, pady=10)
 
     def create_widgets_bar(self) -> None:
         self.pbval = 0
@@ -360,6 +364,17 @@ class Window(ttk.Frame):
         )
         self.progress_atoms["text"] = str(self.n_atoms) + " atoms"
         self.progress_events["text"] = str(self.n_events) + " events"
+        if self.n_events == 100:
+            time_middle = time.time() - self.start_time
+            expected_time = self.num_events / 100 * time_middle
+            self.expectd_cal_time["text"] = (
+                str(math.floor(expected_time / 3600))
+                + " h"
+                + str(int((expected_time % 3600) / 60))
+                + " min"
+                + str(int(expected_time % 60))
+                + " sec"
+            )
         self.update()
 
     def det_normarize(self) -> None:
@@ -385,9 +400,9 @@ class Window(ttk.Frame):
     def cal_expected_events(self) -> None:
         dep_success = self.init_value.dep_rate_atoms_persec / self.normarize
         num_atom_total = self.init_value.total_atoms + 1
-        num_events = 1 / dep_success * num_atom_total * num_atom_total / 2
+        self.num_events = 1 / dep_success * num_atom_total * num_atom_total / 2
         self.progress_expectation["text"] = (
-            "Expected: " + str(int(num_events)) + " events"
+            "Expected: " + str(int(self.num_events)) + " events"
         )
 
     def update_after_deposition(self, dep_pos, atom_type) -> None:
