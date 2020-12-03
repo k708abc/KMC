@@ -350,7 +350,6 @@ class Window(ttk.Frame):
         self.pos_rec: List[dict] = []
         self.time_rec: List[float] = []
         self.cov_rec: List[float] = []
-        self.rec_num = 0
         self.rec_num_atoms = 0
 
     def update_progress(self) -> None:
@@ -418,14 +417,18 @@ class Window(ttk.Frame):
         # deposition
         judge = judge_null(self.init_value.dep_rate_atoms_persec / self.normarize)
         if judge == "success":
-            dep_pos, atom_type = deposit_an_atom(
-                self.atom_set,
-                self.bonds,
-                self.bln_defect.get(),
-                self.empty_firstBL,
-                self.init_value,
-            )
-            self.update_after_deposition(dep_pos, atom_type)
+            _ = self.deposition()
+
+    def deposition(self) -> Tuple:
+        dep_pos, atom_type = deposit_an_atom(
+            self.atom_set,
+            self.bonds,
+            self.bln_defect.get(),
+            self.empty_firstBL,
+            self.init_value,
+        )
+        self.update_after_deposition(dep_pos, atom_type)
+        return dep_pos
 
     def try_events(self) -> None:
         events, rates, states = site_events(
@@ -515,12 +518,32 @@ class Window(ttk.Frame):
         # end of the loop
         self.end_of_loop()
 
+    def recalculate_atom():
+        pass
+
+    def rejuction_free_kmc(self) -> None:
+        self.start_setting()
+        self.atom_exist: List[Tuple[int, int, int]] = []
+        (
+            self.lattice,
+            self.bonds,
+            self.atom_set,
+            self.event,
+            self.event_time,
+            self.event_time_tot,
+        ) = lattice_form(self.init_value)
+        # return lattice, bonds, atom_set, event, event_time, event_time_tot
+        # 最初の二原子を配置
+        for _ in range(2):
+            dep_pos = self.deposition()
+            related_atoms = self.recalculate
+
     def start_function(self) -> None:
         self.update_values()
         if self.var_method.get() == "Null event":
             self.null_event_kmc()
         elif self.var_method.get() == "Rejection free":
-            pass
+            self.rejection_free_kmc()
         elif self.var_method.get() == "Simple 1D":
             pass
 
