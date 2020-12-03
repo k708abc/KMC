@@ -390,7 +390,7 @@ class Window(ttk.Frame):
             "Expected: " + str(int(num_events)) + " events"
         )
 
-    def update_after_deposition(self, dep_pos, atom_type):
+    def update_after_deposition(self, dep_pos, atom_type) -> None:
         self.atom_set[dep_pos] = atom_type
         self.atom_exist.append(dep_pos)
         self.n_atoms += 1
@@ -399,7 +399,7 @@ class Window(ttk.Frame):
         if dep_pos[2] in (0, 1):
             self.empty_firstBL -= 1
 
-    def try_deposition(self):
+    def try_deposition(self) -> None:
         # deposition
         judge = judge_null(self.init_value.dep_rate_atoms_persec / self.normarize)
         if judge == "success":
@@ -412,7 +412,7 @@ class Window(ttk.Frame):
             )
             self.update_after_deposition(dep_pos, atom_type)
 
-    def try_events(self):
+    def try_events(self) -> None:
         events, rates, states = site_events(
             self.atom_set,
             self.bonds,
@@ -442,7 +442,7 @@ class Window(ttk.Frame):
             if self.target[2] in (0, 1):
                 self.empty_firstBL += 1
 
-    def end_of_loop(self):
+    def end_of_loop(self) -> None:
         self.record_position()
         self.progress_label["text"] = str("Saving...")
         self.update()
@@ -464,7 +464,7 @@ class Window(ttk.Frame):
         )
         self.update()
 
-    def null_event_kmc(self):  # 長過ぎ！　Helper function 作ってコンパクトにしないと見通し悪い。
+    def null_event_kmc(self) -> None:  # 長過ぎ！　Helper function 作ってコンパクトにしないと見通し悪い。
         self.start_setting()
         self.atom_exist: List[Tuple[int, int, int]] = [(-1, -1, -1)]
         self.lattice, self.bonds, self.atom_set, _, _, _ = lattice_form(self.init_value)
@@ -498,7 +498,7 @@ class Window(ttk.Frame):
         # end of the loop
         self.end_of_loop()
 
-    def start_function(self):
+    def start_function(self) -> None:
         self.update_values()
         if self.var_method.get() == "Null event":
             self.null_event_kmc()
