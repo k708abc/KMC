@@ -31,7 +31,7 @@ class Params:
         self.binding_energies["Si56"] = -1.5
         self.binding_energies["Si_intra"] = -1.5
         self.binding_energies["Si_inter"] = -1.5
-        self.binding_energies["Agtop"] = -1.5
+        # self.binding_energies["Agtop"] = -1.5
         self.transformation = -1.5
         self.record_name = "KMC_Si_rec"
         self.img_per = 10

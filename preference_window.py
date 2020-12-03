@@ -158,13 +158,12 @@ class Window(ttk.Frame):
             "Si56",
             "Si_intra",
             "Si_inter",
-            "Ag_top",
         ]
 
         self.energylabels = []
         self.energies = []
         self.rate_labels = []
-        for _ in range(9):
+        for _ in range(8):
             self.energies.append(ttk.Entry(self.frame_energies, width=7))
             self.rate_labels.append(ttk.Label(self.frame_energies, text="0"))
         for (energy, (key, val)) in zip(
