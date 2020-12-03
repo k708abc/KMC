@@ -7,7 +7,9 @@ from event_collection_check import random_target, event_check_poscar
 import os
 
 
-def bond_energy_same_state(target: Tuple, bond: Tuple, params, atom_state: int):
+def bond_energy_same_state(
+    target: Tuple[int, int, int], bond: Tuple, params, atom_state: int
+):
     z_target = target[2]
     z_bond = bond[2]
     if atom_state == 2:
@@ -47,7 +49,7 @@ def bond_energy_same_state(target: Tuple, bond: Tuple, params, atom_state: int):
         return 0
 
 
-def bond_energy_diff_state(target: Tuple, bond: Tuple, params):
+def bond_energy_diff_state(target: Tuple[int, int, int], bond: Tuple, params):
     z_target = target[2]
     z_bond = bond[2]
     if z_target in (1, 0) and z_bond in (1, 0):
@@ -84,7 +86,9 @@ def bond_energy_diff_state(target: Tuple, bond: Tuple, params):
         raise RuntimeError("Something wrong in 2D energy")
 
 
-def total_energy_trans(atom_set: Dict, bonds: Dict, target: Tuple, params):
+def total_energy_trans(
+    atom_set: Dict, bonds: Dict, target: Tuple[int, int, int], params
+):
     target_z = target[2]
     target_state = atom_set[target]
     energy = 0
@@ -127,7 +131,7 @@ def find_lower_sites(indexes):
 
 
 # 移動後に原子が孤立するような移動は省く
-def judge_isolation(atom_set, bonds, target, nn_atom, events):
+def judge_isolation(atom_set, bonds, target: Tuple[int, int, int], nn_atom, events):
     rem_eve = []
     for check in nn_atom:
         # 隣接原子の周囲の原子数
@@ -152,7 +156,7 @@ def judge_isolation(atom_set, bonds, target, nn_atom, events):
     return rem_eve
 
 
-def judge_defect(target, events):
+def judge_defect(target: Tuple[int, int, int], events):
     remove = []
     for event in events:
         if target[2] not in (0, 1) and event[2] in (0, 1):
@@ -163,7 +167,7 @@ def judge_defect(target, events):
 def possible_events(
     atom_set: Dict,
     bonds: Dict,
-    target: Tuple,
+    target: Tuple[int, int, int],
     params,
     energy: float,
     unit_length: int,
@@ -176,9 +180,8 @@ def possible_events(
     events: List[Tuple] = []
     rates: List[float] = []
     #
-    atom_x = target[0]
-    atom_y = target[1]
-    atom_z = target[2]
+    atom_x, atom_y, atom_z = target
+
     # nnn: next nearest neighbor
     nnn_sites = [
         ((atom_x - 1) % unit_length, atom_y, atom_z),
@@ -358,7 +361,7 @@ def state_determinate(atom_set, bonds, event_list, params):
     return states
 
 
-def state_change_to_neighbor(atom_set, bonds, target, params):
+def state_change_to_neighbor(atom_set, bonds, target: Tuple[int, int, int], params):
     pre = float(params.prefactor)
     kbt = params.temperature_eV
     t_state = atom_set[target]
@@ -376,7 +379,7 @@ def state_change_to_neighbor(atom_set, bonds, target, params):
         raise RuntimeError("Some error in state change to neighbor")
 
 
-def state_change_new(atom_set, bonds, target, params):
+def state_change_new(atom_set, bonds, target: Tuple[int, int, int], params):
     neighbor_i = 0
     target_state = atom_set[target]
     pre = float(params.prefactor)
@@ -404,7 +407,7 @@ def state_change_new(atom_set, bonds, target, params):
 def site_events(
     atom_set: Dict,
     bonds: Dict,
-    target: Tuple,
+    target: Tuple[int, int, int],
     params,
     defect: bool,
     empty_first: int,

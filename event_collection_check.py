@@ -15,7 +15,7 @@ def event_check_poscar(
     lattice: Dict,
     unit_length: int,
     maxz: int,
-    target: Tuple,
+    target: Tuple[int, int, int],
 ):
     xp: List[float] = [lattice[target][0] / unit_length]
     yp: List[float] = [lattice[target][1] / unit_length]
