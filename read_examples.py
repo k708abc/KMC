@@ -1,8 +1,8 @@
 from typing import Dict, Tuple, List
 
 
-def read_atom_set():
-    atom_set: Dict[Tuple] = {}
+def read_atom_set() -> Dict:
+    atom_set: Dict[Tuple, int] = {}
     f = open("atm_set_example.txt", "r")
     data_list = f.readlines()
     for line in data_list:
@@ -14,8 +14,8 @@ def read_atom_set():
     return atom_set
 
 
-def read_bonds():
-    bonds: Dict[List] = {}
+def read_bonds() -> Dict:
+    bonds: Dict[Tuple, List] = {}
     f = open("bonds_example.txt", "r")
     data_list = f.readlines()
     for line in data_list:
@@ -39,7 +39,7 @@ def read_bonds():
     return bonds
 
 
-def read_lattice():
+def read_lattice() -> Dict:
     lattice: Dict[Tuple, List] = {}
     f = open("lattice_example.txt", "r")
     data_list = f.readlines()

@@ -26,6 +26,6 @@ if __name__ == "__main__":
     init_values = Params()
     pre = float(init_values.prefactor)
     kbt = init_values.temperature_eV
-    print("Unit test")
+    print("Test : caluculate rate constant")
     energy = float(input("Input energy: "))
-    print(rate(pre, kbt, energy))
+    print("rate = " + str(rate(pre, kbt, energy)))

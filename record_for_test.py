@@ -1,4 +1,7 @@
-def rec_for_test(atom_set, bonds, lattice):
+from typing import Dict
+
+
+def rec_for_test(atom_set: Dict, bonds: Dict, lattice: Dict) -> None:
     file_data = open("atm_set_example.txt", "w")
     for atom_index, state in atom_set.items():
         for component_index in atom_index:
@@ -26,5 +29,4 @@ def rec_for_test(atom_set, bonds, lattice):
         for pos in position:
             file_data.write(str(pos) + " ")
         file_data.write("\n")
-
     file_data.close()

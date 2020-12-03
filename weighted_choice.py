@@ -2,7 +2,7 @@ import random
 from typing import List, Tuple
 
 
-def choice(events: List, rates: List, states: List) -> Tuple:
+def choice(events: List, rates: List, states: List) -> Tuple[Tuple, int]:
     tot = sum(rates)
     r_tot = random.random() * tot
 
@@ -23,9 +23,12 @@ if __name__ == "__main__":
     rates: List = [0.1, 0.5, 10]
     states: List = [0, 1, 2]
     result: List = [0, 0, 0]
-    print("Unit test")
-    for i in range(100):
+    repetition = 100
+    #
+    for _ in range(repetition):
         event, state = choice(events, rates, states)
         result[state] += 1
+    print("Test: Weighted choice")
+    print("repetition : " + str(repetition))
     print("rates = " + str(rates))
     print("results = " + str(result))

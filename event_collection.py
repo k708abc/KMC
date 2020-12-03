@@ -7,7 +7,7 @@ from event_collection_check import random_target, event_check_poscar
 import os
 
 
-def bond_energy_same_state(target, bond, params, atom_state):
+def bond_energy_same_state(target: Tuple, bond: Tuple, params, atom_state: int):
     z_target = target[2]
     z_bond = bond[2]
     if atom_state == 2:
@@ -47,7 +47,7 @@ def bond_energy_same_state(target, bond, params, atom_state):
         return 0
 
 
-def bond_energy_diff_state(target, bond, params):
+def bond_energy_diff_state(target: Tuple, bond: Tuple, params):
     z_target = target[2]
     z_bond = bond[2]
     if z_target in (1, 0) and z_bond in (1, 0):

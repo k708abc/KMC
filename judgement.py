@@ -12,17 +12,19 @@ def judge_null(success: float) -> str:
 
 
 if __name__ == "__main__":
-    success = 1.2
+    success = 0.7
     success_i = 0
     null_i = 0
-    for _ in range(100):
+    repetition = 100
+    for _ in range(repetition):
         judge = judge_null(success)
         if judge == "success":
             success_i += 1
         elif judge == "failure":
             null_i += 1
 
-    print("judge null test")
+    print("Test : judge null event")
     print("success probability = " + str(success))
+    print("repetition = " + str(repetition))
     print("success times = " + str(success_i))
     print("null times = " + str(null_i))
