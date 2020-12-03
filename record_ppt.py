@@ -83,7 +83,7 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     table.cell(0, 6).text = "Si(5-6)"
     table.cell(0, 7).text = "Si(intra)"
     table.cell(0, 8).text = "Si(inter)"
-    table.cell(0, 9).text = "Ag(top)"
+    # table.cell(0, 9).text = "Ag(top)"
     table.cell(0, 10).text = "Trans."
     table.cell(1, 0).text = "Energy"
     table.cell(1, 1).text = str(params.binding_energies["AgSi"])
@@ -94,7 +94,7 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     table.cell(1, 6).text = str(params.binding_energies["Si56"])
     table.cell(1, 7).text = str(params.binding_energies["Si_intra"])
     table.cell(1, 8).text = str(params.binding_energies["Si_inter"])
-    table.cell(1, 9).text = str(params.binding_energies["Agtop"])
+    # table.cell(1, 9).text = str(params.binding_energies["Agtop"])
     table.cell(1, 10).text = str(params.transformation)
     #
     """
