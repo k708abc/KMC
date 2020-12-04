@@ -16,6 +16,8 @@ from event_collection import site_events
 from normarize_list import normarize_rate
 from weighted_choice import choice
 from recording import record_data
+from atoms_recalculate import recalculate
+from rejection_free_choose import rejection_free_choise
 
 
 class Window(ttk.Frame):
@@ -430,6 +432,19 @@ class Window(ttk.Frame):
         self.update_after_deposition(dep_pos, atom_type)
         return dep_pos
 
+    def event_progress(self):
+        if self.move_atom == self.target:
+            self.atom_set[self.target] = self.new_state
+        else:
+            self.atom_set[self.move_atom] = self.new_state
+            self.atom_set[self.target] = 0
+            self.atom_exist.remove(self.target)
+            self.atom_exist.append(self.move_atom)
+            if self.move_atom[2] in (0, 1):
+                self.empty_firstBL -= 1
+            if self.target[2] in (0, 1):
+                self.empty_firstBL += 1
+
     def try_events(self) -> None:
         events, rates, states = site_events(
             self.atom_set,
@@ -446,19 +461,9 @@ class Window(ttk.Frame):
         events.append(self.target)
         states.append(self.atom_set[self.target])
         # choose an event
-        move_atom, new_state = choice(events, norm_rates, states)
+        self.move_atom, self.new_state = choice(events, norm_rates, states)
         # event progress
-        if move_atom == self.target:
-            self.atom_set[self.target] = new_state
-        else:
-            self.atom_set[move_atom] = new_state
-            self.atom_set[self.target] = 0
-            self.atom_exist.remove(self.target)
-            self.atom_exist.append(move_atom)
-            if move_atom[2] in (0, 1):
-                self.empty_firstBL -= 1
-            if self.target[2] in (0, 1):
-                self.empty_firstBL += 1
+        self.event_progress()
 
     def end_of_loop(self) -> None:
         self.record_position()
@@ -485,8 +490,10 @@ class Window(ttk.Frame):
     def null_event_kmc(self) -> None:  # 長過ぎ！　Helper function 作ってコンパクトにしないと見通し悪い。
         self.start_setting()
         self.atom_exist: List[Tuple[int, int, int]] = [(-1, -1, -1)]
-        self.lattice, self.bonds, self.atom_set, _, _, _ = lattice_form(self.init_value)
-        # return lattice, bonds, atom_set, event, event_time, event_time_tot
+        self.lattice, self.bonds, self.atom_set, _, _, _, _ = lattice_form(
+            self.init_value
+        )
+        # return lattice, bonds, atom_set, event, event_time, event_time_tot,event_state
         self.det_normarize()
         self.cal_expected_events()
         """
@@ -518,11 +525,50 @@ class Window(ttk.Frame):
         # end of the loop
         self.end_of_loop()
 
-    def recalculate_atom():
-        pass
+    def update_events(self):
+        self.related_atoms = list(set(self.related_atoms))
+        for target_rel in self.related_atoms:
+            events, rates, states = site_events(
+                self.atom_set,
+                self.bonds,
+                target_rel,
+                self.init_value,
+                self.bln_defect.get(),
+                self.empty_firstBL,
+                self.bln_tr.get(),
+            )
+            self.total_event_time -= self.event_time_tot[target_rel]
+            self.event[target_rel] = events
+            self.event_time[target_rel] = rates
+            self.event_time_tot[target_rel] = sum(rates)
+            self.event_state[target_rel] = states
+            self.total_event_time += self.event_time_tot[target_rel]
+        self.related_atoms = []
 
-    def rejuction_free_kmc(self) -> None:
+    def rejection_free_deposition(self):
+        dep_pos = self.deposition()
+        # 蒸着によりイベントに変化が生じうる原子
+        self.related_atoms = recalculate(
+            dep_pos, self.bonds, self.atom_set, self.init_value
+        )
+        # それぞれのイベント等を格納
+        self.update_events()
+
+    def rejection_free_event(self):
+        self.move_atom = self.event[self.target][self.event_number]
+        self.new_state = self.event_state[self.target][self.event_number]
+        self.event_progress()
+        self.related_atoms = recalculate(
+            self.target, self.bonds, self.atom_set, self.init_value
+        )
+        self.related_atoms.extend(
+            recalculate(self.move_atom, self.bonds, self.atom_set, self.init_value)
+        )
+        self.update_events()
+
+    def rejection_free_kmc(self) -> None:
         self.start_setting()
+        self.total_event_time = self.init_value.dep_rate_atoms_persec
         self.atom_exist: List[Tuple[int, int, int]] = []
         (
             self.lattice,
@@ -531,12 +577,23 @@ class Window(ttk.Frame):
             self.event,
             self.event_time,
             self.event_time_tot,
+            self.event_state,
         ) = lattice_form(self.init_value)
         # return lattice, bonds, atom_set, event, event_time, event_time_tot
         # 最初の二原子を配置
         for _ in range(2):
-            dep_pos = self.deposition()
-            related_atoms = self.recalculate
+            self.rejection_free_deposition()
+        #
+        while int(self.prog_time) <= int(self.init_value.total_time):
+            self.target, self.event_number = rejection_free_choise(
+                self.total_event_time, self.event_time, self.event_time_tot
+            )
+            if self.target == (-1, -1, -1):
+                self.rejection_free_deposition()
+            else:
+                self.rejection_free_event()
+            self.update_progress()
+        self.end_of_loop()
 
     def start_function(self) -> None:
         self.update_values()

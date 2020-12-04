@@ -10,6 +10,7 @@ bonds: Dict[Tuple, List] = {}
 event: Dict[Tuple, List] = {}
 event_time: Dict[Tuple, List] = {}
 event_time_tot: Dict[Tuple, float] = {}
+event_state: Dict[Tuple, int] = {}
 
 
 def reset_dicts() -> None:
@@ -20,6 +21,7 @@ def reset_dicts() -> None:
     event.clear()
     event_time.clear()
     event_time_tot.clear()
+    event_state.clear()
 
 
 def form_first_3BL(
@@ -121,11 +123,12 @@ def lattice_form(input_params: Params):  # 　ここ長すぎるので、少な�
                 event[(i, j, k)] = []
                 event_time[(i, j, k)] = []
                 event_time_tot[(i, j, k)] = 0.0
+                event_state[(i, j, k)] = []
     #
     form_first_3BL(unit_length, z_intra, z_inter)
     lattice_full_layers(unit_height)
     search_bond(unit_length, z_max)
-    return lattice, bonds, atom_set, event, event_time, event_time_tot
+    return lattice, bonds, atom_set, event, event_time, event_time_tot, event_state
 
 
 if __name__ == "__main__":

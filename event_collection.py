@@ -181,7 +181,6 @@ def possible_events(
     rates: List[float] = []
     #
     atom_x, atom_y, atom_z = target
-
     # nnn: next nearest neighbor
     nnn_sites = [
         ((atom_x - 1) % unit_length, atom_y, atom_z),
