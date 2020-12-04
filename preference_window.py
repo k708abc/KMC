@@ -365,7 +365,7 @@ class Window(ttk.Frame):
         )
         self.progress_atoms["text"] = str(self.n_atoms) + " atoms"
         self.progress_events["text"] = str(self.n_events) + " events"
-        if self.n_events == 100:
+        if self.n_events == 100 and self.num_events is not None:
             time_middle = time.time() - self.start_time
             expected_time = self.num_events / 100 * time_middle
             self.expectd_cal_time["text"] = (
@@ -537,6 +537,10 @@ class Window(ttk.Frame):
                 self.empty_firstBL,
                 self.bln_tr.get(),
             )
+            print("target :" + str(target_rel))
+            print("events : " + str(events))
+            print("rates : " + str(rates))
+            print("states: " + str(states))
             self.total_event_time -= self.event_time_tot[target_rel]
             self.event[target_rel] = events
             self.event_time[target_rel] = rates
@@ -568,6 +572,7 @@ class Window(ttk.Frame):
 
     def rejection_free_kmc(self) -> None:
         self.start_setting()
+        self.num_events = None
         self.total_event_time = self.init_value.dep_rate_atoms_persec
         self.atom_exist: List[Tuple[int, int, int]] = []
         (

@@ -2,7 +2,9 @@ from typing import List, Dict, Tuple
 
 
 def recalculate(target, bonds, atom_set, params):
-    recal_list: List = [target]
+    recal_list: List = []
+    if atom_set[target] != 0:
+        recal_list.append(target)
     atom_x, atom_y, atom_z = target
     unit_length = params.n_cell_init
     # 最近接

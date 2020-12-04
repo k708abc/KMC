@@ -365,11 +365,16 @@ def state_change_to_neighbor(atom_set, bonds, target: Tuple[int, int, int], para
     kbt = params.temperature_eV
     t_state = atom_set[target]
     E_change = 0
+    diff_i = 0
     for bond in bonds[target]:
         if atom_set[bond] == t_state:
             E_change += bond_energy_same_state(target, bond, params, t_state)
+        elif atom_set[bond] != 0:
+            diff_i += 1
     change_rate = rate(pre, kbt, E_change)
-    if t_state == 2:
+    if diff_i == 0:
+        return t_state, 0
+    elif t_state == 2:
         return 3, change_rate
     elif t_state == 3:
         return 2, change_rate

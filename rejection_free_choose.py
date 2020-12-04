@@ -14,6 +14,15 @@ def choose_an_event(r_tot, event_rates):
 
 def rejection_free_choise(total_event_time, event_time, event_time_tot):
     r_tot = total_event_time * random.random()
+    """
+    tot_time = 0
+    for sites, times in event_time_tot.items():
+        tot_time += times
+    print("total_event_time : " + str(total_event_time))
+    print("tot_time_calculatesd : " + str(tot_time))
+    print("diff: " + str(total_event_time - tot_time))
+    """
+
     for rate_site, rate in event_time_tot.items():
         if rate >= r_tot:
             event_number = choose_an_event(r_tot, event_time[rate_site])
