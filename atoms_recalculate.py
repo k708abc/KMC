@@ -2,9 +2,11 @@ from typing import List, Dict, Tuple
 
 
 def recalculate(target, bonds, atom_set, params):
-    recal_list: List = []
+    recal_list: List = [target]
+    """
     if atom_set[target] != 0:
         recal_list.append(target)
+    """
     atom_x, atom_y, atom_z = target
     unit_length = params.n_cell_init
     # 最近接
@@ -39,7 +41,7 @@ def recalculate(target, bonds, atom_set, params):
             direct_below = (atom_x, atom_y, atom_z - 1)
             nn_direct_below = bonds[direct_below]
             for nn_d_b in nn_direct_below:
-                if atom_set(nn_d_b) != 0:
+                if atom_set[nn_d_b] != 0:
                     recal_list.append(nn_d_b)
             # 次近接下から登ってくる
             for nnn in nnn_sites:

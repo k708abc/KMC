@@ -436,6 +436,13 @@ class Window(ttk.Frame):
         if self.move_atom == self.target:
             self.atom_set[self.target] = self.new_state
         else:
+            """
+            print(self.atom_exist)
+            print(self.target)
+            print(self.atom_set[self.target])
+            print(self.event_time_tot[self.target])
+            """
+
             self.atom_set[self.move_atom] = self.new_state
             self.atom_set[self.target] = 0
             self.atom_exist.remove(self.target)
@@ -528,19 +535,27 @@ class Window(ttk.Frame):
     def update_events(self):
         self.related_atoms = list(set(self.related_atoms))
         for target_rel in self.related_atoms:
-            events, rates, states = site_events(
-                self.atom_set,
-                self.bonds,
-                target_rel,
-                self.init_value,
-                self.bln_defect.get(),
-                self.empty_firstBL,
-                self.bln_tr.get(),
-            )
-            print("target :" + str(target_rel))
-            print("events : " + str(events))
-            print("rates : " + str(rates))
-            print("states: " + str(states))
+            if self.atom_set[target_rel] == 0:
+                events = []
+                rates = []
+                states = []
+
+            else:
+                events, rates, states = site_events(
+                    self.atom_set,
+                    self.bonds,
+                    target_rel,
+                    self.init_value,
+                    self.bln_defect.get(),
+                    self.empty_firstBL,
+                    self.bln_tr.get(),
+                )
+                """
+                print("target :" + str(target_rel))
+                print("events : " + str(events))
+                print("rates : " + str(rates))
+                print("states: " + str(states))
+                """
             self.total_event_time -= self.event_time_tot[target_rel]
             self.event[target_rel] = events
             self.event_time[target_rel] = rates
@@ -597,6 +612,12 @@ class Window(ttk.Frame):
                 self.rejection_free_deposition()
             else:
                 self.rejection_free_event()
+
+            # recoding the positions in the middle
+            if self.n_atoms >= self.rec_num_atoms:
+                self.rec_num_atoms += self.init_value.rec_num_atom_interval
+                self.record_position()
+
             self.update_progress()
         self.end_of_loop()
 
