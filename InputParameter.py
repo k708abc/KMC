@@ -23,16 +23,18 @@ class Params:
         self.post_anneal = 0
         self.prefactor = "1E+13"
         self.binding_energies: OrderedDict[str, float] = OrderedDict()
-        self.binding_energies["AgSi"] = -1.5
-        self.binding_energies["Si12"] = -1.5
-        self.binding_energies["Si23"] = -1.5
-        self.binding_energies["Si34"] = -1.5
-        self.binding_energies["Si45"] = -1.5
-        self.binding_energies["Si56"] = -1.5
-        self.binding_energies["Si_intra"] = -1.5
-        self.binding_energies["Si_inter"] = -1.5
+        self.binding_energies["AgSi"] = -0.75
+        self.binding_energies["Si12"] = -0.75
+        self.binding_energies["Si23"] = -0.75
+        self.binding_energies["Si34"] = -0.75
+        self.binding_energies["Si45"] = -0.75
+        self.binding_energies["Si56"] = -0.75
+        self.binding_energies["Si_intra"] = -1
+        self.binding_energies["Si_inter"] = -1
         # self.binding_energies["Agtop"] = -1.5
         self.transformation = -1.5
+        self.put_first = 10
+        self.cut_number = 1000
         self.record_name = "KMC_Si_rec"
         self.img_per = 10
         self.comments = "No comments"
@@ -40,6 +42,9 @@ class Params:
         self.inter_distance = 0.612
         self.keep_defect_check = True
         self.trans_check = True
+        self.first_put_check = True
+        self.cut_check = True
+        self.method = "Rejection free"
 
     @property
     def temperature_eV(self) -> float:
