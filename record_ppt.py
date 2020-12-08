@@ -139,6 +139,16 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     table.cell(1, 2).text = str('{:.3g}'.format(final_check))
     """
     #
+    width = height = Inches(1)
+    top = Inches(6)
+    left = Inches(0.5)
+    txBox = slide.shapes.add_textbox(left, top, width, height)
+    tf = txBox.text_frame
+    p = tf.add_paragraph()
+    p.text = "Comment: " + "\n" + params.comments
+    p.font.size = Pt(20)
+
+    #
     num_ims = len(img_names)
     imn = 0
     while imn < num_ims:
