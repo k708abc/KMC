@@ -159,7 +159,7 @@ def judge_isolation(atom_set, bonds, target: Tuple[int, int, int], nn_atom, even
 def judge_defect(target: Tuple[int, int, int], events):
     remove = []
     for event in events:
-        if target[2] not in (0, 1) and event[2] in (0, 1):
+        if (target[2] not in (0, 1)) and (event[2] in (0, 1)):
             remove.append(event)
     return remove
 
@@ -314,9 +314,11 @@ def possible_events(
                     rates.append(rate(pre, kbt, energy))
     # イベントリストから、孤立原子を生じるイベントを抽出
     remove = judge_isolation(atom_set, bonds, target, nn_atom, events)
+    """
     # first BLにデフェクトを残す場合
-    if (defect is True) and (empty_first == 1):
+    if (defect is True) and (empty_first == int(params.num_defect)):
         remove.extend(judge_defect(target, events))
+    """
     # 削除
     event_f: List = []
     rates_f: List = []

@@ -35,6 +35,7 @@ class Params:
         self.transformation = -1.5
         self.put_first = 10
         self.cut_number = 1000
+        self.num_defect = 1
         self.record_name = "KMC_Si_rec"
         self.img_per = 10
         self.comments = "No comments"

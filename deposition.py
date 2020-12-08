@@ -54,7 +54,7 @@ def deposit_an_atom(
     atom_set: Dict, bonds: Dict, defect, empty_first: int, params
 ) -> Tuple:
     candidate = find_candidates(atom_set, bonds)
-    if (defect is True) and (empty_first == 1):
+    if (defect is True) and (empty_first == int(params.num_defect)):
         candidate = remove_first(candidate)
 
     dep_pos = dep_position(candidate)
@@ -62,7 +62,6 @@ def deposit_an_atom(
 
     # rejection free ではイベント更新を行うサイトのリストが必要（あとまわし）
     # そこでは、蒸着サイトと関係する周囲のサイトをイベント更新リストに入れる
-
     return dep_pos, atom_type
 
 
