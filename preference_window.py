@@ -122,6 +122,7 @@ class Window(ttk.Frame):
         )
         self.postanneal_time = ttk.Entry(self.frame_basics, width=7)
         self.postanneal_time.insert(tk.END, self.init_value.post_anneal)
+        self.postanneal_time.configure(state="readonly")
         self.postanneal_time.bind("<Return>", self.update_click)
         self.prefactor_label = ttk.Label(self.frame_basics, text="Prefactor (1/s)")
         self.prefactor = ttk.Entry(self.frame_basics, width=7)
