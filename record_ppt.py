@@ -77,7 +77,7 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
 
     table = shapes.add_table(rows, cols, left, top, width, height).table
     table.cell(0, 0).text = "Transformation"
-    table.cell(0, 1).text = "Keep a defect"
+    table.cell(0, 1).text = "Keep defects"
     table.cell(0, 2).text = "Put at first"
     table.cell(0, 3).text = "Cut event"
     table.cell(0, 4).text = "Method"
@@ -87,7 +87,7 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     table.cell(1, 3).text = str(params.cut_check)
     table.cell(1, 4).text = str(params.method)
     table.cell(2, 0).text = str(params.transformation)
-    table.cell(2, 1).text = str(1)
+    table.cell(2, 1).text = str(params.num_defect)
     table.cell(2, 2).text = str(params.put_first)
     table.cell(2, 3).text = str(params.cut_number)
     table.cell(2, 4).text = str("")

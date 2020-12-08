@@ -207,6 +207,8 @@ class Window(ttk.Frame):
             self.frame_checks, text="Keep defect in the first layer"
         )
         self.chk_defect = ttk.Checkbutton(self.frame_checks, variable=self.bln_defect)
+        self.num_defect = ttk.Entry(self.frame_checks, width=7)
+        self.num_defect.insert(tk.END, self.init_value.num_defect)
         #
         self.bln_first = tk.BooleanVar()
         self.bln_first.set(self.init_value.first_put_check)
@@ -230,6 +232,7 @@ class Window(ttk.Frame):
         self.transformation.grid(row=0, column=2, **self.padWE)
         self.chk_defect_label.grid(row=1, column=0, **self.padWE)
         self.chk_defect.grid(row=1, column=1, **self.padWE)
+        self.num_defect.grid(row=1, column=2, **self.padWE)
 
         self.chk_first_put_label.grid(row=2, column=0, **self.padWE)
 
@@ -351,6 +354,7 @@ class Window(ttk.Frame):
         self.init_value.trans_check = self.bln_tr.get()
         self.init_value.first_put_check = self.bln_first.get()
         self.init_value.cut_check = self.bln_cut.get()
+        self.init_value.num_defect = self.num_defect.get()
         self.init_value.put_first = self.put_first.get()
         self.init_value.cut_number = self.cut.get()
         self.init_value.method = self.var_method.get()
@@ -458,6 +462,7 @@ class Window(ttk.Frame):
             _ = self.deposition()
 
     def deposition(self) -> Tuple:
+        self.n_events_perdep = 0
         dep_pos, atom_type = deposit_an_atom(
             self.atom_set,
             self.bonds,
@@ -468,7 +473,19 @@ class Window(ttk.Frame):
         self.update_after_deposition(dep_pos, atom_type)
         return dep_pos
 
+    def defect_check(self):
+        if (self.target[2] not in (0, 1)) and (self.move_atom[2] in (0, 1)):
+            self.move_atom = self.target
+            self.new_state = self.atom_set[self.target]
+            self.n_events -= 1
+            self.n_events_perdep -= 1
+
     def event_progress(self):
+        if (self.empty_firstBL == int(self.init_value.num_defect)) and (
+            self.init_value.keep_defect_check is True
+        ):
+            self.defect_check()
+        #
         if self.move_atom == self.target:
             self.atom_set[self.target] = self.new_state
         else:
@@ -505,6 +522,11 @@ class Window(ttk.Frame):
         states.append(self.atom_set[self.target])
         # choose an event
         self.move_atom, self.new_state = choice(events, norm_rates, states)
+        if (self.target != self.move_atom) or (
+            self.atom_set[self.target] != self.new_state
+        ):
+            self.n_events_perdep += 1
+
         # event progress
         self.event_progress()
 
@@ -549,7 +571,12 @@ class Window(ttk.Frame):
 
         while int(self.prog_time) <= int(self.init_value.total_time):
             self.target = choose_atom(self.atom_exist)
-            if self.target == (-1, -1, -1):
+            if (self.n_events_perdep >= int(self.init_value.cut_number)) and (
+                self.init_value.cut_check is True
+            ):
+                _ = self.deposition()
+
+            elif self.target == (-1, -1, -1):
                 self.try_deposition()
             else:
                 self.try_events()
@@ -605,7 +632,6 @@ class Window(ttk.Frame):
         self.related_atoms = []
 
     def rejection_free_deposition(self):
-        self.n_events_perdep = 0
         dep_pos = self.deposition()
         # 蒸着によりイベントに変化が生じうる原子
         self.related_atoms = recalculate(
@@ -613,6 +639,9 @@ class Window(ttk.Frame):
         )
         # それぞれのイベント等を格納
         self.update_events()
+        #
+        #
+        # self.prev_dep = dep_pos
 
     def rejection_free_event(self):
         self.move_atom = self.event[self.target][self.event_number]
@@ -625,6 +654,9 @@ class Window(ttk.Frame):
             recalculate(self.move_atom, self.bonds, self.atom_set, self.init_value)
         )
         self.update_events()
+        #
+        #
+        # self.prev_eve = str(self.target) + ":" + str(self.move_atom)
 
     """
     def num_atom_check(self):
@@ -640,6 +672,29 @@ class Window(ttk.Frame):
             print("k")
         else:
             print("ok")
+    """
+    """
+    def atom_count(self):
+        if self.empty_firstBL < int(self.init_value.num_defect):
+            count = 0
+            for key, val in self.atom_set.items():
+                if val != 0 and key[2] in (0, 1):
+                    count += 1
+            print("defect error")
+            print(self.prev_eve)
+            print(self.empty_firstBL)
+            print(int(self.init_value.num_defect))
+            print(count)
+            print(self.prev_dep)
+            input()
+        count = 0
+        for key, val in self.atom_set.items():
+            if val != 0:
+                count += 1
+        if count != self.n_atoms:
+            print("count error")
+            print(self.prev_eve)
+            input()
     """
 
     def rejection_free_kmc(self) -> None:
@@ -662,17 +717,22 @@ class Window(ttk.Frame):
             for _ in range(int(self.put_first.get())):
                 self.rejection_free_deposition()
         #
+        self.prev_eve = "dep"
         while int(self.prog_time) <= int(self.init_value.total_time):
             # self.num_atom_check()
+            # self.atom_count()
+
             self.target, self.event_number = rejection_free_choise(
                 self.total_event_time, self.event_time, self.event_time_tot
             )
             if self.target == (-1, -1, -1):
                 self.rejection_free_deposition()
+                # self.prev_eve = "dep_nat"
             elif (self.n_events_perdep == int(self.cut.get())) and (
                 self.bln_cut.get() is True
             ):
                 self.rejection_free_deposition()
+                # self.prev_eve = "dep_lim"
             else:
                 self.rejection_free_event()
 
