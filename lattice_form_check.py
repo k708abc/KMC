@@ -1,6 +1,7 @@
 from typing import List, Dict, Tuple
 import matplotlib.pyplot as plt
 import matplotlib.lines as mlines
+from InputParameter import Params
 
 unit_x: List[float] = [1, 0, 0]
 unit_y: List[float] = [0.5, 0.866, 0]
@@ -68,7 +69,9 @@ def figure_formation(unit_length, x_list, y_list, bond_list, BL_num):
     return fig
 
 
-def check_lattice(input_params, lattice: Dict[Tuple, List], bonds: Dict[Tuple, List]):
+def check_lattice(
+    input_params: Params, lattice: Dict[Tuple, List], bonds: Dict[Tuple, List]
+):
     unit_length = input_params.n_cell_init
     z_units = input_params.z_unit_init
     maxz = z_units * 6 - 1
