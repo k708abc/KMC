@@ -449,6 +449,15 @@ def site_events(
 
     else:
         states = [2 for _ in range(len(event_list))]
+    """
+    for rate in rate_list:
+        if rate > 10:
+            print("too large rate constant")
+            print(target)
+            print(event_list)
+            print(rate_list)
+    """
+
     return event_list, rate_list, states
 
 

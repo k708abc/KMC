@@ -30,7 +30,7 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     left = Inches(0.5)
     top = Inches(1.5)
     rows = 2
-    cols = 11
+    cols = 9
     width = Inches(12)
     height = Inches(1)
     # record parameters
@@ -43,9 +43,9 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     table0.cell(0, 5).text = "dep. time (min)"
     table0.cell(0, 6).text = "post anneal(min)"
     table0.cell(0, 7).text = "prefactor"
-    table0.cell(0, 8).text = "transform"
-    table0.cell(0, 9).text = "keep defect"
-    table0.cell(0, 10).text = "Cal. time (s)"
+    # table0.cell(0, 8).text = "transform"
+    # table0.cell(0, 9).text = "keep defect"
+    table0.cell(0, 8).text = "Cal. time (s)"
     table0.cell(1, 0).text = str(params.n_cell_init)
     table0.cell(1, 1).text = str(params.z_unit_init)
     table0.cell(1, 2).text = str(params.temperature)
@@ -54,8 +54,8 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     table0.cell(1, 5).text = str(params.dep_time)
     table0.cell(1, 6).text = str(params.post_anneal)
     table0.cell(1, 7).text = str("{:.1E}".format(params.prefactor))
-    table0.cell(1, 8).text = str(params.trans_check)
-    table0.cell(1, 9).text = str(params.keep_defect_check)
+    # table0.cell(1, 8).text = str(params.trans_check)
+    # table0.cell(1, 9).text = str(params.keep_defect_check)
     """
     if bln_tr.get() == True:
         table0.cell(1, 8).text = "on"
@@ -66,12 +66,36 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     else:
         table0.cell(1, 9).text = "off"
     """
-    table0.cell(1, 10).text = str(minute) + " m " + str(second) + " s"
+    table0.cell(1, 8).text = str(minute) + " m " + str(second) + " s"
     #
     left = Inches(0.5)
     top = Inches(3.5)
+    rows = 3
+    cols = 5
+    width = Inches(12)
+    height = Inches(1)
+
+    table = shapes.add_table(rows, cols, left, top, width, height).table
+    table.cell(0, 0).text = "Transformation"
+    table.cell(0, 1).text = "Keep a defect"
+    table.cell(0, 2).text = "Put at first"
+    table.cell(0, 3).text = "Cut event"
+    table.cell(0, 4).text = "Method"
+    table.cell(1, 0).text = str(params.trans_check)
+    table.cell(1, 1).text = str(params.keep_defect_check)
+    table.cell(1, 2).text = str(params.first_put_check)
+    table.cell(1, 3).text = str(params.cut_check)
+    table.cell(1, 4).text = str(params.method)
+    table.cell(2, 0).text = str(params.transformation)
+    table.cell(2, 1).text = str(1)
+    table.cell(2, 2).text = str(params.put_first)
+    table.cell(2, 3).text = str(params.cut_number)
+    table.cell(2, 4).text = str("")
+    #
+    left = Inches(0.5)
+    top = Inches(5)
     rows = 2
-    cols = 11
+    cols = 9
     width = Inches(12)
     height = Inches(1)
     table = shapes.add_table(rows, cols, left, top, width, height).table
@@ -84,7 +108,7 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     table.cell(0, 7).text = "Si(intra)"
     table.cell(0, 8).text = "Si(inter)"
     # table.cell(0, 9).text = "Ag(top)"
-    table.cell(0, 10).text = "Trans."
+    # table.cell(0, 10).text = "Trans."
     table.cell(1, 0).text = "Energy"
     table.cell(1, 1).text = str(params.binding_energies["AgSi"])
     table.cell(1, 2).text = str(params.binding_energies["Si12"])
@@ -95,7 +119,7 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     table.cell(1, 7).text = str(params.binding_energies["Si_intra"])
     table.cell(1, 8).text = str(params.binding_energies["Si_inter"])
     # table.cell(1, 9).text = str(params.binding_energies["Agtop"])
-    table.cell(1, 10).text = str(params.transformation)
+    # table.cell(1, 10).text = str(params.transformation)
     #
     """
     left = Inches(0.5)

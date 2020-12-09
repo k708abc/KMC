@@ -5,6 +5,9 @@ import math
 from record_ppt import rec_ppt
 import os
 
+unit_x: List[float] = [1, 0, 0]
+unit_y: List[float] = [0.5, 0.866, 0]
+
 
 def highest_z(pos_all: List[Dict]) -> int:
     maxz = 1
@@ -13,6 +16,34 @@ def highest_z(pos_all: List[Dict]) -> int:
             if (state != 0) and (index[2] + 1 > maxz):
                 maxz = index[2] + 1
     return maxz
+
+
+def triangle(xp, yp, z):
+    if z % 2 == 0:
+        t1x = xp * unit_x[0] + yp * unit_y[0] - (unit_x[0] + unit_y[0]) / 3
+        t1y = xp * unit_x[1] + yp * unit_y[1] - (unit_x[1] + unit_y[1]) / 3
+        t2x = t1x + unit_x[0]
+        t2y = t1y + unit_x[1]
+        t3x = t1x + unit_y[0]
+        t3y = t1y + unit_y[1]
+    else:
+        t1x = xp * unit_x[0] + yp * unit_y[0] + (unit_x[0] + unit_y[0]) / 3
+        t1y = xp * unit_x[1] + yp * unit_y[1] + (unit_x[1] + unit_y[1]) / 3
+        t2x = t1x - unit_x[0]
+        t2y = t1y - unit_x[1]
+        t3x = t1x - unit_y[0]
+        t3y = t1y - unit_y[1]
+    return [(t1x, t1y), (t2x, t2y), (t3x, t3y)]
+
+
+def color_determinate(z, maxz):
+    color_num = math.floor(z / 2) - 1
+    maxz_BL = math.floor(maxz / 2) - 1
+    if color_num == -1:
+        color = [0, 1, 0]
+    else:
+        color = [color_num / maxz_BL, 0, 1 - color_num / maxz_BL]
+    return color
 
 
 def image_formaiton(pos: Dict, lattice: Dict, length: int, maxz: int):
@@ -41,189 +72,57 @@ def image_formaiton(pos: Dict, lattice: Dict, length: int, maxz: int):
                 else:
                     xp = lattice[(x, y, z)][0]
                     yp = lattice[(x, y, z)][1]
-                    if z % 2 == 0:
-                        t1x = (
-                            xp * unit_x[0]
-                            + yp * unit_y[0]
-                            - (unit_x[0] + unit_y[0]) / 3
-                        )
-                        t1y = (
-                            xp * unit_x[1]
-                            + yp * unit_y[1]
-                            - (unit_x[1] + unit_y[1]) / 3
-                        )
-                        t2x = t1x + unit_x[0]
-                        t2y = t1y + unit_x[1]
-                        t3x = t1x + unit_y[0]
-                        t3y = t1y + unit_y[1]
-
-                    else:
-                        t1x = (
-                            xp * unit_x[0]
-                            + yp * unit_y[0]
-                            + (unit_x[0] + unit_y[0]) / 3
-                        )
-                        t1y = (
-                            xp * unit_x[1]
-                            + yp * unit_y[1]
-                            + (unit_x[1] + unit_y[1]) / 3
-                        )
-                        t2x = t1x - unit_x[0]
-                        t2y = t1y - unit_x[1]
-                        t3x = t1x - unit_y[0]
-                        t3y = t1y - unit_y[1]
-
-                    color_num = math.floor(z / 2) - 1
-                    maxz_BL = math.floor(maxz / 2) - 1
-
-                    if color_num == -1:
-                        color = [0, 1, 0]
-                    else:
-                        color = [color_num / maxz_BL, 0, 1 - color_num / maxz_BL]
-
-                    p = pat.Polygon(
-                        xy=[(t1x, t1y), (t2x, t2y), (t3x, t3y)], fc=color, ec=color
-                    )
+                    tri_pos = triangle(xp, yp, z)
+                    color = color_determinate(z, maxz)
+                    p = pat.Polygon(xy=tri_pos, fc=color, ec=color)
                     ax.add_patch(p)
 
                     if x == 0:
-                        if z % 2 == 0:
-                            t1x = (
-                                xp * unit_x[0]
-                                + yp * unit_y[0]
-                                - (unit_x[0] + unit_y[0]) / 3
-                                + unit_x[0] * length
-                            )
-                            t1y = (
-                                xp * unit_x[1]
-                                + yp * unit_y[1]
-                                - (unit_x[1] + unit_y[1]) / 3
-                                + unit_x[1] * length
-                            )
+                        xpl = xp + length
+                        ypl = yp
+                        tri_pos = triangle(xpl, ypl, z)
 
-                            t2x = t1x + unit_x[0]
-                            t2y = t1y + unit_x[1]
-
-                            t3x = t1x + unit_y[0]
-                            t3y = t1y + unit_y[1]
-                        else:
-                            t1x = (
-                                xp * unit_x[0]
-                                + yp * unit_y[0]
-                                + (unit_x[0] + unit_y[0]) / 3
-                                + unit_x[0] * length
-                            )
-                            t1y = (
-                                xp * unit_x[1]
-                                + yp * unit_y[1]
-                                + (unit_x[1] + unit_y[1]) / 3
-                                + unit_x[1] * length
-                            )
-
-                            t2x = t1x - unit_x[0]
-                            t2y = t1y - unit_x[1]
-
-                            t3x = t1x - unit_y[0]
-                            t3y = t1y - unit_y[1]
-
-                        p = pat.Polygon(
-                            xy=[(t1x, t1y), (t2x, t2y), (t3x, t3y)], fc=color, ec=color
-                        )
+                        p = pat.Polygon(xy=tri_pos, fc=color, ec=color)
                         ax.add_patch(p)
 
                     if y == 0:
-                        if z % 2 == 0:
-                            t1x = (
-                                xp * unit_x[0]
-                                + yp * unit_y[0]
-                                - (unit_x[0] + unit_y[0]) / 3
-                                + unit_y[0] * length
-                            )
-                            t1y = (
-                                xp * unit_x[1]
-                                + yp * unit_y[1]
-                                - (unit_x[1] + unit_y[1]) / 3
-                                + unit_y[1] * length
-                            )
-
-                            t2x = t1x + unit_x[0]
-                            t2y = t1y + unit_x[1]
-
-                            t3x = t1x + unit_y[0]
-                            t3y = t1y + unit_y[1]
-                        else:
-                            t1x = (
-                                xp * unit_x[0]
-                                + yp * unit_y[0]
-                                + (unit_x[0] + unit_y[0]) / 3
-                                + unit_y[0] * length
-                            )
-                            t1y = (
-                                xp * unit_x[1]
-                                + yp * unit_y[1]
-                                + (unit_x[1] + unit_y[1]) / 3
-                                + unit_y[1] * length
-                            )
-
-                            t2x = t1x - unit_x[0]
-                            t2y = t1y - unit_x[1]
-
-                            t3x = t1x - unit_y[0]
-                            t3y = t1y - unit_y[1]
-
-                        p = pat.Polygon(
-                            xy=[(t1x, t1y), (t2x, t2y), (t3x, t3y)], fc=color, ec=color
-                        )
+                        xpl = xp
+                        ypl = yp + length
+                        tri_pos = triangle(xpl, ypl, z)
+                        p = pat.Polygon(xy=tri_pos, fc=color, ec=color)
                         ax.add_patch(p)
 
                     if (x == 0) and (y == 0):
+                        xpl = xp + length
+                        ypl = yp + length
+                        tri_pos = triangle(xpl, ypl, z)
 
-                        if z % 2 == 0:
-                            t1x = (
-                                xp * unit_x[0]
-                                + yp * unit_y[0]
-                                - (unit_x[0] + unit_y[0]) / 3
-                                + unit_y[0] * length
-                                + unit_x[0] * length
-                            )
-                            t1y = (
-                                xp * unit_x[1]
-                                + yp * unit_y[1]
-                                - (unit_x[1] + unit_y[1]) / 3
-                                + unit_y[1] * length
-                                + unit_x[1] * length
-                            )
+                        p = pat.Polygon(xy=tri_pos, fc=color, ec=color)
+                        ax.add_patch(p)
 
-                            t2x = t1x + unit_x[0]
-                            t2y = t1y + unit_x[1]
+                    if x == length - 1:
+                        xpl = xp - length
+                        ypl = yp
+                        tri_pos = triangle(xpl, ypl, z)
 
-                            t3x = t1x + unit_y[0]
-                            t3y = t1y + unit_y[1]
-                        else:
-                            t1x = (
-                                xp * unit_x[0]
-                                + yp * unit_y[0]
-                                + (unit_x[0] + unit_y[0]) / 3
-                                + unit_y[0] * length
-                                + unit_x[0] * length
-                            )
-                            t1y = (
-                                xp * unit_x[1]
-                                + yp * unit_y[1]
-                                + (unit_x[1] + unit_y[1]) / 3
-                                + unit_y[1] * length
-                                + unit_x[1] * length
-                            )
+                        p = pat.Polygon(xy=tri_pos, fc=color, ec=color)
+                        ax.add_patch(p)
 
-                            t2x = t1x - unit_x[0]
-                            t2y = t1y - unit_x[1]
+                    if y == length - 1:
+                        xpl = xp
+                        ypl = yp - length
 
-                            t3x = t1x - unit_y[0]
-                            t3y = t1y - unit_y[1]
+                        tri_pos = triangle(xpl, ypl, z)
 
-                        p = pat.Polygon(
-                            xy=[(t1x, t1y), (t2x, t2y), (t3x, t3y)], fc=color, ec=color
-                        )
+                        p = pat.Polygon(xy=tri_pos, fc=color, ec=color)
+                        ax.add_patch(p)
+
+                    if (x == length - 1) and (y == length - 1):
+                        xpl = xp - length
+                        ypl = yp - length
+                        tri_pos = triangle(xpl, ypl, z)
+
+                        p = pat.Polygon(xy=tri_pos, fc=color, ec=color)
                         ax.add_patch(p)
 
     p = pat.Polygon(
@@ -246,6 +145,8 @@ def image_formaiton(pos: Dict, lattice: Dict, length: int, maxz: int):
 
     ax.set_xlim(0, (unit_x[0] + unit_y[0]) * length)
     ax.set_ylim(0, (unit_x[1] + unit_y[1]) * length)
+    ax.axes.xaxis.set_visible(False)
+    ax.axes.yaxis.set_visible(False)
     ax.set_aspect("equal")
 
     return fig
@@ -270,11 +171,13 @@ def hist_formation(pos: Dict, maxz: int, n_BL: int):
     bx.barh(left, hist_2, label="2D")
     bx.barh(left, hist_3, left=hist_2, label="3D")
     bx.set_yticks(left)
-    bx.legend()
+    bx.legend(fontsize=16)
     # bx.set_yticklabels(lay)
-    bx.set_xlabel("Coverage")
-    bx.set_ylabel("layer number")
     bx.set_xlim(0, 100)
+    plt.xlabel("Coverage", fontsize=20)
+    plt.ylabel("layer number", fontsize=20)
+    plt.tick_params(labelsize=18)
+    fig.subplots_adjust(bottom=0.2)
     return fig
 
 
