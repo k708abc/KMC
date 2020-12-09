@@ -44,43 +44,43 @@ class Window(ttk.Frame):
         self.create_layout_basic()
         self.frame_basics.pack()
 
-    def create_frame_energies(self):
+    def create_frame_energies(self) -> None:
         self.frame_energies = ttk.Frame()
         self.create_widgets_energies()
         self.create_layout_energies()
         self.frame_energies.pack()
 
-    def create_frame_checks(self):
+    def create_frame_checks(self) -> None:
         self.frame_checks = ttk.Frame()
         self.create_widgets_checks()
         self.create_layout_checks()
         self.frame_checks.pack()
 
-    def create_frame_memos(self):
+    def create_frame_memos(self) -> None:
         self.frame_records = ttk.Frame()
         self.create_widgets_records()
         self.create_layout_records()
         self.frame_records.pack()
 
-    def create_method(self):
+    def create_method(self) -> None:
         self.frame_method = ttk.Frame()
         self.create_widgets_method()
         self.create_layout_method()
         self.frame_method.pack()
 
-    def create_frame_buttons(self):
+    def create_frame_buttons(self) -> None:
         self.frame_buttons = ttk.Frame()
         self.create_widgets_buttons()
         self.create_layout_buttons()
         self.frame_buttons.pack()
 
-    def create_frame_bar(self):
+    def create_frame_bar(self) -> None:
         self.frame_bars = ttk.Frame()
         self.create_widgets_bar()
         self.create_layout_bar()
         self.frame_bars.pack()
 
-    def create_frame_progress(self):
+    def create_frame_progress(self) -> None:
         self.frame_progress = ttk.Frame()
         self.create_widgets_progress()
         self.create_layout_progress()
@@ -532,7 +532,7 @@ class Window(ttk.Frame):
         # end of the loop
         self.end_of_loop()
 
-    def update_events(self):
+    def update_events(self) -> None:
         self.related_atoms = list(set(self.related_atoms))
         for target_rel in self.related_atoms:
             if self.atom_set[target_rel] == 0:
@@ -564,7 +564,7 @@ class Window(ttk.Frame):
             self.total_event_time += self.event_time_tot[target_rel]
         self.related_atoms = []
 
-    def rejection_free_deposition(self):
+    def rejection_free_deposition(self) -> None:
         dep_pos = self.deposition()
         # 蒸着によりイベントに変化が生じうる原子
         self.related_atoms = recalculate(
@@ -573,7 +573,7 @@ class Window(ttk.Frame):
         # それぞれのイベント等を格納
         self.update_events()
 
-    def rejection_free_event(self):
+    def rejection_free_event(self) -> None:
         self.move_atom = self.event[self.target][self.event_number]
         self.new_state = self.event_state[self.target][self.event_number]
         self.event_progress()
