@@ -488,15 +488,59 @@ class Window(ttk.Frame):
             self.defect_check()
         #
         if self.move_atom == self.target:
-            self.atom_set[self.target] = self.new_state
-        else:
+            if self.new_state == 4:
+                # クラスターで3次元化
+                # print("clustering")
+                # print(self.target)
+
+                self.atom_set[self.target] = 3
+                for bond in self.bonds[self.target]:
+                    if self.atom_set[bond] != 0:
+                        self.atom_set[bond] = 3
+                        # print(bond)
+                # input()
+            else:
+                self.atom_set[self.target] = self.new_state
             """
-            print(self.atom_exist)
-            print(self.target)
-            print(self.atom_set[self.target])
-            print(self.event_time_tot[self.target])
+            elif self.new_state != self.atom_set[self.target]:
+                if self.new_state == 2:
+                    print("3D→2D")
+                    print("target: " + str(self.target))
+                    print("state: " + str(self.atom_set[self.target]))
+                    print("new state: " + str(self.new_state))
+                    print(self.event_time[self.target])
+                    print(self.event[self.target])
+                    num_b2 = 0
+                    num_b3 = 0
+                    for bond in self.bonds[self.target]:
+                        if self.atom_set[bond] == 2:
+                            num_b2 += 1
+                        elif self.atom_set[bond] == 3:
+                            num_b3 += 1
+                    print("bond2: " + str(num_b2))
+                    print("bond3: " + str(num_b3))
+
+                else:
+                    print("2D→3D")
+                    print("target: " + str(self.target))
+                    print("state: " + str(self.atom_set[self.target]))
+                    print("new state: " + str(self.new_state))
+                    print(self.event_time[self.target])
+                    print(self.event[self.target])
+                    num_b2 = 0
+                    num_b3 = 0
+                    for bond in self.bonds[self.target]:
+                        if self.atom_set[bond] == 2:
+                            num_b2 += 1
+                        elif self.atom_set[bond] == 3:
+                            num_b3 += 1
+                    print("bond2: " + str(num_b2))
+                    print("bond3: " + str(num_b3))
+
+                self.atom_set[self.target] = self.new_state
             """
 
+        else:
             self.atom_set[self.move_atom] = self.new_state
             self.atom_set[self.target] = 0
             self.atom_exist.remove(self.target)
@@ -618,12 +662,7 @@ class Window(ttk.Frame):
                     self.empty_firstBL,
                     self.bln_tr.get(),
                 )
-                """
-                print("target :" + str(target_rel))
-                print("events : " + str(events))
-                print("rates : " + str(rates))
-                print("states: " + str(states))
-                """
+
             self.total_event_time -= self.event_time_tot[target_rel]
             self.event[target_rel] = events
             self.event_time[target_rel] = rates
@@ -654,6 +693,11 @@ class Window(ttk.Frame):
         self.related_atoms.extend(
             recalculate(self.move_atom, self.bonds, self.atom_set, self.init_value)
         )
+        if self.new_state == 4:
+            for bond in self.bonds[self.target]:
+                self.related_atoms.extend(
+                    recalculate(bond, self.bonds, self.atom_set, self.init_value)
+                )
         self.update_events()
         #
         #

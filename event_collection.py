@@ -368,18 +368,26 @@ def state_change_to_neighbor(atom_set, bonds, target: Tuple[int, int, int], para
     t_state = atom_set[target]
     E_change = 0
     diff_i = 0
+    num_bond = 0
     for bond in bonds[target]:
         if atom_set[bond] == t_state:
             E_change += bond_energy_same_state(target, bond, params, t_state)
+            num_bond += 1
         elif atom_set[bond] != 0:
             diff_i += 1
+            num_bond += 1
     change_rate = rate(pre, kbt, E_change)
-    if diff_i == 0:
+    if num_bond == 2 and diff_i == 1:
+        return 3, 0
+    elif diff_i == 0:
         return t_state, 0
+
     elif t_state == 2:
-        return 3, change_rate
+        return 3, 0
+        # change_rateを0に変更
     elif t_state == 3:
-        return 2, change_rate
+        return 2, 0
+        # change_rateを0に変更
     else:
         print("target state = " + str(t_state))
         raise RuntimeError("Some error in state change to neighbor")
@@ -398,7 +406,7 @@ def state_change_new(atom_set, bonds, target: Tuple[int, int, int], params):
     if target_state == 2:
         E_trans = (5 - neighbor_i) * params.transformation
         trans_rate = rate(pre, kbt, E_trans)
-        return 3, trans_rate
+        return 4, trans_rate
     # 3次元から2次元：周辺原子が少ないと起きやすい
     elif target_state == 3:
         if neighbor_i == 0:
