@@ -234,17 +234,11 @@ class Window(ttk.Frame):
         self.chk_defect_label.grid(row=1, column=0, **self.padWE)
         self.chk_defect.grid(row=1, column=1, **self.padWE)
         self.num_defect.grid(row=1, column=2, **self.padWE)
-
         self.chk_first_put_label.grid(row=2, column=0, **self.padWE)
-
         self.chk_first_put.grid(row=2, column=1, **self.padWE)
-
         self.put_first.grid(row=2, column=2, **self.padWE)
-
         self.chk_cut_label.grid(row=3, column=0, **self.padWE)
-
         self.chk_cut.grid(row=3, column=1, **self.padWE)
-
         self.cut.grid(row=3, column=2, **self.padWE)
 
     def create_widgets_records(self) -> None:
@@ -492,6 +486,7 @@ class Window(ttk.Frame):
                 # クラスターで3次元化
                 # print("clustering")
                 # print(self.target)
+                self.prev_eve = "clustering"
 
                 self.atom_set[self.target] = 3
                 for bond in self.bonds[self.target]:
@@ -500,7 +495,16 @@ class Window(ttk.Frame):
                         # print(bond)
                 # input()
             else:
+                self.prev_eve = (
+                    "state change: "
+                    + str(self.target)
+                    + " : "
+                    + str(self.atom_set[self.target])
+                    + "→"
+                    + str(self.new_state)
+                )
                 self.atom_set[self.target] = self.new_state
+
             """
             elif self.new_state != self.atom_set[self.target]:
                 if self.new_state == 2:
@@ -541,6 +545,18 @@ class Window(ttk.Frame):
             """
 
         else:
+            self.prev_eve = (
+                "move : "
+                + str(self.target)
+                + " : "
+                + str(self.atom_set[self.target])
+                + " → "
+                + str(self.move_atom)
+                + " ("
+                + str(self.atom_set[self.move_atom])
+                + ") : "
+                + str(self.new_state)
+            )
             self.atom_set[self.move_atom] = self.new_state
             self.atom_set[self.target] = 0
             self.atom_exist.remove(self.target)
@@ -684,6 +700,10 @@ class Window(ttk.Frame):
         # self.prev_dep = dep_pos
 
     def rejection_free_event(self):
+        if self.target is None or self.event_number is None:
+            print("None in rejection free")
+            print(self.target)
+            print(self.event_number)
         self.move_atom = self.event[self.target][self.event_number]
         self.new_state = self.event_state[self.target][self.event_number]
         self.event_progress()
@@ -703,7 +723,6 @@ class Window(ttk.Frame):
         #
         # self.prev_eve = str(self.target) + ":" + str(self.move_atom)
 
-    """
     def num_atom_check(self):
         num = 0
         for index, state in self.atom_set.items():
@@ -712,12 +731,22 @@ class Window(ttk.Frame):
         num_ex = len(self.atom_exist)
         #
         if self.n_atoms != num:
-            print("s")
-        elif num_ex != num:
-            print("k")
+            print("Atom number not match")
+            print("Rec. num : " + str(self.n_atoms))
+            print("Real num : " + str(num))
+            print("Exist num :" + str(num_ex))
+            print(self.prev_eve)
+            input()
+        if num_ex != num:
+            print("Atom_number not much with existing list")
+            print("Rec. num : " + str(self.n_atoms))
+            print("Real num : " + str(num))
+            print("Exist num :" + str(num_ex))
+            print(self.prev_eve)
+            input()
         else:
-            print("ok")
-    """
+            pass
+
     """
     def atom_count(self):
         if self.empty_firstBL < int(self.init_value.num_defect):
@@ -772,12 +801,12 @@ class Window(ttk.Frame):
             )
             if self.target == (-1, -1, -1):
                 self.rejection_free_deposition()
-                # self.prev_eve = "dep_nat"
+                self.prev_eve = "dep_nat"
             elif (self.n_events_perdep == int(self.cut.get())) and (
                 self.bln_cut.get() is True
             ):
                 self.rejection_free_deposition()
-                # self.prev_eve = "dep_lim"
+                self.prev_eve = "dep_lim"
             else:
                 self.rejection_free_event()
 

@@ -383,11 +383,11 @@ def state_change_to_neighbor(atom_set, bonds, target: Tuple[int, int, int], para
         return t_state, 0
 
     elif t_state == 2:
-        return 3, 0
-        # change_rateを0に変更
+        return 3, change_rate
+
     elif t_state == 3:
-        return 2, 0
-        # change_rateを0に変更
+        return 2, change_rate
+
     else:
         print("target state = " + str(t_state))
         raise RuntimeError("Some error in state change to neighbor")
@@ -446,11 +446,13 @@ def site_events(
         # 各イベントの構造判定
         states = state_determinate(atom_set, bonds, event_list, params)
         # サイトの変わらない構造変化の設定
+        """
         # 隣接原子の状態による変化
         state, rate = state_change_to_neighbor(atom_set, bonds, target, params)
         event_list.append(target)
         rate_list.append(rate)
         states.append(state)
+        """
         # 隣接原子の数による変化
         state, rate = state_change_new(atom_set, bonds, target, params)
         event_list.append(target)
@@ -459,14 +461,6 @@ def site_events(
 
     else:
         states = [2 for _ in range(len(event_list))]
-    """
-    for rate in rate_list:
-        if rate > 10:
-            print("too large rate constant")
-            print(target)
-            print(event_list)
-            print(rate_list)
-    """
 
     return event_list, rate_list, states
 
