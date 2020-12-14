@@ -19,10 +19,10 @@ def choice(events: List, rates: List, states: List) -> Tuple[Tuple, int]:
 
 
 if __name__ == "__main__":
-    events: List = [(0, 0, 0), (0, 0, 1), (0, 0, 2)]
-    rates: List = [0.1, 0.5, 10]
-    states: List = [0, 1, 2]
-    result: List = [0, 0, 0]
+    events: List[Tuple[int, int, int]] = [(0, 0, 0), (0, 0, 1), (0, 0, 2)]
+    rates: List[float] = [0.1, 0.5, 10]
+    states: List[int] = [0, 1, 2]
+    result: List[int] = [0, 0, 0]  # と言うことで良いですか？
     repetition = 100
     #
     for _ in range(repetition):
