@@ -254,4 +254,10 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
 
     slide.shapes.add_picture(file_name, left, top, height=height)
     """
-    prs.save(ppt_name)
+    rec_num = 0
+    while rec_num == 0:
+        try:
+            prs.save(ppt_name)
+            rec_num = 1
+        except:
+            pass
