@@ -815,6 +815,15 @@ class Window(ttk.Frame):
                 self.rec_num_atoms += self.init_value.rec_num_atom_interval
                 self.record_position()
             self.update_progress()
+            """
+            # 構造の途中確認用
+            if self.n_atoms == 80 and self.record_middle == 0:
+                from record_for_test import rec_for_test
+
+                self.record_middle = 1
+                rec_for_test(self.atom_set, self.bonds, self.lattice)
+            """
+
         self.end_of_loop()
 
     def start_function(self) -> None:
