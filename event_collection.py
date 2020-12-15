@@ -418,6 +418,19 @@ def state_change_new(atom_set, bonds, target: Tuple[int, int, int], params):
         raise RuntimeError("Some error in state change to neighbor")
 
 
+def rate_limit(rates, upper_limit) -> List:
+    new_rate: List = []
+    for rate in rates:
+        if rate > upper_limit:
+            new_rate.append(upper_limit)
+        else:
+            new_rate.append(rate)
+
+    return new_rate
+
+
+
+
 def site_events(
     atom_set: Dict,
     bonds: Dict,
@@ -461,6 +474,9 @@ def site_events(
 
     else:
         states = [2 for _ in range(len(event_list))]
+
+    if params.limit_check is True:
+        rate_list = rate_limit(rate_list, float(params.limit_val))
 
     return event_list, rate_list, states
 

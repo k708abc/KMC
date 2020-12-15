@@ -111,19 +111,23 @@ class Window(ttk.Frame):
         self.deposition_rate = ttk.Entry(self.frame_basics, width=7)
         self.deposition_rate.insert(tk.END, self.init_value.dep_rate)
         self.deposition_rate.bind("<Return>", self.update_click)
+
+
+
+
+        self.dep_rate_conv_label = ttk.Label(
+            self.frame_basics, text="Dep. rate(atoms/s)"
+        )
+        self.dep_rate_conv_val = ttk.Label(
+            self.frame_basics, text= ('{:.3f}'.format(self.init_value.dep_rate_atoms_persec
+        )))
+
         self.deposition_time_label = ttk.Label(
             self.frame_basics, text="Dep. time (min)"
         )
         self.deposition_time = ttk.Entry(self.frame_basics, width=7)
         self.deposition_time.insert(tk.END, self.init_value.dep_time)
         self.deposition_time.bind("<Return>", self.update_click)
-        self.postanneal_time_label = ttk.Label(
-            self.frame_basics, text="Post aneeal time (min)"
-        )
-        self.postanneal_time = ttk.Entry(self.frame_basics, width=7)
-        self.postanneal_time.insert(tk.END, self.init_value.post_anneal)
-        self.postanneal_time.configure(state="readonly")
-        self.postanneal_time.bind("<Return>", self.update_click)
         self.prefactor_label = ttk.Label(self.frame_basics, text="Prefactor (1/s)")
         self.prefactor = ttk.Entry(self.frame_basics, width=7)
         self.prefactor.insert(tk.END, self.init_value.prefactor)
@@ -143,10 +147,15 @@ class Window(ttk.Frame):
         # the second row
         self.deposition_rate_label.grid(row=1, column=0, **self.padWE)
         self.deposition_rate.grid(row=1, column=1, **self.padWE)
-        self.deposition_time_label.grid(row=1, column=2, **self.padWE)
-        self.deposition_time.grid(row=1, column=3, **self.padWE)
-        self.postanneal_time_label.grid(row=1, column=4, **self.padWE)
-        self.postanneal_time.grid(row=1, column=5, **self.padWE)
+
+        self.dep_rate_conv_label.grid(row=1, column=2, **self.padWE)
+        self.dep_rate_conv_val.grid(row=1, column=3, **self.padWE)
+
+        self.deposition_time_label.grid(row=1, column=4, **self.padWE)
+        self.deposition_time.grid(row=1, column=5, **self.padWE)
+
+
+
         self.prefactor_label.grid(row=1, column=6, **self.padWE)
         self.prefactor.grid(row=1, column=7, **self.padWE)
 
@@ -190,6 +199,9 @@ class Window(ttk.Frame):
         for i, ratelabel in enumerate(self.rate_labels):
             ratelabel.grid(row=2, column=i + 1)
 
+
+
+
     def create_widgets_checks(self) -> None:
         self.bln_tr = tk.BooleanVar()
         self.bln_tr.set(self.init_value.trans_check)
@@ -226,6 +238,15 @@ class Window(ttk.Frame):
         self.chk_cut = ttk.Checkbutton(self.frame_checks, variable=self.bln_cut)
         self.cut = ttk.Entry(self.frame_checks, width=7)
         self.cut.insert(tk.END, self.init_value.cut_number)
+        #
+        self.bln_limit = tk.BooleanVar()
+        self.bln_limit.set(self.init_value.limit_check)
+
+        
+        self.chk_limit_label = ttk.Label(self.frame_checks, text="Rate limit")
+        self.chk_limit = ttk.Checkbutton(self.frame_checks, variable=self.bln_limit)
+        self.limit = ttk.Entry(self.frame_checks, width=7)
+        self.limit.insert(tk.END, self.init_value.limit_val)
 
     def create_layout_checks(self) -> None:
         self.chk_transformation_label.grid(row=0, column=0, **self.padWE)
@@ -240,6 +261,11 @@ class Window(ttk.Frame):
         self.chk_cut_label.grid(row=3, column=0, **self.padWE)
         self.chk_cut.grid(row=3, column=1, **self.padWE)
         self.cut.grid(row=3, column=2, **self.padWE)
+
+        self.chk_limit_label.grid(row=4, column=0, **self.padWE)
+        self.chk_limit.grid(row=4, column=1, **self.padWE)
+        self.limit.grid(row=4, column=2, **self.padWE)
+
 
     def create_widgets_records(self) -> None:
         self.record_label = tk.Label(self.frame_records, text="Record")
@@ -335,7 +361,8 @@ class Window(ttk.Frame):
         self.init_value.temperature = float(self.temperature.get())
         self.init_value.dep_rate = float(self.deposition_rate.get())
         self.init_value.dep_time = float(self.deposition_time.get())
-        self.init_value.post_anneal = float(self.postanneal_time.get())
+
+
         self.init_value.prefactor = float(self.prefactor.get())
         for energy_entry, energy_key in zip(
             self.energies, self.init_value.binding_energies
@@ -349,9 +376,13 @@ class Window(ttk.Frame):
         self.init_value.trans_check = self.bln_tr.get()
         self.init_value.first_put_check = self.bln_first.get()
         self.init_value.cut_check = self.bln_cut.get()
+        self.init_value.limit_check = self.bln_limit.get()
+
         self.init_value.num_defect = self.num_defect.get()
         self.init_value.put_first = self.put_first.get()
         self.init_value.cut_number = self.cut.get()
+        self.init_value.limit_val = self.limit.get()
+
         self.init_value.method = self.var_method.get()
         self.record_middle = 0
         #
@@ -363,6 +394,7 @@ class Window(ttk.Frame):
                     rate(float(self.prefactor.get()), kbt, float(energy.get()))
                 )
             )
+        self.dep_rate_conv_val ["text"] = '{:.3f}'.format(self.init_value.dep_rate_atoms_persec)
         self.update()
 
     def update_click(self, event) -> None:
@@ -421,6 +453,10 @@ class Window(ttk.Frame):
                 for energy in self.energies
             ]
         )
+        if self.init_value.limit_check is True:
+            if fast_event > float(self.init_value.limit_val):
+                fast_event = float(self.init_value.limit_val)
+
         if self.bln_tr.get() is True:
             self.normarize = 6 * fast_event + rate(
                 float(self.prefactor.get()), kbt, float(self.init_value.transformation)
@@ -700,10 +736,12 @@ class Window(ttk.Frame):
         # self.prev_dep = dep_pos
 
     def rejection_free_event(self):
+        """
         if self.target is None or self.event_number is None:
             print("None in rejection free")
             print(self.target)
             print(self.event_number)
+        """
         self.move_atom = self.event[self.target][self.event_number]
         self.new_state = self.event_state[self.target][self.event_number]
         self.event_progress()
