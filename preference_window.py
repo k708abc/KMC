@@ -44,43 +44,43 @@ class Window(ttk.Frame):
         self.create_layout_basic()
         self.frame_basics.pack()
 
-    def create_frame_energies(self):
+    def create_frame_energies(self) -> None:
         self.frame_energies = ttk.Frame()
         self.create_widgets_energies()
         self.create_layout_energies()
         self.frame_energies.pack()
 
-    def create_frame_checks(self):
+    def create_frame_checks(self) -> None:
         self.frame_checks = ttk.Frame()
         self.create_widgets_checks()
         self.create_layout_checks()
         self.frame_checks.pack()
 
-    def create_frame_memos(self):
+    def create_frame_memos(self) -> None:
         self.frame_records = ttk.Frame()
         self.create_widgets_records()
         self.create_layout_records()
         self.frame_records.pack()
 
-    def create_method(self):
+    def create_method(self) -> None:
         self.frame_method = ttk.Frame()
         self.create_widgets_method()
         self.create_layout_method()
         self.frame_method.pack()
 
-    def create_frame_buttons(self):
+    def create_frame_buttons(self) -> None:
         self.frame_buttons = ttk.Frame()
         self.create_widgets_buttons()
         self.create_layout_buttons()
         self.frame_buttons.pack()
 
-    def create_frame_bar(self):
+    def create_frame_bar(self) -> None:
         self.frame_bars = ttk.Frame()
         self.create_widgets_bar()
         self.create_layout_bar()
         self.frame_bars.pack()
 
-    def create_frame_progress(self):
+    def create_frame_progress(self) -> None:
         self.frame_progress = ttk.Frame()
         self.create_widgets_progress()
         self.create_layout_progress()
