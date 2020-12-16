@@ -1,12 +1,8 @@
 from typing import List, Dict, Tuple
 
 
-def recalculate(target, bonds, atom_set, params):
+def recalculate(target: Tuple, bonds: Dict, atom_set: Dict, params) -> List:
     recal_list: List = [target]
-    """
-    if atom_set[target] != 0:
-        recal_list.append(target)
-    """
     atom_x, atom_y, atom_z = target
     unit_length = params.n_cell_init
     # 最近接
@@ -66,8 +62,8 @@ def recalculate(target, bonds, atom_set, params):
             pass
         else:
             # 隣接直下から登る
-            for nnn in nnn_sites:
-                nnn_below = (nnn[0], nnn[1], nnn[2] - 1)
-                if atom_set[nnn_below] != 0:
-                    recal_list.append(nnn_below)
+            for nn in nn_sites:
+                nn_below = (nn[0], nn[1], nn[2] - 1)
+                if atom_set[nn_below] != 0:
+                    recal_list.append(nn_below)
     return recal_list

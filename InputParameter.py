@@ -20,21 +20,21 @@ class Params:
         self.temperature = 550
         self.dep_rate = 0.4
         self.dep_time = 5
-        self.post_anneal = 0
         self.prefactor = "1E+13"
         self.binding_energies: OrderedDict[str, float] = OrderedDict()
-        self.binding_energies["AgSi"] = -0.75
-        self.binding_energies["Si12"] = -0.75
-        self.binding_energies["Si23"] = -0.75
-        self.binding_energies["Si34"] = -0.75
-        self.binding_energies["Si45"] = -0.75
-        self.binding_energies["Si56"] = -0.75
-        self.binding_energies["Si_intra"] = -1
-        self.binding_energies["Si_inter"] = -1
+        self.binding_energies["AgSi"] = -0.2
+        self.binding_energies["Si12"] = -0.6
+        self.binding_energies["Si23"] = -0.3
+        self.binding_energies["Si34"] = -0.6
+        self.binding_energies["Si45"] = -0.3
+        self.binding_energies["Si56"] = -0.6
+        self.binding_energies["Si_intra"] = -0.55
+        self.binding_energies["Si_inter"] = -0.55
         # self.binding_energies["Agtop"] = -1.5
-        self.transformation = -1.5
+        self.transformation = -1.0
         self.put_first = 10
-        self.cut_number = 1000
+        self.cut_number = 5000
+        self.num_defect = 1
         self.record_name = "KMC_Si_rec"
         self.img_per = 10
         self.comments = "No comments"
@@ -44,6 +44,8 @@ class Params:
         self.trans_check = True
         self.first_put_check = True
         self.cut_check = True
+        self.limit_check = True
+        self.limit_val = 1000
         self.method = "Rejection free"
 
     @property
@@ -60,7 +62,7 @@ class Params:
 
     @property
     def total_time(self) -> float:
-        return (self.dep_time + self.post_anneal) * 60
+        return (self.dep_time) * 60
 
     @property
     def interval(self) -> float:

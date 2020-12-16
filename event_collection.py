@@ -159,7 +159,7 @@ def judge_isolation(atom_set, bonds, target: Tuple[int, int, int], nn_atom, even
 def judge_defect(target: Tuple[int, int, int], events):
     remove = []
     for event in events:
-        if target[2] not in (0, 1) and event[2] in (0, 1):
+        if (target[2] not in (0, 1)) and (event[2] in (0, 1)):
             remove.append(event)
     return remove
 
@@ -314,9 +314,11 @@ def possible_events(
                     rates.append(rate(pre, kbt, energy))
     # イベントリストから、孤立原子を生じるイベントを抽出
     remove = judge_isolation(atom_set, bonds, target, nn_atom, events)
+    """
     # first BLにデフェクトを残す場合
-    if (defect is True) and (empty_first == 1):
+    if (defect is True) and (empty_first == int(params.num_defect)):
         remove.extend(judge_defect(target, events))
+    """
     # 削除
     event_f: List = []
     rates_f: List = []
@@ -366,18 +368,26 @@ def state_change_to_neighbor(atom_set, bonds, target: Tuple[int, int, int], para
     t_state = atom_set[target]
     E_change = 0
     diff_i = 0
+    num_bond = 0
     for bond in bonds[target]:
         if atom_set[bond] == t_state:
             E_change += bond_energy_same_state(target, bond, params, t_state)
+            num_bond += 1
         elif atom_set[bond] != 0:
             diff_i += 1
+            num_bond += 1
     change_rate = rate(pre, kbt, E_change)
-    if diff_i == 0:
+    if num_bond == 2 and diff_i == 1:
+        return 3, 0
+    elif diff_i == 0:
         return t_state, 0
+
     elif t_state == 2:
         return 3, change_rate
+
     elif t_state == 3:
         return 2, change_rate
+
     else:
         print("target state = " + str(t_state))
         raise RuntimeError("Some error in state change to neighbor")
@@ -396,7 +406,7 @@ def state_change_new(atom_set, bonds, target: Tuple[int, int, int], params):
     if target_state == 2:
         E_trans = (5 - neighbor_i) * params.transformation
         trans_rate = rate(pre, kbt, E_trans)
-        return 3, trans_rate
+        return 4, trans_rate
     # 3次元から2次元：周辺原子が少ないと起きやすい
     elif target_state == 3:
         if neighbor_i == 0:
@@ -406,6 +416,19 @@ def state_change_new(atom_set, bonds, target: Tuple[int, int, int], params):
         return 2, trans_rate
     else:
         raise RuntimeError("Some error in state change to neighbor")
+
+
+def rate_limit(rates, upper_limit) -> List:
+    new_rate: List = []
+    for rate in rates:
+        if rate > upper_limit:
+            new_rate.append(upper_limit)
+        else:
+            new_rate.append(rate)
+
+    return new_rate
+
+
 
 
 def site_events(
@@ -436,11 +459,13 @@ def site_events(
         # 各イベントの構造判定
         states = state_determinate(atom_set, bonds, event_list, params)
         # サイトの変わらない構造変化の設定
+        """
         # 隣接原子の状態による変化
         state, rate = state_change_to_neighbor(atom_set, bonds, target, params)
         event_list.append(target)
         rate_list.append(rate)
         states.append(state)
+        """
         # 隣接原子の数による変化
         state, rate = state_change_new(atom_set, bonds, target, params)
         event_list.append(target)
@@ -449,14 +474,9 @@ def site_events(
 
     else:
         states = [2 for _ in range(len(event_list))]
-    """
-    for rate in rate_list:
-        if rate > 10:
-            print("too large rate constant")
-            print(target)
-            print(event_list)
-            print(rate_list)
-    """
+
+    if params.limit_check is True:
+        rate_list = rate_limit(rate_list, float(params.limit_val))
 
     return event_list, rate_list, states
 

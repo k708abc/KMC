@@ -182,16 +182,26 @@ def hist_formation(pos: Dict, maxz: int, n_BL: int):
 
 
 def rec_poscar(pos: Dict, lattice: Dict, unit_length: int, maxz: int, rec_name: str):
-    xp: list[float] = []
-    yp: list[float] = []
-    zp: list[float] = []
-    atom_i = 0
+    xp2: list[float] = []
+    yp2: list[float] = []
+    zp2: list[float] = []
+    xp3: list[float] = []
+    yp3: list[float] = []
+    zp3: list[float] = []
+    atom2_i = 0
+    atom3_i = 0
     for index, atom_state in pos.items():
-        if atom_state != 0:
-            xp.append(lattice[index][0] / unit_length)
-            yp.append(lattice[index][1] / unit_length)
-            zp.append(lattice[index][2] / maxz / 2.448)
-            atom_i += 1
+        if atom_state == 2:
+            xp2.append(lattice[index][0] / unit_length)
+            yp2.append(lattice[index][1] / unit_length)
+            zp2.append(lattice[index][2] / maxz / 2.448)
+            atom2_i += 1
+        elif atom_state == 3:
+            xp3.append(lattice[index][0] / unit_length)
+            yp3.append(lattice[index][1] / unit_length)
+            zp3.append(lattice[index][2] / maxz / 2.448)
+            atom3_i += 1
+
     file_data = open(rec_name, "w")
     file_data.write(rec_name + "\n")
     file_data.write("10" + "\n")
@@ -200,11 +210,14 @@ def rec_poscar(pos: Dict, lattice: Dict, unit_length: int, maxz: int, rec_name: 
         str(unit_length / 2) + "\t" + str(unit_length / 2 * 1.732) + "\t" + "0" + "\n"
     )
     file_data.write("0" + "\t" + "0" + "\t" + str(maxz * 2.448) + "\n")
-    file_data.write("Si" + "\n")
-    file_data.write(str(atom_i) + "\n")
+    file_data.write("Si" + "\t" + "O" + "\n")
+    file_data.write(str(atom2_i) + "\t" + str(atom3_i) + "\n")
+
     file_data.write("direct" + "\n")
-    for i in range(len(xp)):
-        file_data.write(str(xp[i]) + "\t" + str(yp[i]) + "\t" + str(zp[i]) + "\n")
+    for i in range(len(xp2)):
+        file_data.write(str(xp2[i]) + "\t" + str(yp2[i]) + "\t" + str(zp2[i]) + "\n")
+    for i in range(len(xp3)):
+        file_data.write(str(xp3[i]) + "\t" + str(yp3[i]) + "\t" + str(zp3[i]) + "\n")
     file_data.close()
 
 

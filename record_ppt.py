@@ -77,7 +77,7 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
 
     table = shapes.add_table(rows, cols, left, top, width, height).table
     table.cell(0, 0).text = "Transformation"
-    table.cell(0, 1).text = "Keep a defect"
+    table.cell(0, 1).text = "Keep defects"
     table.cell(0, 2).text = "Put at first"
     table.cell(0, 3).text = "Cut event"
     table.cell(0, 4).text = "Method"
@@ -87,7 +87,7 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     table.cell(1, 3).text = str(params.cut_check)
     table.cell(1, 4).text = str(params.method)
     table.cell(2, 0).text = str(params.transformation)
-    table.cell(2, 1).text = str(1)
+    table.cell(2, 1).text = str(params.num_defect)
     table.cell(2, 2).text = str(params.put_first)
     table.cell(2, 3).text = str(params.cut_number)
     table.cell(2, 4).text = str("")
@@ -138,6 +138,16 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     table.cell(1, 1).text = str('{:.3g}'.format(ML_check))
     table.cell(1, 2).text = str('{:.3g}'.format(final_check))
     """
+    #
+    width = height = Inches(1)
+    top = Inches(6)
+    left = Inches(0.5)
+    txBox = slide.shapes.add_textbox(left, top, width, height)
+    tf = txBox.text_frame
+    p = tf.add_paragraph()
+    p.text = "Comment: " + "\n" + params.comments
+    p.font.size = Pt(20)
+
     #
     num_ims = len(img_names)
     imn = 0
@@ -244,4 +254,10 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
 
     slide.shapes.add_picture(file_name, left, top, height=height)
     """
-    prs.save(ppt_name)
+    rec_num = 0
+    while rec_num == 0:
+        try:
+            prs.save(ppt_name)
+            rec_num = 1
+        except:
+            pass
