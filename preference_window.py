@@ -19,6 +19,9 @@ from recording import record_data
 from atoms_recalculate import recalculate
 from rejection_free_choose import rejection_free_choise
 
+##
+from recording import rec_events_per_dep
+
 
 class Window(ttk.Frame):
     kb_eV = 8.617e-5
@@ -432,6 +435,10 @@ class Window(ttk.Frame):
         self.cov_rec: List[float] = []
         self.rec_num_atoms = 0
         self.n_events_perdep = 0
+        #
+        #
+        self.n_events_rec: List[int] = []
+        self.num_atoms_rec: List[int] = []
 
     def update_progress(self) -> None:
         self.n_events += 1
@@ -445,7 +452,8 @@ class Window(ttk.Frame):
         )
         self.progress_atoms["text"] = str(self.n_atoms) + " atoms"
         self.progress_events["text"] = str(self.n_events) + " events"
-        if self.n_events == 100 and self.num_events is not None:
+
+        if (self.n_events == 100) and (self.init_value.method == "Null event"):
             time_middle = time.time() - self.start_time
             expected_time = self.num_events / 100 * time_middle
             self.expectd_cal_time["text"] = (
@@ -456,7 +464,7 @@ class Window(ttk.Frame):
                 + str(int(expected_time % 60))
                 + " sec"
             )
-        else:
+        elif self.n_events == 100:
             self.expectd_cal_time["text"] = "---"
 
         self.update()
@@ -494,6 +502,11 @@ class Window(ttk.Frame):
         )
 
     def update_after_deposition(self, dep_pos, atom_type) -> None:
+        ##
+        self.n_events_rec.append(self.n_events_perdep)
+        self.num_atoms_rec.append(self.n_atoms)
+        ##
+        self.n_events_perdep = 0
         self.atom_set[dep_pos] = atom_type
         self.atom_exist.append(dep_pos)
         self.n_atoms += 1
@@ -509,7 +522,7 @@ class Window(ttk.Frame):
             _ = self.deposition()
 
     def deposition(self) -> Tuple:
-        self.n_events_perdep = 0
+        # self.n_events_perdep = 0
         dep_pos, atom_type = deposit_an_atom(
             self.atom_set,
             self.bonds,
@@ -660,6 +673,11 @@ class Window(ttk.Frame):
             second,
             self.bln_defect.get(),
         )
+        #
+        #
+        rec_events_per_dep(self.n_events_rec, self.num_atoms_rec)
+        #
+        #
         self.progress_label["text"] = (
             "Finished: " + str(minute) + " min " + str(second) + " s"
         )
@@ -752,13 +770,12 @@ class Window(ttk.Frame):
         # self.prev_dep = dep_pos
 
     def rejection_free_event(self):
-        """
+
         if self.target is None or self.event_number is None:
             print("None in rejection free")
             print(self.target)
             print(self.event_number)
-        """
-        self.progress_expectation["text"] = "---"
+
         self.move_atom = self.event[self.target][self.event_number]
         self.new_state = self.event_state[self.target][self.event_number]
         self.event_progress()
@@ -827,7 +844,11 @@ class Window(ttk.Frame):
     """
 
     def rejection_free_kmc(self) -> None:
+        #
+        # self.min_rates = 10000000000
+        #
         self.start_setting()
+        self.progress_expectation["text"] = "---"
         self.num_events = None
         self.total_event_time = self.init_value.dep_rate_atoms_persec
         self.atom_exist: List[Tuple[int, int, int]] = []
@@ -870,8 +891,25 @@ class Window(ttk.Frame):
                 self.rec_num_atoms += self.init_value.rec_num_atom_interval
                 self.record_position()
             self.update_progress()
+
             """
             # 構造の途中確認用
+            if self.n_atoms == 17 and self.total_event_time < self.min_rates:
+                from record_for_test import rec_for_test
+                from recording import rec_poscar
+
+                rec_for_test(self.atom_set, self.bonds, self.lattice)
+                rec_poscar(
+                    self.atom_set,
+                    self.lattice,
+                    self.init_value.n_cell_init,
+                    self.init_value.z_unit_init,
+                    "middle_structure.vasp",
+                )
+            """
+
+            """
+            # 構造の途中確認用2
             if self.n_atoms == 80 and self.record_middle == 0:
                 from record_for_test import rec_for_test
 
