@@ -2,6 +2,7 @@
 """初期値も予め入力したい方式なら、クラス作っちゃった方が楽かも"""
 
 from collections import OrderedDict
+import math
 
 
 class Params:
@@ -22,14 +23,14 @@ class Params:
         self.dep_time = 5
         self.prefactor = "1E+13"
         self.binding_energies: OrderedDict[str, float] = OrderedDict()
-        self.binding_energies["AgSi"] = -0.2
-        self.binding_energies["Si12"] = -0.6
+        self.binding_energies["AgSi"] = -0.3
+        self.binding_energies["Si12"] = -0.55
         self.binding_energies["Si23"] = -0.3
-        self.binding_energies["Si34"] = -0.6
-        self.binding_energies["Si45"] = -0.3
-        self.binding_energies["Si56"] = -0.6
-        self.binding_energies["Si_intra"] = -0.55
-        self.binding_energies["Si_inter"] = -0.55
+        self.binding_energies["Si34"] = -0.5
+        self.binding_energies["Si45"] = -0.5
+        self.binding_energies["Si56"] = -0.5
+        self.binding_energies["Si_intra"] = -0.5
+        self.binding_energies["Si_inter"] = -0.5
         # self.binding_energies["Agtop"] = -1.5
         self.transformation = -1.0
         self.put_first = 10
@@ -43,7 +44,7 @@ class Params:
         self.keep_defect_check = True
         self.trans_check = True
         self.first_put_check = True
-        self.cut_check = True
+        self.cut_check = False
         self.limit_check = True
         self.limit_val = 1000
         self.method = "Rejection free"
@@ -75,3 +76,11 @@ class Params:
     @property
     def rec_num_atom_interval(self) -> int:
         return int(self.total_atoms * self.img_per / 100)
+
+    @property
+    def cal_energy(self) -> float:
+        return (
+            -8.617e-5
+            * self.temperature
+            * math.log(float(self.limit_val) / float(self.prefactor))
+        )

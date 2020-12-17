@@ -429,8 +429,6 @@ def rate_limit(rates, upper_limit) -> List:
     return new_rate
 
 
-
-
 def site_events(
     atom_set: Dict,
     bonds: Dict,
