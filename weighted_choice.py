@@ -22,7 +22,7 @@ if __name__ == "__main__":
     events: List[Tuple[int, int, int]] = [(0, 0, 0), (0, 0, 1), (0, 0, 2)]
     rates: List[float] = [0.1, 0.5, 10]
     states: List[int] = [0, 1, 2]
-    result: List[int] = [0, 0, 0]  # と言うことで良いですか？
+    result: List[int] = [0, 0, 0]  # と言うことで良いですか？→OKです
     repetition = 100
     #
     for _ in range(repetition):
