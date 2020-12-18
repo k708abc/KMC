@@ -1,8 +1,14 @@
+from InputParameter import Params
 from typing import List, Dict, Tuple
 
 
-def recalculate(target: Tuple, bonds: Dict, atom_set: Dict, params) -> List:
-    recal_list: List = [target]
+def recalculate(
+    target: Tuple[int, int, int],
+    bonds: Dict[Tuple[int, int, int], List[Tuple[int, int, int]]],
+    atom_set: Dict[Tuple[int, int, int], int],
+    params: Params,
+) -> List[Tuple[int, int, int]]:
+    recal_list: List[Tuple[int, int, int]] = [target]
     atom_x, atom_y, atom_z = target
     unit_length = params.n_cell_init
     # 最近接

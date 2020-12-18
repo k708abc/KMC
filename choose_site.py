@@ -3,8 +3,8 @@ from typing import List, Tuple
 
 
 def choose_atom(
-    candidates: List,
-) -> Tuple[int, int, int]:  # Tuple の中身？ Tuple[int, int, int] とか?
+    candidates: List[Tuple[int, int, int]],
+) -> Tuple[int, int, int]:
     return random.choice(candidates)
 
 
