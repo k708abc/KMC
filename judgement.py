@@ -1,7 +1,7 @@
 import random
 
 
-def judge_null(success: float) -> str:
+def judge_null(success: float) -> bool:
     assert success <= 1
     null = 1 - success
     result = [True, False]
@@ -17,9 +17,9 @@ if __name__ == "__main__":
     repetition = 100
     for _ in range(repetition):
         judge = judge_null(success)
-        if judge == "success":
+        if judge:
             success_i += 1
-        elif judge == "failure":
+        else:
             null_i += 1
 
     print("Test : judge null event")
