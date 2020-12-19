@@ -8,7 +8,7 @@ import os
 
 
 def bond_energy_same_state(
-    target: Tuple[int, int, int], bond: Tuple, params, atom_state: int
+    target: Tuple[int, int, int], bond: Tuple, params: Params, atom_state: int
 ):
     z_target = target[2]
     z_bond = bond[2]

@@ -10,7 +10,7 @@ def random_target(atom_set: Dict):
 
 
 def event_check_poscar(
-    atom_set: Dict,
+    atom_set: Dict[Tuple[int, int, int], int],
     events: List,
     lattice: Dict,
     unit_length: int,

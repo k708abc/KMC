@@ -2,7 +2,11 @@ from typing import List, Dict, Tuple
 
 
 def dep_check_poscar(
-    atom_set: Dict, candidate: List[Tuple], lattice: Dict, unit_length: int, maxz: int
+    atom_set: Dict[Tuple[int, int, int], int],
+    candidate: List[Tuple[int, int, int]],
+    lattice: Dict,
+    unit_length: int,
+    maxz: int,
 ):
     xp: List[float] = []
     yp: List[float] = []
