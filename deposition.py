@@ -50,9 +50,9 @@ def remove_first(candidate) -> List[Tuple]:
     return candidate_new
 
 
-def deposit_an_atom(
-    atom_set: Dict, bonds: Dict, defect, empty_first: int, params
-) -> Tuple:
+def deposit_an_atom(atom_set: Dict, bonds: Dict, params) -> Tuple:
+    defect = params.keep_defect_check
+    empty_first = int(params.put_first)
     candidate = find_candidates(atom_set, bonds)
     if (defect is True) and (empty_first == int(params.num_defect)):
         candidate = remove_first(candidate)

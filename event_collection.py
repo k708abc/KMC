@@ -91,7 +91,7 @@ def total_energy_trans(
 ):
     target_z = target[2]
     target_state = atom_set[target]
-    energy = 0
+    energy = float(params.binding_energies["Base"])
     if target_z == 0:
         energy += params.binding_energies["AgSi"]
     for bond in bonds[target]:
@@ -105,7 +105,7 @@ def total_energy_trans(
 
 def total_energy_wo_trans(atom_set: Dict, bonds: Dict, target: Tuple, params):
     target_z = target[2]
-    energy = 0
+    energy = float(params.binding_energies["Base"])
     if target_z == 0:
         energy += params.binding_energies["AgSi"]
     for bond in bonds[target]:

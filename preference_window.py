@@ -161,6 +161,7 @@ class Window(ttk.Frame):
     def create_widgets_energies(self) -> None:
         self.labels: List[str] = [
             "  ",
+            "Base",
             "AgSi",
             "Si12",
             "Si23",
@@ -174,7 +175,7 @@ class Window(ttk.Frame):
         self.energylabels = []
         self.energies = []
         self.rate_labels = []
-        for _ in range(8):
+        for _ in range(9):
             self.energies.append(ttk.Entry(self.frame_energies, width=7))
             self.rate_labels.append(ttk.Label(self.frame_energies, text="0"))
         for (energy, (key, val)) in zip(
@@ -400,7 +401,12 @@ class Window(ttk.Frame):
         for energy, rate_label in zip(self.energies, self.rate_labels):
             rate_label["text"] = str(
                 "{:.3g}".format(
-                    rate(float(self.prefactor.get()), kbt, float(energy.get()))
+                    rate(
+                        float(self.prefactor.get()),
+                        kbt,
+                        float(energy.get())
+                        + float(self.init_value.binding_energies["Base"]),
+                    )
                 )
             )
         self.dep_rate_conv_val["text"] = "{:.3f}".format(
@@ -526,8 +532,6 @@ class Window(ttk.Frame):
         dep_pos, atom_type = deposit_an_atom(
             self.atom_set,
             self.bonds,
-            self.bln_defect.get(),
-            self.empty_firstBL,
             self.init_value,
         )
         self.update_after_deposition(dep_pos, atom_type)

@@ -288,3 +288,6 @@ def record_data(
         rec_poscar(pos_i, lattice, unit_length, maxz, poscar_name)
     #
     rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_name)
+    #
+    plt.clf()
+    plt.close()
