@@ -434,14 +434,14 @@ def site_events(
     bonds: Dict,
     target: Tuple[int, int, int],
     params,
-    defect: bool,
-    empty_first: int,
-    trans: bool,
 ):
     event_list: List[Tuple] = []
     rate_list: List[float] = []
     unit_length = params.n_cell_init
     states: List[int] = []
+    defect = params.keep_defect_check
+    empty_first = int(params.num_defect)
+    trans = params.trans_check
     # calculate total energy
     if params.trans_check is False:
         energy = total_energy_wo_trans(atom_set, bonds, target, params)

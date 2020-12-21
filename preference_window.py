@@ -8,28 +8,32 @@ import math
 from cal_rates import rate
 import time
 from lattice_form import lattice_form
-from InputParameter import Params
-from deposition import deposit_an_atom
+
+# from InputParameter import Params
+# from deposition import deposit_an_atom
 from choose_site import choose_atom
 from judgement import judge_null
 from event_collection import site_events
 from normarize_list import normarize_rate
 from weighted_choice import choice
 from recording import record_data
-from atoms_recalculate import recalculate
-from rejection_free_choose import rejection_free_choise
+
+# from atoms_recalculate import recalculate
+# from rejection_free_choose import rejection_free_choise
+from kmc_functions import common_functions
 
 ##
 from recording import rec_events_per_dep
 
 
-class Window(ttk.Frame):
+class Window(ttk.Frame, common_functions):
     kb_eV = 8.617e-5
     padWE: Dict = dict(sticky=(tk.W, tk.E), padx=15, pady=2)
 
     def __init__(self, master) -> None:
         super().__init__(master, padding=2)
-        self.init_value = Params()
+        # self.init_value = Params()
+        common_functions.__init__(self)
         self.create_frame_basics()
         self.create_frame_energies()
         self.create_frame_checks()
@@ -422,7 +426,7 @@ class Window(ttk.Frame):
     def update_click(self, event) -> None:
         self.update_values()
 
-    def start_setting(self) -> None:
+    def start_setting_tk(self):
         self.progress_label["text"] = "Started"
         self.progress_time["text"] = "0 s"
         self.progress_coverage["text"] = "0 ML"
@@ -431,6 +435,9 @@ class Window(ttk.Frame):
         self.pbval = 0
         self.progress_bar.configure(value=self.pbval)
         self.update()
+
+    """
+    def start_setting(self) -> None:
         self.start_time = time.time()
         self.prog_time = 0
         self.n_atoms = 0
@@ -445,10 +452,9 @@ class Window(ttk.Frame):
         #
         self.n_events_rec: List[int] = []
         self.num_atoms_rec: List[int] = []
+    """
 
-    def update_progress(self) -> None:
-        self.n_events += 1
-        self.n_events_perdep += 1
+    def update_progress_tk(self):
         self.pbval = int(self.prog_time / self.init_value.total_time * 100)
         self.progress_bar.configure(value=self.pbval)
         self.progress_label["text"] = str(self.pbval) + " %"
@@ -458,7 +464,6 @@ class Window(ttk.Frame):
         )
         self.progress_atoms["text"] = str(self.n_atoms) + " atoms"
         self.progress_events["text"] = str(self.n_events) + " events"
-
         if (self.n_events == 100) and (self.init_value.method == "Null event"):
             time_middle = time.time() - self.start_time
             expected_time = self.num_events / 100 * time_middle
@@ -474,6 +479,12 @@ class Window(ttk.Frame):
             self.expectd_cal_time["text"] = "---"
 
         self.update()
+
+    """
+    def update_progress(self) -> None:
+        self.n_events += 1
+        self.n_events_perdep += 1
+    """
 
     def det_normarize(self) -> None:
         kbt = self.init_value.temperature_eV
@@ -527,6 +538,7 @@ class Window(ttk.Frame):
         if judge:
             self.deposition()
 
+    """
     def deposition(self) -> Tuple:
         # self.n_events_perdep = 0
         dep_pos, atom_type = deposit_an_atom(
@@ -536,14 +548,17 @@ class Window(ttk.Frame):
         )
         self.update_after_deposition(dep_pos, atom_type)
         return dep_pos
-
+    """
+    """
     def defect_check(self):
         if (self.target[2] not in (0, 1)) and (self.move_atom[2] in (0, 1)):
             self.move_atom = self.target
             self.new_state = self.atom_set[self.target]
             self.n_events -= 1
             self.n_events_perdep -= 1
+    """
 
+    """
     def event_progress(self):
         if (self.empty_firstBL == int(self.init_value.num_defect)) and (
             self.init_value.keep_defect_check is True
@@ -573,8 +588,8 @@ class Window(ttk.Frame):
                     + str(self.new_state)
                 )
                 self.atom_set[self.target] = self.new_state
-
-            """
+    """
+    """
             elif self.new_state != self.atom_set[self.target]:
                 if self.new_state == 2:
                     print("3D→2D")
@@ -611,8 +626,8 @@ class Window(ttk.Frame):
                     print("bond3: " + str(num_b3))
 
                 self.atom_set[self.target] = self.new_state
-            """
-
+    """
+    """
         else:
             self.prev_eve = (
                 "move : "
@@ -634,6 +649,7 @@ class Window(ttk.Frame):
                 self.empty_firstBL -= 1
             if self.target[2] in (0, 1):
                 self.empty_firstBL += 1
+    """
 
     def try_events(self) -> None:
         events, rates, states = site_events(
@@ -660,21 +676,26 @@ class Window(ttk.Frame):
         # event progress
         self.event_progress()
 
+    def end_of_loop_tk(self):
+        self.progress_label["text"] = (
+            "Finished: " + str(self.minute) + " min " + str(self.second) + " s"
+        )
+        self.update()
+
+    """
     def end_of_loop(self) -> None:
         self.record_position()
-        self.progress_label["text"] = str("Saving...")
-        self.update()
         elapsed_time = time.time() - self.start_time
-        minute = math.floor(elapsed_time / 60)
-        second = int(elapsed_time % 60)
+        self.minute = math.floor(elapsed_time / 60)
+        self.second = int(elapsed_time % 60)
         record_data(
             self.pos_rec,
             self.time_rec,
             self.cov_rec,
             self.lattice,
             self.init_value,
-            minute,
-            second,
+            self.minute,
+            self.second,
             self.bln_defect.get(),
         )
         #
@@ -682,12 +703,10 @@ class Window(ttk.Frame):
         rec_events_per_dep(self.n_events_rec, self.num_atoms_rec)
         #
         #
-        self.progress_label["text"] = (
-            "Finished: " + str(minute) + " min " + str(second) + " s"
-        )
-        self.update()
+    """
 
     def null_event_kmc(self) -> None:  # 長過ぎ！　Helper function 作ってコンパクトにしないと見通し悪い。
+        self.start_setting_tk()
         self.start_setting()
         self.atom_exist: List[Tuple[int, int, int]] = [(-1, -1, -1)]
         self.lattice, self.bonds, self.atom_set, _, _, _, _ = lattice_form(
@@ -717,6 +736,7 @@ class Window(ttk.Frame):
                 self.try_events()
             # end of an event
             self.update_progress()
+            self.update_progress_tk()
             # recoding the positions in the middle
             if self.n_atoms >= self.rec_num_atoms:
                 self.rec_num_atoms += self.init_value.rec_num_atom_interval
@@ -733,7 +753,9 @@ class Window(ttk.Frame):
 
         # end of the loop
         self.end_of_loop()
+        self.end_of_loop_tk()
 
+    """
     def update_events(self):
         self.related_atoms = list(set(self.related_atoms))
         for target_rel in self.related_atoms:
@@ -760,7 +782,9 @@ class Window(ttk.Frame):
             self.event_state[target_rel] = states
             self.total_event_time += self.event_time_tot[target_rel]
         self.related_atoms = []
+    """
 
+    """
     def rejection_free_deposition(self):
         dep_pos = self.deposition()
         # 蒸着によりイベントに変化が生じうる原子
@@ -772,7 +796,9 @@ class Window(ttk.Frame):
         #
         #
         # self.prev_dep = dep_pos
+    """
 
+    """
     def rejection_free_event(self):
 
         if self.target is None or self.event_number is None:
@@ -798,6 +824,8 @@ class Window(ttk.Frame):
         #
         #
         # self.prev_eve = str(self.target) + ":" + str(self.move_atom)
+
+    """
 
     def num_atom_check(self):
         num = 0
@@ -849,77 +877,24 @@ class Window(ttk.Frame):
         #
         # self.min_rates = 10000000000
         #
+        self.start_setting_tk()
         self.start_setting()
         self.progress_expectation["text"] = "---"
-        self.num_events = None
-        self.total_event_time = self.init_value.dep_rate_atoms_persec
-        self.atom_exist: List[Tuple[int, int, int]] = []
-        (
-            self.lattice,
-            self.bonds,
-            self.atom_set,
-            self.event,
-            self.event_time,
-            self.event_time_tot,
-            self.event_state,
-        ) = lattice_form(self.init_value)
-        # return lattice, bonds, atom_set, event, event_time, event_time_tot
+        self.start_rejection_free()
         # 最初の二原子を配置
-        if self.bln_first.get() is True:
-            for _ in range(int(self.put_first.get())):
-                self.rejection_free_deposition()
+        self.put_first_atoms_rf()
         #
-        self.prev_eve = "dep"
+        # self.prev_eve = "dep"
         while int(self.prog_time) <= int(self.init_value.total_time):
             # self.num_atom_check()
             # self.atom_count()
-
-            self.target, self.event_number = rejection_free_choise(
-                self.total_event_time, self.event_time, self.event_time_tot
-            )
-            if self.target == (-1, -1, -1):
-                self.rejection_free_deposition()
-                self.prev_eve = "dep_nat"
-            elif (self.n_events_perdep == int(self.cut.get())) and (
-                self.bln_cut.get() is True
-            ):
-                self.rejection_free_deposition()
-                self.prev_eve = "dep_lim"
-            else:
-                self.rejection_free_event()
-
-            # recoding the positions in the middle
-            if self.n_atoms >= self.rec_num_atoms:
-                self.rec_num_atoms += self.init_value.rec_num_atom_interval
-                self.record_position()
+            self.rejection_free_loop()
             self.update_progress()
+            self.update_progress_tk()
 
-            """
-            # 構造の途中確認用
-            if self.n_atoms == 17 and self.total_event_time < self.min_rates:
-                from record_for_test import rec_for_test
-                from recording import rec_poscar
-
-                rec_for_test(self.atom_set, self.bonds, self.lattice)
-                rec_poscar(
-                    self.atom_set,
-                    self.lattice,
-                    self.init_value.n_cell_init,
-                    self.init_value.z_unit_init,
-                    "middle_structure.vasp",
-                )
-            """
-
-            """
-            # 構造の途中確認用2
-            if self.n_atoms == 80 and self.record_middle == 0:
-                from record_for_test import rec_for_test
-
-                self.record_middle = 1
-                rec_for_test(self.atom_set, self.bonds, self.lattice)
-            """
-
+            # self.middle_check()
         self.end_of_loop()
+        self.end_of_loop_tk()
 
     def start_function(self) -> None:
         self.update_values()
