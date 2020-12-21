@@ -518,8 +518,8 @@ class Window(ttk.Frame):
     def try_deposition(self) -> None:
         # deposition
         judge = judge_null(self.init_value.dep_rate_atoms_persec / self.normarize)
-        if judge == "success":
-            _ = self.deposition()
+        if judge:
+            self.deposition()
 
     def deposition(self) -> Tuple:
         # self.n_events_perdep = 0
@@ -797,7 +797,7 @@ class Window(ttk.Frame):
 
     def num_atom_check(self):
         num = 0
-        for index, state in self.atom_set.items():
+        for state in self.atom_set.values():
             if state != 0:
                 num += 1
         num_ex = len(self.atom_exist)
@@ -816,8 +816,6 @@ class Window(ttk.Frame):
             print("Exist num :" + str(num_ex))
             print(self.prev_eve)
             input()
-        else:
-            pass
 
     """
     def atom_count(self):
