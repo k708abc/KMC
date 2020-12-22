@@ -15,7 +15,9 @@ def choose_an_event(r_tot, event_rates):
     return len(event_rates) - 1
 
 
-def rejection_free_choise(total_event_time, event_time, event_time_tot):
+def rejection_free_choise(
+    total_event_time: float, event_time: List[List[float]], event_time_tot: List[float]
+):
     r_tot = total_event_time * random.random()
     """
     tot_time = 0

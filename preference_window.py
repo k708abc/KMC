@@ -17,14 +17,15 @@ from judgement import judge_null
 from event_collection import site_events
 from normarize_list import normarize_rate
 from weighted_choice import choice
-from recording import record_data
+
+# from recording import record_data
 
 # from atoms_recalculate import recalculate
 # from rejection_free_choose import rejection_free_choise
 from kmc_functions import common_functions
 
 ##
-from recording import rec_events_per_dep
+# from recording import rec_events_per_dep
 
 
 class Window(ttk.Frame, common_functions):

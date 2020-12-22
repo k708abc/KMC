@@ -55,9 +55,7 @@ class common_functions:
     def deposition(self) -> Tuple:
         # self.n_events_perdep = 0
         dep_pos, atom_type = deposit_an_atom(
-            self.atom_set,
-            self.bonds,
-            self.init_value,
+            self.atom_set, self.bonds, self.init_value, self.empty_firstBL
         )
         self.update_after_deposition(dep_pos, atom_type)
         return dep_pos
@@ -117,11 +115,12 @@ class common_functions:
                 self.rejection_free_deposition()
 
     def rejection_free_event(self):
-
+        """
         if self.target is None or self.event_number is None:
             print("None in rejection free")
             print(self.target)
             print(self.event_number)
+        """
 
         self.move_atom = self.event[self.target][self.event_number]
         self.new_state = self.event_state[self.target][self.event_number]

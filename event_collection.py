@@ -5,6 +5,7 @@ from read_examples import read_lattice, read_bonds, read_atom_set
 from InputParameter import Params
 from event_collection_check import random_target, event_check_poscar
 import os
+import time
 
 
 def bond_energy_same_state(
@@ -157,11 +158,19 @@ def judge_isolation(atom_set, bonds, target: Tuple[int, int, int], nn_atom, even
 
 
 def judge_defect(target: Tuple[int, int, int], events):
+    return [
+        event
+        for event in events
+        if ((target[2] not in (0, 1)) and (event[2] in (0, 1)))
+    ]
+
+    """
     remove = []
     for event in events:
         if (target[2] not in (0, 1)) and (event[2] in (0, 1)):
             remove.append(event)
     return remove
+    """
 
 
 def possible_events(
@@ -179,6 +188,7 @@ def possible_events(
     kbt = params.temperature_eV
     events: List[Tuple] = []
     rates: List[float] = []
+
     #
     atom_x, atom_y, atom_z = target
     # nnn: next nearest neighbor
@@ -199,6 +209,18 @@ def possible_events(
     #
     # BL内での移動
     # 最近接空きサイトへの移動
+    """
+    events += [
+        empty
+        for empty in nn_empty
+        if (len(find_filled_sites(atom_set, bonds[empty])) >= 2 or empty[2] == 0)
+    ]
+    rates += [
+        rate(pre, kbt, energy)
+        for empty in nn_empty
+        if (len(find_filled_sites(atom_set, bonds[empty])) >= 2 or empty[2] == 0)
+    ]
+    """
     for empty in nn_empty:
         # 最近接空きサイトの周辺原子
         nn_nn_site = find_filled_sites(atom_set, bonds[empty])
@@ -206,7 +228,21 @@ def possible_events(
         if len(nn_nn_site) >= 2 or empty[2] == 0:
             events.append(empty)
             rates.append(rate(pre, kbt, energy))
-    # 同高さの次近接への移動
+
+    # 同高さの次近接への移動s
+    """
+    events += [
+        empty
+        for empty in nnn_empty
+        if (len(find_filled_sites(atom_set, bonds[empty])) >= 1 or empty[2] == 0)
+    ]
+    rates += [
+        rate(pre, kbt, energy)
+        for empty in nnn_empty
+        if (len(find_filled_sites(atom_set, bonds[empty])) >= 1 or empty[2] == 0)
+    ]
+
+    """
     for empty in nnn_empty:
         # 次近接空きサイトの周辺原子
         nn_nnn_site = find_filled_sites(atom_set, bonds[empty])
@@ -214,11 +250,30 @@ def possible_events(
         if len(nn_nnn_site) >= 1 or empty[2] == 0:
             events.append(empty)
             rates.append(rate(pre, kbt, energy))
+
     #
     # BLの上り下り
     # BLの下層原子
     if atom_z % 2 == 0:
         # BLを上る判定
+        """
+        events += [
+            (filled[0], filled[1], filled[2] + 1)
+            for filled in nn_atom
+            if (
+                atom_set[(filled[0], filled[1], filled[2] + 1)] == 0
+                and len(find_filled_sites(atom_set, bonds[filled])) >= 2
+            )
+        ]
+        rates += [
+            rate(pre, kbt, energy)
+            for filled in nn_atom
+            if (
+                atom_set[(filled[0], filled[1], filled[2] + 1)] == 0
+                and len(find_filled_sites(atom_set, bonds[filled])) >= 2
+            )
+        ]
+        """
         for filled in nn_atom:
             # 最近接原子の周囲原子
             nn_nn_atom = find_filled_sites(atom_set, bonds[filled])
@@ -227,6 +282,7 @@ def possible_events(
             if atom_set[above_site] == 0 and len(nn_nn_atom) >= 2:
                 events.append(above_site)
                 rates.append(rate(pre, kbt, energy))
+
         # BLを下る判定
         # Ag直上原子は下れない
         if atom_z == 0:
@@ -239,12 +295,22 @@ def possible_events(
                 pass
             # 直下に原子があるおき
             else:
+                """
+                events += [
+                    empty for empty in find_empty_sites(atom_set, bonds[direct_below])
+                ]
+                rates += [
+                    rate(pre, kbt, energy)
+                    for empty in find_empty_sites(atom_set, bonds[direct_below])
+                ]
+                """
                 # 直下原子周辺の空きサイト
                 d_step_empty = find_empty_sites(atom_set, bonds[direct_below])
                 # 直下原子の周辺空きサイト→候補
                 for empty in d_step_empty:
                     events.append(empty)
                     rates.append(rate(pre, kbt, energy))
+
             # 次近接の下へも移動可能
             # 次近接空きサイト
             nnn_empty = find_empty_sites(atom_set, nnn_sites)
@@ -252,6 +318,19 @@ def possible_events(
             nnn_lower_site = find_lower_sites(nnn_empty)
             # 次近接空きサイト下空きサイト
             nnn_lower_empty = find_empty_sites(atom_set, nnn_lower_site)
+            #
+            """
+            events += [
+                cand
+                for cand in nnn_lower_empty
+                if len(find_filled_sites(atom_set, bonds[cand])) >= 1
+            ]
+            rates += [
+                rate(pre, kbt, energy)
+                for cand in nnn_lower_empty
+                if len(find_filled_sites(atom_set, bonds[cand])) >= 1
+            ]
+            """
             for cand in nnn_lower_empty:
                 # 次近接空きサイト下空きサイトの周辺原子
                 cand_nn_atom = find_filled_sites(atom_set, bonds[cand])
@@ -259,6 +338,7 @@ def possible_events(
                 if len(cand_nn_atom) >= 1:
                     events.append(cand)
                     rates.append(rate(pre, kbt, energy))
+
     #
     # BLの上層原子
     # 次近接の真上か、最近接真上と次近接真上の共通サイト
@@ -279,9 +359,14 @@ def possible_events(
             # 次近接直上の原子
             nnn_above_atoms = find_filled_sites(atom_set, nnn_above_site)
             # 次近接原子直上の空きサイト→候補
+            """
+            events += [above_empty for above_empty in nnn_above_empty]
+            rates += [rate(pre, kbt, energy) for above_empty in nnn_above_empty]
+            """
             for above_empty in nnn_above_empty:
                 events.append(above_empty)
                 rates.append(rate(pre, kbt, energy))
+
             # 次近接直上に原子がある場合
             for above_filled in nnn_above_atoms:
                 # 次近接直上の結合サイト
@@ -305,6 +390,19 @@ def possible_events(
             nn_lower = find_lower_sites(nn_empty)
             # 最近接空きサイトの下空きサイト
             nn_lower_enpty = find_empty_sites(atom_set, nn_lower)
+            #
+            """
+            events += [
+                cand
+                for cand in nn_lower_enpty
+                if len(find_filled_sites(atom_set, bonds[cand])) >= 1
+            ]
+            rates += [
+                rate(pre, kbt, energy)
+                for cand in nn_lower_enpty
+                if len(find_filled_sites(atom_set, bonds[cand])) >= 1
+            ]
+            """
             for cand in nn_lower_enpty:
                 # 候補サイトの周辺原子
                 cand_nn = find_filled_sites(atom_set, bonds[cand])
@@ -312,6 +410,7 @@ def possible_events(
                 if len(cand_nn) >= 1:
                     events.append(cand)
                     rates.append(rate(pre, kbt, energy))
+
     # イベントリストから、孤立原子を生じるイベントを抽出
     remove = judge_isolation(atom_set, bonds, target, nn_atom, events)
     """
@@ -319,7 +418,12 @@ def possible_events(
     if (defect is True) and (empty_first == int(params.num_defect)):
         remove.extend(judge_defect(target, events))
     """
+    """
     # 削除
+    event_f = [eve for eve in events if eve not in remove]
+    rates_f = [rat for eve, rat in zip(events, rates) if eve not in remove]
+
+    """
     event_f: List = []
     rates_f: List = []
     for eve, rat in zip(events, rates):
@@ -328,6 +432,7 @@ def possible_events(
         else:
             event_f.append(eve)
             rates_f.append(rat)
+
     return event_f, rates_f
 
 
@@ -355,11 +460,15 @@ def state_after_move(atom_set, bonds, event, params):
 
 def state_determinate(atom_set, bonds, event_list, params):
     # 原子が動いた後の構造を設定
+    return [state_after_move(atom_set, bonds, event, params) for event in event_list]
+
+    """
     states: List[int] = []
     for event in event_list:
         state = state_after_move(atom_set, bonds, event, params)
         states.append(state)
     return states
+    """
 
 
 def state_change_to_neighbor(atom_set, bonds, target: Tuple[int, int, int], params):
@@ -420,11 +529,11 @@ def state_change_new(atom_set, bonds, target: Tuple[int, int, int], params):
 
 def rate_limit(rates, upper_limit) -> List:
     new_rate: List = []
-    for rate in rates:
-        if rate > upper_limit:
+    for rate_val in rates:
+        if rate_val > upper_limit:
             new_rate.append(upper_limit)
         else:
-            new_rate.append(rate)
+            new_rate.append(rate_val)
 
     return new_rate
 
@@ -498,13 +607,21 @@ if __name__ == "__main__":
     defect = True
     empty_first = 10
     #
+    start = time.time()
+
     dir_name = "Event_check/"
     os.makedirs(dir_name, exist_ok=True)
     target_cand = random_target(atom_set)
     for target in target_cand:
         event_list, rate_list, states = site_events(
-            atom_set, bonds, target, parameters, defect, empty_first, trans
+            atom_set,
+            bonds,
+            target,
+            parameters,
         )
         #
         event_check_poscar(atom_set, event_list, lattice, unit_length, maxz, target)
     print("Poscars for event check are formed.")
+    end_time = time.time() - start
+    print(end_time)
+    # average time before : 0.017 s
