@@ -8,6 +8,7 @@ from rejection_free_choose import rejection_free_choise
 from event_collection import site_events
 import math
 from recording import record_data
+import copy
 
 ##
 from recording import rec_events_per_dep
@@ -60,6 +61,20 @@ class common_functions:
         )
         self.update_after_deposition(dep_pos, atom_type)
         return dep_pos
+
+    def update_after_deposition(self, dep_pos, atom_type) -> None:
+        ##
+        self.n_events_rec.append(self.n_events_perdep)
+        self.num_atoms_rec.append(self.n_atoms)
+        ##
+        self.n_events_perdep = 0
+        self.atom_set[dep_pos] = atom_type
+        self.atom_exist.append(dep_pos)
+        self.n_atoms += 1
+        self.n_events += 1
+        self.prog_time += 1 / (self.init_value.dep_rate_atoms_persec)
+        if dep_pos[2] in (0, 1):
+            self.empty_firstBL -= 1
 
     def update_events(self):
         self.related_atoms = list(set(self.related_atoms))
@@ -144,8 +159,19 @@ class common_functions:
 
         # recoding the positions in the middle
         if self.n_atoms >= self.rec_num_atoms:
+            print(
+                "Progress: "
+                + str(self.n_atoms)
+                + "/"
+                + str(self.init_value.total_atoms)
+            )
             self.rec_num_atoms += self.init_value.rec_num_atom_interval
             self.record_position()
+
+    def record_position(self) -> None:
+        self.pos_rec.append(copy.copy(self.atom_set))
+        self.time_rec.append(self.prog_time)
+        self.cov_rec.append(self.n_atoms / self.init_value.atoms_in_BL)
 
     def middle_check(self):
         # 構造の途中確認用
@@ -184,7 +210,6 @@ class common_functions:
             self.init_value,
             self.minute,
             self.second,
-            self.bln_defect.get(),
         )
         #
         #

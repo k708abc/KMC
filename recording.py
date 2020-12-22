@@ -250,7 +250,6 @@ def record_data(
     params,
     minute: int,
     second: float,
-    defect,
 ):
     maxz = highest_z(pos_all)
     maxz_unit = params.z_unit_init * 6

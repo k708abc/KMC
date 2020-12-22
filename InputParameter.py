@@ -21,7 +21,7 @@ class Params:
         self.temperature = 550
         self.dep_rate = 0.4
         self.dep_time = 5
-        self.prefactor = "1E+13"
+        self.prefactor = 1e13
         self.binding_energies: OrderedDict[str, float] = OrderedDict()
         self.binding_energies["Base"] = 0
         self.binding_energies["AgSi"] = -1.1

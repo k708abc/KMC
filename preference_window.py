@@ -3,7 +3,8 @@
 from typing import List, Dict, Tuple
 import tkinter as tk
 import tkinter.ttk as ttk
-import copy
+
+# import copy
 import math
 from cal_rates import rate
 import time
@@ -505,10 +506,12 @@ class Window(ttk.Frame, common_functions):
         else:
             self.normarize = 6 * fast_event
 
+    """
     def record_position(self) -> None:
         self.pos_rec.append(copy.copy(self.atom_set))
         self.time_rec.append(self.prog_time)
         self.cov_rec.append(self.n_atoms / self.init_value.atoms_in_BL)
+    """
 
     def cal_expected_events(self) -> None:
         dep_success = self.init_value.dep_rate_atoms_persec / self.normarize
@@ -518,6 +521,7 @@ class Window(ttk.Frame, common_functions):
             "Expected: " + str(int(self.num_events)) + " events"
         )
 
+    """
     def update_after_deposition(self, dep_pos, atom_type) -> None:
         ##
         self.n_events_rec.append(self.n_events_perdep)
@@ -531,6 +535,7 @@ class Window(ttk.Frame, common_functions):
         self.prog_time += 1 / (self.init_value.dep_rate_atoms_persec)
         if dep_pos[2] in (0, 1):
             self.empty_firstBL -= 1
+    """
 
     def try_deposition(self) -> None:
         # deposition
