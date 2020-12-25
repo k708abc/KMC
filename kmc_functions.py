@@ -9,6 +9,7 @@ from event_collection import site_events
 import math
 from recording import record_data
 import copy
+import decimal
 
 ##
 from recording import rec_events_per_dep
@@ -23,7 +24,7 @@ class common_functions:
         self.prog_time = 0
         self.n_atoms = 0
         self.n_events = 0
-        self.empty_firstBL = self.init_value.atoms_in_BL
+        self.empty_firstBL = decimal.Decimal(self.init_value.atoms_in_BL)
         self.pos_rec: List[dict] = []
         self.time_rec: List[float] = []
         self.cov_rec: List[float] = []
@@ -40,7 +41,7 @@ class common_functions:
 
     def start_rejection_free(self):
         self.num_events = None
-        self.total_event_time = self.init_value.dep_rate_atoms_persec
+        self.total_event_time = decimal.Decimal(self.init_value.dep_rate_atoms_persec)
         self.atom_exist: List[Tuple[int, int, int]] = []
         (
             self.lattice,
@@ -92,10 +93,26 @@ class common_functions:
             self.total_event_time -= self.event_time_tot[target_rel]
             self.event[target_rel] = events
             self.event_time[target_rel] = rates
-            self.event_time_tot[target_rel] = sum(rates)
+            self.event_time_tot[target_rel] = decimal.Decimal(sum(rates))
             self.event_state[target_rel] = states
             self.total_event_time += self.event_time_tot[target_rel]
         self.related_atoms = []
+        #
+        #
+        # self.time_check()
+
+    def time_check(self):
+        tot_time = self.init_value.dep_rate_atoms_persec
+        for times in self.event_time_tot.values():
+            tot_time += times
+        if abs(tot_time - self.total_event_time) == 0:
+            pass
+        else:
+            print("recal_time = " + str(tot_time))
+            print("tot_time = " + str(self.total_event_time))
+            print("diff = " + str(self.total_event_time - tot_time))
+            print("events = " + str(self.num_events))
+            input()
 
     def rejection_free_deposition(self):
         dep_pos = self.deposition()
@@ -198,9 +215,9 @@ class common_functions:
 
     def end_of_loop(self) -> None:
         self.record_position()
-        elapsed_time = time.time() - self.start_time
-        self.minute = math.floor(elapsed_time / 60)
-        self.second = int(elapsed_time % 60)
+        self.elapsed_time = time.time() - self.start_time
+        self.minute = math.floor(self.elapsed_time / 60)
+        self.second = int(self.elapsed_time % 60)
         record_data(
             self.pos_rec,
             self.time_rec,
@@ -215,6 +232,7 @@ class common_functions:
         rec_events_per_dep(self.n_events_rec, self.num_atoms_rec)
         #
         #
+        # self.time_check()
 
     def defect_check(self):
         if (self.target[2] not in (0, 1)) and (self.move_atom[2] in (0, 1)):

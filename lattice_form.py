@@ -2,6 +2,7 @@
 from typing import List, Dict, Tuple
 from InputParameter import Params
 from lattice_form_check import check_lattice
+import decimal
 
 lattice_first: Dict[Tuple, List] = {}
 lattice: Dict[Tuple, List] = {}
@@ -122,7 +123,7 @@ def lattice_form(input_params: Params):  # 　ここ長すぎるので、少な�
                 bonds[(i, j, k)] = []
                 event[(i, j, k)] = []
                 event_time[(i, j, k)] = []
-                event_time_tot[(i, j, k)] = 0.0
+                event_time_tot[(i, j, k)] = decimal.Decimal(0)
                 event_state[(i, j, k)] = []
     #
     form_first_3BL(unit_length, z_intra, z_inter)
