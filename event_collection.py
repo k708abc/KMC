@@ -93,26 +93,35 @@ def total_energy_trans(
 ):
     target_z = target[2]
     target_state = atom_set[target]
-    energy = float(params.binding_energies["Base"])
+    energy = 0
+    num_bond = 0
     if target_z == 0:
         energy += params.binding_energies["AgSi"]
     for bond in bonds[target]:
         bond_state = atom_set[bond]
         if bond_state not in (0, target_state):
             energy += bond_energy_diff_state(target, bond, params)
+            num_bond += 1
         elif bond_state == target_state:
             energy += bond_energy_same_state(target, bond, params, target_state)
+            num_bond += 1
+    if num_bond != 0:
+        energy += float(params.binding_energies["Base"])
     return energy
 
 
 def total_energy_wo_trans(atom_set: Dict, bonds: Dict, target: Tuple, params):
     target_z = target[2]
-    energy = float(params.binding_energies["Base"])
+    energy = 0
+    num_bond = 0
     if target_z == 0:
         energy += params.binding_energies["AgSi"]
     for bond in bonds[target]:
         if atom_set[bond] != 0:
+            num_bond += 1
             energy += bond_energy_same_state(target, bond, params, 2)
+    if num_bond != 0:
+        energy += float(params.binding_energies["Base"])
     return energy
 
 
@@ -210,33 +219,23 @@ def possible_events(
     nnn_empty = find_empty_sites(atom_set, nnn_sites)
     # 最近接の存在原子
     nn_atom = find_filled_sites(atom_set, bonds[target])
-    #
     # BL内での移動
     # 最近接空きサイトへの移動
-
-    # pttern2
     eve_rate += [
         (empty, arrrange_rate)
         for empty in nn_empty
         if (len(find_filled_sites(atom_set, bonds[empty])) >= 2 or empty[2] == 0)
     ]
-
-    # 同高さの次近接への移動s
-
-    # pattern2
+    # 同高さの次近接への移動
     eve_rate += [
         (empty, arrrange_rate)
         for empty in nnn_empty
         if (len(find_filled_sites(atom_set, bonds[empty])) >= 1 or empty[2] == 0)
     ]
-
-    #
     # BLの上り下り
     # BLの下層原子
     if atom_z % 2 == 0:
         # BLを上る判定
-
-        # pattern2
         eve_rate += [
             ((filled[0], filled[1], filled[2] + 1), arrrange_rate)
             for filled in nn_atom
@@ -245,7 +244,6 @@ def possible_events(
                 and len(find_filled_sites(atom_set, bonds[filled])) >= 2
             )
         ]
-
         # BLを下る判定
         # Ag直上原子は下れない
         if atom_z == 0:
@@ -258,8 +256,6 @@ def possible_events(
                 pass
             # 直下に原子があるおき
             else:
-
-                # pattern2
                 eve_rate += [
                     (empty, arrrange_rate)
                     for empty in find_empty_sites(atom_set, bonds[direct_below])
@@ -273,15 +269,11 @@ def possible_events(
             # 次近接空きサイト下空きサイト
             nnn_lower_empty = find_empty_sites(atom_set, nnn_lower_site)
             #
-
-            # pattern2
             eve_rate += [
                 (cand, arrrange_rate)
                 for cand in nnn_lower_empty
                 if len(find_filled_sites(atom_set, bonds[cand])) >= 1
             ]
-
-    #
     # BLの上層原子
     # 次近接の真上か、最近接真上と次近接真上の共通サイト
     elif atom_z % 2 == 1:
@@ -301,8 +293,6 @@ def possible_events(
             # 次近接直上の原子
             nnn_above_atoms = find_filled_sites(atom_set, nnn_above_site)
             # 次近接原子直上の空きサイト→候補
-
-            # pattern2
             eve_rate += [
                 (above_empty, arrrange_rate) for above_empty in nnn_above_empty
             ]
@@ -317,8 +307,6 @@ def possible_events(
                 common_site = list(set(above_filled_nn) & set(dir_above_nn))
                 # 共通サイトに原子がない場合→候補
                 if atom_set[common_site[0]] == 0:
-
-                    # pattern2
                     eve_rate.append((common_site[0], arrrange_rate))
 
         #
@@ -333,8 +321,6 @@ def possible_events(
             # 最近接空きサイトの下空きサイト
             nn_lower_enpty = find_empty_sites(atom_set, nn_lower)
             #
-
-            # pattern2
             eve_rate += [
                 (cand, arrrange_rate)
                 for cand in nn_lower_enpty
@@ -342,19 +328,8 @@ def possible_events(
             ]
 
     # イベントリストから、孤立原子を生じるイベントを抽出
-
-    # pattern2
     remove = judge_isolation(atom_set, bonds, target, nn_atom, eve_rate)
-
-    #
-    """
-    # first BLにデフェクトを残す場合
-    if (defect is True) and (empty_first == int(params.num_defect)):
-        remove.extend(judge_defect(target, events))
-    """
     # 削除
-
-    # pattern2
     event_f: List = []
     rates_f: List = []
     for eves in eve_rate:
@@ -504,6 +479,7 @@ def site_events(
         rate_list.append(rate)
         states.append(state)
         """
+
         # 隣接原子の数による変化
         state, rate = state_change_new(atom_set, bonds, target, params)
         event_list.append(target)

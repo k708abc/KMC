@@ -17,24 +17,24 @@ class Params:
     kb_eV = 8.617e-5
 
     def __init__(self) -> None:
-        self.n_cell_init = 5
-        self.z_unit_init = 5
+        self.n_cell_init = 10
+        self.z_unit_init = 4
         self.temperature = 550
-        self.dep_rate = 5
-        self.dep_time = 0.4
+        self.dep_rate = 1
+        self.dep_time = 2
         self.prefactor = 1e13
         self.binding_energies: OrderedDict[str, float] = OrderedDict()
-        self.binding_energies["Base"] = 0
-        self.binding_energies["AgSi"] = -0.3
-        self.binding_energies["Si12"] = -0.55
-        self.binding_energies["Si23"] = -0.55
-        self.binding_energies["Si34"] = -0.55
-        self.binding_energies["Si45"] = -0.55
-        self.binding_energies["Si56"] = -0.55
-        self.binding_energies["Si_intra"] = -0.8
-        self.binding_energies["Si_inter"] = -0.8
+        self.binding_energies["Base"] = -0.8
+        self.binding_energies["AgSi"] = -0.2
+        self.binding_energies["Si12"] = -0.2
+        self.binding_energies["Si23"] = -0.2
+        self.binding_energies["Si34"] = -0.2
+        self.binding_energies["Si45"] = -0.2
+        self.binding_energies["Si56"] = -0.2
+        self.binding_energies["Si_intra"] = -0.3
+        self.binding_energies["Si_inter"] = -0.3
         # self.binding_energies["Agtop"] = -1.5
-        self.transformation = -1.0
+        self.transformation = -1.4
         self.put_first = 10
         self.cut_number = 50000
         self.num_defect = 1
@@ -43,8 +43,8 @@ class Params:
         self.comments = "No comments"
         self.intra_distance = 0.204
         self.inter_distance = 0.612
-        self.keep_defect_check = True
-        self.trans_check = True
+        self.keep_defect_check = False
+        self.trans_check = False
         self.first_put_check = True
         self.cut_check = True
         self.limit_check = False
@@ -57,7 +57,7 @@ class Params:
 
     @property
     def atoms_in_BL(self) -> int:
-        return 2 * (self.n_cell_init) ** 2
+        return int(2 * (self.n_cell_init) ** 2)
 
     @property
     def dep_rate_atoms_persec(self) -> float:

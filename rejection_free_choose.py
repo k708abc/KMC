@@ -3,17 +3,18 @@ from typing import List, Tuple
 import decimal
 
 
-def choose_an_event(r_tot, event_rates):
+def choose_an_event(r_tot: float, event_rates: List[float]) -> int:
     for i, event_rate in enumerate(event_rates):
         if event_rate >= r_tot:
             return i
         else:
             r_tot -= event_rate
-
+    """
     print("value remains")
     print("rtot in event num = " + str(r_tot))
     print(event_rates)
     return len(event_rates) - 1
+    """
 
 
 def rejection_free_choise(
@@ -21,7 +22,7 @@ def rejection_free_choise(
 ):
     random_val = decimal.Decimal(random.random())
     r_tot = total_event_time * random_val
-    prev_rate = -1
+    # prev_rate = -1
     """
     tot_time = 0
     for sites, times in event_time_tot.items():
@@ -30,16 +31,20 @@ def rejection_free_choise(
     print("tot_time_calculatesd : " + str(tot_time))
     print("diff: " + str(total_event_time - tot_time))
     """
-    rate_choose = -1
+    # rate_choose = -1
 
     for rate_site, rate in event_time_tot.items():
-        rate_choose += 1
+        # rate_choose += 1
         if rate >= r_tot:
-            if rate <= 0:
+            if rate == 0:
+                pass
+                """
                 print("rate < 0")
                 print("rate = " + str(rate))
+                """
             else:
                 event_number = choose_an_event(r_tot, event_time[rate_site])
+                """
                 if event_number is None or event_number == -1:
                     print("None happenes in rejection free choice")
                     print("rate site = " + str(rate_site))
@@ -51,11 +56,12 @@ def rejection_free_choise(
                     print("total time = " + str(total_event_time))
                     print("rate_choose = " + str(rate_choose))
                     print("length time_tot = " + str(len(event_time_tot)))
+                """
 
                 return rate_site, event_number
         else:
             r_tot -= rate
-            prev_rate = rate
+            # prev_rate = rate
     if r_tot >= 0:
         return (-1, -1, -1), 0
     else:
