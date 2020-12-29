@@ -242,11 +242,20 @@ class common_functions:
         #
         if self.move_atom == self.target:
             if self.new_state == 4:
+                # print("clustering")
                 # self.prev_eve = "clustering"
                 self.atom_set[self.target] = 3
                 for bond in self.bonds[self.target]:
                     if self.atom_set[bond] != 0:
                         self.atom_set[bond] = 3
+            elif self.new_state == 5:
+                # print("de clustering")
+                # self.prev_eve = "change to 2D"
+                self.atom_set[self.target] = 2
+                for bond in self.bonds[self.target]:
+                    if self.atom_set[bond] != 0:
+                        self.atom_set[bond] = 2
+
             else:
                 """
                 self.prev_eve = (

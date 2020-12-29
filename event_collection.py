@@ -355,13 +355,18 @@ def state_after_move(atom_set, bonds, event, params):
             E3 += bond_energy_same_state(event, bond, params, atom_set[bond])
 
     if E2 == E3 == 0:
-        E2 = -1  # 蒸着時、周辺原子がない場合2次元にする
-    # 結合原子の状態ごとの速度定数逆数を計算
-    rates = [rate(pre, kbt, -E2), rate(pre, kbt, -E3)]
-    states = [2, 3]
-    # 速度定数の大きい状態を取りやすい
-    det_state = random.choices(states, weights=rates)
-    return det_state[0]
+        return 2
+    elif E2 == 0:
+        return 3
+    elif E3 == 0:
+        return 2
+    else:
+        # 結合原子の状態ごとの速度定数逆数を計算
+        rates = [rate(pre, kbt, -E2), rate(pre, kbt, -E3)]
+        states = [2, 3]
+        # 速度定数の大きい状態を取りやすい
+        det_state = random.choices(states, weights=rates)
+        return det_state[0]
 
 
 def state_determinate(atom_set, bonds, event_list, params):
@@ -409,6 +414,25 @@ def state_change_to_neighbor(atom_set, bonds, target: Tuple[int, int, int], para
 
 
 def state_change_new(atom_set, bonds, target: Tuple[int, int, int], params):
+    target_state = atom_set[target]
+    pre = float(params.prefactor)
+    kbt = params.temperature_eV
+    neighbor_i = 0
+    neighbor_2 = 0
+    for bond in bonds[target]:
+        if atom_set[bond] != 0:
+            neighbor_i += 1
+        if atom_set[bond] == 2:
+            neighbor_2 += 1
+    #
+    if target_state == 2 and neighbor_i == 4:
+        return 4, decimal.Decimal(rate(pre, kbt, params.transformation))
+    elif target_state == 3 and target[2] != 0 and neighbor_i != 4 and neighbor_2 != 0:
+        return 5, decimal.Decimal(rate(pre, kbt, params.transformation))
+    else:
+        return target_state, 0
+
+    """
     neighbor_i = 0
     target_state = atom_set[target]
     pre = float(params.prefactor)
@@ -418,7 +442,7 @@ def state_change_new(atom_set, bonds, target: Tuple[int, int, int], params):
             neighbor_i += 1
     # エネルギーの設定については要再考
     # 2次元から3次元：周辺原子が多いと起きやすい
-    if target_state == 2:
+    if target_state == 2 and target[2] >= 3:
         E_trans = (5 - neighbor_i) * params.transformation
         trans_rate = decimal.Decimal(rate(pre, kbt, E_trans))
         return 4, trans_rate
@@ -429,8 +453,11 @@ def state_change_new(atom_set, bonds, target: Tuple[int, int, int], params):
         E_trans = neighbor_i * params.transformation
         trans_rate = decimal.Decimal(rate(pre, kbt, E_trans))
         return 2, trans_rate
+    elif target_state == 2:
+        return 2, decimal.Decimal(0)
     else:
         raise RuntimeError("Some error in state change to neighbor")
+    """
 
 
 def rate_limit(rates, upper_limit) -> List:
