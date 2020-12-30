@@ -23,6 +23,7 @@ class rejection_free(common_functions):
         self.end_of_loop()
         print("Finished: " + str(self.minute) + " min " + str(self.second) + " sec")
         print(self.elapsed_time / self.n_events)
+        input()
 
 
 if __name__ == "__main__":
