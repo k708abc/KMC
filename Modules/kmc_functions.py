@@ -1,15 +1,14 @@
 from InputParameter import Params
 import time
 from typing import List, Dict, Tuple
-from lattice_form import lattice_form
-from deposition import deposit_an_atom
-from atoms_recalculate import recalculate
-from rejection_free_choose import rejection_free_choise
-from event_collection import site_events
+from Modules.lattice_form import lattice_form
+from Modules.deposition import deposit_an_atom
+from Modules.atoms_recalculate import recalculate
+from Modules.rejection_free_choose import rejection_free_choise
+from Modules.event_collection import site_events
 import math
-from recording import record_data
+from Modules.recording import record_data
 import copy
-import decimal
 
 ##
 from recording import rec_events_per_dep
