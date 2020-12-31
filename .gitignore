@@ -2,6 +2,10 @@
 __pycache__/
 *.py[cod]
 *$py.class
+Event_check/
+Keep/
+.vscode/
+KMC_Si_rec/
 
 # C extensions
 *.so
