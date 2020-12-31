@@ -2,7 +2,7 @@ from typing import List, Dict
 import matplotlib.pyplot as plt
 import matplotlib.patches as pat
 import math
-from record_ppt import rec_ppt
+from Modules.record_ppt import rec_ppt
 import os
 
 unit_x: List[float] = [1, 0, 0]
@@ -225,16 +225,17 @@ def dir_formarion(name: str):
     os.makedirs(name, exist_ok=True)
 
 
-def rec_events_per_dep(num_events: List[int], atoms: List[int]):
+def rec_events_per_dep(num_events: List[int], atoms: List[int], params):
+    dir_name = params.record_name + "/"
     fig = plt.figure()
     plt.plot(atoms, num_events)
     plt.xlabel("Num. Atoms")
     plt.ylabel("Num. Events")
     plt.rcParams["font.size"] = 18
     fig.subplots_adjust(bottom=0.2, left=0.2)
-    plt.savefig("Num_events_per_dep.png")
+    plt.savefig(dir_name + "Num_events_per_dep.png")
     #
-    file_data = open("Num_events_per_dep", "w")
+    file_data = open(dir_name + "Num_events_per_dep.txt", "w")
     file_data.write("atoms" + "\t" + "events" + "\n")
 
     for i in range(len(atoms)):

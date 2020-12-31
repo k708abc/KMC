@@ -1,12 +1,13 @@
 import random
 from typing import List, Tuple
+import decimal
 
 
 def choice(
     events: List[Tuple[int, int, int]], rates: List[float], states: List[int]
 ) -> Tuple[Tuple[int, int, int], int]:
     tot = sum(rates)
-    r_tot = random.random() * tot
+    r_tot = decimal.Decimal(random.random()) * tot
 
     for rate, event, state in zip(rates, events, states):
         tot -= rate

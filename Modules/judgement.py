@@ -2,7 +2,9 @@ import random
 
 
 def judge_null(success: float) -> bool:
-    assert success <= 1
+    # assert success <= 1, success
+    if success > 1:
+        success = 1
     null = 1 - success
     result = [True, False]
     weight = [success, null]

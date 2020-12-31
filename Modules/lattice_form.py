@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 from typing import List, Dict, Tuple
 from InputParameter import Params
-from lattice_form_check import check_lattice
+from Test_modules.lattice_form_check import check_lattice
 import decimal
 
 lattice_first: Dict[Tuple, List] = {}

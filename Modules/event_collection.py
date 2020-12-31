@@ -1,9 +1,9 @@
 from typing import List, Dict, Tuple
-from cal_rates import rate
+from Modules.cal_rates import rate
 import random
-from read_examples import read_lattice, read_bonds, read_atom_set
+from Test_modules.read_examples import read_lattice, read_bonds, read_atom_set
 from InputParameter import Params
-from event_collection_check import random_target, event_check_poscar
+from Test_modules.event_collection_check import random_target, event_check_poscar
 import os
 import time
 import decimal

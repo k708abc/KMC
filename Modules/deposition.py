@@ -1,10 +1,10 @@
 from typing import List, Tuple, Dict
 import random
 import math
-from event_collection import state_after_move
-from read_examples import read_atom_set, read_bonds, read_lattice
+from Modules.event_collection import state_after_move
+from Test_modules.read_examples import read_atom_set, read_bonds, read_lattice
 from InputParameter import Params
-from deposition_check import dep_check_poscar
+from Test_modules.deposition_check import dep_check_poscar
 
 
 def find_candidates(atom_set: Dict, bonds: Dict) -> List[Tuple[int, int, int]]:

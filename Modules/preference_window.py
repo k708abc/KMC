@@ -6,29 +6,31 @@ import tkinter.ttk as ttk
 
 # import copy
 import math
-from cal_rates import rate
+from Modules.cal_rates import rate
 import time
-from lattice_form import lattice_form
+
+# from Modules.lattice_form import lattice_form
 
 # from InputParameter import Params
 # from deposition import deposit_an_atom
-from choose_site import choose_atom
-from judgement import judge_null
-from event_collection import site_events
-from normarize_list import normarize_rate
-from weighted_choice import choice
+# from Modules.choose_site import choose_atom
+# from Modules.judgement import judge_null
+# from Modules.event_collection import site_events
+# from Modules.normarize_list import normarize_rate
+# from Modules.weighted_choice import choice
 
 # from recording import record_data
 
 # from atoms_recalculate import recalculate
 # from rejection_free_choose import rejection_free_choise
-from kmc_functions import common_functions
+from Modules.kmc_functions import common_functions
+from Modules.Null_kmc_functions import null_functions
 
 ##
 # from recording import rec_events_per_dep
 
 
-class Window(ttk.Frame, common_functions):
+class Window(ttk.Frame, common_functions, null_functions):
     kb_eV = 8.617e-5
     padWE: Dict = dict(sticky=(tk.W, tk.E), padx=15, pady=2)
 
@@ -36,6 +38,7 @@ class Window(ttk.Frame, common_functions):
         super().__init__(master, padding=2)
         # self.init_value = Params()
         common_functions.__init__(self)
+        null_functions.__init__(self)
         self.create_frame_basics()
         self.create_frame_energies()
         self.create_frame_checks()
@@ -305,7 +308,7 @@ class Window(ttk.Frame, common_functions):
 
     def create_widgets_method(self) -> None:
         self.var_method = tk.StringVar()
-        methods = ("Null event", "Rejection free", "Simple 1D")
+        methods = ("Null event", "Rejection free")
         self.method_label = tk.Label(self.frame_method, text="Method")
         self.method_cb = ttk.Combobox(
             self.frame_method,
@@ -404,16 +407,18 @@ class Window(ttk.Frame, common_functions):
         #
         kbt = self.init_value.temperature_eV
         self.temperautre_energy["text"] = "{:.3g}".format(kbt)
+        num = 0
         for energy, rate_label in zip(self.energies, self.rate_labels):
-            rate_label["text"] = str(
-                "{:.3g}".format(
-                    rate(
-                        float(self.prefactor.get()),
-                        kbt,
-                        float(energy.get())
-                        + float(self.init_value.binding_energies["Base"]),
-                    )
+            if num == 0:
+                E_value = float(self.init_value.binding_energies["Base"])
+                num = 1
+            else:
+                E_value = float(energy.get()) + float(
+                    self.init_value.binding_energies["Base"]
                 )
+
+            rate_label["text"] = str(
+                "{:.3g}".format(rate(float(self.prefactor.get()), kbt, E_value))
             )
         self.dep_rate_conv_val["text"] = "{:.3f}".format(
             self.init_value.dep_rate_atoms_persec
@@ -468,7 +473,7 @@ class Window(ttk.Frame, common_functions):
         self.progress_events["text"] = str(self.n_events) + " events"
         if (self.n_events == 100) and (self.init_value.method == "Null event"):
             time_middle = time.time() - self.start_time
-            expected_time = self.num_events / 100 * time_middle
+            expected_time = int(self.expected_num_events) / 100 * time_middle
             self.expectd_cal_time["text"] = (
                 str(math.floor(expected_time / 3600))
                 + " h"
@@ -488,6 +493,7 @@ class Window(ttk.Frame, common_functions):
         self.n_events_perdep += 1
     """
 
+    """
     def det_normarize(self) -> None:
         kbt = self.init_value.temperature_eV
         fast_event = max(
@@ -506,6 +512,7 @@ class Window(ttk.Frame, common_functions):
             )
         else:
             self.normarize = 6 * fast_event
+    """
 
     """
     def record_position(self) -> None:
@@ -516,10 +523,12 @@ class Window(ttk.Frame, common_functions):
 
     def cal_expected_events(self) -> None:
         dep_success = self.init_value.dep_rate_atoms_persec / self.normarize
+        if dep_success > 1:
+            dep_success = 1
         num_atom_total = self.init_value.total_atoms + 1
-        self.num_events = 1 / dep_success * num_atom_total * num_atom_total / 2
+        self.expected_num_events = 1 / dep_success * num_atom_total * num_atom_total / 2
         self.progress_expectation["text"] = (
-            "Expected: " + str(int(self.num_events)) + " events"
+            "Expected: " + str(int(self.expected_num_events)) + " events"
         )
 
     """
@@ -537,12 +546,14 @@ class Window(ttk.Frame, common_functions):
         if dep_pos[2] in (0, 1):
             self.empty_firstBL -= 1
     """
+    """
 
     def try_deposition(self) -> None:
         # deposition
         judge = judge_null(self.init_value.dep_rate_atoms_persec / self.normarize)
         if judge:
             self.deposition()
+    """
 
     """
     def deposition(self) -> Tuple:
@@ -657,6 +668,7 @@ class Window(ttk.Frame, common_functions):
                 self.empty_firstBL += 1
     """
 
+    """
     def try_events(self) -> None:
         events, rates, states = site_events(
             self.atom_set,
@@ -681,6 +693,7 @@ class Window(ttk.Frame, common_functions):
 
         # event progress
         self.event_progress()
+    """
 
     def end_of_loop_tk(self):
         self.progress_label["text"] = (
@@ -714,49 +727,15 @@ class Window(ttk.Frame, common_functions):
     def null_event_kmc(self) -> None:  # 長過ぎ！　Helper function 作ってコンパクトにしないと見通し悪い。
         self.start_setting_tk()
         self.start_setting()
-        self.atom_exist: List[Tuple[int, int, int]] = [(-1, -1, -1)]
-        self.lattice, self.bonds, self.atom_set, _, _, _, _ = lattice_form(
-            self.init_value
-        )
-        # return lattice, bonds, atom_set, event, event_time, event_time_tot,event_state
-        self.det_normarize()
+        self.start_null()
         self.cal_expected_events()
-        """
-        最初に2原子置くのは、1原子のみが拡散する時間が無駄なためでしたが、
-        Null event methodでは微々たる差なので消しました
-        """
-        if self.bln_first.get() is True:
-            for _ in range(int(self.put_first.get())):
-                _ = self.deposition()
+        self.put_first_atoms_null()
 
         while int(self.prog_time) <= int(self.init_value.total_time):
-            self.target = choose_atom(self.atom_exist)
-            if (self.n_events_perdep >= int(self.init_value.cut_number)) and (
-                self.init_value.cut_check is True
-            ):
-                _ = self.deposition()
-
-            elif self.target == (-1, -1, -1):
-                self.try_deposition()
-            else:
-                self.try_events()
+            self.null_event_loop()
             # end of an event
             self.update_progress()
             self.update_progress_tk()
-            # recoding the positions in the middle
-            if self.n_atoms >= self.rec_num_atoms:
-                self.rec_num_atoms += self.init_value.rec_num_atom_interval
-                self.record_position()
-
-            """
-            # 構造の途中確認用
-            if self.n_atoms == 80 and self.record_middle == 0:
-                from record_for_test import rec_for_test
-
-                self.record_middle = 1
-                rec_for_test(self.atom_set, self.bonds, self.lattice)
-            """
-
         # end of the loop
         self.end_of_loop()
         self.end_of_loop_tk()
@@ -908,8 +887,6 @@ class Window(ttk.Frame, common_functions):
             self.null_event_kmc()
         elif self.var_method.get() == "Rejection free":
             self.rejection_free_kmc()
-        elif self.var_method.get() == "Simple 1D":
-            pass
 
 
 if __name__ == "__main__":

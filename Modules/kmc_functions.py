@@ -11,7 +11,7 @@ from Modules.recording import record_data
 import copy
 
 ##
-from recording import rec_events_per_dep
+from Modules.recording import rec_events_per_dep
 
 
 class common_functions:
@@ -221,7 +221,7 @@ class common_functions:
         )
         #
         #
-        rec_events_per_dep(self.n_events_rec, self.num_atoms_rec)
+        rec_events_per_dep(self.n_events_rec, self.num_atoms_rec, self.init_value)
         #
         #
         # self.time_check()
