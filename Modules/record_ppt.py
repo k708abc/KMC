@@ -1,6 +1,7 @@
 from pptx import Presentation
 from pptx.util import Inches, Pt
 import os
+import datetime
 
 
 def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_name):
@@ -30,7 +31,7 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     left = Inches(0.5)
     top = Inches(1.5)
     rows = 2
-    cols = 8
+    cols = 9
     width = Inches(12)
     height = Inches(1)
     # record parameters
@@ -43,6 +44,7 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     table0.cell(0, 5).text = "dep. time (min)"
     table0.cell(0, 6).text = "prefactor"
     table0.cell(0, 7).text = "Cal. time (s)"
+    table0.cell(0, 8).text = "Finishing time"
     table0.cell(1, 0).text = str(params.n_cell_init)
     table0.cell(1, 1).text = str(params.z_unit_init)
     table0.cell(1, 2).text = str(params.temperature)
@@ -50,18 +52,9 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     table0.cell(1, 4).text = str(params.dep_rate)
     table0.cell(1, 5).text = str(params.dep_time)
     table0.cell(1, 6).text = str("{:.1E}".format(params.prefactor))
-
-    """
-    if bln_tr.get() == True:
-        table0.cell(1, 8).text = "on"
-    else:
-        table0.cell(1, 8).text = "off"
-    if bln_def.get() == True:
-        table0.cell(1, 9).text = "on"
-    else:
-        table0.cell(1, 9).text = "off"
-    """
     table0.cell(1, 7).text = str(minute) + " m " + str(second) + " s"
+    dt_now = datetime.datetime.now()
+    table0.cell(1, 8).text = str(dt_now.strftime("%Y/%m/%d/ %H:%M:%S"))
     #
     left = Inches(0.5)
     top = Inches(3.5)
@@ -93,7 +86,7 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     left = Inches(0.5)
     top = Inches(5)
     rows = 2
-    cols = 10
+    cols = 11
     width = Inches(12)
     height = Inches(1)
     table = shapes.add_table(rows, cols, left, top, width, height).table
@@ -106,6 +99,7 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     table.cell(0, 7).text = "Si(5-6)"
     table.cell(0, 8).text = "Si(intra)"
     table.cell(0, 9).text = "Si(inter)"
+    table.cell(0, 10).text = "ES"
     # table.cell(0, 9).text = "Ag(top)"
     # table.cell(0, 10).text = "Trans."
     table.cell(1, 0).text = "Energy"
@@ -118,6 +112,7 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     table.cell(1, 7).text = str(params.binding_energies["Si56"])
     table.cell(1, 8).text = str(params.binding_energies["Si_intra"])
     table.cell(1, 9).text = str(params.binding_energies["Si_inter"])
+    table.cell(1, 10).text = str(params.binding_energies["ES"])
     # table.cell(1, 9).text = str(params.binding_energies["Agtop"])
     # table.cell(1, 10).text = str(params.transformation)
     #
@@ -254,10 +249,32 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
 
     slide.shapes.add_picture(file_name, left, top, height=height)
     """
+    #
+    slide = prs.slides.add_slide(blank_slide_layout)
+    width = height = Inches(1)
+    top = Inches(-0.1)
+    left = Inches(0.5)
+    txBox = slide.shapes.add_textbox(left, top, width, height)
+    tf = txBox.text_frame
+    p = tf.add_paragraph()
+    p.text = "Number of events per deposition"
+    p.font.size = Pt(28)
+    height = Inches(5.5)
+    top = Inches(1)
+    left = Inches(0.7)
+    slide.shapes.add_picture(
+        dir_name + "Num_events_per_dep.png", left, top, height=height
+    )
+    #
+
     rec_num = 0
-    while rec_num == 0:
+    while rec_num in (0, 1):
         try:
             prs.save(ppt_name)
-            rec_num = 1
+            rec_num = 2
         except:
-            pass
+            if rec_num == 0:
+                print("Close the ppt")
+                rec_num = 1
+            else:
+                pass

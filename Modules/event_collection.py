@@ -197,7 +197,7 @@ def possible_events(
     pre = float(params.prefactor)
     kbt = params.temperature_eV
     eve_rate: List = []
-    arrrange_rate = decimal.Decimal(rate(pre, kbt, energy))
+    rearange_rate = decimal.Decimal(rate(pre, kbt, energy))
 
     # events: List[Tuple] = []
     # rates: List[float] = []
@@ -222,22 +222,25 @@ def possible_events(
     # BL内での移動
     # 最近接空きサイトへの移動
     eve_rate += [
-        (empty, arrrange_rate)
+        (empty, rearange_rate)
         for empty in nn_empty
         if (len(find_filled_sites(atom_set, bonds[empty])) >= 2 or empty[2] == 0)
     ]
     # 同高さの次近接への移動
     eve_rate += [
-        (empty, arrrange_rate)
+        (empty, rearange_rate)
         for empty in nnn_empty
         if (len(find_filled_sites(atom_set, bonds[empty])) >= 1 or empty[2] == 0)
     ]
     # BLの上り下り
+    rearange_rate = decimal.Decimal(
+        rate(pre, kbt, energy + params.binding_energies["ES"])
+    )
     # BLの下層原子
     if atom_z % 2 == 0:
         # BLを上る判定
         eve_rate += [
-            ((filled[0], filled[1], filled[2] + 1), arrrange_rate)
+            ((filled[0], filled[1], filled[2] + 1), rearange_rate)
             for filled in nn_atom
             if (
                 atom_set[(filled[0], filled[1], filled[2] + 1)] == 0
@@ -257,7 +260,7 @@ def possible_events(
             # 直下に原子があるおき
             else:
                 eve_rate += [
-                    (empty, arrrange_rate)
+                    (empty, rearange_rate)
                     for empty in find_empty_sites(atom_set, bonds[direct_below])
                 ]
 
@@ -270,7 +273,7 @@ def possible_events(
             nnn_lower_empty = find_empty_sites(atom_set, nnn_lower_site)
             #
             eve_rate += [
-                (cand, arrrange_rate)
+                (cand, rearange_rate)
                 for cand in nnn_lower_empty
                 if len(find_filled_sites(atom_set, bonds[cand])) >= 1
             ]
@@ -294,7 +297,7 @@ def possible_events(
             nnn_above_atoms = find_filled_sites(atom_set, nnn_above_site)
             # 次近接原子直上の空きサイト→候補
             eve_rate += [
-                (above_empty, arrrange_rate) for above_empty in nnn_above_empty
+                (above_empty, rearange_rate) for above_empty in nnn_above_empty
             ]
 
             # 次近接直上に原子がある場合
@@ -307,7 +310,7 @@ def possible_events(
                 common_site = list(set(above_filled_nn) & set(dir_above_nn))
                 # 共通サイトに原子がない場合→候補
                 if atom_set[common_site[0]] == 0:
-                    eve_rate.append((common_site[0], arrrange_rate))
+                    eve_rate.append((common_site[0], rearange_rate))
 
         #
         # BLを下る判定
@@ -322,7 +325,7 @@ def possible_events(
             nn_lower_enpty = find_empty_sites(atom_set, nn_lower)
             #
             eve_rate += [
-                (cand, arrrange_rate)
+                (cand, rearange_rate)
                 for cand in nn_lower_enpty
                 if len(find_filled_sites(atom_set, bonds[cand])) >= 1
             ]

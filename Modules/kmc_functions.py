@@ -210,6 +210,7 @@ class common_functions:
         self.elapsed_time = time.time() - self.start_time
         self.minute = math.floor(self.elapsed_time / 60)
         self.second = int(self.elapsed_time % 60)
+        rec_events_per_dep(self.n_events_rec, self.num_atoms_rec, self.init_value)
         record_data(
             self.pos_rec,
             self.time_rec,
@@ -219,10 +220,6 @@ class common_functions:
             self.minute,
             self.second,
         )
-        #
-        #
-        rec_events_per_dep(self.n_events_rec, self.num_atoms_rec, self.init_value)
-        #
         #
         # self.time_check()
 

@@ -17,22 +17,23 @@ class Params:
     kb_eV = 8.617e-5
 
     def __init__(self) -> None:
-        self.n_cell_init = 10
+        self.n_cell_init = 5
         self.z_unit_init = 4
         self.temperature = 550
         self.dep_rate = 0.1
         self.dep_time = 20
         self.prefactor = 1e13
         self.binding_energies: OrderedDict[str, float] = OrderedDict()
-        self.binding_energies["Base"] = -0.7
-        self.binding_energies["AgSi"] = -0.2
-        self.binding_energies["Si12"] = -0.2
-        self.binding_energies["Si23"] = -0.2
-        self.binding_energies["Si34"] = -0.2
-        self.binding_energies["Si45"] = -0.2
-        self.binding_energies["Si56"] = -0.2
-        self.binding_energies["Si_intra"] = -0.2
-        self.binding_energies["Si_inter"] = -0.2
+        self.binding_energies["Base"] = -1.5
+        self.binding_energies["AgSi"] = -1.5
+        self.binding_energies["Si12"] = -1.5
+        self.binding_energies["Si23"] = -1.5
+        self.binding_energies["Si34"] = -1.5
+        self.binding_energies["Si45"] = -1.5
+        self.binding_energies["Si56"] = -1.5
+        self.binding_energies["Si_intra"] = -1.5
+        self.binding_energies["Si_inter"] = -1.5
+        self.binding_energies["ES"] = -0
         # self.binding_energies["Agtop"] = -1.5
         self.transformation = -1.8
         self.put_first = 10
