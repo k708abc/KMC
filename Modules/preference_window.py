@@ -177,8 +177,8 @@ class Window(ttk.Frame, common_functions, null_functions):
             "Si34",
             "Si45",
             "Si56",
-            "Si_intra",
             "Si_inter",
+            "Si_intra",
             "ES",
         ]
 

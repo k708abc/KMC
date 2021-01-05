@@ -15,37 +15,29 @@ def bond_energy_same_state(
     z_target = target[2]
     z_bond = bond[2]
     if atom_state == 2:
-        if z_target in (1, 0) and z_bond in (1, 0):
+        if z_target + z_bond == 1:
+            return params.binding_energies["Si01"]
+        elif z_target + z_bond == 3:
             return params.binding_energies["Si12"]
-        elif z_target in (1, 2) and z_bond in (1, 2):
+        elif z_target + z_bond == 5:
             return params.binding_energies["Si23"]
-        elif z_target in (2, 3) and z_bond in (2, 3):
+        elif z_target + z_bond == 7:
             return params.binding_energies["Si34"]
-        elif z_target in (3, 4) and z_bond in (3, 4):
+        elif z_target + z_bond == 9:
             return params.binding_energies["Si45"]
-        elif z_target in (4, 5) and z_bond in (4, 5):
-            return params.binding_energies["Si56"]
-        elif z_target in (5, 6) and z_bond in (5, 6):
-            return params.binding_energies["Si_intra"]
-        elif z_target % 2 == 0 and z_bond == z_target + 1:
-            return params.binding_energies["Si_intra"]
-        elif z_target % 2 == 0 and z_bond == z_target - 1:
+        elif z_target + z_bond == 11:
             return params.binding_energies["Si_inter"]
-        elif z_target % 2 == 1 and z_bond == z_target + 1:
-            return params.binding_energies["Si_inter"]
-        elif z_target % 2 == 1 and z_bond == z_target - 1:
+        elif (z_target + z_bond - 1) % 4 == 0:
             return params.binding_energies["Si_intra"]
+        elif (z_target + z_bond - 1) % 4 == 2:
+            return params.binding_energies["Si_inter"]
         else:
             raise RuntimeError("Something wrong in 2D energy")
     else:
-        if z_target % 2 == 0 and z_bond == z_target + 1:
+        if (z_target + z_bond - 1) % 4 == 0:
             return params.binding_energies["Si_intra"]
-        elif z_target % 2 == 0 and z_bond == z_target - 1:
+        elif (z_target + z_bond - 1) % 4 == 2:
             return params.binding_energies["Si_inter"]
-        elif z_target % 2 == 1 and z_bond == z_target + 1:
-            return params.binding_energies["Si_inter"]
-        elif z_target % 2 == 1 and z_bond == z_target - 1:
-            return params.binding_energies["Si_intra"]
         else:
             raise RuntimeError("Something wrong in 3D energy")
         return 0
@@ -54,38 +46,34 @@ def bond_energy_same_state(
 def bond_energy_diff_state(target: Tuple[int, int, int], bond: Tuple, params):
     z_target = target[2]
     z_bond = bond[2]
-    if z_target in (1, 0) and z_bond in (1, 0):
+    if z_target + z_bond == 1:
+        return (
+            params.binding_energies["Si01"] + params.binding_energies["Si_intra"]
+        ) / 2
+    elif z_target + z_bond == 3:
         return (
             params.binding_energies["Si12"] + params.binding_energies["Si_inter"]
         ) / 2
-    elif z_target in (1, 2) and z_bond in (1, 2):
+    elif z_target + z_bond == 5:
         return (
             params.binding_energies["Si23"] + params.binding_energies["Si_intra"]
         ) / 2
-    elif z_target in (2, 3) and z_bond in (2, 3):
+    elif z_target + z_bond == 7:
         return (
             params.binding_energies["Si34"] + params.binding_energies["Si_inter"]
         ) / 2
-    elif z_target in (3, 4) and z_bond in (3, 4):
+    elif z_target + z_bond == 9:
         return (
             params.binding_energies["Si45"] + params.binding_energies["Si_intra"]
         ) / 2
-    elif z_target in (4, 5) and z_bond in (4, 5):
-        return (
-            params.binding_energies["Si56"] + params.binding_energies["Si_inter"]
-        ) / 2
-    elif z_target in (5, 6) and z_bond in (5, 6):
-        return params.binding_energies["Si_intra"]
-    elif z_target % 2 == 0 and z_bond == z_target + 1:
-        return params.binding_energies["Si_intra"]
-    elif z_target % 2 == 0 and z_bond == z_target - 1:
+    elif z_target + z_bond == 11:
         return params.binding_energies["Si_inter"]
-    elif z_target % 2 == 1 and z_bond == z_target + 1:
-        return params.binding_energies["Si_inter"]
-    elif z_target % 2 == 1 and z_bond == z_target - 1:
+    elif (z_target + z_bond - 1) % 4 == 0:
         return params.binding_energies["Si_intra"]
+    elif (z_target + z_bond - 1) % 4 == 2:
+        return params.binding_energies["Si_inter"]
     else:
-        raise RuntimeError("Something wrong in 2D energy")
+        raise RuntimeError("Something wrong in diff state energy")
 
 
 def total_energy_trans(
