@@ -17,23 +17,24 @@ class Params:
     kb_eV = 8.617e-5
 
     def __init__(self) -> None:
-        self.n_cell_init = 5
+        self.n_cell_init = 10
         self.z_unit_init = 4
         self.temperature = 550
         self.dep_rate = 0.1
         self.dep_time = 20
         self.prefactor = 1e13
         self.binding_energies: OrderedDict[str, float] = OrderedDict()
-        self.binding_energies["Base"] = -0.8
-        self.binding_energies["AgSi"] = -0.2
-        self.binding_energies["Si01"] = -0.25
-        self.binding_energies["Si12"] = -0.2
-        self.binding_energies["Si23"] = -0.25
-        self.binding_energies["Si34"] = -0.2
-        self.binding_energies["Si45"] = -0.25
-        self.binding_energies["Si_inter"] = -0.2
-        self.binding_energies["Si_intra"] = -0.25
-        self.binding_energies["ES"] = -0
+        self.binding_energies["Ag base"] = -1.5
+        self.binding_energies["AgSi"] = -0.1
+        self.binding_energies["Si base"] = -1.5
+        self.binding_energies["Si01"] = -0.1
+        self.binding_energies["Si12"] = -0.1
+        self.binding_energies["Si23"] = -0.1
+        self.binding_energies["Si34"] = -0.1
+        self.binding_energies["Si45"] = -0.1
+        self.binding_energies["Si_inter"] = -0.1
+        self.binding_energies["Si_intra"] = -0.1
+        self.binding_energies["ES"] = -0.2
         # self.binding_energies["Agtop"] = -1.5
         self.transformation = -1.8
         self.put_first = 10
@@ -41,7 +42,7 @@ class Params:
         self.num_defect = 1
         self.record_name = "KMC_Si_rec"
         self.img_per = 10
-        self.comments = "3次元成長する条件の探索: 層間弱い"
+        self.comments = "Ag base test"
         self.intra_distance = 0.204
         self.inter_distance = 0.612
         self.keep_defect_check = False

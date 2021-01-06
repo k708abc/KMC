@@ -94,7 +94,9 @@ def total_energy_trans(
             energy += bond_energy_same_state(target, bond, params, target_state)
             num_bond += 1
     if num_bond != 0:
-        energy += float(params.binding_energies["Base"])
+        energy += float(params.binding_energies["Si base"])
+    else:
+        energy += float(params.binding_energies["Ag base"])
     return energy
 
 
@@ -109,7 +111,9 @@ def total_energy_wo_trans(atom_set: Dict, bonds: Dict, target: Tuple, params):
             num_bond += 1
             energy += bond_energy_same_state(target, bond, params, 2)
     if num_bond != 0:
-        energy += float(params.binding_energies["Base"])
+        energy += float(params.binding_energies["Si base"])
+    else:
+        energy += float(params.binding_energies["Ag base"])
     return energy
 
 

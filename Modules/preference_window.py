@@ -170,8 +170,9 @@ class Window(ttk.Frame, common_functions, null_functions):
     def create_widgets_energies(self) -> None:
         self.labels: List[str] = [
             "  ",
-            "Base",
+            "Ag base",
             "AgSi",
+            "Si base",
             "Si12",
             "Si23",
             "Si34",
@@ -185,7 +186,7 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.energylabels = []
         self.energies = []
         self.rate_labels = []
-        for _ in range(10):
+        for _ in range(11):
             self.energies.append(ttk.Entry(self.frame_energies, width=7))
             self.rate_labels.append(ttk.Label(self.frame_energies, text="0"))
         for (energy, (key, val)) in zip(
@@ -411,11 +412,19 @@ class Window(ttk.Frame, common_functions, null_functions):
         num = 0
         for energy, rate_label in zip(self.energies, self.rate_labels):
             if num == 0:
-                E_value = float(self.init_value.binding_energies["Base"])
+                E_value = float(self.init_value.binding_energies["Ag base"])
                 num = 1
+            elif num == 1:
+                E_value = float(energy.get()) + float(
+                    self.init_value.binding_energies["Ag base"]
+                )
+                num = 2
+            elif num == 2:
+                E_value = float(self.init_value.binding_energies["Si base"])
+                num = 3
             else:
                 E_value = float(energy.get()) + float(
-                    self.init_value.binding_energies["Base"]
+                    self.init_value.binding_energies["Si base"]
                 )
 
             rate_label["text"] = str(
