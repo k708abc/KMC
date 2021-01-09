@@ -10,11 +10,17 @@ import decimal
 
 
 def bond_energy_same_state(
-    target: Tuple[int, int, int], bond: Tuple, params: Params, atom_state: int
+    target: Tuple[int, int, int],
+    bond: Tuple,
+    atom_state: int,
+    energy2D,
+    energy3D,
 ):
     z_target = target[2]
     z_bond = bond[2]
     if atom_state == 2:
+        return energy2D[int((z_target + z_bond - 1) / 2)]
+        """
         if z_target + z_bond == 1:
             return params.binding_energies["Si01"]
         elif z_target + z_bond == 3:
@@ -33,7 +39,10 @@ def bond_energy_same_state(
             return params.binding_energies["Si_inter"]
         else:
             raise RuntimeError("Something wrong in 2D energy")
+        """
     else:
+        return energy3D[int((z_target + z_bond - 1) / 2)]
+        """
         if (z_target + z_bond - 1) % 4 == 0:
             return params.binding_energies["Si_intra"]
         elif (z_target + z_bond - 1) % 4 == 2:
@@ -41,9 +50,14 @@ def bond_energy_same_state(
         else:
             raise RuntimeError("Something wrong in 3D energy")
         return 0
+        """
 
 
-def bond_energy_diff_state(target: Tuple[int, int, int], bond: Tuple, params):
+def bond_energy_diff_state(
+    target: Tuple[int, int, int], bond: Tuple, energy2D3D: List[float]
+):
+    return energy2D3D[int((bond[2] + target[2] - 1) / 2)]
+    """
     z_target = target[2]
     z_bond = bond[2]
     if z_target + z_bond == 1:
@@ -74,10 +88,17 @@ def bond_energy_diff_state(target: Tuple[int, int, int], bond: Tuple, params):
         return params.binding_energies["Si_inter"]
     else:
         raise RuntimeError("Something wrong in diff state energy")
+    """
 
 
 def total_energy_trans(
-    atom_set: Dict, bonds: Dict, target: Tuple[int, int, int], params
+    atom_set: Dict,
+    bonds: Dict,
+    target: Tuple[int, int, int],
+    params,
+    energy2D,
+    energy2D3D,
+    energy3D,
 ):
     target_z = target[2]
     target_state = atom_set[target]
@@ -88,10 +109,12 @@ def total_energy_trans(
     for bond in bonds[target]:
         bond_state = atom_set[bond]
         if bond_state not in (0, target_state):
-            energy += bond_energy_diff_state(target, bond, params)
+            energy += bond_energy_diff_state(target, bond, energy2D3D)
             num_bond += 1
         elif bond_state == target_state:
-            energy += bond_energy_same_state(target, bond, params, target_state)
+            energy += bond_energy_same_state(
+                target, bond, target_state, energy2D, energy3D
+            )
             num_bond += 1
     if num_bond != 0:
         energy += float(params.binding_energies["Si base"])
@@ -100,7 +123,13 @@ def total_energy_trans(
     return energy
 
 
-def total_energy_wo_trans(atom_set: Dict, bonds: Dict, target: Tuple, params):
+def total_energy_wo_trans(
+    atom_set: Dict,
+    bonds: Dict,
+    target: Tuple[int, int, int],
+    params,
+    energy2D,
+):
     target_z = target[2]
     energy = 0
     num_bond = 0
@@ -109,7 +138,7 @@ def total_energy_wo_trans(atom_set: Dict, bonds: Dict, target: Tuple, params):
     for bond in bonds[target]:
         if atom_set[bond] != 0:
             num_bond += 1
-            energy += bond_energy_same_state(target, bond, params, 2)
+            energy += bond_energy_same_state(target, bond, 2, energy2D, 0)
     if num_bond != 0:
         energy += float(params.binding_energies["Si base"])
     else:
@@ -337,7 +366,7 @@ def possible_events(
     return event_f, rates_f
 
 
-def state_after_move(atom_set, bonds, event, params):
+def state_after_move(atom_set, bonds, event, params, energy2D, energy3D):
     pre = float(params.prefactor)
     kbt = params.temperature_eV
     E2 = 0
@@ -345,9 +374,13 @@ def state_after_move(atom_set, bonds, event, params):
     # 移動後の隣接原子の状態を確認
     for bond in bonds[event]:
         if atom_set[bond] == 2:
-            E2 += bond_energy_same_state(event, bond, params, atom_set[bond])
+            E2 += bond_energy_same_state(
+                event, bond, atom_set[bond], energy2D, energy3D
+            )
         elif atom_set[bond] == 3:
-            E3 += bond_energy_same_state(event, bond, params, atom_set[bond])
+            E3 += bond_energy_same_state(
+                event, bond, atom_set[bond], energy2D, energy3D
+            )
 
     if E2 == E3 == 0:
         return 2
@@ -364,9 +397,14 @@ def state_after_move(atom_set, bonds, event, params):
         return det_state[0]
 
 
-def state_determinate(atom_set, bonds, event_list, params):
+def state_determinate(
+    atom_set, bonds, event_list, params, energy2D, energy2D3D, energy3D
+):
     # 原子が動いた後の構造を設定
-    return [state_after_move(atom_set, bonds, event, params) for event in event_list]
+    return [
+        state_after_move(atom_set, bonds, event, params, energy2D, energy3D)
+        for event in event_list
+    ]
 
     """
     states: List[int] = []
@@ -377,7 +415,9 @@ def state_determinate(atom_set, bonds, event_list, params):
     """
 
 
-def state_change_to_neighbor(atom_set, bonds, target: Tuple[int, int, int], params):
+def state_change_to_neighbor(
+    atom_set, bonds, target: Tuple[int, int, int], params, energy2D, energy3D
+):
     pre = float(params.prefactor)
     kbt = params.temperature_eV
     t_state = atom_set[target]
@@ -386,7 +426,9 @@ def state_change_to_neighbor(atom_set, bonds, target: Tuple[int, int, int], para
     num_bond = 0
     for bond in bonds[target]:
         if atom_set[bond] == t_state:
-            E_change += bond_energy_same_state(target, bond, params, t_state)
+            E_change += bond_energy_same_state(
+                target, bond, t_state, energy2D, energy3D
+            )
             num_bond += 1
         elif atom_set[bond] != 0:
             diff_i += 1
@@ -471,6 +513,9 @@ def site_events(
     bonds: Dict,
     target: Tuple[int, int, int],
     params,
+    energy2D: List[float],
+    energy2D3D: List[float],
+    energy3D: List[float],
 ):
     event_list: List[Tuple] = []
     rate_list: List[float] = []
@@ -481,9 +526,11 @@ def site_events(
     trans = params.trans_check
     # calculate total energy
     if params.trans_check is False:
-        energy = total_energy_wo_trans(atom_set, bonds, target, params)
+        energy = total_energy_wo_trans(atom_set, bonds, target, params, energy2D)
     elif params.trans_check is True:
-        energy = total_energy_trans(atom_set, bonds, target, params)
+        energy = total_energy_trans(
+            atom_set, bonds, target, params, energy2D, energy2D3D, energy3D
+        )
 
     # calculate possible events
     event_list, rate_list = possible_events(
@@ -492,11 +539,13 @@ def site_events(
     # event_list: List[tuple[int, int, int, int], rate_list: List[float]
     if trans is True:
         # 各イベントの構造判定
-        states = state_determinate(atom_set, bonds, event_list, params)
+        states = state_determinate(
+            atom_set, bonds, event_list, params, energy2D, energy2D3D, energy3D
+        )
         # サイトの変わらない構造変化の設定
         """
         # 隣接原子の状態による変化
-        state, rate = state_change_to_neighbor(atom_set, bonds, target, params)
+        state, rate = state_change_to_neighbor(atom_set, bonds, target, params, energy2D, energy3D)
         event_list.append(target)
         rate_list.append(rate)
         states.append(state)

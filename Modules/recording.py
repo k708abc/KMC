@@ -251,6 +251,7 @@ def record_data(
     params,
     minute: int,
     second: float,
+    time_per_eve,
 ):
     maxz = highest_z(pos_all)
     maxz_unit = params.z_unit_init * 6
@@ -287,7 +288,17 @@ def record_data(
         poscar_name = dir_name + rec_name + "_poscar.vasp"
         rec_poscar(pos_i, lattice, unit_length, maxz, poscar_name)
     #
-    rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_name)
+    rec_ppt(
+        params,
+        minute,
+        second,
+        img_names,
+        hist_names,
+        time,
+        coverage,
+        dir_name,
+        time_per_eve,
+    )
     #
     plt.clf()
     plt.close()

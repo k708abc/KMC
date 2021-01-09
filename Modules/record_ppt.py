@@ -4,7 +4,17 @@ import os
 import datetime
 
 
-def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_name):
+def rec_ppt(
+    params,
+    minute,
+    second,
+    img_names,
+    hist_names,
+    time,
+    coverage,
+    dir_name,
+    time_per_dep,
+):
     ppt_name = dir_name + "Layer_analysis_results.pptx"
     if os.path.exists(ppt_name):
         prs = Presentation(ppt_name)
@@ -59,7 +69,7 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     left = Inches(0.1)
     top = Inches(3.5)
     rows = 3
-    cols = 6
+    cols = 7
     width = Inches(13)
     height = Inches(1)
 
@@ -70,6 +80,7 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     table.cell(0, 3).text = "Cut event"
     table.cell(0, 4).text = "Rate limit"
     table.cell(0, 5).text = "Method"
+    table.cell(0, 6).text = "time/event (ms)"
     table.cell(1, 0).text = str(params.trans_check)
     table.cell(1, 1).text = str(params.keep_defect_check)
     table.cell(1, 2).text = str(params.first_put_check)
@@ -82,9 +93,10 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     table.cell(2, 3).text = str(params.cut_number)
     table.cell(2, 4).text = str(params.limit_val)
     table.cell(2, 5).text = str("")
+    table.cell(2, 6).text = str(time_per_dep)
     #
     left = Inches(0.1)
-    top = Inches(5)
+    top = Inches(5.5)
     rows = 2
     cols = 12
     width = Inches(13)
@@ -137,7 +149,7 @@ def rec_ppt(params, minute, second, img_names, hist_names, time, coverage, dir_n
     """
     #
     width = height = Inches(1)
-    top = Inches(6)
+    top = Inches(6.5)
     left = Inches(0.5)
     txBox = slide.shapes.add_textbox(left, top, width, height)
     tf = txBox.text_frame

@@ -29,8 +29,6 @@ class common_functions:
         self.cov_rec: List[float] = []
         self.rec_num_atoms = 0
         self.n_events_perdep = 0
-        #
-        #
         self.n_events_rec: List[int] = []
         self.num_atoms_rec: List[int] = []
 
@@ -51,10 +49,75 @@ class common_functions:
             self.event_time_tot,
             self.event_state,
         ) = lattice_form(self.init_value)
+        self.energy_summarie()
+
+    def energy_summarie(self):
+        self.energy_2D = [
+            self.init_value.binding_energies["Si01"],
+            self.init_value.binding_energies["Si12"],
+            self.init_value.binding_energies["Si23"],
+            self.init_value.binding_energies["Si34"],
+            self.init_value.binding_energies["Si45"],
+        ]
+        #
+        self.energy_2D += [
+            self.init_value.binding_energies["Si_inter"]
+            if i % 2 == 0
+            else self.init_value.binding_energies["Si_intra"]
+            for i in range(self.init_value.z_unit_init * 5 + 1)
+        ]
+        #
+        self.energy_2D3D = [
+            (
+                self.init_value.binding_energies["Si01"]
+                + self.init_value.binding_energies["Si_intra"]
+            )
+            / 2,
+            (
+                self.init_value.binding_energies["Si12"]
+                + self.init_value.binding_energies["Si_inter"]
+            )
+            / 2,
+            (
+                self.init_value.binding_energies["Si23"]
+                + self.init_value.binding_energies["Si_intra"]
+            )
+            / 2,
+            (
+                self.init_value.binding_energies["Si34"]
+                + self.init_value.binding_energies["Si_inter"]
+            )
+            / 2,
+            (
+                self.init_value.binding_energies["Si45"]
+                + self.init_value.binding_energies["Si_intra"]
+            )
+            / 2,
+        ]
+        self.energy_2D3D += [
+            self.init_value.binding_energies["Si_inter"]
+            if i % 2 == 0
+            else self.init_value.binding_energies["Si_intra"]
+            for i in range(self.init_value.z_unit_init * 5 + 1)
+        ]
+        #
+        self.energy_3D = [
+            self.init_value.binding_energies["Si_intra"]
+            if i % 2 == 0
+            else self.init_value.binding_energies["Si_inter"]
+            for i in range(self.init_value.z_unit_init * 6 + 1)
+        ]
+        #
 
     def deposition(self) -> Tuple:
         dep_pos, atom_type = deposit_an_atom(
-            self.atom_set, self.bonds, self.init_value, self.empty_firstBL
+            self.atom_set,
+            self.bonds,
+            self.init_value,
+            self.empty_firstBL,
+            self.energy_2D,
+            self.energy_2D3D,
+            self.energy_3D,
         )
         self.update_after_deposition(dep_pos, atom_type)
         return dep_pos
@@ -87,6 +150,9 @@ class common_functions:
                     self.bonds,
                     target_rel,
                     self.init_value,
+                    self.energy_2D,
+                    self.energy_2D3D,
+                    self.energy_3D,
                 )
             self.total_event_time -= self.event_time_tot[target_rel]
             self.event[target_rel] = events
@@ -113,7 +179,16 @@ class common_functions:
             input()
 
     def rejection_free_deposition(self):
-        print("Progress: " + str(self.n_atoms) + "/" + str(self.init_value.total_atoms) + " Event: " + str(self.n_events_perdep) + "/" + str(self.init_value.cut_number))
+        print(
+            "Progress: "
+            + str(self.n_atoms)
+            + "/"
+            + str(self.init_value.total_atoms)
+            + " Event: "
+            + str(self.n_events_perdep)
+            + "/"
+            + str(self.init_value.cut_number)
+        )
         dep_pos = self.deposition()
         # 蒸着によりイベントに変化が生じうる原子
         self.related_atoms = recalculate(
@@ -210,6 +285,7 @@ class common_functions:
         self.elapsed_time = time.time() - self.start_time
         self.minute = math.floor(self.elapsed_time / 60)
         self.second = int(self.elapsed_time % 60)
+        self.time_per_event = round(self.elapsed_time / self.n_events * 1000, 3)
         rec_events_per_dep(self.n_events_rec, self.num_atoms_rec, self.init_value)
         record_data(
             self.pos_rec,
@@ -219,6 +295,7 @@ class common_functions:
             self.init_value,
             self.minute,
             self.second,
+            self.time_per_event,
         )
         #
         # self.time_check()

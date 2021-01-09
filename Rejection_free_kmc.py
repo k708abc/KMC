@@ -22,11 +22,7 @@ class rejection_free(common_functions):
         print("Recording")
         self.end_of_loop()
         print("Finished: " + str(self.minute) + " min " + str(self.second) + " sec")
-        print(
-            "Time/event: "
-            + str(round(self.elapsed_time / self.n_events * 1000, 3))
-            + " ms"
-        )
+        print("Time/event: " + str(self.time_per_event) + " ms")
         input()
 
 

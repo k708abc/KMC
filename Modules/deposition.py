@@ -30,11 +30,13 @@ def dep_position(candidate: List) -> Tuple[int, int, int]:
     return candidate[math.floor(random.random() * len(candidate))]
 
 
-def judge_type(atom_set: Dict, bonds: Dict, dep_pos: Tuple, params) -> int:
+def judge_type(
+    atom_set: Dict, bonds: Dict, dep_pos: Tuple, params, energy2D, energy3D
+) -> int:
     # 周囲の原子の様子等に応じて原子の状態を区別
     # silicene or diamond etc...
     if params.trans_check:
-        return state_after_move(atom_set, bonds, dep_pos, params)
+        return state_after_move(atom_set, bonds, dep_pos, params, energy2D, energy3D)
     else:
         return 2
 
@@ -52,14 +54,20 @@ def remove_first(candidate) -> List[Tuple]:
 
 
 def deposit_an_atom(
-    atom_set: Dict, bonds: Dict, params: Params, empty_first: int
+    atom_set: Dict,
+    bonds: Dict,
+    params: Params,
+    empty_first: int,
+    energy2D,
+    energy2D3D,
+    energy3D,
 ) -> Tuple:
     candidate = find_candidates(atom_set, bonds)
     if (params.keep_defect_check is True) and (empty_first == int(params.num_defect)):
         candidate = remove_first(candidate)
 
     dep_pos = dep_position(candidate)
-    atom_type = judge_type(atom_set, bonds, dep_pos, params)
+    atom_type = judge_type(atom_set, bonds, dep_pos, params, energy2D, energy3D)
 
     return dep_pos, atom_type
 
