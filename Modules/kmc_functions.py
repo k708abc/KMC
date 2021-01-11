@@ -108,6 +108,13 @@ class common_functions:
             for i in range(self.init_value.z_unit_init * 6 + 1)
         ]
         #
+        self.energy_else = [
+            self.init_value.binding_energies["Ag base"],
+            self.init_value.binding_energies["AgSi"],
+            self.init_value.binding_energies["Si base"],
+            self.init_value.binding_energies["ES"],
+            self.init_value.transformation,
+        ]
 
     def deposition(self) -> Tuple:
         dep_pos, atom_type = deposit_an_atom(
@@ -153,6 +160,7 @@ class common_functions:
                     self.energy_2D,
                     self.energy_2D3D,
                     self.energy_3D,
+                    self.energy_else,
                 )
             self.total_event_time -= self.event_time_tot[target_rel]
             self.event[target_rel] = events

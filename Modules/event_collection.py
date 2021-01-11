@@ -16,96 +16,32 @@ def bond_energy_same_state(
     energy2D,
     energy3D,
 ):
-    z_target = target[2]
-    z_bond = bond[2]
     if atom_state == 2:
-        return energy2D[int((z_target + z_bond - 1) / 2)]
-        """
-        if z_target + z_bond == 1:
-            return params.binding_energies["Si01"]
-        elif z_target + z_bond == 3:
-            return params.binding_energies["Si12"]
-        elif z_target + z_bond == 5:
-            return params.binding_energies["Si23"]
-        elif z_target + z_bond == 7:
-            return params.binding_energies["Si34"]
-        elif z_target + z_bond == 9:
-            return params.binding_energies["Si45"]
-        elif z_target + z_bond == 11:
-            return params.binding_energies["Si_inter"]
-        elif (z_target + z_bond - 1) % 4 == 0:
-            return params.binding_energies["Si_intra"]
-        elif (z_target + z_bond - 1) % 4 == 2:
-            return params.binding_energies["Si_inter"]
-        else:
-            raise RuntimeError("Something wrong in 2D energy")
-        """
+        return energy2D[int((target[2] + bond[2] - 1) / 2)]
     else:
-        return energy3D[int((z_target + z_bond - 1) / 2)]
-        """
-        if (z_target + z_bond - 1) % 4 == 0:
-            return params.binding_energies["Si_intra"]
-        elif (z_target + z_bond - 1) % 4 == 2:
-            return params.binding_energies["Si_inter"]
-        else:
-            raise RuntimeError("Something wrong in 3D energy")
-        return 0
-        """
+        return energy3D[int((target[2] + bond[2] - 1) / 2)]
 
 
 def bond_energy_diff_state(
     target: Tuple[int, int, int], bond: Tuple, energy2D3D: List[float]
 ):
     return energy2D3D[int((bond[2] + target[2] - 1) / 2)]
-    """
-    z_target = target[2]
-    z_bond = bond[2]
-    if z_target + z_bond == 1:
-        return (
-            params.binding_energies["Si01"] + params.binding_energies["Si_intra"]
-        ) / 2
-    elif z_target + z_bond == 3:
-        return (
-            params.binding_energies["Si12"] + params.binding_energies["Si_inter"]
-        ) / 2
-    elif z_target + z_bond == 5:
-        return (
-            params.binding_energies["Si23"] + params.binding_energies["Si_intra"]
-        ) / 2
-    elif z_target + z_bond == 7:
-        return (
-            params.binding_energies["Si34"] + params.binding_energies["Si_inter"]
-        ) / 2
-    elif z_target + z_bond == 9:
-        return (
-            params.binding_energies["Si45"] + params.binding_energies["Si_intra"]
-        ) / 2
-    elif z_target + z_bond == 11:
-        return params.binding_energies["Si_inter"]
-    elif (z_target + z_bond - 1) % 4 == 0:
-        return params.binding_energies["Si_intra"]
-    elif (z_target + z_bond - 1) % 4 == 2:
-        return params.binding_energies["Si_inter"]
-    else:
-        raise RuntimeError("Something wrong in diff state energy")
-    """
 
 
 def total_energy_trans(
     atom_set: Dict,
     bonds: Dict,
     target: Tuple[int, int, int],
-    params,
+    energy_else,
     energy2D,
     energy2D3D,
     energy3D,
 ):
-    target_z = target[2]
     target_state = atom_set[target]
     energy = 0
     num_bond = 0
-    if target_z == 0:
-        energy += params.binding_energies["AgSi"]
+    if target[2] == 0:
+        energy += energy_else[1]  # AgSi
     for bond in bonds[target]:
         bond_state = atom_set[bond]
         if bond_state not in (0, target_state):
@@ -117,9 +53,9 @@ def total_energy_trans(
             )
             num_bond += 1
     if num_bond != 0:
-        energy += float(params.binding_energies["Si base"])
+        energy += energy_else[2]  # Si base
     else:
-        energy += float(params.binding_energies["Ag base"])
+        energy += energy_else[0]  # Ag base
     return energy
 
 
@@ -127,22 +63,21 @@ def total_energy_wo_trans(
     atom_set: Dict,
     bonds: Dict,
     target: Tuple[int, int, int],
-    params,
+    energy_else,
     energy2D,
 ):
-    target_z = target[2]
     energy = 0
     num_bond = 0
-    if target_z == 0:
-        energy += params.binding_energies["AgSi"]
+    if target[2] == 0:
+        energy += energy_else[1]  # AgSi
     for bond in bonds[target]:
         if atom_set[bond] != 0:
             num_bond += 1
             energy += bond_energy_same_state(target, bond, 2, energy2D, 0)
     if num_bond != 0:
-        energy += float(params.binding_energies["Si base"])
+        energy += energy_else[2]  # Si base
     else:
-        energy += float(params.binding_energies["Ag base"])
+        energy += energy_else[0]  # Ag base
     return energy
 
 
@@ -164,7 +99,6 @@ def find_lower_sites(indexes):
 
 # 移動後に原子が孤立するような移動は省く
 def judge_isolation(atom_set, bonds, target: Tuple[int, int, int], nn_atom, events):
-    rem_eve = []
     for check in nn_atom:
         # 隣接原子の周囲の原子数
         nn_nn_atom = find_lower_sites(bonds[check])
@@ -179,13 +113,10 @@ def judge_isolation(atom_set, bonds, target: Tuple[int, int, int], nn_atom, even
                 if post_move[0] in bonds[check]:
                     # 移動後のサイトの隣接原子
                     post_nn_atom = find_filled_sites(atom_set, post_move)
-                    # ダイマーを形成（2原子で孤立）→孤立
+                    # 2原子で孤立している→remove
                     if len(post_nn_atom) <= 1:
-                        rem_eve.append(post_move)
-                # 移動後に孤立
-                else:
-                    rem_eve.append(post_move)
-    return rem_eve
+                        events.remove(post_move)
+    return events
 
 
 def judge_defect(target: Tuple[int, int, int], events):
@@ -195,14 +126,6 @@ def judge_defect(target: Tuple[int, int, int], events):
         if ((target[2] not in (0, 1)) and (event[2] in (0, 1)))
     ]
 
-    """
-    remove = []
-    for event in events:
-        if (target[2] not in (0, 1)) and (event[2] in (0, 1)):
-            remove.append(event)
-    return remove
-    """
-
 
 def possible_events(
     atom_set: Dict,
@@ -210,19 +133,13 @@ def possible_events(
     target: Tuple[int, int, int],
     params,
     energy: float,
-    unit_length: int,
-    defect: bool,
-    empty_first: int,
-    trans: bool,
+    energy_else,
 ):
     pre = float(params.prefactor)
     kbt = params.temperature_eV
     eve_rate: List = []
     rearange_rate = decimal.Decimal(rate(pre, kbt, energy))
-
-    # events: List[Tuple] = []
-    # rates: List[float] = []
-
+    unit_length = params.n_cell_init
     #
     atom_x, atom_y, atom_z = target
     # nnn: next nearest neighbor
@@ -254,9 +171,7 @@ def possible_events(
         if (len(find_filled_sites(atom_set, bonds[empty])) >= 1 or empty[2] == 0)
     ]
     # BLの上り下り
-    rearange_rate = decimal.Decimal(
-        rate(pre, kbt, energy + params.binding_energies["ES"])
-    )
+    rearange_rate = decimal.Decimal(rate(pre, kbt, energy + energy_else[3]))
     # BLの下層原子
     if atom_z % 2 == 0:
         # BLを上る判定
@@ -278,7 +193,7 @@ def possible_events(
             # 直下に原子がないときパス
             if atom_set[direct_below] == 0:
                 pass
-            # 直下に原子があるおき
+            # 直下に原子があるとき
             else:
                 eve_rate += [
                     (empty, rearange_rate)
@@ -352,17 +267,10 @@ def possible_events(
             ]
 
     # イベントリストから、孤立原子を生じるイベントを抽出
-    remove = judge_isolation(atom_set, bonds, target, nn_atom, eve_rate)
-    # 削除
-    event_f: List = []
-    rates_f: List = []
-    for eves in eve_rate:
-        if eves[0] in remove:
-            pass
-        else:
-            event_f.append(eves[0])
-            rates_f.append(eves[1])
-
+    eve_rate = judge_isolation(atom_set, bonds, target, nn_atom, eve_rate)
+    #
+    event_f: List = [eves[0] for eves in eve_rate]
+    rates_f: List = [eves[1] for eves in eve_rate]
     return event_f, rates_f
 
 
@@ -405,14 +313,6 @@ def state_determinate(
         state_after_move(atom_set, bonds, event, params, energy2D, energy3D)
         for event in event_list
     ]
-
-    """
-    states: List[int] = []
-    for event in event_list:
-        state = state_after_move(atom_set, bonds, event, params)
-        states.append(state)
-    return states
-    """
 
 
 def state_change_to_neighbor(
@@ -516,26 +416,25 @@ def site_events(
     energy2D: List[float],
     energy2D3D: List[float],
     energy3D: List[float],
+    energy_else: List[float],
 ):
     event_list: List[Tuple] = []
     rate_list: List[float] = []
-    unit_length = params.n_cell_init
     states: List[int] = []
-    defect = params.keep_defect_check
-    empty_first = int(params.num_defect)
+
     trans = params.trans_check
     # calculate total energy
     if params.trans_check is False:
-        energy = total_energy_wo_trans(atom_set, bonds, target, params, energy2D)
-    elif params.trans_check is True:
+        energy = total_energy_wo_trans(atom_set, bonds, target, energy_else, energy2D)
+    else:
         energy = total_energy_trans(
-            atom_set, bonds, target, params, energy2D, energy2D3D, energy3D
+            atom_set, bonds, target, energy_else, energy2D, energy2D3D, energy3D
         )
-
     # calculate possible events
     event_list, rate_list = possible_events(
-        atom_set, bonds, target, params, energy, unit_length, defect, empty_first, trans
+        atom_set, bonds, target, params, energy, energy_else
     )
+
     # event_list: List[tuple[int, int, int, int], rate_list: List[float]
     if trans is True:
         # 各イベントの構造判定
@@ -602,4 +501,3 @@ if __name__ == "__main__":
     print("Poscars for event check are formed.")
     end_time = time.time() - start
     print(end_time)
-    # average time before : 0.017 s
