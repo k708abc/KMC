@@ -182,6 +182,78 @@ def hist_formation(pos: Dict, maxz: int, n_BL: int):
 
 
 def rec_poscar(pos: Dict, lattice: Dict, unit_length: int, maxz: int, rec_name: str):
+    xp: list[float] = [[]]
+    yp: list[float] = [[]]
+    zp: list[float] = [[]]
+    zmax = 1
+    atom_list = [
+        "B",
+        "C",
+        "N",
+        "O",
+        "F",
+        "Al",
+        "Si",
+        "P",
+        "S",
+        "Cl",
+        "Ga",
+        "Ge",
+        "As",
+        "Se",
+        "Br",
+    ]
+    #
+    x_Ag: list[float] = []
+    y_Ag: list[float] = []
+    Si_unit = 0.384
+    Ag_unit = 0.289
+    unit_size = unit_length * Si_unit
+    Ag_num = round(unit_size / Ag_unit)
+    x_Ag = [i / Ag_num for i in range(Ag_num) for _ in range(Ag_num)]
+    y_Ag = [i / Ag_num for _ in range(Ag_num) for i in range(Ag_num)]
+    #
+
+    for index, atom_state in pos.items():
+        if atom_state != 0:
+            z_val = index[2]
+            if z_val > zmax:
+                while zmax < z_val:
+                    xp.append([])
+                    yp.append([])
+                    zp.append([])
+                    zmax += 2
+            xp[z_val // 2].append(lattice[index][0] / unit_length)
+            yp[z_val // 2].append(lattice[index][1] / unit_length)
+            zp[z_val // 2].append((lattice[index][2] + 0.7) / maxz / 2.448)
+    #
+    file_data = open(rec_name, "w")
+    file_data.write(rec_name + "\n")
+    file_data.write("10" + "\n")
+    file_data.write(str(unit_length) + "\t" + "0" + "\t" + "0" + "\n")
+    file_data.write(
+        str(unit_length / 2) + "\t" + str(unit_length / 2 * 1.732) + "\t" + "0" + "\n"
+    )
+    file_data.write("0" + "\t" + "0" + "\t" + str(maxz * 2.448) + "\n")
+    #
+    file_data.write("Ag" + "\t")
+    for i in range(len(zp)):
+        file_data.write(atom_list[i] + "\t")
+    file_data.write("\n")
+    file_data.write(str(len(x_Ag)) + "\t")
+    for i in range(len(zp)):
+        file_data.write(str(len(zp[i])) + "\t")
+    file_data.write("\n")
+    file_data.write("direct" + "\n")
+    #
+    for i in range(len(x_Ag)):
+        file_data.write(str(x_Ag[i]) + "\t" + str(y_Ag[i]) + "\t" + str(0) + "\n")
+    for (i, j, k) in zip(xp, yp, zp):
+        for (xval, yval, zval) in zip(i, j, k):
+            file_data.write(str(xval) + "\t" + str(yval) + "\t" + str(zval) + "\n")
+    file_data.close()
+
+    """
     xp2: list[float] = []
     yp2: list[float] = []
     zp2: list[float] = []
@@ -219,6 +291,7 @@ def rec_poscar(pos: Dict, lattice: Dict, unit_length: int, maxz: int, rec_name: 
     for i in range(len(xp3)):
         file_data.write(str(xp3[i]) + "\t" + str(yp3[i]) + "\t" + str(zp3[i]) + "\n")
     file_data.close()
+    """
 
 
 def dir_formarion(name: str):
@@ -227,6 +300,8 @@ def dir_formarion(name: str):
 
 def rec_events_per_dep(num_events: List[int], atoms: List[int], params):
     dir_name = params.record_name + "/"
+    if os.path.exists(dir_name) is False:
+        os.mkdir(dir_name)
     fig = plt.figure()
     plt.plot(atoms, num_events)
     plt.xlabel("Num. Atoms")
@@ -287,6 +362,8 @@ def record_data(
         #
         poscar_name = dir_name + rec_name + "_poscar.vasp"
         rec_poscar(pos_i, lattice, unit_length, maxz, poscar_name)
+        plt.clf()
+        plt.close()
     #
     rec_ppt(
         params,
@@ -300,5 +377,3 @@ def record_data(
         time_per_eve,
     )
     #
-    plt.clf()
-    plt.close()
