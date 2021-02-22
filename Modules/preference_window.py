@@ -170,23 +170,18 @@ class Window(ttk.Frame, common_functions, null_functions):
     def create_widgets_energies(self) -> None:
         self.labels: List[str] = [
             "  ",
-            "Ag base",
-            "AgSi",
-            "Si base",
-            "Si12",
-            "Si23",
-            "Si34",
-            "Si45",
-            "Si56",
-            "Si_inter",
-            "Si_intra",
-            "ES",
+            "Si_1st BL",
+            "Si_2nd BL",
+            "Si_3rd BL",
+            "Si_else",
         ]
 
         self.energylabels = []
+        self.diffuse = []
         self.energies = []
         self.rate_labels = []
-        for _ in range(11):
+        for _ in range(4):
+            self.diffuse.append(ttk.Entry(self.frame_energies, width=7))
             self.energies.append(ttk.Entry(self.frame_energies, width=7))
             self.rate_labels.append(ttk.Label(self.frame_energies, text="0"))
         for (energy, (key, val)) in zip(
@@ -194,6 +189,12 @@ class Window(ttk.Frame, common_functions, null_functions):
         ):
             energy.insert(tk.END, val)
             energy.bind("<Return>", self.update_click)
+        for (diffuse, (key, val)) in zip(
+            self.diffuse, self.init_value.diffusion_barriers.items()
+        ):
+            diffuse.insert(tk.END, val)
+            diffuse.bind("<Return>", self.update_click)
+
         for label in self.labels:
             self.energylabels.append(ttk.Label(self.frame_energies, text=label))
 
@@ -201,14 +202,22 @@ class Window(ttk.Frame, common_functions, null_functions):
         # self.update_values()
         for i, energylabel in enumerate(self.energylabels):
             energylabel.grid(row=0, column=i, **self.padWE)
-        self.energy_label0 = ttk.Label(self.frame_energies, text="Energy (eV)")
-        self.energy_label0.grid(row=1, column=0, **self.padWE)
+        self.energy_label_diffuse = ttk.Label(
+            self.frame_energies, text="Diffusion Energy (eV)"
+        )
+        self.energy_label_diffuse.grid(row=1, column=0, **self.padWE)
+        for i, diffuse_entry in enumerate(self.diffuse):
+            diffuse_entry.grid(row=1, column=i + 1)
+
+        self.energy_label0 = ttk.Label(self.frame_energies, text="Bond Energy (eV)")
+        self.energy_label0.grid(row=2, column=0, **self.padWE)
+
         for i, energy_entry in enumerate(self.energies):
-            energy_entry.grid(row=1, column=i + 1)
-        self.rate_bond_label = ttk.Label(self.frame_energies, text="Rates/bond")
-        self.rate_bond_label.grid(row=2, **self.padWE)
+            energy_entry.grid(row=2, column=i + 1)
+        self.rate_bond_label = ttk.Label(self.frame_energies, text="Diffuse rate")
+        self.rate_bond_label.grid(row=3, **self.padWE)
         for i, ratelabel in enumerate(self.rate_labels):
-            ratelabel.grid(row=2, column=i + 1)
+            ratelabel.grid(row=3, column=i + 1)
 
     def create_widgets_checks(self) -> None:
         self.bln_tr = tk.BooleanVar()
@@ -385,10 +394,17 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.init_value.dep_time = float(self.deposition_time.get())
 
         self.init_value.prefactor = float(self.prefactor.get())
+        #
+        for diffuse_entry, diffuse_key in zip(
+            self.diffuse, self.init_value.diffusion_barriers
+        ):
+            self.init_value.diffusion_barriers[diffuse_key] = float(diffuse_entry.get())
+        #
         for energy_entry, energy_key in zip(
             self.energies, self.init_value.binding_energies
         ):
             self.init_value.binding_energies[energy_key] = float(energy_entry.get())
+
         self.init_value.transformation = float(self.transformation.get())
         self.init_value.record_name = str(self.record.get())
         self.init_value.img_per = float(self.image_rec.get())
@@ -410,7 +426,8 @@ class Window(ttk.Frame, common_functions, null_functions):
         kbt = self.init_value.temperature_eV
         self.temperautre_energy["text"] = "{:.3g}".format(kbt)
         num = 0
-        for energy, rate_label in zip(self.energies, self.rate_labels):
+        for diffuse_energy, rate_label in zip(self.diffuse, self.rate_labels):
+            """
             if num == 0:
                 E_value = float(self.init_value.binding_energies["Ag base"])
                 num = 1
@@ -426,6 +443,8 @@ class Window(ttk.Frame, common_functions, null_functions):
                 E_value = float(energy.get()) + float(
                     self.init_value.binding_energies["Si base"]
                 )
+            """
+            E_value = float(diffuse_energy.get())
 
             rate_label["text"] = str(
                 "{:.3g}".format(rate(float(self.prefactor.get()), kbt, E_value))

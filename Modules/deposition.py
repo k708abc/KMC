@@ -59,7 +59,6 @@ def deposit_an_atom(
     params: Params,
     empty_first: int,
     energy2D,
-    energy2D3D,
     energy3D,
 ) -> Tuple:
     candidate = find_candidates(atom_set, bonds)

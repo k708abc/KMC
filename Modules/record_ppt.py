@@ -39,7 +39,7 @@ def rec_ppt(
     p.font.size = Pt(28)
     shapes = slide.shapes
     left = Inches(0.1)
-    top = Inches(1.5)
+    top = Inches(1)
     rows = 2
     cols = 9
     width = Inches(13)
@@ -67,9 +67,9 @@ def rec_ppt(
     table0.cell(1, 8).text = str(dt_now.strftime("%Y/%m/%d/ %H:%M:%S"))
     #
     left = Inches(0.1)
-    top = Inches(3.5)
+    top = Inches(2.5)
     rows = 3
-    cols = 7
+    cols = 8
     width = Inches(13)
     height = Inches(1)
 
@@ -79,6 +79,7 @@ def rec_ppt(
     table.cell(0, 2).text = "Put at first"
     table.cell(0, 3).text = "Cut event"
     table.cell(0, 4).text = "Rate limit"
+
     table.cell(0, 5).text = "Method"
     table.cell(0, 6).text = "time/event (ms)"
     table.cell(1, 0).text = str(params.trans_check)
@@ -96,61 +97,46 @@ def rec_ppt(
     table.cell(2, 6).text = str(time_per_dep)
     #
     left = Inches(0.1)
-    top = Inches(5.5)
-    rows = 2
-    cols = 12
+    top = Inches(4.2)
+    rows = 3
+    cols = 5
     width = Inches(13)
     height = Inches(1)
     table = shapes.add_table(rows, cols, left, top, width, height).table
-    table.cell(0, 1).text = "Ag base"
-    table.cell(0, 2).text = "Ag-Si"
-    table.cell(0, 3).text = "Si base"
-    table.cell(0, 4).text = "Si(0-1)"
-    table.cell(0, 5).text = "Si(1-2)"
-    table.cell(0, 6).text = "Si(2-3)"
-    table.cell(0, 7).text = "Si(3-4)"
-    table.cell(0, 8).text = "Si(4-5)"
-    table.cell(0, 9).text = "Si(inter)"
-    table.cell(0, 10).text = "Si(intra)"
-    table.cell(0, 11).text = "ES"
+    # table.cell(0, 1).text = "Ag base"
+    # table.cell(0, 2).text = "Ag-Si"
+    # table.cell(0, 3).text = "Si base"
+    table.cell(0, 1).text = "Si(1st)"
+    table.cell(0, 2).text = "Si(2nd)"
+    table.cell(0, 3).text = "Si(3rd)"
+    table.cell(0, 4).text = "Si(else)"
     # table.cell(0, 9).text = "Ag(top)"
     # table.cell(0, 10).text = "Trans."
-    table.cell(1, 0).text = "Energy"
-    table.cell(1, 1).text = str(params.binding_energies["Ag base"])
-    table.cell(1, 2).text = str(params.binding_energies["AgSi"])
-    table.cell(1, 3).text = str(params.binding_energies["Si base"])
-    table.cell(1, 4).text = str(params.binding_energies["Si01"])
-    table.cell(1, 5).text = str(params.binding_energies["Si12"])
-    table.cell(1, 6).text = str(params.binding_energies["Si23"])
-    table.cell(1, 7).text = str(params.binding_energies["Si34"])
-    table.cell(1, 8).text = str(params.binding_energies["Si45"])
-    table.cell(1, 9).text = str(params.binding_energies["Si_inter"])
-    table.cell(1, 10).text = str(params.binding_energies["Si_intra"])
-    table.cell(1, 11).text = str(params.binding_energies["ES"])
+    table.cell(1, 0).text = "Diffusion (eV)"
+    # table.cell(1, 1).text = str(params.binding_energies["Ag base"])
+    # table.cell(1, 2).text = str(params.binding_energies["AgSi"])
+    # table.cell(1, 3).text = str(params.binding_energies["Si base"])
+    table.cell(1, 1).text = str(params.diffusion_barriers["Si_1st"])
+    table.cell(1, 2).text = str(params.diffusion_barriers["Si_2nd"])
+    table.cell(1, 3).text = str(params.diffusion_barriers["Si_3rd"])
+    table.cell(1, 4).text = str(params.diffusion_barriers["Si_else"])
+
     # table.cell(1, 9).text = str(params.binding_energies["Agtop"])
     # table.cell(1, 10).text = str(params.transformation)
     #
-    """
-    left = Inches(0.5)
-    top = Inches(6.5)
-    rows = 2
-    cols = 3
-    width = Inches(8)
-    height = Inches(0.5)
+    table.cell(2, 0).text = "Binding (eV)"
+    # table.cell(1, 1).text = str(params.binding_energies["Ag base"])
+    # table.cell(1, 2).text = str(params.binding_energies["AgSi"])
+    # table.cell(1, 3).text = str(params.binding_energies["Si base"])
+    table.cell(2, 1).text = str(params.binding_energies["Si_1st"])
+    table.cell(2, 2).text = str(params.binding_energies["Si_2nd"])
+    table.cell(2, 3).text = str(params.binding_energies["Si_3rd"])
+    table.cell(2, 4).text = str(params.binding_energies["Si_else"])
+    ##
 
-    table = shapes.add_table(rows, cols, left, top, width, height).table
-    table.cell(0, 0).text = "Total energy"
-    table.cell(0, 1).text = "1 ML"
-    table.cell(0, 2).text = "Final"
-
-    table.cell(1, 0).text = str('{:.3g}'.format(E))
-    table.cell(1, 1).text = str('{:.3g}'.format(ML_check))
-    table.cell(1, 2).text = str('{:.3g}'.format(final_check))
-    """
-    #
     width = height = Inches(1)
-    top = Inches(6.5)
-    left = Inches(0.5)
+    top = Inches(5.3)
+    left = Inches(0.2)
     txBox = slide.shapes.add_textbox(left, top, width, height)
     tf = txBox.text_frame
     p = tf.add_paragraph()

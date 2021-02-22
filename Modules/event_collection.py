@@ -11,51 +11,41 @@ import decimal
 
 def bond_energy_same_state(
     target: Tuple[int, int, int],
-    bond: Tuple,
     atom_state: int,
     energy2D,
     energy3D,
 ):
     if atom_state == 2:
-        return energy2D[int((target[2] + bond[2] - 1) / 2)]
+        return energy2D[int(target[2] // 2)]
     else:
-        return energy3D[int((target[2] + bond[2] - 1) / 2)]
+        return energy3D[int(target[2] // 2)]
 
 
-def bond_energy_diff_state(
-    target: Tuple[int, int, int], bond: Tuple, energy2D3D: List[float]
-):
-    return energy2D3D[int((bond[2] + target[2] - 1) / 2)]
+def bond_energy_diff_state(target: Tuple[int, int, int], energy2D3D: List[float]):
+    return energy2D3D[int(target[2] // 2)]
 
 
 def total_energy_trans(
     atom_set: Dict,
     bonds: Dict,
     target: Tuple[int, int, int],
-    energy_else,
-    energy2D,
-    energy2D3D,
-    energy3D,
+    energy2D: List[float],
+    energy2D3D: List[float],
+    energy3D: List[float],
+    diffuse_energy: List[float],
 ):
     target_state = atom_set[target]
-    energy = 0
-    num_bond = 0
-    if target[2] == 0:
-        energy += energy_else[1]  # AgSi
+    energy = diffuse_energy[target[2] // 2]  # base energy for diffusion
     for bond in bonds[target]:
         bond_state = atom_set[bond]
-        if bond_state not in (0, target_state):
-            energy += bond_energy_diff_state(target, bond, energy2D3D)
-            num_bond += 1
+        if bond_state == 0:
+            pass
+        elif (bond[0], bond[1]) == (target[0], target[1]):
+            pass
+        elif bond_state != target_state:
+            energy += bond_energy_diff_state(target, energy2D3D)
         elif bond_state == target_state:
-            energy += bond_energy_same_state(
-                target, bond, target_state, energy2D, energy3D
-            )
-            num_bond += 1
-    if num_bond != 0:
-        energy += energy_else[2]  # Si base
-    else:
-        energy += energy_else[0]  # Ag base
+            energy += bond_energy_same_state(target, target_state, energy2D, energy3D)
     return energy
 
 
@@ -63,21 +53,15 @@ def total_energy_wo_trans(
     atom_set: Dict,
     bonds: Dict,
     target: Tuple[int, int, int],
-    energy_else,
-    energy2D,
+    energy2D: List[float],
+    diffuse_energy: List[float],
 ):
-    energy = 0
+    energy = diffuse_energy[target[2] // 2]
     num_bond = 0
-    if target[2] == 0:
-        energy += energy_else[1]  # AgSi
     for bond in bonds[target]:
-        if atom_set[bond] != 0:
+        if atom_set[bond] != 0 and (bond[0], bond[1]) != (target[0], target[1]):
             num_bond += 1
-            energy += bond_energy_same_state(target, bond, 2, energy2D, 0)
-    if num_bond != 0:
-        energy += energy_else[2]  # Si base
-    else:
-        energy += energy_else[0]  # Ag base
+    energy += num_bond * bond_energy_same_state(target, 2, energy2D, 0)
     return energy
 
 
@@ -133,7 +117,6 @@ def possible_events(
     target: Tuple[int, int, int],
     params,
     energy: float,
-    energy_else,
 ):
     pre = float(params.prefactor)
     kbt = params.temperature_eV
@@ -171,7 +154,7 @@ def possible_events(
         if (len(find_filled_sites(atom_set, bonds[empty])) >= 1 or empty[2] == 0)
     ]
     # BLの上り下り
-    rearange_rate = decimal.Decimal(rate(pre, kbt, energy + energy_else[3]))
+    rearange_rate = decimal.Decimal(rate(pre, kbt, energy))
     # BLの下層原子
     if atom_z % 2 == 0:
         # BLを上る判定
@@ -282,13 +265,9 @@ def state_after_move(atom_set, bonds, event, params, energy2D, energy3D):
     # 移動後の隣接原子の状態を確認
     for bond in bonds[event]:
         if atom_set[bond] == 2:
-            E2 += bond_energy_same_state(
-                event, bond, atom_set[bond], energy2D, energy3D
-            )
+            E2 += bond_energy_same_state(event, atom_set[bond], energy2D, energy3D)
         elif atom_set[bond] == 3:
-            E3 += bond_energy_same_state(
-                event, bond, atom_set[bond], energy2D, energy3D
-            )
+            E3 += bond_energy_same_state(event, atom_set[bond], energy2D, energy3D)
 
     if E2 == E3 == 0:
         return 2
@@ -416,23 +395,29 @@ def site_events(
     energy2D: List[float],
     energy2D3D: List[float],
     energy3D: List[float],
-    energy_else: List[float],
+    diffuse_energy: List[float],
 ):
     event_list: List[Tuple] = []
     rate_list: List[float] = []
     states: List[int] = []
-
     trans = params.trans_check
     # calculate total energy
-    if params.trans_check is False:
-        energy = total_energy_wo_trans(atom_set, bonds, target, energy_else, energy2D)
+    if trans is False:
+        energy = total_energy_wo_trans(
+            atom_set, bonds, target, energy2D, diffuse_energy
+        )
+
     else:
         energy = total_energy_trans(
-            atom_set, bonds, target, energy_else, energy2D, energy2D3D, energy3D
+            atom_set, bonds, target, energy2D, energy2D3D, energy3D, diffuse_energy
         )
     # calculate possible events
     event_list, rate_list = possible_events(
-        atom_set, bonds, target, params, energy, energy_else
+        atom_set,
+        bonds,
+        target,
+        params,
+        energy,
     )
 
     # event_list: List[tuple[int, int, int, int], rate_list: List[float]

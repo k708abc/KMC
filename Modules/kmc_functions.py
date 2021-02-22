@@ -53,67 +53,53 @@ class common_functions:
 
     def energy_summarie(self):
         self.energy_2D = [
-            self.init_value.binding_energies["Si01"],
-            self.init_value.binding_energies["Si12"],
-            self.init_value.binding_energies["Si23"],
-            self.init_value.binding_energies["Si34"],
-            self.init_value.binding_energies["Si45"],
+            self.init_value.binding_energies["Si_1st"],
+            self.init_value.binding_energies["Si_2nd"],
+            self.init_value.binding_energies["Si_3rd"],
         ]
         #
         self.energy_2D += [
-            self.init_value.binding_energies["Si_inter"]
-            if i % 2 == 0
-            else self.init_value.binding_energies["Si_intra"]
-            for i in range(self.init_value.z_unit_init * 5 + 1)
+            self.init_value.binding_energies["Si_else"]
+            for i in range(self.init_value.z_unit_init * 3 - 2)
         ]
         #
         self.energy_2D3D = [
             (
-                self.init_value.binding_energies["Si01"]
-                + self.init_value.binding_energies["Si_intra"]
+                self.init_value.binding_energies["Si_1st"]
+                + self.init_value.binding_energies["Si_else"]
             )
             / 2,
             (
-                self.init_value.binding_energies["Si12"]
-                + self.init_value.binding_energies["Si_inter"]
+                self.init_value.binding_energies["Si_2nd"]
+                + self.init_value.binding_energies["Si_else"]
             )
             / 2,
             (
-                self.init_value.binding_energies["Si23"]
-                + self.init_value.binding_energies["Si_intra"]
-            )
-            / 2,
-            (
-                self.init_value.binding_energies["Si34"]
-                + self.init_value.binding_energies["Si_inter"]
-            )
-            / 2,
-            (
-                self.init_value.binding_energies["Si45"]
-                + self.init_value.binding_energies["Si_intra"]
+                self.init_value.binding_energies["Si_3rd"]
+                + self.init_value.binding_energies["Si_else"]
             )
             / 2,
         ]
         self.energy_2D3D += [
-            self.init_value.binding_energies["Si_inter"]
-            if i % 2 == 0
-            else self.init_value.binding_energies["Si_intra"]
-            for i in range(self.init_value.z_unit_init * 5 + 1)
+            self.init_value.binding_energies["Si_else"]
+            for i in range(self.init_value.z_unit_init * 3 - 2)
         ]
         #
         self.energy_3D = [
-            self.init_value.binding_energies["Si_intra"]
-            if i % 2 == 0
-            else self.init_value.binding_energies["Si_inter"]
-            for i in range(self.init_value.z_unit_init * 6 + 1)
+            self.init_value.binding_energies["Si_else"]
+            for i in range(self.init_value.z_unit_init * 3 + 1)
         ]
         #
-        self.energy_else = [
-            self.init_value.binding_energies["Ag base"],
-            self.init_value.binding_energies["AgSi"],
-            self.init_value.binding_energies["Si base"],
-            self.init_value.binding_energies["ES"],
-            self.init_value.transformation,
+        self.diffuse_energy = [
+            self.init_value.diffusion_barriers["Si_1st"],
+            self.init_value.diffusion_barriers["Si_2nd"],
+            self.init_value.diffusion_barriers["Si_3rd"],
+            self.init_value.diffusion_barriers["Si_else"],
+        ]
+        #
+        self.diffuse_energy += [
+            self.init_value.diffusion_barriers["Si_else"]
+            for i in range(self.init_value.z_unit_init * 3 - 2)
         ]
 
     def deposition(self) -> Tuple:
@@ -123,7 +109,6 @@ class common_functions:
             self.init_value,
             self.empty_firstBL,
             self.energy_2D,
-            self.energy_2D3D,
             self.energy_3D,
         )
         self.update_after_deposition(dep_pos, atom_type)
@@ -160,7 +145,7 @@ class common_functions:
                     self.energy_2D,
                     self.energy_2D3D,
                     self.energy_3D,
-                    self.energy_else,
+                    self.diffuse_energy,
                 )
             self.total_event_time -= self.event_time_tot[target_rel]
             self.event[target_rel] = events
