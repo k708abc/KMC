@@ -318,6 +318,65 @@ def rec_events_per_dep(num_events: List[int], atoms: List[int], params):
     file_data.close()
 
 
+def rec_growth_mode(growth_mode, coverage, params):
+    ag = []
+    first = []
+    multi = []
+    for i in growth_mode:
+        ag.append(i[0])
+        first.append(i[1])
+        multi.append(i[2])
+    #
+    dir_name = params.record_name + "/"
+    if os.path.exists(dir_name) is False:
+        os.mkdir(dir_name)
+    fig = plt.figure()
+    plt.plot(coverage, ag, label="Ag")
+    plt.plot(coverage, first, label="First ML")
+    plt.plot(coverage, multi, label="Multi layer")
+    plt.legend(bbox_to_anchor=(1, 1), loc="upper right", borderaxespad=0, fontsize=14)
+    plt.ylim(0, 100)
+    plt.xlabel("Total amount (ML)")
+    plt.ylabel("Coverage (%)")
+    plt.rcParams["font.size"] = 18
+    fig.subplots_adjust(bottom=0.2, left=0.2)
+    plt.savefig(dir_name + "Coverage_change.png")
+
+
+def height_check(i, k, pos, maxz):
+    max_pos = -1
+    for z in range(maxz + 1):
+        if pos[(i, k, z)] != 0:
+            max_pos = z
+    return max_pos
+
+
+def growth_check(pos, unit_length, maxz, atom_BL):
+    num_ag = 0
+    num_1st = 0
+    num_multi = 0
+    for i in range(unit_length):
+        for k in range(unit_length):
+            height = height_check(i, k, pos, maxz)
+            if height == -1:
+                num_ag += 2
+            elif height == 0:
+                num_ag += 1
+                num_1st += 1
+            elif height == 1:
+                num_1st += 2
+            elif height == 2:
+                num_1st += 1
+                num_multi += 1
+            else:
+                num_multi += 2
+    return (
+        round(num_ag / atom_BL * 100, 2),
+        round(num_1st / atom_BL * 100, 2),
+        round(num_multi / atom_BL * 100, 2),
+    )
+
+
 def record_data(
     pos_all: List[dict],
     time: List,
@@ -337,6 +396,7 @@ def record_data(
     hist_names: List[str] = []
     dir_name = params.record_name + "/"
     dir_formarion(dir_name)
+    growth_mode = []
 
     for rec_num, (pos_i, time_i, cov_i) in enumerate(zip(pos_all, time, coverage)):
         rec_name = (
@@ -364,6 +424,10 @@ def record_data(
         rec_poscar(pos_i, lattice, unit_length, maxz, poscar_name)
         plt.clf()
         plt.close()
+        #
+        growth_mode.append(growth_check(pos_i, unit_length, maxz, params.atoms_in_BL))
+    #
+    rec_growth_mode(growth_mode, coverage, params)
     #
     rec_ppt(
         params,
@@ -375,5 +439,6 @@ def record_data(
         coverage,
         dir_name,
         time_per_eve,
+        growth_mode,
     )
     #

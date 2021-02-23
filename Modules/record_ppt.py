@@ -14,6 +14,7 @@ def rec_ppt(
     coverage,
     dir_name,
     time_per_dep,
+    growth_mode,
 ):
     ppt_name = dir_name + "Layer_analysis_results.pptx"
     if os.path.exists(ppt_name):
@@ -69,7 +70,7 @@ def rec_ppt(
     left = Inches(0.1)
     top = Inches(2.5)
     rows = 3
-    cols = 8
+    cols = 7
     width = Inches(13)
     height = Inches(1)
 
@@ -228,27 +229,6 @@ def rec_ppt(
                     p.font.size = Pt(20)
 
                     imn = imn + 1
-    """
-    slide = prs.slides.add_slide(blank_slide_layout)
-
-    width = height = Inches(1)
-    top = Inches(-0.1)
-    left = Inches(0.5)
-    txBox = slide.shapes.add_textbox(left, top, width, height)
-    tf = txBox.text_frame
-
-    p = tf.add_paragraph()
-    p.text = "Results: Coverage dependence"
-    p.font.size = Pt(28)
-
-    height = Inches(5.5)
-    top = Inches(1)
-    left = Inches(0.7)
-
-    file_name = entry_rec.get() + "_coverage" + ".png"
-
-    slide.shapes.add_picture(file_name, left, top, height=height)
-    """
     #
     slide = prs.slides.add_slide(blank_slide_layout)
     width = height = Inches(1)
@@ -257,14 +237,55 @@ def rec_ppt(
     txBox = slide.shapes.add_textbox(left, top, width, height)
     tf = txBox.text_frame
     p = tf.add_paragraph()
-    p.text = "Number of events per deposition"
+    p.text = "Growth mode"
+    p.font.size = Pt(28)
+    n_growth = len(growth_mode)
+    #
+    left = Inches(0.1)
+    top = Inches(2.5)
+    rows = 4
+    cols = 9
+    width = Inches(13)
+    height = Inches(1)
+    inch = 1
+    imn = 0
+    while imn < n_growth:
+
+        top = Inches(inch)
+        table_g = slide.shapes.add_table(rows, cols, left, top, width, height).table
+        table_g.cell(0, 0).text = "Coverage"
+        table_g.cell(1, 0).text = "Ag"
+        table_g.cell(2, 0).text = "1st layer"
+        table_g.cell(3, 0).text = "Multi layer"
+        for i in range(8):
+            if imn >= n_growth:
+                pass
+            else:
+                table_g.cell(0, i + 1).text = str(coverage[imn])
+                table_g.cell(1, i + 1).text = str(growth_mode[imn][0])
+                table_g.cell(2, i + 1).text = str(growth_mode[imn][1])
+                table_g.cell(3, i + 1).text = str(growth_mode[imn][2])
+                imn += 1
+        inch += 1.8
+
+    #
+    slide = prs.slides.add_slide(blank_slide_layout)
+    width = height = Inches(1)
+    top = Inches(-0.1)
+    left = Inches(0.5)
+    txBox = slide.shapes.add_textbox(left, top, width, height)
+    tf = txBox.text_frame
+    p = tf.add_paragraph()
+    p.text = "Number of events per deposition" + "\n" + "Change of coverage"
     p.font.size = Pt(28)
     height = Inches(5.5)
-    top = Inches(1)
-    left = Inches(0.7)
+    top = Inches(2)
+    left = Inches(0)
     slide.shapes.add_picture(
         dir_name + "Num_events_per_dep.png", left, top, height=height
     )
+    left = Inches(6)
+    slide.shapes.add_picture(dir_name + "Coverage_change.png", left, top, height=height)
     #
 
     rec_num = 0
