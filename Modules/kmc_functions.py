@@ -280,7 +280,7 @@ class common_functions:
         self.second = int(self.elapsed_time % 60)
         self.time_per_event = round(self.elapsed_time / self.n_events * 1000, 3)
         rec_events_per_dep(self.n_events_rec, self.num_atoms_rec, self.init_value)
-        record_data(
+        self.growth_mode, self.coverage = record_data(
             self.pos_rec,
             self.time_rec,
             self.cov_rec,
@@ -290,6 +290,7 @@ class common_functions:
             self.second,
             self.time_per_event,
         )
+
         #
         # self.time_check()
 

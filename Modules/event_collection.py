@@ -40,7 +40,7 @@ def total_energy_trans(
         bond_state = atom_set[bond]
         if bond_state == 0:
             pass
-        elif (bond[0], bond[1]) == (target[0], target[1]):
+        elif target[2] // 2 != bond[2] // 2:
             pass
         elif bond_state != target_state:
             energy += bond_energy_diff_state(target, energy2D3D)
@@ -59,7 +59,7 @@ def total_energy_wo_trans(
     energy = diffuse_energy[target[2] // 2]
     num_bond = 0
     for bond in bonds[target]:
-        if atom_set[bond] != 0 and (bond[0], bond[1]) != (target[0], target[1]):
+        if (atom_set[bond] != 0) and (target[2] // 2 == bond[2] // 2):
             num_bond += 1
     energy += num_bond * bond_energy_same_state(target, 2, energy2D, 0)
     return energy

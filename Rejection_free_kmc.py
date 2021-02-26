@@ -2,8 +2,9 @@ from Modules.kmc_functions import common_functions
 
 
 class rejection_free(common_functions):
-    def __init__(self) -> None:
+    def __init__(self, num) -> None:
         common_functions.__init__(self)
+        self.num = num
 
     def start(self):
         print("Calculation start")
@@ -23,9 +24,10 @@ class rejection_free(common_functions):
         self.end_of_loop()
         print("Finished: " + str(self.minute) + " min " + str(self.second) + " sec")
         print("Time/event: " + str(self.time_per_event) + " ms")
-        input()
+        if self.num == 0:
+            input()
 
 
 if __name__ == "__main__":
-    rf_class = rejection_free()
+    rf_class = rejection_free(0)
     rf_class.start()
