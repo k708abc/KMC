@@ -343,10 +343,10 @@ def rec_growth_mode(growth_mode, coverage, params):
     plt.savefig(dir_name + "Coverage_change.png")
 
 
-def height_check(i, k, pos, maxz):
+def height_check(pos_x, pos_y, pos, maxz):
     max_pos = -1
     for z in range(maxz + 1):
-        if pos[(i, k, z)] != 0:
+        if pos[(pos_x, pos_y, z)] != 0:
             max_pos = z
     return max_pos
 
@@ -375,6 +375,32 @@ def growth_check(pos, unit_length, maxz, atom_BL):
         round(num_1st / atom_BL * 100, 2),
         round(num_multi / atom_BL * 100, 2),
     )
+
+
+def num_check(coverage, num):
+    value = 100
+    number = 0
+    for i in range(len(coverage)):
+        cf_val = abs(num - coverage[i])
+        if value > cf_val:
+            number = i
+            value = cf_val
+    return number
+
+
+def growth_val(growth_mode, coverage, num_1ML, num_2ML):
+    val1 = growth_mode[num_1ML][1] / (100 - growth_mode[num_1ML][2]) * 100
+    if 100 - growth_mode[num_2ML][2] == 0:
+        val2 = 0
+    else:
+        val2 = growth_mode[num_2ML][1] / (100 - growth_mode[num_2ML][2]) * 100
+    return [val1, val2, coverage[num_1ML], coverage[num_2ML]]
+
+
+def mode_check(growth_mode, coverage):
+    num_1ML = num_check(coverage, 1)
+    num_2ML = num_check(coverage, 2)
+    return growth_val(growth_mode, coverage, num_1ML, num_2ML)
 
 
 def record_data(
@@ -429,6 +455,8 @@ def record_data(
     #
     rec_growth_mode(growth_mode, coverage, params)
     #
+    mode_val = mode_check(growth_mode, coverage)
+    #
     rec_ppt(
         params,
         minute,
@@ -440,5 +468,8 @@ def record_data(
         dir_name,
         time_per_eve,
         growth_mode,
+        mode_val,
     )
+    plt.close("all")
+    return mode_val
     #

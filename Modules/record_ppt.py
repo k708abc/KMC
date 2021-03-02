@@ -15,6 +15,7 @@ def rec_ppt(
     dir_name,
     time_per_dep,
     growth_mode,
+    mode_val,
 ):
     ppt_name = dir_name + "Layer_analysis_results.pptx"
     if os.path.exists(ppt_name):
@@ -104,31 +105,18 @@ def rec_ppt(
     width = Inches(13)
     height = Inches(1)
     table = shapes.add_table(rows, cols, left, top, width, height).table
-    # table.cell(0, 1).text = "Ag base"
-    # table.cell(0, 2).text = "Ag-Si"
-    # table.cell(0, 3).text = "Si base"
     table.cell(0, 1).text = "Si(1st)"
     table.cell(0, 2).text = "Si(2nd)"
     table.cell(0, 3).text = "Si(3rd)"
     table.cell(0, 4).text = "Si(else)"
-    # table.cell(0, 9).text = "Ag(top)"
-    # table.cell(0, 10).text = "Trans."
     table.cell(1, 0).text = "Diffusion (eV)"
-    # table.cell(1, 1).text = str(params.binding_energies["Ag base"])
-    # table.cell(1, 2).text = str(params.binding_energies["AgSi"])
-    # table.cell(1, 3).text = str(params.binding_energies["Si base"])
     table.cell(1, 1).text = str(params.diffusion_barriers["Si_1st"])
     table.cell(1, 2).text = str(params.diffusion_barriers["Si_2nd"])
     table.cell(1, 3).text = str(params.diffusion_barriers["Si_3rd"])
     table.cell(1, 4).text = str(params.diffusion_barriers["Si_else"])
 
-    # table.cell(1, 9).text = str(params.binding_energies["Agtop"])
-    # table.cell(1, 10).text = str(params.transformation)
     #
     table.cell(2, 0).text = "Binding (eV)"
-    # table.cell(1, 1).text = str(params.binding_energies["Ag base"])
-    # table.cell(1, 2).text = str(params.binding_energies["AgSi"])
-    # table.cell(1, 3).text = str(params.binding_energies["Si base"])
     table.cell(2, 1).text = str(params.binding_energies["Si_1st"])
     table.cell(2, 2).text = str(params.binding_energies["Si_2nd"])
     table.cell(2, 3).text = str(params.binding_energies["Si_3rd"])
@@ -250,7 +238,6 @@ def rec_ppt(
     inch = 1
     imn = 0
     while imn < n_growth:
-
         top = Inches(inch)
         table_g = slide.shapes.add_table(rows, cols, left, top, width, height).table
         table_g.cell(0, 0).text = "Coverage"
@@ -267,6 +254,17 @@ def rec_ppt(
                 table_g.cell(3, i + 1).text = str(growth_mode[imn][2])
                 imn += 1
         inch += 1.8
+    #
+    top = Inches(inch)
+    rows = 2
+    cols = 3
+    table_mode = slide.shapes.add_table(rows, cols, left, top, width, height).table
+    table_mode.cell(0, 0).text = "Coverage"
+    table_mode.cell(0, 1).text = str(mode_val[2])
+    table_mode.cell(0, 2).text = str(mode_val[3])
+    table_mode.cell(1, 0).text = "Value"
+    table_mode.cell(1, 1).text = str(mode_val[0])
+    table_mode.cell(1, 2).text = str(mode_val[1])
 
     #
     slide = prs.slides.add_slide(blank_slide_layout)
