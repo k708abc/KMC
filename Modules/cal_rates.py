@@ -19,7 +19,9 @@ def rate(pre: float, kbt: float, energy: float) -> float:
     float
         reaction rate
     """
-    return pre * math.exp(energy / kbt)
+    print(pre * math.exp((-1) * energy / kbt))
+    input()
+    return pre * math.exp((-1) * energy / kbt)
 
 
 if __name__ == "__main__":
