@@ -37,7 +37,6 @@ class common_functions:
         self.n_events_perdep += 1
 
     def start_rejection_free(self):
-        # self.num_events = None
         self.total_event_time = self.init_value.dep_rate_atoms_persec
         self.atom_exist: List[Tuple[int, int, int]] = []
         (
@@ -47,22 +46,23 @@ class common_functions:
             self.event,
             self.event_time,
             self.event_time_tot,
-            self.event_state,
+            _,
         ) = lattice_form(self.init_value)
-        self.energy_summarie()
+        self.energy_summarize()
 
-    def energy_summarie(self):
-        self.energy_2D = [
+    def energy_summarize(self):
+        self.energy_bonding = [
             self.init_value.binding_energies["Si_1st"],
             self.init_value.binding_energies["Si_2nd"],
             self.init_value.binding_energies["Si_3rd"],
         ]
         #
-        self.energy_2D += [
+        self.energy_bonding += [
             self.init_value.binding_energies["Si_else"]
             for i in range(self.init_value.z_unit_init * 3 - 2)
         ]
         #
+        """
         self.energy_2D3D = [
             (
                 self.init_value.binding_energies["Si_1st"]
@@ -89,38 +89,37 @@ class common_functions:
             self.init_value.binding_energies["Si_else"]
             for i in range(self.init_value.z_unit_init * 3 + 1)
         ]
+        """
         #
-        self.diffuse_energy = [
+        self.energy_diffuse = [
             self.init_value.diffusion_barriers["Si_1st"],
             self.init_value.diffusion_barriers["Si_2nd"],
             self.init_value.diffusion_barriers["Si_3rd"],
             self.init_value.diffusion_barriers["Si_else"],
         ]
         #
-        self.diffuse_energy += [
+        self.energy_diffuse += [
             self.init_value.diffusion_barriers["Si_else"]
             for i in range(self.init_value.z_unit_init * 3 - 2)
         ]
 
     def deposition(self) -> Tuple:
-        dep_pos, atom_type = deposit_an_atom(
+        dep_pos = deposit_an_atom(
             self.atom_set,
             self.bonds,
             self.init_value,
             self.empty_firstBL,
-            self.energy_2D,
-            self.energy_3D,
         )
-        self.update_after_deposition(dep_pos, atom_type)
+        self.update_after_deposition(dep_pos)
         return dep_pos
 
-    def update_after_deposition(self, dep_pos, atom_type) -> None:
+    def update_after_deposition(self, dep_pos) -> None:
         ##
         self.n_events_rec.append(self.n_events_perdep)
         self.num_atoms_rec.append(self.n_atoms)
         ##
         self.n_events_perdep = 0
-        self.atom_set[dep_pos] = atom_type
+        self.atom_set[dep_pos] = 1
         self.atom_exist.append(dep_pos)
         self.n_atoms += 1
         self.n_events += 1
@@ -134,24 +133,21 @@ class common_functions:
             if self.atom_set[target_rel] == 0:
                 events = []
                 rates = []
-                states = []
 
             else:
-                events, rates, states = site_events(
+                events, rates = site_events(
                     self.atom_set,
                     self.bonds,
                     target_rel,
                     self.init_value,
-                    self.energy_2D,
-                    self.energy_2D3D,
-                    self.energy_3D,
-                    self.diffuse_energy,
+                    self.energy_bonding,
+                    self.energy_diffuse,
                 )
             self.total_event_time -= self.event_time_tot[target_rel]
             self.event[target_rel] = events
             self.event_time[target_rel] = rates
             self.event_time_tot[target_rel] = sum(rates)
-            self.event_state[target_rel] = states
+            # self.event_state[target_rel] = states
             self.total_event_time += self.event_time_tot[target_rel]
         self.related_atoms = []
         #
@@ -199,14 +195,8 @@ class common_functions:
                 self.rejection_free_deposition()
 
     def rejection_free_event(self):
-        """
-        if self.target is None or self.event_number is None:
-            print("None in rejection free")
-            print(self.target)
-            print(self.event_number)
-        """
         self.move_atom = self.event[self.target][self.event_number]
-        self.new_state = self.event_state[self.target][self.event_number]
+        # self.new_state = self.event_state[self.target][self.event_number]
         self.event_progress()
         self.related_atoms = recalculate(
             self.target, self.bonds, self.atom_set, self.init_value
@@ -214,11 +204,13 @@ class common_functions:
         self.related_atoms += recalculate(
             self.move_atom, self.bonds, self.atom_set, self.init_value
         )
+        """
         if self.new_state == 4:
             for bond in self.bonds[self.target]:
                 self.related_atoms += recalculate(
                     bond, self.bonds, self.atom_set, self.init_value
                 )
+        """
         self.update_events()
         #
         #
@@ -297,7 +289,7 @@ class common_functions:
     def defect_check(self):
         if (self.target[2] not in (0, 1)) and (self.move_atom[2] in (0, 1)):
             self.move_atom = self.target
-            self.new_state = self.atom_set[self.target]
+            # self.new_state = self.atom_set[self.target]
             self.n_events -= 1
             self.n_events_perdep -= 1
 
@@ -308,6 +300,7 @@ class common_functions:
             self.defect_check()
         #
         if self.move_atom == self.target:
+            """
             if self.new_state == 4:
                 # print("clustering")
                 # self.prev_eve = "clustering"
@@ -324,34 +317,13 @@ class common_functions:
                         self.atom_set[bond] = 2
 
             else:
-                """
-                self.prev_eve = (
-                    "state change: "
-                    + str(self.target)
-                    + " : "
-                    + str(self.atom_set[self.target])
-                    + "→"
-                    + str(self.new_state)
-                )
-                """
-                self.atom_set[self.target] = self.new_state
+            """
+            self.atom_set[self.target] = 1
+            print("selfmove")
 
         else:
-            """
-            self.prev_eve = (
-                "move : "
-                + str(self.target)
-                + " : "
-                + str(self.atom_set[self.target])
-                + " → "
-                + str(self.move_atom)
-                + " ("
-                + str(self.atom_set[self.move_atom])
-                + ") : "
-                + str(self.new_state)
-            )
-            """
-            self.atom_set[self.move_atom] = self.new_state
+
+            self.atom_set[self.move_atom] = 1
             self.atom_set[self.target] = 0
             self.atom_exist.remove(self.target)
             self.atom_exist.append(self.move_atom)

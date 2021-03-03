@@ -9,64 +9,31 @@ import time
 import decimal
 
 
-def bond_energy_same_state(
+def bond_energy(
     target: Tuple[int, int, int],
-    atom_state: int,
-    energy2D,
-    energy3D,
+    energy_bonding,
 ):
-    if atom_state == 2:
-        return energy2D[int(target[2] // 2)]
-    else:
-        return energy3D[int(target[2] // 2)]
+    return energy_bonding[int(target[2] // 2)]
 
 
-def bond_energy_diff_state(target: Tuple[int, int, int], energy2D3D: List[float]):
-    return energy2D3D[int(target[2] // 2)]
-
-
-def total_energy_trans(
+def total_energy(
     atom_set: Dict,
     bonds: Dict,
     target: Tuple[int, int, int],
-    energy2D: List[float],
-    energy2D3D: List[float],
-    energy3D: List[float],
-    diffuse_energy: List[float],
+    energy_bonding: List[float],
+    energy_diffuse: List[float],
 ):
-    target_state = atom_set[target]
-    energy = diffuse_energy[target[2] // 2]  # base energy for diffusion
-    for bond in bonds[target]:
-        bond_state = atom_set[bond]
-        if bond_state == 0:
-            pass
-        elif target[2] // 2 != bond[2] // 2:
-            pass
-        elif bond_state != target_state:
-            energy += bond_energy_diff_state(target, energy2D3D)
-        elif bond_state == target_state:
-            energy += bond_energy_same_state(target, target_state, energy2D, energy3D)
-    return energy
-
-
-def total_energy_wo_trans(
-    atom_set: Dict,
-    bonds: Dict,
-    target: Tuple[int, int, int],
-    energy2D: List[float],
-    diffuse_energy: List[float],
-):
-    energy = diffuse_energy[target[2] // 2]
+    energy = energy_diffuse[target[2] // 2]
     num_bond = 0
     for bond in bonds[target]:
-        if (atom_set[bond] != 0) and (target[2] // 2 == bond[2] // 2):
+        if (atom_set[bond] == 1) and (target[2] // 2 == bond[2] // 2):
             num_bond += 1
-    energy += num_bond * bond_energy_same_state(target, 2, energy2D, 0)
+    energy += num_bond * bond_energy(target, energy_bonding)
     return energy
 
 
 def find_filled_sites(atom_set, indexes):
-    return [atom_nn for atom_nn in indexes if atom_set[atom_nn] != 0]
+    return [atom_nn for atom_nn in indexes if atom_set[atom_nn] == 1]
 
 
 def find_empty_sites(atom_set, indexes):
@@ -203,7 +170,7 @@ def possible_events(
         # 直上原子のインデックス
         direct_above = (atom_x, atom_y, atom_z + 1)
         # 直上原子があるときpass
-        if atom_set[direct_above] != 0:
+        if atom_set[direct_above] == 1:
             pass
         else:
             # 次近接の原子
@@ -257,125 +224,6 @@ def possible_events(
     return event_f, rates_f
 
 
-def state_after_move(atom_set, bonds, event, params, energy2D, energy3D):
-    pre = float(params.prefactor)
-    kbt = params.temperature_eV
-    E2 = 0
-    E3 = 0
-    # 移動後の隣接原子の状態を確認
-    for bond in bonds[event]:
-        if atom_set[bond] == 2:
-            E2 += bond_energy_same_state(event, atom_set[bond], energy2D, energy3D)
-        elif atom_set[bond] == 3:
-            E3 += bond_energy_same_state(event, atom_set[bond], energy2D, energy3D)
-
-    if E2 == E3 == 0:
-        return 2
-    elif E2 == 0:
-        return 3
-    elif E3 == 0:
-        return 2
-    else:
-        # 結合原子の状態ごとの速度定数逆数を計算
-        rates = [rate(pre, kbt, -E2), rate(pre, kbt, -E3)]
-        states = [2, 3]
-        # 速度定数の大きい状態を取りやすい
-        det_state = random.choices(states, weights=rates)
-        return det_state[0]
-
-
-def state_determinate(
-    atom_set, bonds, event_list, params, energy2D, energy2D3D, energy3D
-):
-    # 原子が動いた後の構造を設定
-    return [
-        state_after_move(atom_set, bonds, event, params, energy2D, energy3D)
-        for event in event_list
-    ]
-
-
-def state_change_to_neighbor(
-    atom_set, bonds, target: Tuple[int, int, int], params, energy2D, energy3D
-):
-    pre = float(params.prefactor)
-    kbt = params.temperature_eV
-    t_state = atom_set[target]
-    E_change = 0
-    diff_i = 0
-    num_bond = 0
-    for bond in bonds[target]:
-        if atom_set[bond] == t_state:
-            E_change += bond_energy_same_state(
-                target, bond, t_state, energy2D, energy3D
-            )
-            num_bond += 1
-        elif atom_set[bond] != 0:
-            diff_i += 1
-            num_bond += 1
-    change_rate = decimal.Decimal(rate(pre, kbt, E_change))
-    if num_bond == 2 and diff_i == 1:
-        return 3, 0
-    elif diff_i == 0:
-        return t_state, 0
-
-    elif t_state == 2:
-        return 3, change_rate
-
-    elif t_state == 3:
-        return 2, change_rate
-
-    else:
-        print("target state = " + str(t_state))
-        raise RuntimeError("Some error in state change to neighbor")
-
-
-def state_change_new(atom_set, bonds, target: Tuple[int, int, int], params):
-    target_state = atom_set[target]
-    pre = float(params.prefactor)
-    kbt = params.temperature_eV
-    neighbor_i = 0
-    neighbor_2 = 0
-    for bond in bonds[target]:
-        if atom_set[bond] != 0:
-            neighbor_i += 1
-        if atom_set[bond] == 2:
-            neighbor_2 += 1
-    #
-    if target_state == 2 and neighbor_i == 4:
-        return 4, decimal.Decimal(rate(pre, kbt, params.transformation))
-    elif target_state == 3 and target[2] != 0 and neighbor_i != 4 and neighbor_2 != 0:
-        return 5, decimal.Decimal(rate(pre, kbt, params.transformation))
-    else:
-        return target_state, 0
-
-    """
-    neighbor_i = 0
-    target_state = atom_set[target]
-    pre = float(params.prefactor)
-    kbt = params.temperature_eV
-    for bond in bonds[target]:
-        if atom_set[bond] != 0:
-            neighbor_i += 1
-    # エネルギーの設定については要再考
-    # 2次元から3次元：周辺原子が多いと起きやすい
-    if target_state == 2 and target[2] >= 3:
-        E_trans = (5 - neighbor_i) * params.transformation
-        trans_rate = decimal.Decimal(rate(pre, kbt, E_trans))
-        return 4, trans_rate
-    # 3次元から2次元：周辺原子が少ないと起きやすい
-    elif target_state == 3:
-        if neighbor_i == 0:
-            neighbor_i == 1
-        E_trans = neighbor_i * params.transformation
-        trans_rate = decimal.Decimal(rate(pre, kbt, E_trans))
-        return 2, trans_rate
-    elif target_state == 2:
-        return 2, decimal.Decimal(0)
-    else:
-        raise RuntimeError("Some error in state change to neighbor")
-    """
-
-
 def rate_limit(rates, upper_limit) -> List:
     new_rate: List = []
     for rate_val in rates:
@@ -392,25 +240,16 @@ def site_events(
     bonds: Dict,
     target: Tuple[int, int, int],
     params,
-    energy2D: List[float],
-    energy2D3D: List[float],
-    energy3D: List[float],
-    diffuse_energy: List[float],
+    energy_bonding: List[float],
+    energy_diffuse: List[float],
 ):
     event_list: List[Tuple] = []
     rate_list: List[float] = []
-    states: List[int] = []
-    trans = params.trans_check
+    # states: List[int] = []
+    # trans = params.trans_check
     # calculate total energy
-    if trans is False:
-        energy = total_energy_wo_trans(
-            atom_set, bonds, target, energy2D, diffuse_energy
-        )
+    energy = total_energy(atom_set, bonds, target, energy_bonding, energy_diffuse)
 
-    else:
-        energy = total_energy_trans(
-            atom_set, bonds, target, energy2D, energy2D3D, energy3D, diffuse_energy
-        )
     # calculate possible events
     event_list, rate_list = possible_events(
         atom_set,
@@ -420,34 +259,10 @@ def site_events(
         energy,
     )
 
-    # event_list: List[tuple[int, int, int, int], rate_list: List[float]
-    if trans is True:
-        # 各イベントの構造判定
-        states = state_determinate(
-            atom_set, bonds, event_list, params, energy2D, energy2D3D, energy3D
-        )
-        # サイトの変わらない構造変化の設定
-        """
-        # 隣接原子の状態による変化
-        state, rate = state_change_to_neighbor(atom_set, bonds, target, params, energy2D, energy3D)
-        event_list.append(target)
-        rate_list.append(rate)
-        states.append(state)
-        """
-
-        # 隣接原子の数による変化
-        state, rate = state_change_new(atom_set, bonds, target, params)
-        event_list.append(target)
-        rate_list.append(rate)
-        states.append(state)
-
-    else:
-        states = [2 for _ in range(len(event_list))]
-
     if params.limit_check is True:
         rate_list = rate_limit(rate_list, decimal.Decimal(float(params.limit_val)))
 
-    return event_list, rate_list, states
+    return event_list, rate_list
 
 
 def highest_z(atom_set):
@@ -475,7 +290,7 @@ if __name__ == "__main__":
     os.makedirs(dir_name, exist_ok=True)
     target_cand = random_target(atom_set)
     for target in target_cand:
-        event_list, rate_list, states = site_events(
+        event_list, rate_list = site_events(
             atom_set,
             bonds,
             target,

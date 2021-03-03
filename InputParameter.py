@@ -17,34 +17,32 @@ class Params:
     kb_eV = 8.617e-5
 
     def __init__(self) -> None:
-        self.n_cell_init = 10
+        self.n_cell_init = 20
         self.z_unit_init = 6
         self.temperature = 550
         self.dep_rate = 0.1
-        self.dep_time = 20
+        self.dep_time = 30
         self.prefactor = 1e13
         self.binding_energies: OrderedDict[str, float] = OrderedDict()
         self.binding_energies["Si_1st"] = 0.2
         self.binding_energies["Si_2nd"] = 0.2
-        self.binding_energies["Si_3rd"] = 0.2
-        self.binding_energies["Si_else"] = 0.2
+        self.binding_energies["Si_3rd"] = 0.25
+        self.binding_energies["Si_else"] = 0.25
         self.diffusion_barriers: OrderedDict[str, float] = OrderedDict()
-        self.diffusion_barriers["Si_1st"] = 1.4
-        self.diffusion_barriers["Si_2nd"] = 1.4
-        self.diffusion_barriers["Si_3rd"] = 1.4
-        self.diffusion_barriers["Si_else"] = 1.4
+        self.diffusion_barriers["Si_1st"] = 1.2
+        self.diffusion_barriers["Si_2nd"] = 1.3
+        self.diffusion_barriers["Si_3rd"] = 1.3
+        self.diffusion_barriers["Si_else"] = 1.3
         #
-        self.transformation = 1.8
         self.put_first = 10
         self.cut_number = 100000
         self.num_defect = 1
         self.record_name = "KMC_Si_rec_test"
-        self.img_per = 20 / 3
-        self.comments = "test"
+        self.img_per = 10
+        self.comments = "silicene speed test"
         self.intra_distance = 0.204
         self.inter_distance = 0.612
         self.keep_defect_check = False
-        self.trans_check = False
         self.first_put_check = True
         self.cut_check = False
         self.limit_check = False

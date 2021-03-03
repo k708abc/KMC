@@ -157,19 +157,16 @@ def rec_img(img, name: str):
 
 
 def hist_formation(pos: Dict, maxz: int, n_BL: int):
-    hist_2: List[float] = [0 for _ in range(math.ceil(maxz / 2))]
-    hist_3: List[float] = [0 for _ in range(math.ceil(maxz / 2))]
+    hist: List[float] = [0 for _ in range(math.ceil(maxz / 2))]
+    # hist_3: List[float] = [0 for _ in range(math.ceil(maxz / 2))]
     left: List[float] = [i for i in range(math.ceil(maxz / 2))]
     for pos_index, atom_state in pos.items():
-        if atom_state == 2:
-            hist_2[pos_index[2] // 2] += 1 / n_BL * 100
-        elif atom_state == 3:
-            hist_3[pos_index[2] // 2] += 1 / n_BL * 100
+        if atom_state == 1:
+            hist[pos_index[2] // 2] += 1 / n_BL * 100
 
     fig = plt.figure()
     bx = fig.add_subplot(111)
-    bx.barh(left, hist_2, label="2D")
-    bx.barh(left, hist_3, left=hist_2, label="3D")
+    bx.barh(left, hist, label="Number")
     bx.set_yticks(left)
     bx.legend(fontsize=16)
     # bx.set_yticklabels(lay)
@@ -252,46 +249,6 @@ def rec_poscar(pos: Dict, lattice: Dict, unit_length: int, maxz: int, rec_name: 
         for (xval, yval, zval) in zip(i, j, k):
             file_data.write(str(xval) + "\t" + str(yval) + "\t" + str(zval) + "\n")
     file_data.close()
-
-    """
-    xp2: list[float] = []
-    yp2: list[float] = []
-    zp2: list[float] = []
-    xp3: list[float] = []
-    yp3: list[float] = []
-    zp3: list[float] = []
-    atom2_i = 0
-    atom3_i = 0
-    for index, atom_state in pos.items():
-        if atom_state == 2:
-            xp2.append(lattice[index][0] / unit_length)
-            yp2.append(lattice[index][1] / unit_length)
-            zp2.append(lattice[index][2] / maxz / 2.448)
-            atom2_i += 1
-        elif atom_state == 3:
-            xp3.append(lattice[index][0] / unit_length)
-            yp3.append(lattice[index][1] / unit_length)
-            zp3.append(lattice[index][2] / maxz / 2.448)
-            atom3_i += 1
-
-    file_data = open(rec_name, "w")
-    file_data.write(rec_name + "\n")
-    file_data.write("10" + "\n")
-    file_data.write(str(unit_length) + "\t" + "0" + "\t" + "0" + "\n")
-    file_data.write(
-        str(unit_length / 2) + "\t" + str(unit_length / 2 * 1.732) + "\t" + "0" + "\n"
-    )
-    file_data.write("0" + "\t" + "0" + "\t" + str(maxz * 2.448) + "\n")
-    file_data.write("Si" + "\t" + "O" + "\n")
-    file_data.write(str(atom2_i) + "\t" + str(atom3_i) + "\n")
-
-    file_data.write("direct" + "\n")
-    for i in range(len(xp2)):
-        file_data.write(str(xp2[i]) + "\t" + str(yp2[i]) + "\t" + str(zp2[i]) + "\n")
-    for i in range(len(xp3)):
-        file_data.write(str(xp3[i]) + "\t" + str(yp3[i]) + "\t" + str(zp3[i]) + "\n")
-    file_data.close()
-    """
 
 
 def dir_formarion(name: str):
