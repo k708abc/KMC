@@ -168,7 +168,7 @@ def hist_formation(pos: Dict, maxz: int, n_BL: int):
     bx = fig.add_subplot(111)
     bx.barh(left, hist, label="Number")
     bx.set_yticks(left)
-    bx.legend(fontsize=16)
+    # bx.legend(fontsize=16)
     # bx.set_yticklabels(lay)
     bx.set_xlim(0, 100)
     plt.xlabel("Coverage", fontsize=20)

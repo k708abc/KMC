@@ -7,10 +7,8 @@ from Modules.atoms_recalculate import recalculate
 from Modules.rejection_free_choose import rejection_free_choise
 from Modules.event_collection import site_events
 import math
-from Modules.recording import record_data
 import copy
-
-##
+from Modules.recording import record_data
 from Modules.recording import rec_events_per_dep
 
 
@@ -231,7 +229,9 @@ class common_functions:
         self.minute = math.floor(self.elapsed_time / 60)
         self.second = int(self.elapsed_time % 60)
         self.time_per_event = round(self.elapsed_time / self.n_events * 1000, 3)
+
         rec_events_per_dep(self.n_events_rec, self.num_atoms_rec, self.init_value)
+
         self.mode_val = record_data(
             self.pos_rec,
             self.time_rec,

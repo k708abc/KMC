@@ -3,31 +3,11 @@
 from typing import List, Dict, Tuple
 import tkinter as tk
 import tkinter.ttk as ttk
-
-# import copy
 import math
 from Modules.cal_rates import rate
 import time
-
-# from Modules.lattice_form import lattice_form
-
-# from InputParameter import Params
-# from deposition import deposit_an_atom
-# from Modules.choose_site import choose_atom
-# from Modules.judgement import judge_null
-# from Modules.event_collection import site_events
-# from Modules.normarize_list import normarize_rate
-# from Modules.weighted_choice import choice
-
-# from recording import record_data
-
-# from atoms_recalculate import recalculate
-# from rejection_free_choose import rejection_free_choise
 from Modules.kmc_functions import common_functions
 from Modules.Null_kmc_functions import null_functions
-
-##
-# from recording import rec_events_per_dep
 
 
 class Window(ttk.Frame, common_functions, null_functions):
@@ -140,7 +120,7 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.deposition_time.bind("<Return>", self.update_click)
         self.prefactor_label = ttk.Label(self.frame_basics, text="Prefactor (1/s)")
         self.prefactor = ttk.Entry(self.frame_basics, width=7)
-        self.prefactor.insert(tk.END, self.init_value.prefactor)
+        self.prefactor.insert(tk.END, "{:.1e}".format(self.init_value.prefactor))
         self.prefactor.bind("<Return>", self.update_click)
 
     def create_layout_basic(self) -> None:
@@ -220,18 +200,6 @@ class Window(ttk.Frame, common_functions, null_functions):
             ratelabel.grid(row=3, column=i + 1)
 
     def create_widgets_checks(self) -> None:
-        self.bln_tr = tk.BooleanVar()
-        self.bln_tr.set(self.init_value.trans_check)
-        self.chk_transformation_label = ttk.Label(
-            self.frame_checks, text="Transformation"
-        )
-        self.chk_transformation = ttk.Checkbutton(
-            self.frame_checks, variable=self.bln_tr
-        )
-        self.transformation = ttk.Entry(self.frame_checks, width=7)
-        self.transformation.insert(tk.END, self.init_value.transformation)
-        self.chk_transformation_label2 = ttk.Label(self.frame_checks, text="")
-        #
         self.bln_defect = tk.BooleanVar()
         self.bln_defect.set(self.init_value.keep_defect_check)
         self.chk_defect_label = ttk.Label(
@@ -273,30 +241,25 @@ class Window(ttk.Frame, common_functions, null_functions):
         )
 
     def create_layout_checks(self) -> None:
-        self.chk_transformation_label.grid(row=0, column=0, **self.padWE)
-        self.chk_transformation.grid(row=0, column=1, **self.padWE)
-        self.transformation.grid(row=0, column=2, **self.padWE)
-        self.chk_transformation_label2.grid(row=0, column=3, **self.padWE)
+        self.chk_defect_label.grid(row=0, column=0, **self.padWE)
+        self.chk_defect.grid(row=0, column=1, **self.padWE)
+        self.num_defect.grid(row=0, column=2, **self.padWE)
+        self.chk_defect_label2.grid(row=0, column=3, **self.padWE)
         #
-        self.chk_defect_label.grid(row=1, column=0, **self.padWE)
-        self.chk_defect.grid(row=1, column=1, **self.padWE)
-        self.num_defect.grid(row=1, column=2, **self.padWE)
-        self.chk_defect_label2.grid(row=1, column=3, **self.padWE)
+        self.chk_first_put_label.grid(row=1, column=0, **self.padWE)
+        self.chk_first_put.grid(row=1, column=1, **self.padWE)
+        self.put_first.grid(row=1, column=2, **self.padWE)
+        self.chk_first_put_label2.grid(row=1, column=3, **self.padWE)
         #
-        self.chk_first_put_label.grid(row=2, column=0, **self.padWE)
-        self.chk_first_put.grid(row=2, column=1, **self.padWE)
-        self.put_first.grid(row=2, column=2, **self.padWE)
-        self.chk_first_put_label2.grid(row=2, column=3, **self.padWE)
+        self.chk_cut_label.grid(row=2, column=0, **self.padWE)
+        self.chk_cut.grid(row=2, column=1, **self.padWE)
+        self.cut.grid(row=2, column=2, **self.padWE)
+        self.chk_cut_label2.grid(row=2, column=3, **self.padWE)
         #
-        self.chk_cut_label.grid(row=3, column=0, **self.padWE)
-        self.chk_cut.grid(row=3, column=1, **self.padWE)
-        self.cut.grid(row=3, column=2, **self.padWE)
-        self.chk_cut_label2.grid(row=3, column=3, **self.padWE)
-        #
-        self.chk_limit_label.grid(row=4, column=0, **self.padWE)
-        self.chk_limit.grid(row=4, column=1, **self.padWE)
-        self.limit.grid(row=4, column=2, **self.padWE)
-        self.chk_limit_label2.grid(row=4, column=3, **self.padWE)
+        self.chk_limit_label.grid(row=3, column=0, **self.padWE)
+        self.chk_limit.grid(row=3, column=1, **self.padWE)
+        self.limit.grid(row=3, column=2, **self.padWE)
+        self.chk_limit_label2.grid(row=3, column=3, **self.padWE)
 
     def create_widgets_records(self) -> None:
         self.record_label = tk.Label(self.frame_records, text="Record")
@@ -404,46 +367,23 @@ class Window(ttk.Frame, common_functions, null_functions):
             self.energies, self.init_value.binding_energies
         ):
             self.init_value.binding_energies[energy_key] = float(energy_entry.get())
-
-        self.init_value.transformation = float(self.transformation.get())
         self.init_value.record_name = str(self.record.get())
         self.init_value.img_per = float(self.image_rec.get())
         self.init_value.comments = str(self.comments.get())
         self.init_value.keep_defect_check = self.bln_defect.get()
-        self.init_value.trans_check = self.bln_tr.get()
         self.init_value.first_put_check = self.bln_first.get()
         self.init_value.cut_check = self.bln_cut.get()
         self.init_value.limit_check = self.bln_limit.get()
-
         self.init_value.num_defect = self.num_defect.get()
         self.init_value.put_first = self.put_first.get()
         self.init_value.cut_number = self.cut.get()
         self.init_value.limit_val = self.limit.get()
-
         self.init_value.method = self.var_method.get()
         self.record_middle = 0
         #
         kbt = self.init_value.temperature_eV
         self.temperautre_energy["text"] = "{:.3g}".format(kbt)
-        num = 0
         for diffuse_energy, rate_label in zip(self.diffuse, self.rate_labels):
-            """
-            if num == 0:
-                E_value = float(self.init_value.binding_energies["Ag base"])
-                num = 1
-            elif num == 1:
-                E_value = float(energy.get()) + float(
-                    self.init_value.binding_energies["Ag base"]
-                )
-                num = 2
-            elif num == 2:
-                E_value = float(self.init_value.binding_energies["Si base"])
-                num = 3
-            else:
-                E_value = float(energy.get()) + float(
-                    self.init_value.binding_energies["Si base"]
-                )
-            """
             E_value = float(diffuse_energy.get())
 
             rate_label["text"] = str(
@@ -472,24 +412,6 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.progress_bar.configure(value=self.pbval)
         self.update()
 
-    """
-    def start_setting(self) -> None:
-        self.start_time = time.time()
-        self.prog_time = 0
-        self.n_atoms = 0
-        self.n_events = 0
-        self.empty_firstBL = self.init_value.atoms_in_BL
-        self.pos_rec: List[dict] = []
-        self.time_rec: List[float] = []
-        self.cov_rec: List[float] = []
-        self.rec_num_atoms = 0
-        self.n_events_perdep = 0
-        #
-        #
-        self.n_events_rec: List[int] = []
-        self.num_atoms_rec: List[int] = []
-    """
-
     def update_progress_tk(self):
         self.pbval = int(self.prog_time / self.init_value.total_time * 100)
         self.progress_bar.configure(value=self.pbval)
@@ -516,40 +438,6 @@ class Window(ttk.Frame, common_functions, null_functions):
 
         self.update()
 
-    """
-    def update_progress(self) -> None:
-        self.n_events += 1
-        self.n_events_perdep += 1
-    """
-
-    """
-    def det_normarize(self) -> None:
-        kbt = self.init_value.temperature_eV
-        fast_event = max(
-            [
-                rate(float(self.prefactor.get()), kbt, float(energy.get()))
-                for energy in self.energies
-            ]
-        )
-        if self.init_value.limit_check is True:
-            if fast_event > float(self.init_value.limit_val):
-                fast_event = float(self.init_value.limit_val)
-
-        if self.bln_tr.get() is True:
-            self.normarize = 6 * fast_event + rate(
-                float(self.prefactor.get()), kbt, float(self.init_value.transformation)
-            )
-        else:
-            self.normarize = 6 * fast_event
-    """
-
-    """
-    def record_position(self) -> None:
-        self.pos_rec.append(copy.copy(self.atom_set))
-        self.time_rec.append(self.prog_time)
-        self.cov_rec.append(self.n_atoms / self.init_value.atoms_in_BL)
-    """
-
     def cal_expected_events(self) -> None:
         dep_success = self.init_value.dep_rate_atoms_persec / self.normarize
         if dep_success > 1:
@@ -560,198 +448,11 @@ class Window(ttk.Frame, common_functions, null_functions):
             "Expected: " + str(int(self.expected_num_events)) + " events"
         )
 
-    """
-    def update_after_deposition(self, dep_pos, atom_type) -> None:
-        ##
-        self.n_events_rec.append(self.n_events_perdep)
-        self.num_atoms_rec.append(self.n_atoms)
-        ##
-        self.n_events_perdep = 0
-        self.atom_set[dep_pos] = atom_type
-        self.atom_exist.append(dep_pos)
-        self.n_atoms += 1
-        self.n_events += 1
-        self.prog_time += 1 / (self.init_value.dep_rate_atoms_persec)
-        if dep_pos[2] in (0, 1):
-            self.empty_firstBL -= 1
-    """
-    """
-
-    def try_deposition(self) -> None:
-        # deposition
-        judge = judge_null(self.init_value.dep_rate_atoms_persec / self.normarize)
-        if judge:
-            self.deposition()
-    """
-
-    """
-    def deposition(self) -> Tuple:
-        # self.n_events_perdep = 0
-        dep_pos, atom_type = deposit_an_atom(
-            self.atom_set,
-            self.bonds,
-            self.init_value,
-        )
-        self.update_after_deposition(dep_pos, atom_type)
-        return dep_pos
-    """
-    """
-    def defect_check(self):
-        if (self.target[2] not in (0, 1)) and (self.move_atom[2] in (0, 1)):
-            self.move_atom = self.target
-            self.new_state = self.atom_set[self.target]
-            self.n_events -= 1
-            self.n_events_perdep -= 1
-    """
-
-    """
-    def event_progress(self):
-        if (self.empty_firstBL == int(self.init_value.num_defect)) and (
-            self.init_value.keep_defect_check is True
-        ):
-            self.defect_check()
-        #
-        if self.move_atom == self.target:
-            if self.new_state == 4:
-                # クラスターで3次元化
-                # print("clustering")
-                # print(self.target)
-                self.prev_eve = "clustering"
-
-                self.atom_set[self.target] = 3
-                for bond in self.bonds[self.target]:
-                    if self.atom_set[bond] != 0:
-                        self.atom_set[bond] = 3
-                        # print(bond)
-                # input()
-            else:
-                self.prev_eve = (
-                    "state change: "
-                    + str(self.target)
-                    + " : "
-                    + str(self.atom_set[self.target])
-                    + "→"
-                    + str(self.new_state)
-                )
-                self.atom_set[self.target] = self.new_state
-    """
-    """
-            elif self.new_state != self.atom_set[self.target]:
-                if self.new_state == 2:
-                    print("3D→2D")
-                    print("target: " + str(self.target))
-                    print("state: " + str(self.atom_set[self.target]))
-                    print("new state: " + str(self.new_state))
-                    print(self.event_time[self.target])
-                    print(self.event[self.target])
-                    num_b2 = 0
-                    num_b3 = 0
-                    for bond in self.bonds[self.target]:
-                        if self.atom_set[bond] == 2:
-                            num_b2 += 1
-                        elif self.atom_set[bond] == 3:
-                            num_b3 += 1
-                    print("bond2: " + str(num_b2))
-                    print("bond3: " + str(num_b3))
-
-                else:
-                    print("2D→3D")
-                    print("target: " + str(self.target))
-                    print("state: " + str(self.atom_set[self.target]))
-                    print("new state: " + str(self.new_state))
-                    print(self.event_time[self.target])
-                    print(self.event[self.target])
-                    num_b2 = 0
-                    num_b3 = 0
-                    for bond in self.bonds[self.target]:
-                        if self.atom_set[bond] == 2:
-                            num_b2 += 1
-                        elif self.atom_set[bond] == 3:
-                            num_b3 += 1
-                    print("bond2: " + str(num_b2))
-                    print("bond3: " + str(num_b3))
-
-                self.atom_set[self.target] = self.new_state
-    """
-    """
-        else:
-            self.prev_eve = (
-                "move : "
-                + str(self.target)
-                + " : "
-                + str(self.atom_set[self.target])
-                + " → "
-                + str(self.move_atom)
-                + " ("
-                + str(self.atom_set[self.move_atom])
-                + ") : "
-                + str(self.new_state)
-            )
-            self.atom_set[self.move_atom] = self.new_state
-            self.atom_set[self.target] = 0
-            self.atom_exist.remove(self.target)
-            self.atom_exist.append(self.move_atom)
-            if self.move_atom[2] in (0, 1):
-                self.empty_firstBL -= 1
-            if self.target[2] in (0, 1):
-                self.empty_firstBL += 1
-    """
-
-    """
-    def try_events(self) -> None:
-        events, rates, states = site_events(
-            self.atom_set,
-            self.bonds,
-            self.target,
-            self.init_value,
-            self.bln_defect.get(),
-            self.empty_firstBL,
-            self.bln_tr.get(),
-        )
-        # Normarize rates
-        norm_rates = normarize_rate(rates, self.normarize)
-        # add null event
-        events.append(self.target)
-        states.append(self.atom_set[self.target])
-        # choose an event
-        self.move_atom, self.new_state = choice(events, norm_rates, states)
-        if (self.target != self.move_atom) or (
-            self.atom_set[self.target] != self.new_state
-        ):
-            self.n_events_perdep += 1
-
-        # event progress
-        self.event_progress()
-    """
-
     def end_of_loop_tk(self):
         self.progress_label["text"] = (
             "Finished: " + str(self.minute) + " min " + str(self.second) + " s"
         )
         self.update()
-
-    """
-    def end_of_loop(self) -> None:
-        self.record_position()
-        elapsed_time = time.time() - self.start_time
-        self.minute = math.floor(elapsed_time / 60)
-        self.second = int(elapsed_time % 60)
-        record_data(
-            self.pos_rec,
-            self.time_rec,
-            self.cov_rec,
-            self.lattice,
-            self.init_value,
-            self.minute,
-            self.second,
-            self.bln_defect.get(),
-        )
-        #
-        #
-        rec_events_per_dep(self.n_events_rec, self.num_atoms_rec)
-        #
-        #
-    """
 
     def null_event_kmc(self) -> None:  # 長過ぎ！　Helper function 作ってコンパクトにしないと見通し悪い。
         self.start_setting_tk()
@@ -768,78 +469,6 @@ class Window(ttk.Frame, common_functions, null_functions):
         # end of the loop
         self.end_of_loop()
         self.end_of_loop_tk()
-
-    """
-    def update_events(self):
-        self.related_atoms = list(set(self.related_atoms))
-        for target_rel in self.related_atoms:
-            if self.atom_set[target_rel] == 0:
-                events = []
-                rates = []
-                states = []
-
-            else:
-                events, rates, states = site_events(
-                    self.atom_set,
-                    self.bonds,
-                    target_rel,
-                    self.init_value,
-                    self.bln_defect.get(),
-                    self.empty_firstBL,
-                    self.bln_tr.get(),
-                )
-
-            self.total_event_time -= self.event_time_tot[target_rel]
-            self.event[target_rel] = events
-            self.event_time[target_rel] = rates
-            self.event_time_tot[target_rel] = sum(rates)
-            self.event_state[target_rel] = states
-            self.total_event_time += self.event_time_tot[target_rel]
-        self.related_atoms = []
-    """
-
-    """
-    def rejection_free_deposition(self):
-        dep_pos = self.deposition()
-        # 蒸着によりイベントに変化が生じうる原子
-        self.related_atoms = recalculate(
-            dep_pos, self.bonds, self.atom_set, self.init_value
-        )
-        # それぞれのイベント等を格納
-        self.update_events()
-        #
-        #
-        # self.prev_dep = dep_pos
-    """
-
-    """
-    def rejection_free_event(self):
-
-        if self.target is None or self.event_number is None:
-            print("None in rejection free")
-            print(self.target)
-            print(self.event_number)
-
-        self.move_atom = self.event[self.target][self.event_number]
-        self.new_state = self.event_state[self.target][self.event_number]
-        self.event_progress()
-        self.related_atoms = recalculate(
-            self.target, self.bonds, self.atom_set, self.init_value
-        )
-        self.related_atoms.extend(
-            recalculate(self.move_atom, self.bonds, self.atom_set, self.init_value)
-        )
-        if self.new_state == 4:
-            for bond in self.bonds[self.target]:
-                self.related_atoms.extend(
-                    recalculate(bond, self.bonds, self.atom_set, self.init_value)
-                )
-        self.update_events()
-        #
-        #
-        # self.prev_eve = str(self.target) + ":" + str(self.move_atom)
-
-    """
 
     def num_atom_check(self):
         num = 0
@@ -862,30 +491,6 @@ class Window(ttk.Frame, common_functions, null_functions):
             print("Exist num :" + str(num_ex))
             print(self.prev_eve)
             input()
-
-    """
-    def atom_count(self):
-        if self.empty_firstBL < int(self.init_value.num_defect):
-            count = 0
-            for key, val in self.atom_set.items():
-                if val != 0 and key[2] in (0, 1):
-                    count += 1
-            print("defect error")
-            print(self.prev_eve)
-            print(self.empty_firstBL)
-            print(int(self.init_value.num_defect))
-            print(count)
-            print(self.prev_dep)
-            input()
-        count = 0
-        for key, val in self.atom_set.items():
-            if val != 0:
-                count += 1
-        if count != self.n_atoms:
-            print("count error")
-            print(self.prev_eve)
-            input()
-    """
 
     def rejection_free_kmc(self) -> None:
         #
