@@ -38,7 +38,7 @@ class Params:
         self.cut_number = 100000
         self.num_defect = 1
         self.record_name = "KMC_Si_rec_test"
-        self.img_per = 10
+        self.img_per = 20 / 3
         self.comments = "silicene speed test"
         self.intra_distance = 0.204
         self.inter_distance = 0.612

@@ -1,8 +1,6 @@
 from typing import List, Tuple, Dict
 import random
 import math
-
-# from Modules.event_collection import state_after_move
 from Test_modules.read_examples import read_atom_set, read_bonds, read_lattice
 from InputParameter import Params
 from Test_modules.deposition_check import dep_check_poscar
@@ -11,13 +9,13 @@ from Test_modules.deposition_check import dep_check_poscar
 def find_candidates(atom_set: Dict, bonds: Dict) -> List[Tuple[int, int, int]]:
     candidate: List[Tuple[int, int, int]] = []
     for atom_index, condition in atom_set.items():
-        if condition != 0:
+        if condition == 1:
             pass
         elif atom_index[2] == 0:
             candidate.append(atom_index)
         else:
             for bond in bonds[atom_index]:
-                if atom_set[bond] != 0:
+                if atom_set[bond] == 1:
                     candidate.append(atom_index)
                     break
     return list(set(candidate))
@@ -37,11 +35,7 @@ def deposit_an_atom(
     candidate = find_candidates(atom_set, bonds)
     if (params.keep_defect_check is True) and (empty_first == int(params.num_defect)):
         candidate = remove_first(candidate)
-
-    dep_pos = dep_position(candidate)
-    # atom_type = judge_type(atom_set, bonds, dep_pos, params, energy2D, energy3D)
-
-    return dep_pos
+    return dep_position(candidate)
 
 
 def highest_z(atom_set: Dict):

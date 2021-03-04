@@ -10,9 +10,8 @@ class rejection_free(common_functions):
         print("Calculation start")
         self.start_setting()
         self.start_rejection_free()
-        # 最初の原子を配置
+        # Put first atom
         self.put_first_atoms_rf()
-        # self.prev_eve = "dep"
         print("Loop start")
         while int(self.prog_time) <= int(self.init_value.total_time):
             # self.num_atom_check()

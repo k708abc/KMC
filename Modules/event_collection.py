@@ -9,13 +9,6 @@ import time
 import decimal
 
 
-def bond_energy(
-    target: Tuple[int, int, int],
-    energy_bonding,
-):
-    return energy_bonding[int(target[2] // 2)]
-
-
 def total_energy(
     atom_set: Dict,
     bonds: Dict,
@@ -23,13 +16,13 @@ def total_energy(
     energy_bonding: List[float],
     energy_diffuse: List[float],
 ):
-    energy = energy_diffuse[target[2] // 2]
     num_bond = 0
     for bond in bonds[target]:
         if (atom_set[bond] == 1) and (target[2] // 2 == bond[2] // 2):
             num_bond += 1
-    energy += num_bond * bond_energy(target, energy_bonding)
-    return energy
+    return (
+        energy_diffuse[target[2] // 2] + num_bond * energy_bonding[int(target[2] // 2)]
+    )
 
 
 def find_filled_sites(atom_set, indexes):
@@ -48,11 +41,17 @@ def find_lower_sites(indexes):
     return [(i[0], i[1], i[2] - 1) for i in indexes]
 
 
-# 移動後に原子が孤立するような移動は省く
-def judge_isolation(atom_set, bonds, target: Tuple[int, int, int], nn_atom, events):
+# target が移動することで、結合している周囲原子が孤立するような移動は省く
+def judge_isolation(
+    atom_set,
+    bonds,
+    target: Tuple[int, int, int],
+    nn_atom: List[Tuple[int, int, int]],
+    events: List[Tuple[Tuple[int, int, int], float]],
+):
     for check in nn_atom:
         # 隣接原子の周囲の原子数
-        nn_nn_atom = find_lower_sites(bonds[check])
+        nn_nn_atom = find_filled_sites(atom_set, bonds[check])
         # 二個以上なら移動後も孤立しない
         if len(nn_nn_atom) >= 2:
             pass
@@ -63,10 +62,13 @@ def judge_isolation(atom_set, bonds, target: Tuple[int, int, int], nn_atom, even
                 # 移動後も結合し続ける
                 if post_move[0] in bonds[check]:
                     # 移動後のサイトの隣接原子
-                    post_nn_atom = find_filled_sites(atom_set, post_move)
+                    post_nn_atom = find_filled_sites(atom_set, bonds[post_move[0]])
                     # 2原子で孤立している→remove
                     if len(post_nn_atom) <= 1:
                         events.remove(post_move)
+                # 結合がなくなる
+                else:
+                    events.remove(post_move)
     return events
 
 
@@ -120,8 +122,8 @@ def possible_events(
         for empty in nnn_empty
         if (len(find_filled_sites(atom_set, bonds[empty])) >= 1 or empty[2] == 0)
     ]
+    #
     # BLの上り下り
-    rearange_rate = decimal.Decimal(rate(pre, kbt, energy))
     # BLの下層原子
     if atom_z % 2 == 0:
         # BLを上る判定
@@ -140,8 +142,11 @@ def possible_events(
         else:
             # 直下原子のインデックス
             direct_below = (atom_x, atom_y, atom_z - 1)
-            # 直下に原子がないときパス
-            if atom_set[direct_below] == 0:
+            # 直下に原子がないとき
+            if (
+                atom_set[direct_below] == 0
+                and len(find_filled_sites(atom_set, bonds[direct_below])) >= 2
+            ):
                 pass
             # 直下に原子があるとき
             else:
@@ -258,10 +263,8 @@ def site_events(
         params,
         energy,
     )
-
-    if params.limit_check is True:
+    if params.limit_check:
         rate_list = rate_limit(rate_list, decimal.Decimal(float(params.limit_val)))
-
     return event_list, rate_list
 
 

@@ -62,35 +62,6 @@ class common_functions:
             for i in range(self.init_value.z_unit_init * 3 - 2)
         ]
         #
-        """
-        self.energy_2D3D = [
-            (
-                self.init_value.binding_energies["Si_1st"]
-                + self.init_value.binding_energies["Si_else"]
-            )
-            / 2,
-            (
-                self.init_value.binding_energies["Si_2nd"]
-                + self.init_value.binding_energies["Si_else"]
-            )
-            / 2,
-            (
-                self.init_value.binding_energies["Si_3rd"]
-                + self.init_value.binding_energies["Si_else"]
-            )
-            / 2,
-        ]
-        self.energy_2D3D += [
-            self.init_value.binding_energies["Si_else"]
-            for i in range(self.init_value.z_unit_init * 3 - 2)
-        ]
-        #
-        self.energy_3D = [
-            self.init_value.binding_energies["Si_else"]
-            for i in range(self.init_value.z_unit_init * 3 + 1)
-        ]
-        """
-        #
         self.energy_diffuse = [
             self.init_value.diffusion_barriers["Si_1st"],
             self.init_value.diffusion_barriers["Si_2nd"],
@@ -147,7 +118,6 @@ class common_functions:
             self.event[target_rel] = events
             self.event_time[target_rel] = rates
             self.event_time_tot[target_rel] = sum(rates)
-            # self.event_state[target_rel] = states
             self.total_event_time += self.event_time_tot[target_rel]
         self.related_atoms = []
         #
@@ -196,7 +166,6 @@ class common_functions:
 
     def rejection_free_event(self):
         self.move_atom = self.event[self.target][self.event_number]
-        # self.new_state = self.event_state[self.target][self.event_number]
         self.event_progress()
         self.related_atoms = recalculate(
             self.target, self.bonds, self.atom_set, self.init_value
@@ -204,13 +173,6 @@ class common_functions:
         self.related_atoms += recalculate(
             self.move_atom, self.bonds, self.atom_set, self.init_value
         )
-        """
-        if self.new_state == 4:
-            for bond in self.bonds[self.target]:
-                self.related_atoms += recalculate(
-                    bond, self.bonds, self.atom_set, self.init_value
-                )
-        """
         self.update_events()
         #
         #
@@ -222,12 +184,10 @@ class common_functions:
         )
         if self.target == (-1, -1, -1):
             self.rejection_free_deposition()
-            # self.prev_eve = "dep_nat"
         elif (self.n_events_perdep == int(self.init_value.cut_number)) and (
             self.init_value.cut_check is True
         ):
             self.rejection_free_deposition()
-            # self.prev_eve = "dep_lim"
         else:
             self.rejection_free_event()
 
@@ -289,7 +249,6 @@ class common_functions:
     def defect_check(self):
         if (self.target[2] not in (0, 1)) and (self.move_atom[2] in (0, 1)):
             self.move_atom = self.target
-            # self.new_state = self.atom_set[self.target]
             self.n_events -= 1
             self.n_events_perdep -= 1
 
@@ -299,35 +258,11 @@ class common_functions:
         ):
             self.defect_check()
         #
-        if self.move_atom == self.target:
-            """
-            if self.new_state == 4:
-                # print("clustering")
-                # self.prev_eve = "clustering"
-                self.atom_set[self.target] = 3
-                for bond in self.bonds[self.target]:
-                    if self.atom_set[bond] != 0:
-                        self.atom_set[bond] = 3
-            elif self.new_state == 5:
-                # print("de clustering")
-                # self.prev_eve = "change to 2D"
-                self.atom_set[self.target] = 2
-                for bond in self.bonds[self.target]:
-                    if self.atom_set[bond] != 0:
-                        self.atom_set[bond] = 2
-
-            else:
-            """
-            self.atom_set[self.target] = 1
-            print("selfmove")
-
-        else:
-
-            self.atom_set[self.move_atom] = 1
-            self.atom_set[self.target] = 0
-            self.atom_exist.remove(self.target)
-            self.atom_exist.append(self.move_atom)
-            if self.move_atom[2] in (0, 1):
-                self.empty_firstBL -= 1
-            if self.target[2] in (0, 1):
-                self.empty_firstBL += 1
+        self.atom_set[self.target] = 0
+        self.atom_set[self.move_atom] = 1
+        self.atom_exist.remove(self.target)
+        self.atom_exist.append(self.move_atom)
+        if self.move_atom[2] in (0, 1):
+            self.empty_firstBL -= 1
+        if self.target[2] in (0, 1):
+            self.empty_firstBL += 1
