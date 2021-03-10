@@ -110,16 +110,16 @@ def rec_ppt(
     table.cell(0, 3).text = "Si(3rd)"
     table.cell(0, 4).text = "Si(else)"
     table.cell(1, 0).text = "Diffusion (eV)"
-    table.cell(1, 1).text = str(params.diffusion_barriers["Si_1st"])
-    table.cell(1, 2).text = str(params.diffusion_barriers["Si_2nd"])
-    table.cell(1, 3).text = str(params.diffusion_barriers["Si_3rd"])
+    table.cell(1, 1).text = str(params.diffusion_barriers["Si_first"])
+    table.cell(1, 2).text = str(params.diffusion_barriers["Si_second"])
+    table.cell(1, 3).text = str(params.diffusion_barriers["Si_third"])
     table.cell(1, 4).text = str(params.diffusion_barriers["Si_else"])
 
     #
     table.cell(2, 0).text = "Binding (eV)"
-    table.cell(2, 1).text = str(params.binding_energies["Si_1st"])
-    table.cell(2, 2).text = str(params.binding_energies["Si_2nd"])
-    table.cell(2, 3).text = str(params.binding_energies["Si_3rd"])
+    table.cell(2, 1).text = str(params.binding_energies["Si_first"])
+    table.cell(2, 2).text = str(params.binding_energies["Si_second"])
+    table.cell(2, 3).text = str(params.binding_energies["Si_third"])
     table.cell(2, 4).text = str(params.binding_energies["Si_else"])
     ##
 

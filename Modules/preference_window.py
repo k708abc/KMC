@@ -282,7 +282,7 @@ class Window(ttk.Frame, common_functions, null_functions):
 
     def create_widgets_method(self) -> None:
         self.var_method = tk.StringVar()
-        methods = ("Null event", "Rejection free")
+        methods = ("Null_event", "Rejection_free")
         self.method_label = tk.Label(self.frame_method, text="Method")
         self.method_cb = ttk.Combobox(
             self.frame_method,
@@ -303,10 +303,14 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.close = tk.Button(
             self.frame_buttons, text="close", command=self.close_function, width=20
         )
+        self.save = tk.Button(
+            self.frame_buttons, text="Save values", command=self.save_function, width=20
+        )
 
     def create_layout_buttons(self) -> None:
         self.start.grid(row=0, column=0)
         self.close.grid(row=0, column=1)
+        self.save.grid(row=0, column=2)
 
     def create_widgets_progress(self) -> None:
         self.progress_label = ttk.Label(self.frame_progress, text="Progress (%)")
@@ -345,6 +349,10 @@ class Window(ttk.Frame, common_functions, null_functions):
 
     def close_function(self) -> None:
         self.quit()
+
+    def save_function(self):
+        self.update_values()
+        self.rewrite_input()
 
     def run(self) -> None:
         self.mainloop()
@@ -398,6 +406,169 @@ class Window(ttk.Frame, common_functions, null_functions):
         )
 
         self.update()
+
+    def rewrite_input(self):
+        file_name = "InputParameter.py"
+        temp_rec = []
+        check_val = 0
+        with open(file_name, "r", encoding="utf-8_sig") as f:
+            for row in f:
+                row_sp = row.split()
+                if check_val == 0:
+                    if "@property" in row_sp:
+                        check_val = 1
+                        temp_rec.append(row)
+                    elif "self.n_cell_init" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.n_cell_init))
+                        )
+                    elif "self.z_unit_init" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.z_unit_init))
+                        )
+                    elif "self.temperature" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.temperature))
+                        )
+                    elif "self.dep_rate" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.dep_rate))
+                        )
+                    elif "self.dep_time" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.dep_time))
+                        )
+                    elif "self.prefactor" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.prefactor))
+                        )
+                    elif 'self.binding_energies["Si_first"]' in row_sp:
+                        temp_rec.append(
+                            row.replace(
+                                row_sp[2],
+                                str(self.init_value.binding_energies["Si_first"]),
+                            )
+                        )
+                    elif 'self.binding_energies["Si_second"]' in row_sp:
+                        temp_rec.append(
+                            row.replace(
+                                row_sp[2],
+                                str(self.init_value.binding_energies["Si_second"]),
+                            )
+                        )
+                    elif 'self.binding_energies["Si_third"]' in row_sp:
+                        temp_rec.append(
+                            row.replace(
+                                row_sp[2],
+                                str(self.init_value.binding_energies["Si_third"]),
+                            )
+                        )
+                    elif 'self.binding_energies["Si_else"]' in row_sp:
+                        temp_rec.append(
+                            row.replace(
+                                row_sp[2],
+                                str(self.init_value.binding_energies["Si_else"]),
+                            )
+                        )
+                    elif 'self.diffusion_barriers["Si_first"]' in row_sp:
+                        temp_rec.append(
+                            row.replace(
+                                row_sp[2],
+                                str(self.init_value.diffusion_barriers["Si_first"]),
+                            )
+                        )
+                    elif 'self.diffusion_barriers["Si_second"]' in row_sp:
+                        temp_rec.append(
+                            row.replace(
+                                row_sp[2],
+                                str(self.init_value.diffusion_barriers["Si_second"]),
+                            )
+                        )
+                    elif 'self.diffusion_barriers["Si_third"]' in row_sp:
+                        temp_rec.append(
+                            row.replace(
+                                row_sp[2],
+                                str(self.init_value.diffusion_barriers["Si_third"]),
+                            )
+                        )
+                    elif 'self.diffusion_barriers["Si_else"]' in row_sp:
+                        temp_rec.append(
+                            row.replace(
+                                row_sp[2],
+                                str(self.init_value.diffusion_barriers["Si_else"]),
+                            )
+                        )
+                    elif "self.put_first" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.put_first))
+                        )
+                    elif "self.cut_number" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.cut_number))
+                        )
+                    elif "self.num_defect" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.num_defect))
+                        )
+                    elif "self.record_name" in row_sp:
+                        temp_rec.append(
+                            row.replace(
+                                row_sp[2], '"' + str(self.init_value.record_name) + '"'
+                            )
+                        )
+                    elif "self.img_per" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.img_per))
+                        )
+                    elif "self.comments" in row_sp:
+                        comment = ""
+                        for i in range(2, len(row_sp)):
+                            comment += row_sp[i]
+                            if i != len(row_sp) - 1:
+                                comment += " "
+
+                        temp_rec.append(
+                            row.replace(
+                                comment, '"' + str(self.init_value.comments) + '"'
+                            )
+                        )
+                    elif "self.keep_defect_check" in row_sp:
+                        temp_rec.append(
+                            row.replace(
+                                row_sp[2], str(self.init_value.keep_defect_check)
+                            )
+                        )
+                    elif "self.first_put_check" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.first_put_check))
+                        )
+                    elif "self.cut_check" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.cut_check))
+                        )
+                    elif "self.limit_check" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.limit_check))
+                        )
+                    elif "self.limit_val" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.limit_val))
+                        )
+                    elif "self.method" in row_sp:
+                        temp_rec.append(
+                            row.replace(
+                                row_sp[2], '"' + str(self.init_value.method) + '"'
+                            )
+                        )
+                    else:
+                        temp_rec.append(row)
+                elif check_val == 1:
+                    temp_rec.append(row)
+
+        file_name = "InputParameter.py"
+        with open(file_name, "w", encoding="utf-8_sig") as f:
+            for rep in temp_rec:
+                f.write(rep)
 
     def update_click(self, event) -> None:
         self.update_values()
@@ -517,9 +688,9 @@ class Window(ttk.Frame, common_functions, null_functions):
 
     def start_function(self) -> None:
         self.update_values()
-        if self.var_method.get() == "Null event":
+        if self.var_method.get() == "Null_event":
             self.null_event_kmc()
-        elif self.var_method.get() == "Rejection free":
+        elif self.var_method.get() == "Rejection_free":
             self.rejection_free_kmc()
 
 

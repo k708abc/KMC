@@ -17,12 +17,19 @@ if __name__ == "__main__":
         round(start_E2 + diff_E2 * i, 2)
         for i in range(int((end_E2 - start_E2) / diff_E2))
     ]
+    print("repetetion start")
 
     growth_rec = []
+    total_cal = len(E1_list) * len(E2_list)
+    num_cal = 0
     #
     for i in E1_list:
         growth_rec.append([])
         for k in E2_list:
+            num_cal += 1
+            print("starting:" + str(num_cal) + "/" + str(total_cal))
+            print("val 1 = " + str(i))
+            print("val 2 = " + str(k))
             rf_class = rejection_free(1)
             rf_class.init_value.binding_energies["Si_2nd"] = i
             rf_class.init_value.binding_energies["Si_3rd"] = k

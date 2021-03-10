@@ -50,9 +50,9 @@ class common_functions:
 
     def energy_summarize(self):
         self.energy_bonding = [
-            self.init_value.binding_energies["Si_1st"],
-            self.init_value.binding_energies["Si_2nd"],
-            self.init_value.binding_energies["Si_3rd"],
+            self.init_value.binding_energies["Si_first"],
+            self.init_value.binding_energies["Si_second"],
+            self.init_value.binding_energies["Si_third"],
         ]
         #
         self.energy_bonding += [
@@ -61,9 +61,9 @@ class common_functions:
         ]
         #
         self.energy_diffuse = [
-            self.init_value.diffusion_barriers["Si_1st"],
-            self.init_value.diffusion_barriers["Si_2nd"],
-            self.init_value.diffusion_barriers["Si_3rd"],
+            self.init_value.diffusion_barriers["Si_first"],
+            self.init_value.diffusion_barriers["Si_second"],
+            self.init_value.diffusion_barriers["Si_third"],
             self.init_value.diffusion_barriers["Si_else"],
         ]
         #

@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+﻿#! /usr/bin/env python3
 """初期値も予め入力したい方式なら、クラス作っちゃった方が楽かも"""
 
 from collections import OrderedDict
@@ -19,27 +19,27 @@ class Params:
     def __init__(self) -> None:
         self.n_cell_init = 20
         self.z_unit_init = 6
-        self.temperature = 550
+        self.temperature = 550.0
         self.dep_rate = 0.1
-        self.dep_time = 30
-        self.prefactor = 1e13
+        self.dep_time = 20.0
+        self.prefactor = 10000000000000.0
         self.binding_energies: OrderedDict[str, float] = OrderedDict()
-        self.binding_energies["Si_1st"] = 0.2
-        self.binding_energies["Si_2nd"] = 0.2
-        self.binding_energies["Si_3rd"] = 0.25
-        self.binding_energies["Si_else"] = 0.25
+        self.binding_energies["Si_first"] = 0.2
+        self.binding_energies["Si_second"] = 0.2
+        self.binding_energies["Si_third"] = 0.2
+        self.binding_energies["Si_else"] = 0.2
         self.diffusion_barriers: OrderedDict[str, float] = OrderedDict()
-        self.diffusion_barriers["Si_1st"] = 1.2
-        self.diffusion_barriers["Si_2nd"] = 1.3
-        self.diffusion_barriers["Si_3rd"] = 1.3
-        self.diffusion_barriers["Si_else"] = 1.3
+        self.diffusion_barriers["Si_first"] = 1.4
+        self.diffusion_barriers["Si_second"] = 1.4
+        self.diffusion_barriers["Si_third"] = 1.4
+        self.diffusion_barriers["Si_else"] = 1.4
         #
         self.put_first = 10
         self.cut_number = 100000
         self.num_defect = 1
         self.record_name = "KMC_Si_rec_test"
-        self.img_per = 20 / 3
-        self.comments = "silicene speed test"
+        self.img_per = 5.0
+        self.comments = "Test"
         self.intra_distance = 0.204
         self.inter_distance = 0.612
         self.keep_defect_check = False
@@ -47,7 +47,7 @@ class Params:
         self.cut_check = False
         self.limit_check = False
         self.limit_val = 1000
-        self.method = "Rejection free"
+        self.method = "Rejection_free"
 
     @property
     def temperature_eV(self) -> float:
