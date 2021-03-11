@@ -39,6 +39,9 @@ def total_energy(
     for bond in bonds[target]:
         if atom_set[bond] == 1:
             num_bond += 1
+    # Ag-Siも結合数に含める
+    if target[0] == 0:
+        num_bond += 1
     return (
         energy_diffuse[target[2] // 2] + num_bond * energy_bonding[int(target[2] // 2)]
     )
