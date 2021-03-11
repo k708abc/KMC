@@ -26,20 +26,20 @@ class Params:
         self.binding_energies: OrderedDict[str, float] = OrderedDict()
         self.binding_energies["Si_first"] = 0.2
         self.binding_energies["Si_second"] = 0.2
-        self.binding_energies["Si_third"] = 0.2
-        self.binding_energies["Si_else"] = 0.2
+        self.binding_energies["Si_third"] = 0.25
+        self.binding_energies["Si_else"] = 0.25
         self.diffusion_barriers: OrderedDict[str, float] = OrderedDict()
-        self.diffusion_barriers["Si_first"] = 1.4
-        self.diffusion_barriers["Si_second"] = 1.4
-        self.diffusion_barriers["Si_third"] = 1.4
-        self.diffusion_barriers["Si_else"] = 1.4
+        self.diffusion_barriers["Si_first"] = 1
+        self.diffusion_barriers["Si_second"] = 1
+        self.diffusion_barriers["Si_third"] = 1
+        self.diffusion_barriers["Si_else"] = 1
         #
         self.put_first = 10
         self.cut_number = 100000
         self.num_defect = 1
         self.record_name = "KMC_Si_rec_test"
         self.img_per = 5.0
-        self.comments = "Test"
+        self.comments = "search for silicene, after adding Ag-Si"
         self.intra_distance = 0.204
         self.inter_distance = 0.612
         self.keep_defect_check = False
