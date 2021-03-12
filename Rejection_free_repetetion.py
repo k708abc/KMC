@@ -2,26 +2,37 @@ from Rejection_free_kmc import rejection_free
 from Modules.heatmap import form_heatmap
 
 if __name__ == "__main__":
-    start_E1 = 0.2
-    end_E1 = 0.6
-    diff_E1 = 0.1
-    start_E2 = 0.2
-    end_E2 = 0.6
-    diff_E2 = 0.1
+    start_E1 = 0.15
+    end_E1 = 0.3
+    diff_E1 = 0.025
+    start_E2 = 0.15
+    end_E2 = 0.15
+    diff_E2 = 0
+    or_rec_name = "silicene_param_dep"
     #
-    E1_list = [
-        round(start_E1 + diff_E1 * i, 2)
-        for i in range(int((end_E1 - start_E1) / diff_E1))
-    ]
-    E2_list = [
-        round(start_E2 + diff_E2 * i, 2)
-        for i in range(int((end_E2 - start_E2) / diff_E2))
-    ]
+    if diff_E1 != 0:
+        E1_list = [
+            round(start_E1 + diff_E1 * i, 2)
+            for i in range(int(round((end_E1 - start_E1) / diff_E1)) + 1)
+        ]
+    else:
+        E1_list = [start_E1]
+    if diff_E2 != 0:
+        E2_list = [
+            round(start_E2 + diff_E2 * i, 2)
+            for i in range(int(round((end_E2 - start_E2) / diff_E2)) + 1)
+        ]
+    else:
+        E2_list = [start_E2]
+    #
+    print(E1_list)
+    print(E2_list)
     print("repetetion start")
 
     growth_rec = []
     total_cal = len(E1_list) * len(E2_list)
     num_cal = 0
+
     #
     for i in E1_list:
         growth_rec.append([])
@@ -30,12 +41,14 @@ if __name__ == "__main__":
             print("starting:" + str(num_cal) + "/" + str(total_cal))
             print("val 1 = " + str(i))
             print("val 2 = " + str(k))
+            rec_name = or_rec_name + "_" + str(i) + "_" + str(k)
             rf_class = rejection_free(1)
-            rf_class.init_value.binding_energies["Si_2nd"] = i
-            rf_class.init_value.binding_energies["Si_3rd"] = k
+            rf_class.init_value.binding_energies["Si_second"] = i
+            rf_class.init_value.binding_energies["Si_third"] = k
             rf_class.init_value.binding_energies["Si_else"] = k
+            rf_class.init_value.record_name = rec_name
             rf_class.start()
             growth_rec[-1].append(rf_class.mode_val)
-
     form_heatmap(growth_rec, rf_class.init_value, E1_list, E2_list, diff_E1, diff_E2)
     print("heatmap formed")
+    input()
