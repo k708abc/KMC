@@ -49,6 +49,8 @@ if __name__ == "__main__":
             rf_class.init_value.record_name = rec_name
             rf_class.start()
             growth_rec[-1].append(rf_class.mode_val)
-    form_heatmap(growth_rec, rf_class.init_value, E1_list, E2_list, diff_E1, diff_E2)
+    form_heatmap(
+        growth_rec, rf_class.init_value.record_name, E1_list, E2_list, diff_E1, diff_E2
+    )
     print("heatmap formed")
     input()

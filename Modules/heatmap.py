@@ -2,9 +2,10 @@ import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 from pptx import Presentation
 from pptx.util import Inches, Pt
+import os
 
 
-def form_heatmap(growth_mode, params, E1, E2, diff1, diff2):
+def form_heatmap(growth_mode, rec_name, E1, E2, diff1, diff2):
     fig = plt.figure(figsize=(6, 6))
     ax = fig.add_subplot(111)
     for i in range(len(E1)):
@@ -65,8 +66,10 @@ def form_heatmap(growth_mode, params, E1, E2, diff1, diff2):
     plt.tick_params(labelsize=16)
     plt.tight_layout()
     #
-    dir_name = params.record_name + "/"
+    dir_name = rec_name + "/"
     heat_name = dir_name + "heatmap.png"
+    if os.path.exists(dir_name) is False:
+        os.mkdir(dir_name)
     plt.savefig(heat_name)
     #
     heat_text = dir_name + "heat_values.txt"
@@ -90,18 +93,19 @@ def form_heatmap(growth_mode, params, E1, E2, diff1, diff2):
     file_data.close()
     #
     ppt_name = dir_name + "Layer_analysis_results.pptx"
-    prs = Presentation(ppt_name)
-    blank_slide_layout = prs.slide_layouts[6]
-    slide = prs.slides.add_slide(blank_slide_layout)
-    width = height = Inches(1)
-    top = Inches(0)
-    left = Inches(0.5)
-    txBox = slide.shapes.add_textbox(left, top, width, height)
-    tf = txBox.text_frame
-    p = tf.add_paragraph()
-    p.text = "Heat map"
-    height = Inches(5.5)
-    top = Inches(2)
-    left = Inches(0)
-    slide.shapes.add_picture(heat_name, left, top, height=height)
-    prs.save(ppt_name)
+    if os.path.exists(ppt_name):
+        prs = Presentation(ppt_name)
+        blank_slide_layout = prs.slide_layouts[6]
+        slide = prs.slides.add_slide(blank_slide_layout)
+        width = height = Inches(1)
+        top = Inches(0)
+        left = Inches(0.5)
+        txBox = slide.shapes.add_textbox(left, top, width, height)
+        tf = txBox.text_frame
+        p = tf.add_paragraph()
+        p.text = "Heat map"
+        height = Inches(5.5)
+        top = Inches(2)
+        left = Inches(0)
+        slide.shapes.add_picture(heat_name, left, top, height=height)
+        prs.save(ppt_name)
