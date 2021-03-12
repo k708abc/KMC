@@ -5,21 +5,21 @@ if __name__ == "__main__":
     start_E1 = 0.15
     end_E1 = 0.3
     diff_E1 = 0.025
-    start_E2 = 0.15
-    end_E2 = 0.15
+    start_E2 = 0.175
+    end_E2 = 0.175
     diff_E2 = 0
     or_rec_name = "silicene_param_dep"
     #
     if diff_E1 != 0:
         E1_list = [
-            round(start_E1 + diff_E1 * i, 2)
+            round(start_E1 + diff_E1 * i, 3)
             for i in range(int(round((end_E1 - start_E1) / diff_E1)) + 1)
         ]
     else:
         E1_list = [start_E1]
     if diff_E2 != 0:
         E2_list = [
-            round(start_E2 + diff_E2 * i, 2)
+            round(start_E2 + diff_E2 * i, 3)
             for i in range(int(round((end_E2 - start_E2) / diff_E2)) + 1)
         ]
     else:

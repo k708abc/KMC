@@ -39,7 +39,7 @@ class Params:
         self.num_defect = 1
         self.record_name = "KMC_Si_rec_test"
         self.img_per = 5.0
-        self.comments = "search for silicene, after adding Ag-Si"
+        self.comments = "silicene growth, bnd energy dependence"
         self.intra_distance = 0.204
         self.inter_distance = 0.612
         self.keep_defect_check = False
