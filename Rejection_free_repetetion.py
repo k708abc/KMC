@@ -5,10 +5,10 @@ if __name__ == "__main__":
     start_E1 = 0.15
     end_E1 = 0.3
     diff_E1 = 0.025
-    start_E2 = 0.2
-    end_E2 = 0.2
+    start_E2 = 0.275
+    end_E2 = 0.275
     diff_E2 = 0
-    or_rec_name = "silicene_param_dep_1st015"
+    or_rec_name = "silicene_param_dep_1st0175"
     #
     if diff_E1 != 0:
         E1_list = [
