@@ -24,22 +24,22 @@ class Params:
         self.dep_time = 20.0
         self.prefactor = 10000000000000.0
         self.binding_energies: OrderedDict[str, float] = OrderedDict()
-        self.binding_energies["Si_first"] = 0.2
-        self.binding_energies["Si_second"] = 0.2
-        self.binding_energies["Si_third"] = 0.25
-        self.binding_energies["Si_else"] = 0.25
+        self.binding_energies["Si_first"] = 0.15
+        self.binding_energies["Si_second"] = 0.15
+        self.binding_energies["Si_third"] = 0.15
+        self.binding_energies["Si_else"] = 0.15
         self.diffusion_barriers: OrderedDict[str, float] = OrderedDict()
-        self.diffusion_barriers["Si_first"] = 1.0
-        self.diffusion_barriers["Si_second"] = 1.0
-        self.diffusion_barriers["Si_third"] = 1.0
-        self.diffusion_barriers["Si_else"] = 1.0
+        self.diffusion_barriers["Si_first"] = 1
+        self.diffusion_barriers["Si_second"] = 1
+        self.diffusion_barriers["Si_third"] = 1
+        self.diffusion_barriers["Si_else"] = 1
         #
         self.put_first = 10
         self.cut_number = 100000
         self.num_defect = 1
-        self.record_name = "KMC_Si_rec_test"
+        self.record_name = "silicene_param_dep_1st015"
         self.img_per = 5.0
-        self.comments = "silicene growth, bnd energy dependence"
+        self.comments = "silicene growth, bond energy dependence, Si 1st = 0.15"
         self.intra_distance = 0.204
         self.inter_distance = 0.612
         self.keep_defect_check = False
