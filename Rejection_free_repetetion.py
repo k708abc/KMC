@@ -5,8 +5,8 @@ if __name__ == "__main__":
     start_E1 = 0.15
     end_E1 = 0.3
     diff_E1 = 0.025
-    start_E2 = 0.275
-    end_E2 = 0.275
+    start_E2 = 0.175
+    end_E2 = 0.175
     diff_E2 = 0
     or_rec_name = "silicene_param_dep_1st0175"
     #
