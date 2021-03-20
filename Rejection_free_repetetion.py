@@ -4,11 +4,11 @@ from Modules.heatmap import form_heatmap
 if __name__ == "__main__":
     start_E1 = 0.15
     end_E1 = 0.3
-    diff_E1 = 0.025
-    start_E2 = 0.175
-    end_E2 = 0.175
-    diff_E2 = 0
-    or_rec_name = "silicene_param_dep_1st0175"
+    diff_E1 = 0.01
+    start_E2 = 0.17
+    end_E2 = 0.18
+    diff_E2 = 0.01
+    or_rec_name = "silicene_param_dep_diff_0.01_1st0.2"
     #
     if diff_E1 != 0:
         E1_list = [
