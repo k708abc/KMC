@@ -51,13 +51,28 @@ class common_functions:
     def energy_summarize(self):
         self.energy_bonding = [
             self.init_value.binding_energies["Si_first"],
+            (
+                self.init_value.binding_energies["Si_first"]
+                + self.init_value.binding_energies["Si_second"]
+            )
+            / 2,
             self.init_value.binding_energies["Si_second"],
+            (
+                self.init_value.binding_energies["Si_second"]
+                + self.init_value.binding_energies["Si_third"]
+            )
+            / 2,
             self.init_value.binding_energies["Si_third"],
+            (
+                self.init_value.binding_energies["Si_third"]
+                + self.init_value.binding_energies["Si_else"]
+            )
+            / 2,
         ]
         #
         self.energy_bonding += [
             self.init_value.binding_energies["Si_else"]
-            for i in range(self.init_value.z_unit_init * 3 - 2)
+            for i in range(self.init_value.z_unit_init * 6 - 2)
         ]
         #
         self.energy_diffuse = [

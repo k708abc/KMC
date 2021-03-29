@@ -8,8 +8,7 @@ import os
 import time
 import decimal
 
-"""
-# バイレイヤー内のみを考慮
+
 def total_energy(
     atom_set: Dict,
     bonds: Dict,
@@ -17,34 +16,14 @@ def total_energy(
     energy_bonding: List[float],
     energy_diffuse: List[float],
 ):
-    num_bond = 0
-    for bond in bonds[target]:
-        if (atom_set[bond] == 1) and (target[2] // 2 == bond[2] // 2):
-            num_bond += 1
-    return (
-        energy_diffuse[target[2] // 2] + num_bond * energy_bonding[int(target[2] // 2)]
-    )
-"""
-
-
-# バイレイヤー間も含める
-def total_energy(
-    atom_set: Dict,
-    bonds: Dict,
-    target: Tuple[int, int, int],
-    energy_bonding: List[float],
-    energy_diffuse: List[float],
-):
-    num_bond = 0
+    bond_energy = 0
     for bond in bonds[target]:
         if atom_set[bond] == 1:
-            num_bond += 1
+            bond_energy += energy_bonding[int((target[2] + bond[2] - 1) / 2)]
     # Ag-Siも結合数に含める
     if target[2] == 0:
-        num_bond += 1
-    return (
-        energy_diffuse[target[2] // 2] + num_bond * energy_bonding[int(target[2] // 2)]
-    )
+        bond_energy += energy_bonding[0]
+    return energy_diffuse[target[2] // 2] + bond_energy
 
 
 def find_filled_sites(atom_set, indexes):

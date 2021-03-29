@@ -406,7 +406,7 @@ def record_data(
         poscar_name = dir_name + rec_name + "_poscar.vasp"
         rec_poscar(pos_i, lattice, unit_length, maxz, poscar_name)
         plt.clf()
-        plt.close()
+        plt.close("all")
         #
         growth_mode.append(growth_check(pos_i, unit_length, maxz, params.atoms_in_BL))
     #
