@@ -311,6 +311,7 @@ def height_check(pos_x, pos_y, pos, maxz):
 def growth_check(pos, unit_length, maxz, atom_BL):
     num_ag = 0
     num_1st = 0
+    num_2nd = 0
     num_multi = 0
     for i in range(unit_length):
         for k in range(unit_length):
@@ -324,12 +325,18 @@ def growth_check(pos, unit_length, maxz, atom_BL):
                 num_1st += 2
             elif height == 2:
                 num_1st += 1
+                num_2nd += 1
+            elif height == 3:
+                num_2nd += 2
+            elif height == 4:
+                num_2nd += 1
                 num_multi += 1
             else:
                 num_multi += 2
     return (
         round(num_ag / atom_BL * 100, 2),
         round(num_1st / atom_BL * 100, 2),
+        round(num_2nd / atom_BL * 100, 2),
         round(num_multi / atom_BL * 100, 2),
     )
 
@@ -346,12 +353,31 @@ def num_check(coverage, num):
 
 
 def growth_val(growth_mode, coverage, num_1ML, num_2ML):
-    val1 = growth_mode[num_1ML][1] / (100 - growth_mode[num_1ML][2]) * 100
-    if 100 - growth_mode[num_2ML][2] == 0:
-        val2 = 0
+    First_at_1ML = growth_mode[num_1ML][1]
+    Second_at_2ML = growth_mode[num_2ML][2]
+    First_at_second = growth_mode[num_2ML][1] / (100 - growth_mode[num_2ML][3]) * 100
+    if First_at_1ML < 50:
+        if Second_at_2ML < 50:
+            mode = "VW"
+        else:
+            mode = "BL"
     else:
-        val2 = growth_mode[num_2ML][1] / (100 - growth_mode[num_2ML][2]) * 100
-    return [val1, val2, coverage[num_1ML], coverage[num_2ML]]
+        if Second_at_2ML >= 50:
+            mode = "FM"
+        else:
+            if First_at_second >= 50:
+                mode = "SK"
+            else:
+                mode = "DW"
+
+    return [
+        First_at_1ML,
+        Second_at_2ML,
+        First_at_second,
+        mode,
+        coverage[num_1ML],
+        coverage[num_2ML],
+    ]
 
 
 def mode_check(growth_mode, coverage):

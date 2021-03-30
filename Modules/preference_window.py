@@ -27,6 +27,7 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.create_frame_buttons()
         self.create_frame_progress()
         self.create_frame_bar()
+        self.cerate_frame_repeat()
         master.title("KMC_Si")
         self.update_values()
 
@@ -77,6 +78,12 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.create_widgets_progress()
         self.create_layout_progress()
         self.frame_progress.pack()
+
+    def cerate_frame_repeat(self):
+        self.frame_repeat = ttk.Frame()
+        self.create_widgets_repeat()
+        self.create_layout_repeat()
+        self.frame_repeat.pack()
 
     def create_widgets_basics(self) -> None:
         # The first row
@@ -347,6 +354,48 @@ class Window(ttk.Frame, common_functions, null_functions):
     def create_layout_bar(self) -> None:
         self.progress_bar.grid(pady=20)
 
+    def create_widgets_repeat(self) -> None:
+        self.repeat_label = ttk.Label(self.frame_repeat, text="Repetition setting")
+        self.start_label = ttk.Label(self.frame_repeat, text="Start")
+        self.end_label = ttk.Label(self.frame_repeat, text="End")
+        self.diff_label = ttk.Label(self.frame_repeat, text="Diff")
+
+        self.repeat_label_1 = ttk.Label(self.frame_repeat, text="E1 (eV)")
+        self.repeat_label_2 = ttk.Label(self.frame_repeat, text="E2 (eV)")
+
+        self.start_E1 = ttk.Entry(self.frame_repeat, width=7)
+        self.start_E1.insert(tk.END, self.init_value.start_E1)
+
+        self.end_E1 = ttk.Entry(self.frame_repeat, width=7)
+        self.end_E1.insert(tk.END, self.init_value.end_E1)
+
+        self.diff_E1 = ttk.Entry(self.frame_repeat, width=7)
+        self.diff_E1.insert(tk.END, self.init_value.diff_E1)
+
+        self.start_E2 = ttk.Entry(self.frame_repeat, width=7)
+        self.start_E2.insert(tk.END, self.init_value.start_E2)
+
+        self.end_E2 = ttk.Entry(self.frame_repeat, width=7)
+        self.end_E2.insert(tk.END, self.init_value.end_E2)
+
+        self.diff_E2 = ttk.Entry(self.frame_repeat, width=7)
+        self.diff_E2.insert(tk.END, self.init_value.diff_E2)
+
+    def create_layout_repeat(self) -> None:
+        self.repeat_label.grid(row=0, column=0, **self.padWE)
+        self.start_label.grid(row=0, column=1, **self.padWE)
+        self.end_label.grid(row=0, column=2, **self.padWE)
+        self.diff_label.grid(row=0, column=3, **self.padWE)
+
+        self.repeat_label_1.grid(row=1, column=0, **self.padWE)
+        self.start_E1.grid(row=1, column=1, **self.padWE)
+        self.end_E1.grid(row=1, column=2, **self.padWE)
+        self.diff_E1.grid(row=1, column=3, **self.padWE)
+        self.repeat_label_2.grid(row=2, column=0, **self.padWE)
+        self.start_E2.grid(row=2, column=1, **self.padWE)
+        self.end_E2.grid(row=2, column=2, **self.padWE)
+        self.diff_E2.grid(row=2, column=3, **self.padWE)
+
     def close_function(self) -> None:
         self.quit()
 
@@ -387,6 +436,13 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.init_value.cut_number = self.cut.get()
         self.init_value.limit_val = self.limit.get()
         self.init_value.method = self.var_method.get()
+        self.init_value.start_E1 = float(self.start_E1.get())
+        self.init_value.end_E1 = float(self.end_E1.get())
+        self.init_value.diff_E1 = float(self.diff_E1.get())
+        self.init_value.start_E2 = float(self.start_E2.get())
+        self.init_value.end_E2 = float(self.end_E2.get())
+        self.init_value.diff_E2 = float(self.diff_E2.get())
+
         self.record_middle = 0
         #
         kbt = self.init_value.temperature_eV
@@ -532,6 +588,7 @@ class Window(ttk.Frame, common_functions, null_functions):
                                 comment, '"' + str(self.init_value.comments) + '"'
                             )
                         )
+
                     elif "self.keep_defect_check" in row_sp:
                         temp_rec.append(
                             row.replace(
@@ -560,6 +617,32 @@ class Window(ttk.Frame, common_functions, null_functions):
                                 row_sp[2], '"' + str(self.init_value.method) + '"'
                             )
                         )
+                    elif "self.start_E1" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.start_E1))
+                        )
+                    elif "self.end_E1" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.end_E1))
+                        )
+                    elif "self.diff_E1" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.diff_E1))
+                        )
+
+                    elif "self.start_E2" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.start_E2))
+                        )
+                    elif "self.end_E2" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.end_E2))
+                        )
+                    elif "self.diff_E2" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.diff_E2))
+                        )
+
                     else:
                         temp_rec.append(row)
                 elif check_val == 1:

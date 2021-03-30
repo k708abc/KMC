@@ -1,14 +1,16 @@
 from Rejection_free_kmc import rejection_free
+from InputParameter import Params
 from Modules.heatmap import form_heatmap
 
 if __name__ == "__main__":
-    start_E1 = 0.15
-    end_E1 = 0.3
-    diff_E1 = 0.01
-    start_E2 = 0.17
-    end_E2 = 0.18
-    diff_E2 = 0.01
-    or_rec_name = "silicene_param_dep_diff_0.01_1st0.2"
+    first_input = Params()
+    start_E1 = first_input.start_E1
+    end_E1 = first_input.end_E1
+    diff_E1 = first_input.diff_E1
+    start_E2 = first_input.start_E2
+    end_E2 = first_input.end_E2
+    diff_E2 = first_input.diff_E2
+    or_rec_name = first_input.record_name
     #
     if diff_E1 != 0:
         E1_list = [

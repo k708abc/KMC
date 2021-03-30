@@ -1,5 +1,4 @@
 ﻿#! /usr/bin/env python3
-"""初期値も予め入力したい方式なら、クラス作っちゃった方が楽かも"""
 
 from collections import OrderedDict
 import math
@@ -11,6 +10,7 @@ class Params:
 
     Attributes
     -------------
+
 
     """
 
@@ -29,19 +29,17 @@ class Params:
         self.binding_energies["Si_third"] = 0.175
         self.binding_energies["Si_else"] = 0.175
         self.diffusion_barriers: OrderedDict[str, float] = OrderedDict()
-        self.diffusion_barriers["Si_first"] = 1
-        self.diffusion_barriers["Si_second"] = 1
-        self.diffusion_barriers["Si_third"] = 1
-        self.diffusion_barriers["Si_else"] = 1
+        self.diffusion_barriers["Si_first"] = 1.4
+        self.diffusion_barriers["Si_second"] = 1.4
+        self.diffusion_barriers["Si_third"] = 1.4
+        self.diffusion_barriers["Si_else"] = 1.4
         #
         self.put_first = 10
         self.cut_number = 100000
         self.num_defect = 1
-        self.record_name = "silicene_param_dep_diff0.01_1st02_"
+        self.record_name = "Test"
         self.img_per = 5.0
-        self.comments = (
-            "silicene growth, bond energy dependence, Si 1st = 0.2, diff = 0.01"
-        )
+        self.comments = "Test"
         self.intra_distance = 0.204
         self.inter_distance = 0.612
         self.keep_defect_check = False
@@ -50,6 +48,14 @@ class Params:
         self.limit_check = False
         self.limit_val = 1000
         self.method = "Rejection_free"
+
+        # for repetition
+        self.start_E1 = 0.15
+        self.end_E1 = 0.3
+        self.diff_E1 = 0.01
+        self.start_E2 = 0.15
+        self.end_E2 = 0.3
+        self.diff_E2 = 0.01
 
     @property
     def temperature_eV(self) -> float:

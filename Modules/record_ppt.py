@@ -231,7 +231,7 @@ def rec_ppt(
     #
     left = Inches(0.1)
     top = Inches(2.5)
-    rows = 4
+    rows = 5
     cols = 9
     width = Inches(13)
     height = Inches(1)
@@ -243,7 +243,8 @@ def rec_ppt(
         table_g.cell(0, 0).text = "Coverage"
         table_g.cell(1, 0).text = "Ag"
         table_g.cell(2, 0).text = "1st layer"
-        table_g.cell(3, 0).text = "Multi layer"
+        table_g.cell(3, 0).text = "2nd layer"
+        table_g.cell(4, 0).text = "Multi layer"
         for i in range(8):
             if imn >= n_growth:
                 pass
@@ -252,19 +253,22 @@ def rec_ppt(
                 table_g.cell(1, i + 1).text = str(growth_mode[imn][0])
                 table_g.cell(2, i + 1).text = str(growth_mode[imn][1])
                 table_g.cell(3, i + 1).text = str(growth_mode[imn][2])
+                table_g.cell(4, i + 1).text = str(growth_mode[imn][3])
                 imn += 1
         inch += 1.8
     #
     top = Inches(inch)
     rows = 2
-    cols = 3
+    cols = 4
     table_mode = slide.shapes.add_table(rows, cols, left, top, width, height).table
-    table_mode.cell(0, 0).text = "Coverage"
-    table_mode.cell(0, 1).text = str(mode_val[2])
-    table_mode.cell(0, 2).text = str(mode_val[3])
-    table_mode.cell(1, 0).text = "Value"
+    table_mode.cell(0, 0).text = "Mode"
+    table_mode.cell(0, 1).text = "First layer at 1ML"
+    table_mode.cell(0, 2).text = "Second layer at 2ML"
+    table_mode.cell(0, 3).text = "First layer/100-Multi at 2ML"
+    table_mode.cell(1, 0).text = str(mode_val[3])
     table_mode.cell(1, 1).text = str(mode_val[0])
     table_mode.cell(1, 2).text = str(mode_val[1])
+    table_mode.cell(1, 3).text = str(mode_val[2])
 
     #
     slide = prs.slides.add_slide(blank_slide_layout)
