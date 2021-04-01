@@ -1,12 +1,7 @@
 from typing import List, Dict, Tuple
 from Modules.cal_rates import rate
-import random
-from Test_modules.read_examples import read_lattice, read_bonds, read_atom_set
 from InputParameter import Params
-from Test_modules.event_collection_check import random_target, event_check_poscar
-import os
-import time
-import decimal
+from decimal import Decimal, ROUND_HALF_UP
 
 
 def total_energy(
@@ -56,9 +51,14 @@ def judge_isolation(
         # 二個以上なら移動後も孤立しない
         if len(nn_nn_atom) >= 2:
             pass
+        # 隣接原子が基板上の時も孤立とは扱わない
+        elif check[2] == 0:
+            pass
         # 移動対象としか結合がない
         else:
             # 移動後の位置について
+            remove = []
+
             for post_move in events:
                 # 移動後も結合し続ける
                 if post_move[0] in bonds[check]:
@@ -66,10 +66,15 @@ def judge_isolation(
                     post_nn_atom = find_filled_sites(atom_set, bonds[post_move[0]])
                     # 2原子で孤立している→remove
                     if len(post_nn_atom) <= 1:
-                        events.remove(post_move)
+                        remove.append(post_move)
+                        # events.remove(post_move)
                 # 結合がなくなる
                 else:
-                    events.remove(post_move)
+                    # events.remove(post_move)
+                    remove.append(post_move)
+            for i in remove:
+                events.remove(i)
+
     return events
 
 
@@ -91,7 +96,7 @@ def possible_events(
     pre = float(params.prefactor)
     kbt = params.temperature_eV
     eve_rate: List = []
-    rearange_rate = decimal.Decimal(rate(pre, kbt, energy))
+    rearange_rate = Decimal(rate(pre, kbt, energy)).quantize(Decimal("0.00000001"))
     unit_length = params.n_cell_init
     #
     atom_x, atom_y, atom_z = target
@@ -265,7 +270,7 @@ def site_events(
         energy,
     )
     if params.limit_check:
-        rate_list = rate_limit(rate_list, decimal.Decimal(float(params.limit_val)))
+        rate_list = rate_limit(rate_list, Decimal(float(params.limit_val)))
     return event_list, rate_list
 
 
@@ -278,30 +283,32 @@ def highest_z(atom_set):
 
 
 if __name__ == "__main__":
+    from Modules.Test_modules.event_collection_check import (
+        existing_atoms,
+        event_check_poscar,
+    )
+
     lattice = read_lattice()
     atom_set = read_atom_set()
     bonds = read_bonds()
     parameters = Params()
     unit_length = parameters.n_cell_init
     maxz = highest_z(atom_set)
-    trans = True
     defect = True
     empty_first = 10
     #
-    start = time.time()
+    energy_bonding = [0.1 for i in range(0, 30)]
+    energy_diffuse = [1 for i in range(0, 30)]
 
     dir_name = "Event_check/"
     os.makedirs(dir_name, exist_ok=True)
-    target_cand = random_target(atom_set)
+    target_cand = existing_atoms(atom_set)
+
     for target in target_cand:
         event_list, rate_list = site_events(
-            atom_set,
-            bonds,
-            target,
-            parameters,
+            atom_set, bonds, target, parameters, energy_bonding, energy_diffuse
         )
         #
+
         event_check_poscar(atom_set, event_list, lattice, unit_length, maxz, target)
     print("Poscars for event check are formed.")
-    end_time = time.time() - start
-    print(end_time)

@@ -748,7 +748,7 @@ class Window(ttk.Frame, common_functions, null_functions):
 
     def rejection_free_kmc(self) -> None:
         #
-        # self.min_rates = 10000000000
+        self.min_rates = 10000000000
         #
         self.start_setting_tk()
         self.start_setting()

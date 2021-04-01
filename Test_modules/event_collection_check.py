@@ -1,12 +1,40 @@
 from typing import List, Dict, Tuple
 
 
-def random_target(atom_set: Dict):
+def existing_atoms(atom_set: Dict):
     candidate = []
     for index, state in atom_set.items():
         if state != 0:
             candidate.append(index)
     return candidate
+
+
+def rate_check(atom_set, bonds, rate_list, target):
+    bond = []
+    for i in bonds[target]:
+        if atom_set[i] == 1:
+            bond.append(1)
+        else:
+            bond.append(0)
+
+    file_name = "Test_modules/Event_check/Check_rates.txt"
+    file_data = open(file_name, "a")
+    if len(rate_list) > 0:
+        file_data.write(
+            str(target)
+            + "\t"
+            + "rate: "
+            + str(rate_list[0])
+            + "\t"
+            + "bonds: "
+            + str(bond)
+            + "\n"
+        )
+    else:
+        file_data.write(
+            str(target) + "\t" + "rate: 0" + "\t" + "bonds: " + str(bond) + "\n"
+        )
+    file_data.close()
 
 
 def event_check_poscar(
@@ -34,7 +62,7 @@ def event_check_poscar(
         zp.append(lattice[cand][2] / maxz / 2.448)
         eve_i += 1
     #
-    file_name = "Event_check/Check_events_" + str(target) + ".vasp"
+    file_name = "Test_modules/Event_check/Check_events_" + str(target) + ".vasp"
     file_data = open(file_name, "w")
     file_data.write("check events" + "\n")
     file_data.write("10" + "\n")

@@ -25,7 +25,7 @@ def dep_check_poscar(
         zp.append(lattice[cand][2] / maxz / 2.448)
         cand_i += 1
     #
-    file_data = open("poscar_for_check_depsotion.vasp", "w")
+    file_data = open(".\Test_modules\poscar_for_check_depsotion.vasp", "w")
     file_data.write("check depsotion" + "\n")
     file_data.write("10" + "\n")
     file_data.write(str(unit_length) + "\t" + "0" + "\t" + "0" + "\n")

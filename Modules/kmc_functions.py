@@ -133,9 +133,6 @@ class common_functions:
             self.event_time_tot[target_rel] = sum(rates)
             self.total_event_time += self.event_time_tot[target_rel]
         self.related_atoms = []
-        #
-        #
-        # self.time_check()
 
     def time_check(self):
         tot_time = self.init_value.dep_rate_atoms_persec
@@ -168,9 +165,6 @@ class common_functions:
         )
         # それぞれのイベント等を格納
         self.update_events()
-        #
-        #
-        # self.prev_dep = dep_pos
 
     def put_first_atoms_rf(self):
         if self.init_value.first_put_check is True:
@@ -216,9 +210,9 @@ class common_functions:
 
     def middle_check(self):
         # 構造の途中確認用
-        if self.n_atoms == 17 and self.total_event_time < self.min_rates:
-            from record_for_test import rec_for_test
-            from recording import rec_poscar
+        if self.n_atoms == 30 and self.total_event_time < self.min_rates:
+            from Modules.Test_modules.record_for_test import rec_for_test
+            from Modules.recording import rec_poscar
 
             rec_for_test(self.atom_set, self.bonds, self.lattice)
             rec_poscar(
@@ -228,6 +222,8 @@ class common_functions:
                 self.init_value.z_unit_init,
                 "middle_structure.vasp",
             )
+            print("middle formed")
+            input()
 
         """
         # 構造の途中確認用2
@@ -257,9 +253,6 @@ class common_functions:
             self.second,
             self.time_per_event,
         )
-
-        #
-        # self.time_check()
 
     def defect_check(self):
         if (self.target[2] not in (0, 1)) and (self.move_atom[2] in (0, 1)):

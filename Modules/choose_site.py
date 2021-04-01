@@ -1,6 +1,8 @@
 import random
 from typing import List, Tuple
 
+# 20210401 checked
+
 
 def choose_atom(
     candidates: List[Tuple[int, int, int]],
@@ -8,6 +10,7 @@ def choose_atom(
     return random.choice(candidates)
 
 
+"""
 if __name__ == "__main__":
     num_cand = 10
     repetition = 1000
@@ -20,3 +23,4 @@ if __name__ == "__main__":
     print("repetition : " + str(repetition))
     print("candidates : " + str(candidates))
     print("results : " + str(results))
+"""

@@ -3,7 +3,7 @@ from typing import Dict, Tuple, List
 
 def read_atom_set() -> Dict[Tuple, int]:
     atom_set: Dict[Tuple, int] = {}
-    with open("atm_set_example.txt", "r") as f:
+    with open("./Test_modules/atm_set_example.txt", "r") as f:
         for line in f:
             line_s = line.split("\t")
             indexes = line_s[0].split(" ")
@@ -14,7 +14,7 @@ def read_atom_set() -> Dict[Tuple, int]:
 
 def read_bonds() -> Dict[Tuple, List]:
     bonds: Dict[Tuple, List] = {}
-    with open("bonds_example.txt", "r") as f:
+    with open("./Test_modules/bonds_example.txt", "r") as f:
         for line in f:
             line_s = line.split("\t")
             indexes = line_s[0].split(" ")
@@ -38,7 +38,7 @@ def read_bonds() -> Dict[Tuple, List]:
 
 def read_lattice() -> Dict:
     lattice: Dict[Tuple, List] = {}
-    with open("lattice_example.txt", "r") as f:
+    with open("./Test_modules/lattice_example.txt", "r") as f:
         for line in f:
             line_s = line.split("\t")
             indexes = line_s[0].split(" ")
