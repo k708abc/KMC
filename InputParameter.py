@@ -29,10 +29,10 @@ class Params:
         self.binding_energies["Si_third"] = 0.2
         self.binding_energies["Si_else"] = 0.2
         self.diffusion_barriers: OrderedDict[str, float] = OrderedDict()
-        self.diffusion_barriers["Si_first"] = 1.2
-        self.diffusion_barriers["Si_second"] = 1.2
-        self.diffusion_barriers["Si_third"] = 1.2
-        self.diffusion_barriers["Si_else"] = 1.2
+        self.diffusion_barriers["Si_first"] = 1.4
+        self.diffusion_barriers["Si_second"] = 1.4
+        self.diffusion_barriers["Si_third"] = 1.4
+        self.diffusion_barriers["Si_else"] = 1.4
         #
         self.put_first = 10
         self.cut_number = 100000
