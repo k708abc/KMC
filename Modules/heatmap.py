@@ -1,5 +1,6 @@
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
+from matplotlib import mathtext
 
 # from pptx import Presentation
 # from pptx.util import Inches, Pt
@@ -7,9 +8,20 @@ import matplotlib.pyplot as plt
 
 
 def heatmap_image(dx, dy, xlist, ylist, modelist):
-    fig = plt.figure(figsize=(6, 6))
+    mathtext.FontConstantsBase = mathtext.ComputerModernFontConstants
+    plt.rcParams.update(
+        {
+            "mathtext.default": "default",
+            "mathtext.fontset": "stix",
+            "font.family": "Times New Roman",
+            "font.size": 12,
+            "figure.figsize": (6, 6),
+        }
+    )
+
+    fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111)
-    for x, y, mode in zip(xlist, ylist, modelist):
+    for x, y, mode in zip(ylist, xlist, modelist):
         RGB = [0, 0, 0]
         if mode == "DW":
             RGB = [1, 0, 0]
@@ -30,21 +42,22 @@ def heatmap_image(dx, dy, xlist, ylist, modelist):
             xy=(x - dx / 2, y - dy / 2),
             width=dx,
             height=dy,
-            color=RGB,
+            facecolor=RGB,
+            edgecolor="white",
             fill=True,
         )
 
         ax.add_patch(r)
 
-    ax.set_xlim(min(xlist) - dx / 2, max(xlist) + dx / 2)
-    ax.set_ylim(min(ylist) - dy / 2, max(ylist) + dy / 2)
-    ax.set_xticks(xlist)
-    ax.set_yticks(ylist)
-    ax.set_xlabel("First layer", fontsize=16)
-    ax.set_ylabel("Multi layer", fontsize=16)
+    ax.set_xlim(min(ylist) - dy / 2, max(ylist) + dy / 2)
+    ax.set_ylim(min(xlist) - dx / 2, max(xlist) + dx / 2)
+    ax.set_xticks(ylist)
+    ax.set_yticks(xlist)
+    ax.set_xlabel("$E_{b,multi}$ (eV)", fontsize=24)
+    ax.set_ylabel("$E_{b,2nd}$ (eV)", fontsize=24)
     labels = ax.get_xticklabels()
-    plt.setp(labels, rotation=45, fontsize=16)
-    plt.tick_params(labelsize=16)
+    plt.setp(labels, rotation=45, fontsize=22)
+    plt.tick_params(labelsize=22)
     plt.tight_layout()
     #
     heat_name = "heatmap.png"

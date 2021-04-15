@@ -19,3 +19,5 @@ with open("growth_modes.txt", "r") as f:
 
 
 heatmap_image(dx, dy, xlist, ylist, modelist)
+print("heat map is formed")
+input()
