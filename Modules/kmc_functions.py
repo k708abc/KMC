@@ -50,24 +50,25 @@ class common_functions:
 
     def energy_summarize(self):
         self.energy_bonding = [
-            self.init_value.binding_energies["Si_first"],
+            self.init_value.binding_energies["Si_first"],  # with Ag
+            self.init_value.binding_energies["Si_first"],  # in first BL
             (
                 self.init_value.binding_energies["Si_first"]
                 + self.init_value.binding_energies["Si_second"]
             )
-            / 2,
-            self.init_value.binding_energies["Si_second"],
+            / 2,  # inter 1st and 2nd
+            self.init_value.binding_energies["Si_second"],  # in second
             (
                 self.init_value.binding_energies["Si_second"]
                 + self.init_value.binding_energies["Si_third"]
             )
-            / 2,
-            self.init_value.binding_energies["Si_third"],
+            / 2,  # inter second and third
+            self.init_value.binding_energies["Si_third"],  # in third
             (
                 self.init_value.binding_energies["Si_third"]
                 + self.init_value.binding_energies["Si_else"]
             )
-            / 2,
+            / 2,  # inter third and fourth
         ]
         #
         self.energy_bonding += [
@@ -75,17 +76,23 @@ class common_functions:
             for i in range(self.init_value.z_unit_init * 6 - 2)
         ]
         #
+
         self.energy_diffuse = [
             self.init_value.diffusion_barriers["Si_first"],
+            self.init_value.diffusion_barriers["Si_first"],
+            self.init_value.diffusion_barriers["Si_second"],
             self.init_value.diffusion_barriers["Si_second"],
             self.init_value.diffusion_barriers["Si_third"],
-            self.init_value.diffusion_barriers["Si_else"],
+            self.init_value.diffusion_barriers["Si_third"],
         ]
         #
         self.energy_diffuse += [
             self.init_value.diffusion_barriers["Si_else"]
-            for i in range(self.init_value.z_unit_init * 3 - 2)
+            for i in range(self.init_value.z_unit_init * 6 - 2)
         ]
+        if self.init_value.subtract_check is True:
+            for i in range(len(self.energy_diffuse)):
+                self.energy_diffuse[i] -= self.energy_bonding[i]
 
     def deposition(self) -> Tuple:
         dep_pos = deposit_an_atom(

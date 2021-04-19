@@ -14,11 +14,11 @@ def total_energy(
     bond_energy = 0
     for bond in bonds[target]:
         if atom_set[bond] == 1:
-            bond_energy += energy_bonding[int((target[2] + bond[2] - 1) / 2)]
-    # Ag-Siも結合数に含める
+            bond_energy += energy_bonding[max(target[2], bond[2])]
+    # Ag-Si interaction
     if target[2] == 0:
         bond_energy += energy_bonding[0]
-    return energy_diffuse[target[2] // 2] + bond_energy
+    return energy_diffuse[target[2]] + bond_energy
 
 
 def find_filled_sites(atom_set, indexes):

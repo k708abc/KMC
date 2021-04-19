@@ -246,6 +246,15 @@ class Window(ttk.Frame, common_functions, null_functions):
             self.frame_checks,
             text="(" + "{:.3g}".format(self.init_value.cal_energy) + " eV)",
         )
+        #
+        self.bln_subtract = tk.BooleanVar()
+        self.bln_subtract.set(self.init_value.subtract_check)
+        self.chk_subtract_label = ttk.Label(
+            self.frame_checks, text="Subtract a bond from diffusion"
+        )
+        self.chk_subtract = ttk.Checkbutton(
+            self.frame_checks, variable=self.bln_subtract
+        )
 
     def create_layout_checks(self) -> None:
         self.chk_defect_label.grid(row=0, column=0, **self.padWE)
@@ -267,6 +276,9 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.chk_limit.grid(row=3, column=1, **self.padWE)
         self.limit.grid(row=3, column=2, **self.padWE)
         self.chk_limit_label2.grid(row=3, column=3, **self.padWE)
+        #
+        self.chk_subtract_label.grid(row=4, column=0, **self.padWE)
+        self.chk_subtract.grid(row=4, column=1, **self.padWE)
 
     def create_widgets_records(self) -> None:
         self.record_label = tk.Label(self.frame_records, text="Record")
@@ -431,6 +443,7 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.init_value.first_put_check = self.bln_first.get()
         self.init_value.cut_check = self.bln_cut.get()
         self.init_value.limit_check = self.bln_limit.get()
+        self.init_value.subtract_check = self.bln_subtract.get()
         self.init_value.num_defect = self.num_defect.get()
         self.init_value.put_first = self.put_first.get()
         self.init_value.cut_number = self.cut.get()
@@ -615,6 +628,13 @@ class Window(ttk.Frame, common_functions, null_functions):
                         temp_rec.append(
                             row.replace(
                                 row_sp[2], '"' + str(self.init_value.method) + '"'
+                            )
+                        )
+                    elif "self.subtract_check" in row_sp:
+                        temp_rec.append(
+                            row.replace(
+                                row_sp[2],
+                                str(self.init_value.subtract_check),
                             )
                         )
                     elif "self.start_E1" in row_sp:

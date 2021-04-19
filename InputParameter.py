@@ -48,6 +48,7 @@ class Params:
         self.limit_check = False
         self.limit_val = 1000
         self.method = "Rejection_free"
+        self.subtract_check = True
         # for repetition
         self.start_E1 = 0.19
         self.end_E1 = 0.2
