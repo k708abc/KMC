@@ -371,7 +371,17 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.start_label = ttk.Label(self.frame_repeat, text="Start")
         self.end_label = ttk.Label(self.frame_repeat, text="End")
         self.diff_label = ttk.Label(self.frame_repeat, text="Diff")
-
+        #
+        self.var_repeat = tk.StringVar()
+        self.combo_energy = ttk.Combobox(
+            self.frame_repeat,
+            textvariable=self.var_repeat,
+            values=self.init_value.repeat_combos,
+            state="readonly",
+            width=25,
+        )
+        self.combo_energy.current(self.init_value.repeat_val)
+        #
         self.repeat_label_1 = ttk.Label(self.frame_repeat, text="E1 (eV)")
         self.repeat_label_2 = ttk.Label(self.frame_repeat, text="E2 (eV)")
 
@@ -395,18 +405,19 @@ class Window(ttk.Frame, common_functions, null_functions):
 
     def create_layout_repeat(self) -> None:
         self.repeat_label.grid(row=0, column=0, **self.padWE)
-        self.start_label.grid(row=0, column=1, **self.padWE)
-        self.end_label.grid(row=0, column=2, **self.padWE)
-        self.diff_label.grid(row=0, column=3, **self.padWE)
+        self.start_label.grid(row=0, column=2, **self.padWE)
+        self.end_label.grid(row=0, column=3, **self.padWE)
+        self.diff_label.grid(row=0, column=4, **self.padWE)
 
-        self.repeat_label_1.grid(row=1, column=0, **self.padWE)
-        self.start_E1.grid(row=1, column=1, **self.padWE)
-        self.end_E1.grid(row=1, column=2, **self.padWE)
-        self.diff_E1.grid(row=1, column=3, **self.padWE)
-        self.repeat_label_2.grid(row=2, column=0, **self.padWE)
-        self.start_E2.grid(row=2, column=1, **self.padWE)
-        self.end_E2.grid(row=2, column=2, **self.padWE)
-        self.diff_E2.grid(row=2, column=3, **self.padWE)
+        self.combo_energy.grid(row=1, column=0, **self.padWE)
+        self.repeat_label_1.grid(row=1, column=1, **self.padWE)
+        self.start_E1.grid(row=1, column=2, **self.padWE)
+        self.end_E1.grid(row=1, column=3, **self.padWE)
+        self.diff_E1.grid(row=1, column=4, **self.padWE)
+        self.repeat_label_2.grid(row=2, column=1, **self.padWE)
+        self.start_E2.grid(row=2, column=2, **self.padWE)
+        self.end_E2.grid(row=2, column=3, **self.padWE)
+        self.diff_E2.grid(row=2, column=4, **self.padWE)
 
     def close_function(self) -> None:
         self.quit()
@@ -449,6 +460,9 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.init_value.cut_number = self.cut.get()
         self.init_value.limit_val = self.limit.get()
         self.init_value.method = self.var_method.get()
+        #
+        self.init_value.repeat_val = self.combo_energy.current()
+        #
         self.init_value.start_E1 = float(self.start_E1.get())
         self.init_value.end_E1 = float(self.end_E1.get())
         self.init_value.diff_E1 = float(self.diff_E1.get())
@@ -635,6 +649,13 @@ class Window(ttk.Frame, common_functions, null_functions):
                             row.replace(
                                 row_sp[2],
                                 str(self.init_value.subtract_check),
+                            )
+                        )
+                    elif "self.repeat_val" in row_sp:
+                        temp_rec.append(
+                            row.replace(
+                                row_sp[2],
+                                str(self.init_value.repeat_val),
                             )
                         )
                     elif "self.start_E1" in row_sp:

@@ -1,7 +1,18 @@
-from InputParameter import Params
+# from InputParameter import Params
 from typing import List, Dict, Tuple
 
 
+def recalculate(
+    target: Tuple[int, int, int],
+    atom_set: Dict[Tuple[int, int, int], int],
+    diffuse_candidates: Dict[Tuple[int, int, int], List[Tuple[int, int, int]]],
+):
+    return [fill for fill in diffuse_candidates[target] if atom_set[fill] == 1] + [
+        target
+    ]
+
+
+"""
 def recalculate(
     target: Tuple[int, int, int],
     bonds: Dict[Tuple[int, int, int], List[Tuple[int, int, int]]],
@@ -82,3 +93,4 @@ def recalculate(
             ]
 
     return recal_list
+"""

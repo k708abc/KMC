@@ -17,29 +17,29 @@ class Params:
     kb_eV: float = 8.617e-5
 
     def __init__(self) -> None:
-        self.n_cell_init = 20
+        self.n_cell_init = 5
         self.z_unit_init = 5
         self.temperature = 550.0
         self.dep_rate = 0.1
         self.dep_time = 20.0
         self.prefactor = 10000000000000.0
         self.binding_energies: OrderedDict[str, float] = OrderedDict()
-        self.binding_energies["Si_first"] = 0.25
+        self.binding_energies["Si_first"] = 0.2
         self.binding_energies["Si_second"] = 0.2
         self.binding_energies["Si_third"] = 0.2
         self.binding_energies["Si_else"] = 0.2
         self.diffusion_barriers: OrderedDict[str, float] = OrderedDict()
-        self.diffusion_barriers["Si_first"] = 1.0
-        self.diffusion_barriers["Si_second"] = 1.0
-        self.diffusion_barriers["Si_third"] = 1.0
-        self.diffusion_barriers["Si_else"] = 1.0
+        self.diffusion_barriers["Si_first"] = 1.4
+        self.diffusion_barriers["Si_second"] = 1.4
+        self.diffusion_barriers["Si_third"] = 1.4
+        self.diffusion_barriers["Si_else"] = 1.4
         #
         self.put_first = 10
         self.cut_number = 100000
         self.num_defect = 1
-        self.record_name = "550K_1st_0.25"
+        self.record_name = "Test"
         self.img_per = 5.0
-        self.comments = "550K, 1st= 0.25 eV"
+        self.comments = "Test"
         self.intra_distance = 0.204
         self.inter_distance = 0.612
         self.keep_defect_check = False
@@ -50,12 +50,17 @@ class Params:
         self.method = "Rejection_free"
         self.subtract_check = True
         # for repetition
-        self.start_E1 = 0.19
-        self.end_E1 = 0.2
-        self.diff_E1 = 0.01
-        self.start_E2 = 0.15
-        self.end_E2 = 0.3
-        self.diff_E2 = 0.01
+        self.repeat_combos = (
+            "Bond E1: 2nd, E2: multi",
+            "Diffuse E1: 2nd, E2: multi",
+        )
+        self.repeat_val = 1
+        self.start_E1 = 1.4
+        self.end_E1 = 1.5
+        self.diff_E1 = 0.05
+        self.start_E2 = 1.4
+        self.end_E2 = 1.5
+        self.diff_E2 = 0.05
 
     @property
     def temperature_eV(self) -> float:

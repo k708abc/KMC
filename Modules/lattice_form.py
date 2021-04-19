@@ -3,6 +3,8 @@ from typing import List, Dict, Tuple
 from InputParameter import Params
 from Test_modules.lattice_form_check import check_lattice
 import decimal
+from Modules.find_candidates import find_candidates
+
 
 lattice_first: Dict[Tuple, List] = {}
 lattice: Dict[Tuple, List] = {}
@@ -12,6 +14,7 @@ event: Dict[Tuple, List] = {}
 event_time: Dict[Tuple, List] = {}
 event_time_tot: Dict[Tuple, float] = {}
 event_state: Dict[Tuple, int] = {}
+diffuse_candidates: Dict[Tuple, List] = {}
 
 
 def reset_dicts() -> None:
@@ -125,11 +128,24 @@ def lattice_form(input_params: Params):  # 　ここ長すぎるので、少な�
                 event_time[(i, j, k)] = []
                 event_time_tot[(i, j, k)] = decimal.Decimal(0)
                 event_state[(i, j, k)] = []
+                diffuse_candidates[(i, j, k)] = []
     #
     form_first_3BL(unit_length, z_intra, z_inter)
     lattice_full_layers(unit_height)
     search_bond(unit_length, z_max)
-    return lattice, bonds, atom_set, event, event_time, event_time_tot, event_state
+    for index in diffuse_candidates:
+        diffuse_candidates[index] = find_candidates(bonds, index, unit_length, z_max)
+
+    return (
+        lattice,
+        bonds,
+        atom_set,
+        event,
+        event_time,
+        event_time_tot,
+        event_state,
+        diffuse_candidates,
+    )
 
 
 if __name__ == "__main__":

@@ -43,8 +43,22 @@ def judge_isolation(
     bonds,
     target: Tuple[int, int, int],
     nn_atom: List[Tuple[int, int, int]],
-    events: List[Tuple[Tuple[int, int, int], float]],
+    events: List[Tuple[int, int, int]],
 ):
+    remove = []
+    for check in events:
+        bonds_sites = find_filled_sites(atom_set, bonds[check])
+        num_bonds = len(bonds_sites)
+        if num_bonds >= 2 or check[2] == 0:
+            pass
+        elif num_bonds == 0:
+            remove.append(check)
+        else:
+            if bonds_sites[0] == target:
+                remove.append(check)
+    for i in remove:
+        events.remove(i)
+
     for check in nn_atom:
         # 隣接原子の周囲の原子数
         nn_nn_atom = find_filled_sites(atom_set, bonds[check])
@@ -58,19 +72,16 @@ def judge_isolation(
         else:
             # 移動後の位置について
             remove = []
-
             for post_move in events:
                 # 移動後も結合し続ける
-                if post_move[0] in bonds[check]:
+                if post_move in bonds[check]:
                     # 移動後のサイトの隣接原子
-                    post_nn_atom = find_filled_sites(atom_set, bonds[post_move[0]])
+                    post_nn_atom = find_filled_sites(atom_set, bonds[post_move])
                     # 2原子で孤立している→remove
                     if len(post_nn_atom) <= 1:
                         remove.append(post_move)
-                        # events.remove(post_move)
                 # 結合がなくなる
                 else:
-                    # events.remove(post_move)
                     remove.append(post_move)
             for i in remove:
                 events.remove(i)
@@ -92,12 +103,22 @@ def possible_events(
     target: Tuple[int, int, int],
     params,
     energy: float,
+    diffuse_candidates: Dict,
 ):
     pre = float(params.prefactor)
     kbt = params.temperature_eV
     eve_rate: List = []
     rearange_rate = Decimal(rate(pre, kbt, energy)).quantize(Decimal("0.00000001"))
-    unit_length = params.n_cell_init
+    nn_atom = find_filled_sites(atom_set, bonds[target])
+    #
+    eve_rate += [cand for cand in diffuse_candidates[target] if atom_set[cand] == 0]
+    #
+    event_f = judge_isolation(atom_set, bonds, target, nn_atom, eve_rate)
+    #
+    rates_f: List = [rearange_rate for _ in event_f]
+    return event_f, rates_f
+
+    """
     #
     atom_x, atom_y, atom_z = target
     # nnn: next nearest neighbor
@@ -233,6 +254,7 @@ def possible_events(
     event_f: List = [eves[0] for eves in eve_rate]
     rates_f: List = [eves[1] for eves in eve_rate]
     return event_f, rates_f
+    """
 
 
 def rate_limit(rates, upper_limit) -> List:
@@ -253,6 +275,7 @@ def site_events(
     params,
     energy_bonding: List[float],
     energy_diffuse: List[float],
+    diffuse_candidates: Dict,
 ):
     event_list: List[Tuple] = []
     rate_list: List[float] = []
@@ -263,11 +286,7 @@ def site_events(
 
     # calculate possible events
     event_list, rate_list = possible_events(
-        atom_set,
-        bonds,
-        target,
-        params,
-        energy,
+        atom_set, bonds, target, params, energy, diffuse_candidates
     )
     if params.limit_check:
         rate_list = rate_limit(rate_list, Decimal(float(params.limit_val)))

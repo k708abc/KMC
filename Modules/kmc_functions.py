@@ -45,6 +45,7 @@ class common_functions:
             self.event_time,
             self.event_time_tot,
             _,
+            self.diffuse_candidates,
         ) = lattice_form(self.init_value)
         self.energy_summarize()
 
@@ -133,6 +134,7 @@ class common_functions:
                     self.init_value,
                     self.energy_bonding,
                     self.energy_diffuse,
+                    self.diffuse_candidates,
                 )
             self.total_event_time -= self.event_time_tot[target_rel]
             self.event[target_rel] = events
@@ -168,7 +170,7 @@ class common_functions:
         dep_pos = self.deposition()
         # 蒸着によりイベントに変化が生じうる原子
         self.related_atoms = recalculate(
-            dep_pos, self.bonds, self.atom_set, self.init_value
+            dep_pos, self.atom_set, self.diffuse_candidates
         )
         # それぞれのイベント等を格納
         self.update_events()
@@ -182,10 +184,10 @@ class common_functions:
         self.move_atom = self.event[self.target][self.event_number]
         self.event_progress()
         self.related_atoms = recalculate(
-            self.target, self.bonds, self.atom_set, self.init_value
+            self.target, self.atom_set, self.diffuse_candidates
         )
         self.related_atoms += recalculate(
-            self.move_atom, self.bonds, self.atom_set, self.init_value
+            self.move_atom, self.atom_set, self.diffuse_candidates
         )
         self.update_events()
         #
@@ -209,6 +211,7 @@ class common_functions:
         if self.n_atoms >= self.rec_num_atoms:
             self.rec_num_atoms += self.init_value.rec_num_atom_interval
             self.record_position()
+        self.middle_check()
 
     def record_position(self) -> None:
         self.pos_rec.append(copy.copy(self.atom_set))
@@ -218,10 +221,12 @@ class common_functions:
     def middle_check(self):
         # 構造の途中確認用
         if self.n_atoms == 30 and self.total_event_time < self.min_rates:
-            from Modules.Test_modules.record_for_test import rec_for_test
+            from Test_modules.record_for_test import rec_for_test
             from Modules.recording import rec_poscar
 
-            rec_for_test(self.atom_set, self.bonds, self.lattice)
+            rec_for_test(
+                self.atom_set, self.bonds, self.lattice, self.diffuse_candidates
+            )
             rec_poscar(
                 self.atom_set,
                 self.lattice,

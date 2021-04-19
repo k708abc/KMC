@@ -67,6 +67,7 @@ def check_event_collection():
     lattice = read_lattice()
     atom_set = read_atom_set()
     bonds = read_bonds()
+    candidates = read_candidate()
     parameters = Params()
     unit_length = parameters.n_cell_init
     maxz = highest_z(atom_set)
@@ -85,7 +86,13 @@ def check_event_collection():
 
     for target in target_cand:
         event_list, rate_list = site_events(
-            atom_set, bonds, target, parameters, energy_bonding, energy_diffuse
+            atom_set,
+            bonds,
+            target,
+            parameters,
+            energy_bonding,
+            energy_diffuse,
+            candidates,
         )
         #
         event_check_poscar(atom_set, event_list, lattice, unit_length, maxz, target)
@@ -115,8 +122,8 @@ if __name__ == "__main__":
     cal_rates = False
     choose_site = False
     deposition = False
-    event_collection = False
-    rf_choise = True
+    event_collection = True
+    rf_choise = False
     # cal_rates
 
     if cal_rates:

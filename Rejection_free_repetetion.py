@@ -27,6 +27,7 @@ if __name__ == "__main__":
     else:
         E2_list = [start_E2]
     #
+    print(first_input.repeat_combos[first_input.repeat_val])
     print(E1_list)
     print(E2_list)
     print("repetetion start")
@@ -45,10 +46,18 @@ if __name__ == "__main__":
             print("val 2 = " + str(k))
             rec_name = or_rec_name + "_" + str(i) + "_" + str(k)
             rf_class = rejection_free(1)
-            rf_class.init_value.binding_energies["Si_second"] = i
-            rf_class.init_value.binding_energies["Si_third"] = k
-            rf_class.init_value.binding_energies["Si_else"] = k
+
+            if first_input.repeat_val == 0:
+                rf_class.init_value.binding_energies["Si_second"] = i
+                rf_class.init_value.binding_energies["Si_third"] = k
+                rf_class.init_value.binding_energies["Si_else"] = k
+            elif first_input.repeat_val == 1:
+                rf_class.init_value.diffusion_barriers["Si_second"] = i
+                rf_class.init_value.diffusion_barriers["Si_third"] = k
+                rf_class.init_value.diffusion_barriers["Si_else"] = k
+
             rf_class.init_value.record_name = rec_name
+
             rf_class.start()
             growth_rec[-1].append(rf_class.mode_val)
 
