@@ -14,7 +14,7 @@ class Params:
 
     """
 
-    kb_eV = 8.617e-5
+    kb_eV: float = 8.617e-5
 
     def __init__(self) -> None:
         self.n_cell_init = 20
