@@ -1,6 +1,5 @@
 from InputParameter import Params
 from Modules.lattice_form import lattice_form
-from Test_modules.event_sites_test import possible_events
 import os
 from typing import List
 
@@ -11,14 +10,14 @@ def form_poscar(target, lattice, candidate, unit_length, maxz):
     zp: List[float] = [lattice[target][2] / maxz / 2.448]
     atom_cand = 0
     atom_lattice = 0
-    for index in candidate:
+    for index in candidate[target]:
         if index != target:
             xp.append(lattice[index][0] / unit_length)
             yp.append(lattice[index][1] / unit_length)
             zp.append(lattice[index][2] / maxz / 2.448)
             atom_cand += 1
     for index in lattice:
-        if (index not in candidate) and (index != target):
+        if (index not in candidate[target]) and (index != target):
             xp.append(lattice[index][0] / unit_length)
             yp.append(lattice[index][1] / unit_length)
             zp.append(lattice[index][2] / maxz / 2.448)
@@ -57,6 +56,7 @@ if __name__ == "__main__":
         event_time,
         event_time_tot,
         _,
+        candidate,
     ) = lattice_form(init_value)
 
     unit_length = init_value.n_cell_init
@@ -65,6 +65,5 @@ if __name__ == "__main__":
         if key[2] > maxz:
             pass
         else:
-            candidate = possible_events(bonds, key, init_value)
             form_poscar(key, lattice, candidate, unit_length, maxz)
     print("diffusion check file is fored")
