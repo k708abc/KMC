@@ -211,7 +211,7 @@ class common_functions:
         if self.n_atoms >= self.rec_num_atoms:
             self.rec_num_atoms += self.init_value.rec_num_atom_interval
             self.record_position()
-        self.middle_check()
+        # self.middle_check()
 
     def record_position(self) -> None:
         self.pos_rec.append(copy.copy(self.atom_set))
