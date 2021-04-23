@@ -157,16 +157,17 @@ class common_functions:
             input()
 
     def rejection_free_deposition(self):
-        print(
-            "Progress: "
-            + str(self.n_atoms)
-            + "/"
-            + str(self.init_value.total_atoms)
-            + " Event: "
-            + str(self.n_events_perdep)
-            + "/"
-            + str(self.init_value.cut_number)
-        )
+        if self.num in (1, 0):
+            print(
+                "Progress: "
+                + str(self.n_atoms)
+                + "/"
+                + str(self.init_value.total_atoms)
+                + " Event: "
+                + str(self.n_events_perdep)
+                + "/"
+                + str(self.init_value.cut_number)
+            )
         dep_pos = self.deposition()
         # 蒸着によりイベントに変化が生じうる原子
         self.related_atoms = recalculate(

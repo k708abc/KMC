@@ -22,7 +22,7 @@ class Params:
         self.temperature = 550.0
         self.dep_rate = 0.1
         self.dep_time = 20.0
-        self.prefactor = 10000000000000.0
+        self.prefactor = 1000000000000.0
         self.binding_energies: OrderedDict[str, float] = OrderedDict()
         self.binding_energies["Si_first"] = 0.2
         self.binding_energies["Si_second"] = 0.2
@@ -55,12 +55,12 @@ class Params:
             "Diffuse E1: 2nd, E2: multi",
         )
         self.repeat_val = 1
-        self.start_E1 = 1.4
-        self.end_E1 = 1.5
-        self.diff_E1 = 0.05
-        self.start_E2 = 1.4
-        self.end_E2 = 1.5
-        self.diff_E2 = 0.05
+        self.start_E1 = 1.3
+        self.end_E1 = 1.4
+        self.diff_E1 = 0.02
+        self.start_E2 = 1.36
+        self.end_E2 = 1.4
+        self.diff_E2 = 0.02
 
     @property
     def temperature_eV(self) -> float:
