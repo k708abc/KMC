@@ -61,6 +61,7 @@ class Params:
         self.start_E2 = 1.36
         self.end_E2 = 1.4
         self.diff_E2 = 0.02
+        self.max_workers_val = 4
 
     @property
     def temperature_eV(self) -> float:

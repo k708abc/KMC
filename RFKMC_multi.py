@@ -34,6 +34,7 @@ def run_multi():
     start_E2 = first_input.start_E2
     end_E2 = first_input.end_E2
     diff_E2 = first_input.diff_E2
+    para_val = first_input.max_workers_val
     if os.path.exists("Record") is False:
         os.mkdir("Record")
 
@@ -55,7 +56,7 @@ def run_multi():
     energy_list = [(val1, val2) for val1 in E1_list for val2 in E2_list]
     growth_list = [[0 for k in E2_list] for i in E1_list]
 
-    with futures.ProcessPoolExecutor(max_workers=4) as executor:
+    with futures.ProcessPoolExecutor(max_workers=para_val) as executor:
         future_dict = {executor.submit(function, first_input, var[0], var[1]): var for var in energy_list}
 
         for future in futures.as_completed(future_dict):
