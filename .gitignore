@@ -6,6 +6,7 @@ Event_check/
 Keep/
 .vscode/
 KMC_Si_rec/
+Record/
 
 # C extensions
 *.so

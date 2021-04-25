@@ -4,6 +4,7 @@ import matplotlib.patches as pat
 import math
 from Modules.record_ppt import rec_ppt
 import os
+import glob
 
 unit_x: List[float] = [1, 0, 0]
 unit_y: List[float] = [0.5, 0.866, 0]
@@ -256,7 +257,7 @@ def dir_formarion(name: str):
 
 
 def rec_events_per_dep(num_events: List[int], atoms: List[int], params):
-    dir_name = params.record_name + "/"
+    dir_name = "Record/" + params.record_name + "/"
     if os.path.exists(dir_name) is False:
         os.mkdir(dir_name)
     fig = plt.figure()
@@ -284,7 +285,7 @@ def rec_growth_mode(growth_mode, coverage, params):
         first.append(i[1])
         multi.append(i[2])
     #
-    dir_name = params.record_name + "/"
+    dir_name = "Record/" + params.record_name + "/"
     if os.path.exists(dir_name) is False:
         os.mkdir(dir_name)
     fig = plt.figure()
@@ -386,6 +387,13 @@ def mode_check(growth_mode, coverage):
     return growth_val(growth_mode, coverage, num_1ML, num_2ML)
 
 
+def delete_images(dir_name, recursive=True):
+    dir_name = dir_name + "*.png"
+    for p in glob.glob(dir_name, recursive=recursive):
+        if os.path.isfile(p):
+            os.remove(p)
+
+
 def record_data(
     pos_all: List[dict],
     time: List,
@@ -403,7 +411,8 @@ def record_data(
     n_BL = params.atoms_in_BL
     img_names: List[str] = []
     hist_names: List[str] = []
-    dir_name = params.record_name + "/"
+    dir_name = "Record/" + params.record_name + "/"
+
     dir_formarion(dir_name)
     growth_mode = []
 
@@ -429,7 +438,7 @@ def record_data(
         rec_img(hist, hist_name)
         hist_names.append(hist_name)
         #
-        poscar_name = dir_name + rec_name + "_poscar.vasp"
+        poscar_name =dir_name + rec_name + "_poscar.vasp"
         rec_poscar(pos_i, lattice, unit_length, maxz, poscar_name)
         plt.clf()
         plt.close("all")
@@ -453,6 +462,7 @@ def record_data(
         growth_mode,
         mode_val,
     )
+    delete_images(dir_name)
     plt.close("all")
     return mode_val
     #

@@ -36,6 +36,7 @@ if __name__ == "__main__":
     total_cal = len(E1_list) * len(E2_list)
     num_cal = 0
 
+
     #
     for i in E1_list:
         growth_rec.append([])
@@ -64,4 +65,3 @@ if __name__ == "__main__":
         growth_rec, rf_class.init_value.record_name, E1_list, E2_list, diff_E1, diff_E2
     )
     print("heatmap formed")
-    input()

@@ -10,7 +10,7 @@ import math
 import copy
 from Modules.recording import record_data
 from Modules.recording import rec_events_per_dep
-
+import os
 
 class common_functions:
     def __init__(self) -> None:
@@ -29,6 +29,8 @@ class common_functions:
         self.n_events_perdep = 0
         self.n_events_rec: List[int] = []
         self.num_atoms_rec: List[int] = []
+        if os.path.exists("Record") is False:
+            os.mkdir("Record")
 
     def update_progress(self) -> None:
         self.n_events += 1
