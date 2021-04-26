@@ -47,18 +47,19 @@ def run_multi():
     para_val = first_input.max_workers_val
     if os.path.exists("Record") is False:
         os.mkdir("Record")
-
+    E1_range = abs(end_E1 - start_E1)
+    E2_range = abs(end_E2 - start_E2)
     if diff_E1 != 0:
         E1_list = [
             round(start_E1 + diff_E1 * i, 3)
-            for i in range(int(round((end_E1 - start_E1) / diff_E1)) + 1)
+            for i in range(int(round(E1_range / diff_E1)) + 1)
         ]
     else:
         E1_list = [start_E1]
     if diff_E2 != 0:
         E2_list = [
             round(start_E2 + diff_E2 * i, 3)
-            for i in range(int(round((end_E2 - start_E2) / diff_E2)) + 1)
+            for i in range(int(round(E2_range / diff_E2)) + 1)
         ]
     else:
         E2_list = [start_E2]
@@ -84,7 +85,6 @@ def run_multi():
         growth_list, first_input.record_name, E1_list, E2_list, diff_E1, diff_E2
     )
     print("complete")
-    input()
 
 
 if __name__ == "__main__":
