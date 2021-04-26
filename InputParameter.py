@@ -29,8 +29,8 @@ class Params:
         self.binding_energies["Si_third"] = 0.2
         self.binding_energies["Si_else"] = 0.2
         self.diffusion_barriers: OrderedDict[str, float] = OrderedDict()
-        self.diffusion_barriers["Si_first"] = 1.4
-        self.diffusion_barriers["Si_second"] = 1.4
+        self.diffusion_barriers["Si_first"] = 1.3
+        self.diffusion_barriers["Si_second"] = 1.1
         self.diffusion_barriers["Si_third"] = 1.4
         self.diffusion_barriers["Si_else"] = 1.4
         #
@@ -55,8 +55,8 @@ class Params:
             "Diffuse E1: 2nd, E2: multi",
         )
         self.repeat_val = 1
-        self.start_E1 = 1.3
-        self.end_E1 = 1.4
+        self.start_E1 = 1.0
+        self.end_E1 = 1.02
         self.diff_E1 = 0.02
         self.start_E2 = 1.36
         self.end_E2 = 1.4
