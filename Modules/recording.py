@@ -40,7 +40,7 @@ def triangle(xp, yp, z):
 def color_determinate(z, maxz):
 
     color_num = math.floor(z / 2)
-    maxz_BL = math.floor(maxz / 2)
+    maxz_BL = math.floor(maxz / 2) - 0.999
     if color_num == 0:
         color = [0, 1, 0]
     else:
@@ -356,7 +356,12 @@ def num_check(coverage, num):
 def growth_val(growth_mode, coverage, num_1ML, num_2ML):
     First_at_1ML = growth_mode[num_1ML][1]
     Second_at_2ML = growth_mode[num_2ML][2]
-    First_at_second = growth_mode[num_2ML][1] / (100 - growth_mode[num_2ML][3]) * 100
+    if growth_mode[num_2ML][3] == 100:
+        First_at_second = 0
+    else:
+        First_at_second = (
+            growth_mode[num_2ML][1] / (100 - growth_mode[num_2ML][3]) * 100
+        )
     if First_at_1ML < 50:
         if Second_at_2ML < 50:
             mode = "VW"

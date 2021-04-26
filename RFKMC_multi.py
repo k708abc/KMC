@@ -5,8 +5,18 @@ from Modules.heatmap import form_heatmap
 import os
 
 
-def function(first_input, val1, val2):
-    print("(" + str(val1) + ", " + str(val2) + ")" + " started")
+def function(first_input, val1, val2, i, total_cals):
+    print(
+        "("
+        + str(val1)
+        + ", "
+        + str(val2)
+        + ")"
+        + " started: "
+        + str(i + 1)
+        + "/"
+        + str(total_cals)
+    )
     rec_name = first_input.record_name + "_" + str(val1) + "_" + str(val2)
     rf_class = rejection_free(2)
 
@@ -57,7 +67,12 @@ def run_multi():
     growth_list = [[0 for k in E2_list] for i in E1_list]
 
     with futures.ProcessPoolExecutor(max_workers=para_val) as executor:
-        future_dict = {executor.submit(function, first_input, var[0], var[1]): var for var in energy_list}
+        future_dict = {
+            executor.submit(
+                function, first_input, var[0], var[1], i, len(energy_list)
+            ): var
+            for i, var in enumerate(energy_list)
+        }
 
         for future in futures.as_completed(future_dict):
             values = future_dict[future]
@@ -69,6 +84,7 @@ def run_multi():
         growth_list, first_input.record_name, E1_list, E2_list, diff_E1, diff_E2
     )
     print("complete")
+    input()
 
 
 if __name__ == "__main__":
