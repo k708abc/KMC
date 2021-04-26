@@ -11,11 +11,11 @@ unit_y: List[float] = [0.5, 0.866, 0]
 
 
 def highest_z(pos_all: List[Dict]) -> int:
-    maxz = 1
+    maxz = 0
     for positions in pos_all:
         for index, state in positions.items():
-            if (state != 0) and (index[2] + 1 > maxz):
-                maxz = index[2] + 1
+            if (state != 0) and (index[2] > maxz):
+                maxz = index[2]
     return maxz
 
 
@@ -38,12 +38,13 @@ def triangle(xp, yp, z):
 
 
 def color_determinate(z, maxz):
-    color_num = math.floor(z / 2) - 1
-    maxz_BL = math.floor(maxz / 2) - 1
-    if color_num == -1:
+
+    color_num = math.floor(z / 2)
+    maxz_BL = math.floor(maxz / 2) - 0.999
+    if color_num == 0:
         color = [0, 1, 0]
     else:
-        color = [color_num / maxz_BL, 0, 1 - color_num / maxz_BL]
+        color = [(color_num - 1) / maxz_BL, 0, 1 - (color_num - 1) / maxz_BL]
     return color
 
 
@@ -158,9 +159,8 @@ def rec_img(img, name: str):
 
 
 def hist_formation(pos: Dict, maxz: int, n_BL: int):
-    hist: List[float] = [0 for _ in range(math.ceil(maxz / 2))]
-    # hist_3: List[float] = [0 for _ in range(math.ceil(maxz / 2))]
-    left: List[float] = [i for i in range(math.ceil(maxz / 2))]
+    hist: List[float] = [0 for _ in range(math.floor(maxz / 2))]
+    left: List[float] = [i + 1 for i in range(math.floor(maxz / 2))]
     for pos_index, atom_state in pos.items():
         if atom_state == 1:
             hist[pos_index[2] // 2] += 1 / n_BL * 100
@@ -356,7 +356,12 @@ def num_check(coverage, num):
 def growth_val(growth_mode, coverage, num_1ML, num_2ML):
     First_at_1ML = growth_mode[num_1ML][1]
     Second_at_2ML = growth_mode[num_2ML][2]
-    First_at_second = growth_mode[num_2ML][1] / (100 - growth_mode[num_2ML][3]) * 100
+    if growth_mode[num_2ML][3] == 100:
+        First_at_second = 0
+    else:
+        First_at_second = (
+            growth_mode[num_2ML][1] / (100 - growth_mode[num_2ML][3]) * 100
+        )
     if First_at_1ML < 50:
         if Second_at_2ML < 50:
             mode = "VW"
@@ -438,7 +443,7 @@ def record_data(
         rec_img(hist, hist_name)
         hist_names.append(hist_name)
         #
-        poscar_name =dir_name + rec_name + "_poscar.vasp"
+        poscar_name = dir_name + rec_name + "_poscar.vasp"
         rec_poscar(pos_i, lattice, unit_length, maxz, poscar_name)
         plt.clf()
         plt.close("all")

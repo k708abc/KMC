@@ -36,8 +36,6 @@ if __name__ == "__main__":
     total_cal = len(E1_list) * len(E2_list)
     num_cal = 0
 
-
-    #
     for i in E1_list:
         growth_rec.append([])
         for k in E2_list:

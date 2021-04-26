@@ -20,7 +20,7 @@ class Params:
     kb_eV: float = 8.617e-5
 
     def __init__(self, filename: Union[str, Path] = "") -> None:
-        self.n_cell_init = 5
+        self.n_cell_init = 10
         self.z_unit_init = 5
         self.temperature = 550.0
         self.dep_rate = 0.1
@@ -32,15 +32,15 @@ class Params:
         self.binding_energies["Si_third"] = 0.2
         self.binding_energies["Si_else"] = 0.2
         self.diffusion_barriers: OrderedDict[str, float] = OrderedDict()
-        self.diffusion_barriers["Si_first"] = 1.4
-        self.diffusion_barriers["Si_second"] = 1.4
+        self.diffusion_barriers["Si_first"] = 1.2
+        self.diffusion_barriers["Si_second"] = 1.1
         self.diffusion_barriers["Si_third"] = 1.4
         self.diffusion_barriers["Si_else"] = 1.4
         #
         self.put_first = 10
         self.cut_number = 100000
         self.num_defect = 1
-        self.record_name = "Test"
+        self.record_name = "Test2"
         self.img_per = 5.0
         self.comments = "Test"
         self.intra_distance = 0.204
@@ -58,13 +58,13 @@ class Params:
             "Diffuse E1: 2nd, E2: multi",
         )
         self.repeat_val = 1
-        self.start_E1 = 1.3
-        self.end_E1 = 1.4
-        self.diff_E1 = 0.02
-        self.start_E2 = 1.36
-        self.end_E2 = 1.4
-        self.diff_E2 = 0.02
-        self.max_workers_val = 4
+        self.start_E1 = 1.15
+        self.end_E1 = 1.25
+        self.diff_E1 = 0.05
+        self.start_E2 = 1.15
+        self.end_E2 = 1.25
+        self.diff_E2 = 0.05
+        self.max_workers_val = 3
 
         if filename:
             with open(filename) as f:
