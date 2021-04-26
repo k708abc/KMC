@@ -3,6 +3,9 @@
 from collections import OrderedDict
 import math
 import decimal
+from typing import Union
+import yaml
+from pathlib import Path
 
 
 class Params:
@@ -16,7 +19,7 @@ class Params:
 
     kb_eV: float = 8.617e-5
 
-    def __init__(self) -> None:
+    def __init__(self, filename: Union[str, Path] = "") -> None:
         self.n_cell_init = 5
         self.z_unit_init = 5
         self.temperature = 550.0
@@ -62,6 +65,12 @@ class Params:
         self.end_E2 = 1.4
         self.diff_E2 = 0.02
         self.max_workers_val = 4
+
+        if filename:
+            with open(filename) as f:
+                input_yaml = yaml.safe_load(f)
+            for k, v in input_yaml.items():
+                setattr(self, k, v)
 
     @property
     def temperature_eV(self) -> float:
