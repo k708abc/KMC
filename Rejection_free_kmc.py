@@ -2,7 +2,7 @@ from Modules.kmc_functions import common_functions
 
 
 class rejection_free(common_functions):
-    def __init__(self, num) -> None:
+    def __init__(self, num) -> None:  # この num って何？ 変数名にちゃんと意味を持たせるのは大事よ。
         common_functions.__init__(self)
         self.num = num
 

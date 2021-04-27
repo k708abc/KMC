@@ -12,6 +12,7 @@ from Modules.recording import record_data
 from Modules.recording import rec_events_per_dep
 import os
 
+
 class common_functions:
     def __init__(self) -> None:
         self.init_value = Params()
