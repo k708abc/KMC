@@ -81,15 +81,15 @@ class Params:
         return int(2 * (self.n_cell_init) ** 2)
 
     @property
-    def dep_rate_atoms_persec(self) -> float:
+    def dep_rate_atoms_persec(self) -> decimal.Decimal:
         return decimal.Decimal(self.dep_rate / 60 * self.atoms_in_BL)
 
     @property
-    def total_time(self) -> float:
+    def total_time(self) -> decimal.Decimal:
         return decimal.Decimal(self.dep_time) * 60
 
     @property
-    def interval(self) -> float:
+    def interval(self) -> decimal.Decimal:
         return self.total_time * decimal.Decimal(self.img_per) / 100
 
     @property
