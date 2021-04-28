@@ -3,6 +3,9 @@
 from collections import OrderedDict
 import math
 import decimal
+from typing import Union
+import yaml
+from pathlib import Path
 
 
 class Params:
@@ -16,8 +19,13 @@ class Params:
 
     kb_eV: float = 8.617e-5
 
+<<<<<<< HEAD
     def __init__(self) -> None:
         self.n_cell_init = 20
+=======
+    def __init__(self, filename: Union[str, Path] = "") -> None:
+        self.n_cell_init = 10
+>>>>>>> 67ea18b7de1d9e904c45194a831adbcb09c54f36
         self.z_unit_init = 5
         self.temperature = 550.0
         self.dep_rate = 0.1
@@ -66,6 +74,12 @@ class Params:
         self.diff_E2 = 0.05
         self.max_workers_val = 3
 
+        if filename:
+            with open(filename) as f:
+                input_yaml = yaml.safe_load(f)
+            for k, v in input_yaml.items():
+                setattr(self, k, v)
+
     @property
     def temperature_eV(self) -> float:
         return self.temperature * 8.617e-5
@@ -75,15 +89,15 @@ class Params:
         return int(2 * (self.n_cell_init) ** 2)
 
     @property
-    def dep_rate_atoms_persec(self) -> float:
+    def dep_rate_atoms_persec(self) -> decimal.Decimal:
         return decimal.Decimal(self.dep_rate / 60 * self.atoms_in_BL)
 
     @property
-    def total_time(self) -> float:
+    def total_time(self) -> decimal.Decimal:
         return decimal.Decimal(self.dep_time) * 60
 
     @property
-    def interval(self) -> float:
+    def interval(self) -> decimal.Decimal:
         return self.total_time * decimal.Decimal(self.img_per) / 100
 
     @property
