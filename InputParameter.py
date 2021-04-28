@@ -19,13 +19,9 @@ class Params:
 
     kb_eV: float = 8.617e-5
 
-<<<<<<< HEAD
-    def __init__(self) -> None:
-        self.n_cell_init = 20
-=======
     def __init__(self, filename: Union[str, Path] = "") -> None:
+        """
         self.n_cell_init = 10
->>>>>>> 67ea18b7de1d9e904c45194a831adbcb09c54f36
         self.z_unit_init = 5
         self.temperature = 550.0
         self.dep_rate = 0.1
@@ -56,7 +52,7 @@ class Params:
         self.limit_check = False
         self.limit_val = 1000
         self.subtract_check = True
-        self.transformation = False
+        self.transformation = True
         self.trans_val = 5
         self.method = "Rejection_free"
 
@@ -73,6 +69,7 @@ class Params:
         self.end_E2 = 1.25
         self.diff_E2 = 0.05
         self.max_workers_val = 3
+        """
 
         if filename:
             with open(filename) as f:

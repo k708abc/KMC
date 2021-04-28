@@ -12,10 +12,10 @@ def recalculate(
     candidate = [fill for fill in diffuse_candidates[target] if atom_set[fill] == 1] + [
         target
     ]
-    if (height_change[0] < trans_val) and (height_change[1] >= trans_val):
+    if height_change is True:
         candidate += [
             (target[0], target[1], i)
-            for i in range(target[0], -1, -1)
+            for i in range(trans_val, -1, -1)
             if atom_set[(target[0], target[1], i)] == 1
         ]
     return candidate

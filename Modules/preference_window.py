@@ -8,6 +8,8 @@ from Modules.cal_rates import rate
 import time
 from Modules.kmc_functions import common_functions
 from Modules.Null_kmc_functions import null_functions
+import yaml
+from collections import OrderedDict
 
 
 class Window(ttk.Frame, common_functions, null_functions):
@@ -127,7 +129,7 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.deposition_time.bind("<Return>", self.update_click)
         self.prefactor_label = ttk.Label(self.frame_basics, text="Prefactor (1/s)")
         self.prefactor = ttk.Entry(self.frame_basics, width=7)
-        self.prefactor.insert(tk.END, "{:.1e}".format(self.init_value.prefactor))
+        self.prefactor.insert(tk.END, "{:.1e}".format(float(self.init_value.prefactor)))
         self.prefactor.bind("<Return>", self.update_click)
 
     def create_layout_basic(self) -> None:
@@ -474,13 +476,13 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.init_value.cut_check = self.bln_cut.get()
         self.init_value.limit_check = self.bln_limit.get()
         self.init_value.subtract_check = self.bln_subtract.get()
-        self.init_value.num_defect = self.num_defect.get()
-        self.init_value.put_first = self.put_first.get()
-        self.init_value.cut_number = self.cut.get()
-        self.init_value.limit_val = self.limit.get()
+        self.init_value.num_defect = int(self.num_defect.get())
+        self.init_value.put_first = int(self.put_first.get())
+        self.init_value.cut_number = int(self.cut.get())
+        self.init_value.limit_val = float(self.limit.get())
         self.init_value.method = self.var_method.get()
         self.init_value.transformation = self.bln_trans.get()
-        self.init_value.trans_val = self.trans_val.get()
+        self.init_value.trans_val = int(self.trans_val.get())
         #
         self.init_value.repeat_val = self.combo_energy.current()
         #
@@ -512,6 +514,14 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.update()
 
     def rewrite_input(self):
+        file_name = "kmc_input_test.yml"
+        yml_write: OrderedDict = {
+            key: val for key, val in self.init_value.__dict__.items()
+        }
+        with open(file_name, "w") as file:
+            yaml.dump(yml_write, file)
+
+        """
         file_name = "InputParameter.py"
         temp_rec = []
         check_val = 0
@@ -722,6 +732,7 @@ class Window(ttk.Frame, common_functions, null_functions):
         with open(file_name, "w", encoding="utf-8_sig") as f:
             for rep in temp_rec:
                 f.write(rep)
+        """
 
     def update_click(self, event) -> None:
         self.update_values()

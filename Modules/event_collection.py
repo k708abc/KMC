@@ -10,19 +10,18 @@ def total_energy(
     target: Tuple[int, int, int],
     energy_bonding: List[float],
     energy_diffuse: List[float],
-    trans_val: int,
     highest_atom: Dict[Tuple, int],
 ):
     bond_energy = 0
     # Ag-Si interaction
     if target[2] == 0:
         bond_energy += energy_bonding[0]
-    if trans_val > highest_atom[(target[0], target[1])]:
+    if highest_atom[(target[0], target[1])] == 0:
         for bond in bonds[target]:
             if atom_set[bond] == 1:
                 bond_energy += energy_bonding[max(target[2], bond[2])]
         return energy_diffuse[target[2]] + bond_energy
-    else:
+    elif highest_atom[(target[0], target[1])] >= 1:
         for bond in bonds[target]:
             if atom_set[bond] == 1:
                 bond_energy += energy_bonding[-1]
@@ -147,7 +146,6 @@ def site_events(
     energy_diffuse: List[float],
     diffuse_candidates: Dict,
     highest_atom: Dict,
-    trans_val: int,
 ):
     event_list: List[Tuple] = []
     rate_list: List[float] = []
@@ -160,7 +158,6 @@ def site_events(
         target,
         energy_bonding,
         energy_diffuse,
-        trans_val,
         highest_atom,
     )
 

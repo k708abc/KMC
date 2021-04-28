@@ -63,7 +63,7 @@ def rec_ppt(
     table0.cell(1, 3).text = str("{:.3g}".format(params.temperature_eV))
     table0.cell(1, 4).text = str(params.dep_rate)
     table0.cell(1, 5).text = str(params.dep_time)
-    table0.cell(1, 6).text = str("{:.1E}".format(params.prefactor))
+    table0.cell(1, 6).text = str("{:.1E}".format(float(params.prefactor)))
     table0.cell(1, 7).text = str(minute) + " m " + str(second) + " s"
     dt_now = datetime.datetime.now()
     table0.cell(1, 8).text = str(dt_now.strftime("%Y/%m/%d/ %H:%M:%S"))

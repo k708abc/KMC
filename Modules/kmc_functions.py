@@ -15,7 +15,7 @@ import os
 
 class common_functions:
     def __init__(self) -> None:
-        self.init_value = Params()
+        self.init_value = Params("kmc_input.yml")
 
     def start_setting(self):
         self.start_time = time.time()
@@ -104,24 +104,24 @@ class common_functions:
                 self.energy_diffuse[i] -= self.energy_bonding[i]
 
     def height_check_add(self, pos):
-        prev = self.highest_atom[(pos[0], pos[1])]
-        if prev < pos[2]:
-            self.highest_atom[(pos[0], pos[1])] = pos[2]
-            return (prev, pos[2])
+        if pos[2] >= self.init_value.trans_val:
+            self.highest_atom[(pos[0], pos[1])] += 1
+            if self.highest_atom[(pos[0], pos[1])] == 1:
+                return True
+            else:
+                return False
         else:
-            return (prev, prev)
+            return False
 
     def height_check_remove(self, pos):
-        prev = self.highest_atom[(pos[0], pos[1])]
-        if prev == pos[2]:
-            for i in range(pos[2], 0, -1):
-                if self.atom_set[(pos[0], pos[1], i)] == 1:
-                    self.highest_atom[(pos[0], pos[1])] = i
-                    return (i, prev)
-            self.highest_atom[(pos[0], pos[1])] = 0
-            return (0, prev)
+        if pos[2] >= self.init_value.trans_val:
+            self.highest_atom[(pos[0], pos[1])] -= 1
+            if self.highest_atom[(pos[0], pos[1])] == 0:
+                return True
+            else:
+                return False
         else:
-            return (prev, prev)
+            return False
 
     def deposition(self) -> Tuple:
         dep_pos = deposit_an_atom(
@@ -164,7 +164,6 @@ class common_functions:
                     self.energy_diffuse,
                     self.diffuse_candidates,
                     self.highest_atom,
-                    self.init_value.trans_val,
                 )
             self.total_event_time -= self.event_time_tot[target_rel]
             self.event[target_rel] = events
@@ -199,8 +198,7 @@ class common_functions:
                 + str(self.init_value.cut_number)
             )
         dep_pos = self.deposition()
-        if self.init_value.transformation is True:
-            self.height_change_add = self.height_check_add(dep_pos)
+        self.height_change_add = self.height_check_add(dep_pos)
         # 蒸着によりイベントに変化が生じうる原子
         self.related_atoms = recalculate(
             dep_pos,
@@ -327,9 +325,8 @@ class common_functions:
         self.atom_set[self.move_atom] = 1
         self.atom_exist.remove(self.target)
         self.atom_exist.append(self.move_atom)
-        if self.init_value.transformation is True:
-            self.height_change_rem = self.height_check_remove(self.target)
-            self.height_change_add = self.height_check_add(self.move_atom)
+        self.height_change_rem = self.height_check_remove(self.target)
+        self.height_change_add = self.height_check_add(self.move_atom)
         if self.move_atom[2] in (0, 1):
             self.empty_firstBL -= 1
         if self.target[2] in (0, 1):
