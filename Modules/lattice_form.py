@@ -112,10 +112,10 @@ def search_bond(unit_length: int, z_max: int):  # << index が引数でないの
 
 def lattice_form(input_params: Params):  # 　ここ長すぎるので、少なくとも3つか四つの関数に分ける。
     # 荒船だったら，多分5個ぐらい。
-    unit_length: int = input_params.n_cell_init
-    z_units: int = input_params.z_unit_init
-    z_intra: float = float(input_params.intra_distance)
-    z_inter: float = float(input_params.inter_distance)
+    unit_length: int = input_params.cell_size_xy
+    z_units: int = input_params.cell_size_z
+    z_intra: float = float(input_params.distance_intra)
+    z_inter: float = float(input_params.distance_inter)
     unit_height = 3 * (z_intra + z_inter)
     reset_dicts()
     z_max = z_units * 6 - 1

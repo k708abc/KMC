@@ -57,8 +57,8 @@ def rec_ppt(
     table0.cell(0, 6).text = "prefactor"
     table0.cell(0, 7).text = "Cal. time (s)"
     table0.cell(0, 8).text = "Finishing time"
-    table0.cell(1, 0).text = str(params.n_cell_init)
-    table0.cell(1, 1).text = str(params.z_unit_init)
+    table0.cell(1, 0).text = str(params.cell_size_xy)
+    table0.cell(1, 1).text = str(params.cell_size_z)
     table0.cell(1, 2).text = str(params.temperature)
     table0.cell(1, 3).text = str("{:.3g}".format(params.temperature_eV))
     table0.cell(1, 4).text = str(params.dep_rate)
@@ -91,16 +91,16 @@ def rec_ppt(
     table.cell(1, 2).text = str(params.cut_check)
     table.cell(1, 3).text = str(params.limit_check)
     table.cell(1, 4).text = str(params.subtract_check)
-    table.cell(1, 5).text = str(params.transformation)
+    table.cell(1, 5).text = str(params.trans_check)
     table.cell(1, 6).text = str(params.method)
 
     # table.cell(2, 0).text = str(params.transformation)
-    table.cell(2, 0).text = str(params.num_defect)
-    table.cell(2, 1).text = str(params.put_first)
-    table.cell(2, 2).text = str(params.cut_number)
-    table.cell(2, 3).text = str(params.limit_val)
+    table.cell(2, 0).text = str(params.keep_defect_num)
+    table.cell(2, 1).text = str(params.first_put_num)
+    table.cell(2, 2).text = str(params.cut_num)
+    table.cell(2, 3).text = str(params.limit_num)
     table.cell(2, 4).text = str("")
-    table.cell(2, 5).text = str(params.trans_val)
+    table.cell(2, 5).text = str(params.trans_num)
     table.cell(2, 7).text = str(time_per_dep)
     #
     left = Inches(0.1)
@@ -115,17 +115,17 @@ def rec_ppt(
     table.cell(0, 3).text = "Si(3rd)"
     table.cell(0, 4).text = "Si(else)"
     table.cell(1, 0).text = "Diffusion (eV)"
-    table.cell(1, 1).text = str(params.diffusion_barriers["Si_first"])
-    table.cell(1, 2).text = str(params.diffusion_barriers["Si_second"])
-    table.cell(1, 3).text = str(params.diffusion_barriers["Si_third"])
-    table.cell(1, 4).text = str(params.diffusion_barriers["Si_else"])
+    table.cell(1, 1).text = str(params.energies_diffusion["Si_first"])
+    table.cell(1, 2).text = str(params.energies_diffusion["Si_second"])
+    table.cell(1, 3).text = str(params.energies_diffusion["Si_third"])
+    table.cell(1, 4).text = str(params.energies_diffusion["Si_else"])
 
     #
     table.cell(2, 0).text = "Binding (eV)"
-    table.cell(2, 1).text = str(params.binding_energies["Si_first"])
-    table.cell(2, 2).text = str(params.binding_energies["Si_second"])
-    table.cell(2, 3).text = str(params.binding_energies["Si_third"])
-    table.cell(2, 4).text = str(params.binding_energies["Si_else"])
+    table.cell(2, 1).text = str(params.energies_binding["Si_first"])
+    table.cell(2, 2).text = str(params.energies_binding["Si_second"])
+    table.cell(2, 3).text = str(params.energies_binding["Si_third"])
+    table.cell(2, 4).text = str(params.energies_binding["Si_else"])
     ##
 
     width = height = Inches(1)

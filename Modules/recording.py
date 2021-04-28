@@ -410,8 +410,8 @@ def record_data(
     time_per_eve,
 ):
     maxz = highest_z(pos_all)
-    maxz_unit = params.z_unit_init * 6
-    unit_length = params.n_cell_init
+    maxz_unit = params.cell_size_z * 6
+    unit_length = params.cell_size_xy
     rec_name_body = params.record_name
     n_BL = params.atoms_in_BL
     img_names: List[str] = []

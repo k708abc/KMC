@@ -54,57 +54,57 @@ class common_functions:
         self.energy_summarize()
         self.height_change_rem = (0, 0)
         self.height_change_add = (0, 0)
-        if self.init_value.transformation is False:
-            self.init_value.trans_val = 100
+        if self.init_value.trans_check is False:
+            self.init_value.trans_num = 100
 
     def energy_summarize(self):
         self.energy_bonding = [
-            self.init_value.binding_energies["Si_first"],  # with Ag
-            self.init_value.binding_energies["Si_first"],  # in first BL
+            self.init_value.energies_binding["Si_first"],  # with Ag
+            self.init_value.energies_binding["Si_first"],  # in first BL
             (
-                self.init_value.binding_energies["Si_first"]
-                + self.init_value.binding_energies["Si_second"]
+                self.init_value.energies_binding["Si_first"]
+                + self.init_value.energies_binding["Si_second"]
             )
             / 2,  # inter 1st and 2nd
-            self.init_value.binding_energies["Si_second"],  # in second
+            self.init_value.energies_binding["Si_second"],  # in second
             (
-                self.init_value.binding_energies["Si_second"]
-                + self.init_value.binding_energies["Si_third"]
+                self.init_value.energies_binding["Si_second"]
+                + self.init_value.energies_binding["Si_third"]
             )
             / 2,  # inter second and third
-            self.init_value.binding_energies["Si_third"],  # in third
+            self.init_value.energies_binding["Si_third"],  # in third
             (
-                self.init_value.binding_energies["Si_third"]
-                + self.init_value.binding_energies["Si_else"]
+                self.init_value.energies_binding["Si_third"]
+                + self.init_value.energies_binding["Si_else"]
             )
             / 2,  # inter third and fourth
         ]
         #
         self.energy_bonding += [
-            self.init_value.binding_energies["Si_else"]
-            for i in range(self.init_value.z_unit_init * 6 - 2)
+            self.init_value.energies_binding["Si_else"]
+            for i in range(self.init_value.cell_size_z * 6 - 2)
         ]
         #
 
         self.energy_diffuse = [
-            self.init_value.diffusion_barriers["Si_first"],
-            self.init_value.diffusion_barriers["Si_first"],
-            self.init_value.diffusion_barriers["Si_second"],
-            self.init_value.diffusion_barriers["Si_second"],
-            self.init_value.diffusion_barriers["Si_third"],
-            self.init_value.diffusion_barriers["Si_third"],
+            self.init_value.energies_diffusion["Si_first"],
+            self.init_value.energies_diffusion["Si_first"],
+            self.init_value.energies_diffusion["Si_second"],
+            self.init_value.energies_diffusion["Si_second"],
+            self.init_value.energies_diffusion["Si_third"],
+            self.init_value.energies_diffusion["Si_third"],
         ]
         #
         self.energy_diffuse += [
-            self.init_value.diffusion_barriers["Si_else"]
-            for i in range(self.init_value.z_unit_init * 6 - 2)
+            self.init_value.energies_diffusion["Si_else"]
+            for i in range(self.init_value.cell_size_z * 6 - 2)
         ]
         if self.init_value.subtract_check is True:
             for i in range(len(self.energy_diffuse)):
                 self.energy_diffuse[i] -= self.energy_bonding[i]
 
     def height_check_add(self, pos):
-        if pos[2] >= self.init_value.trans_val:
+        if pos[2] >= self.init_value.trans_num:
             self.highest_atom[(pos[0], pos[1])] += 1
             if self.highest_atom[(pos[0], pos[1])] == 1:
                 return True
@@ -114,7 +114,7 @@ class common_functions:
             return False
 
     def height_check_remove(self, pos):
-        if pos[2] >= self.init_value.trans_val:
+        if pos[2] >= self.init_value.trans_num:
             self.highest_atom[(pos[0], pos[1])] -= 1
             if self.highest_atom[(pos[0], pos[1])] == 0:
                 return True
@@ -186,7 +186,7 @@ class common_functions:
             input()
 
     def rejection_free_deposition(self):
-        if self.num in (1, 0):
+        if self.setting_value in (1, 0):
             print(
                 "Progress: "
                 + str(self.n_atoms)
@@ -195,7 +195,7 @@ class common_functions:
                 + " Event: "
                 + str(self.n_events_perdep)
                 + "/"
-                + str(self.init_value.cut_number)
+                + str(self.init_value.cut_num)
             )
         dep_pos = self.deposition()
         self.height_change_add = self.height_check_add(dep_pos)
@@ -205,14 +205,14 @@ class common_functions:
             self.atom_set,
             self.diffuse_candidates,
             self.height_change_add,
-            self.init_value.trans_val,
+            self.init_value.trans_num,
         )
         # それぞれのイベント等を格納
         self.update_events()
 
     def put_first_atoms_rf(self):
         if self.init_value.first_put_check is True:
-            for _ in range(int(self.init_value.put_first)):
+            for _ in range(int(self.init_value.first_put_num)):
                 self.rejection_free_deposition()
 
     def rejection_free_event(self):
@@ -223,14 +223,14 @@ class common_functions:
             self.atom_set,
             self.diffuse_candidates,
             self.height_change_rem,
-            self.init_value.trans_val,
+            self.init_value.trans_num,
         )
         self.related_atoms += recalculate(
             self.move_atom,
             self.atom_set,
             self.diffuse_candidates,
             self.height_change_add,
-            self.init_value.trans_val,
+            self.init_value.trans_num,
         )
         self.update_events()
         #
@@ -243,7 +243,7 @@ class common_functions:
         )
         if self.target == (-1, -1, -1):
             self.rejection_free_deposition()
-        elif (self.n_events_perdep == int(self.init_value.cut_number)) and (
+        elif (self.n_events_perdep == int(self.init_value.cut_num)) and (
             self.init_value.cut_check is True
         ):
             self.rejection_free_deposition()
@@ -273,8 +273,8 @@ class common_functions:
             rec_poscar(
                 self.atom_set,
                 self.lattice,
-                self.init_value.n_cell_init,
-                self.init_value.z_unit_init,
+                self.init_value.cell_size_xy,
+                self.init_value.cell_size_z,
                 "middle_structure.vasp",
             )
             print("middle formed")
@@ -288,6 +288,20 @@ class common_functions:
             self.record_middle = 1
             rec_for_test(self.atom_set, self.bonds, self.lattice)
         """
+
+    def trans_check(self):
+        for i in range(0, self.init_value.cell_size_xy):
+            for k in range(0, self.init_value.cell_size_xy):
+                above_trans = 0
+                for z in range(
+                    self.init_value.trans_num, self.init_value.cell_size_z * 3 - 2
+                ):
+                    if self.atom_set[(i, k, z)] == 1:
+                        above_trans += 1
+                if above_trans == self.highest_atom[(i, k)]:
+                    print("OK")
+                else:
+                    print("different")
 
     def end_of_loop(self) -> None:
         self.record_position()
@@ -308,6 +322,8 @@ class common_functions:
             self.second,
             self.time_per_event,
         )
+        #
+        # self.trans_check()
 
     def defect_check(self):
         if (self.target[2] not in (0, 1)) and (self.move_atom[2] in (0, 1)):
@@ -316,7 +332,7 @@ class common_functions:
             self.n_events_perdep -= 1
 
     def event_progress(self):
-        if (self.empty_firstBL == int(self.init_value.num_defect)) and (
+        if (self.empty_firstBL == int(self.init_value.keep_defect_num)) and (
             self.init_value.keep_defect_check is True
         ):
             self.defect_check()

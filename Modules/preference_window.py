@@ -91,11 +91,11 @@ class Window(ttk.Frame, common_functions, null_functions):
         # The first row
         self.n_cell_label = ttk.Label(self.frame_basics, text="Number of cell")
         self.n_cell = ttk.Entry(self.frame_basics, width=7)
-        self.n_cell.insert(tk.END, self.init_value.n_cell_init)
+        self.n_cell.insert(tk.END, self.init_value.cell_size_xy)
         self.n_cell.bind("<Return>", self.update_click)
         self.z_unit_label = ttk.Label(self.frame_basics, text="Z unit")
         self.z_unit = ttk.Entry(self.frame_basics, width=7)
-        self.z_unit.insert(tk.END, self.init_value.z_unit_init)
+        self.z_unit.insert(tk.END, self.init_value.cell_size_z)
         self.z_unit.bind("<Return>", self.update_click)
         self.temperature_label = ttk.Label(self.frame_basics, text="T (K)")
         self.temperature = ttk.Entry(self.frame_basics, width=7)
@@ -174,12 +174,12 @@ class Window(ttk.Frame, common_functions, null_functions):
             self.energies.append(ttk.Entry(self.frame_energies, width=7))
             self.rate_labels.append(ttk.Label(self.frame_energies, text="0"))
         for (energy, (key, val)) in zip(
-            self.energies, self.init_value.binding_energies.items()
+            self.energies, self.init_value.energies_binding.items()
         ):
             energy.insert(tk.END, val)
             energy.bind("<Return>", self.update_click)
         for (diffuse, (key, val)) in zip(
-            self.diffuse, self.init_value.diffusion_barriers.items()
+            self.diffuse, self.init_value.energies_diffusion.items()
         ):
             diffuse.insert(tk.END, val)
             diffuse.bind("<Return>", self.update_click)
@@ -216,7 +216,7 @@ class Window(ttk.Frame, common_functions, null_functions):
         )
         self.chk_defect = ttk.Checkbutton(self.frame_checks, variable=self.bln_defect)
         self.num_defect = ttk.Entry(self.frame_checks, width=7)
-        self.num_defect.insert(tk.END, self.init_value.num_defect)
+        self.num_defect.insert(tk.END, self.init_value.keep_defect_num)
         self.chk_defect_label2 = ttk.Label(self.frame_checks, text="")
         #
         self.bln_first = tk.BooleanVar()
@@ -226,7 +226,7 @@ class Window(ttk.Frame, common_functions, null_functions):
         )
         self.chk_first_put = ttk.Checkbutton(self.frame_checks, variable=self.bln_first)
         self.put_first = ttk.Entry(self.frame_checks, width=7)
-        self.put_first.insert(tk.END, self.init_value.put_first)
+        self.put_first.insert(tk.END, self.init_value.first_put_num)
         self.chk_first_put_label2 = ttk.Label(self.frame_checks, text="")
         #
         self.bln_cut = tk.BooleanVar()
@@ -234,7 +234,7 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.chk_cut_label = ttk.Label(self.frame_checks, text="Cut event")
         self.chk_cut = ttk.Checkbutton(self.frame_checks, variable=self.bln_cut)
         self.cut = ttk.Entry(self.frame_checks, width=7)
-        self.cut.insert(tk.END, self.init_value.cut_number)
+        self.cut.insert(tk.END, self.init_value.cut_num)
         self.chk_cut_label2 = ttk.Label(self.frame_checks, text="")
         #
         self.bln_limit = tk.BooleanVar()
@@ -242,7 +242,7 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.chk_limit_label = ttk.Label(self.frame_checks, text="Rate limit")
         self.chk_limit = ttk.Checkbutton(self.frame_checks, variable=self.bln_limit)
         self.limit = ttk.Entry(self.frame_checks, width=7)
-        self.limit.insert(tk.END, self.init_value.limit_val)
+        self.limit.insert(tk.END, self.init_value.limit_num)
         self.limit.bind("<Return>", self.update_click)
         self.chk_limit_label2 = ttk.Label(
             self.frame_checks,
@@ -250,12 +250,12 @@ class Window(ttk.Frame, common_functions, null_functions):
         )
         #
         self.bln_trans = tk.BooleanVar()
-        self.bln_trans.set(self.init_value.transformation)
+        self.bln_trans.set(self.init_value.trans_check)
         self.chk_trans_label = ttk.Label(self.frame_checks, text="Transformation")
         self.chk_trans = ttk.Checkbutton(self.frame_checks, variable=self.bln_trans)
 
         self.trans_val = ttk.Entry(self.frame_checks, width=7)
-        self.trans_val.insert(tk.END, self.init_value.trans_val)
+        self.trans_val.insert(tk.END, self.init_value.trans_num)
         self.limit.bind("<Return>", self.update_click)
         self.chk_trans_label2 = ttk.Label(
             self.frame_checks,
@@ -407,22 +407,22 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.repeat_label_2 = ttk.Label(self.frame_repeat, text="E2 (eV)")
 
         self.start_E1 = ttk.Entry(self.frame_repeat, width=7)
-        self.start_E1.insert(tk.END, self.init_value.start_E1)
+        self.start_E1.insert(tk.END, self.init_value.repeat_E1_start)
 
         self.end_E1 = ttk.Entry(self.frame_repeat, width=7)
-        self.end_E1.insert(tk.END, self.init_value.end_E1)
+        self.end_E1.insert(tk.END, self.init_value.repeat_E1_end)
 
         self.diff_E1 = ttk.Entry(self.frame_repeat, width=7)
-        self.diff_E1.insert(tk.END, self.init_value.diff_E1)
+        self.diff_E1.insert(tk.END, self.init_value.repeat_E1_diff)
 
         self.start_E2 = ttk.Entry(self.frame_repeat, width=7)
-        self.start_E2.insert(tk.END, self.init_value.start_E2)
+        self.start_E2.insert(tk.END, self.init_value.repeat_E2_start)
 
         self.end_E2 = ttk.Entry(self.frame_repeat, width=7)
-        self.end_E2.insert(tk.END, self.init_value.end_E2)
+        self.end_E2.insert(tk.END, self.init_value.repeat_E2_end)
 
         self.diff_E2 = ttk.Entry(self.frame_repeat, width=7)
-        self.diff_E2.insert(tk.END, self.init_value.diff_E2)
+        self.diff_E2.insert(tk.END, self.init_value.repeat_E2_diff)
 
     def create_layout_repeat(self) -> None:
         self.repeat_label.grid(row=0, column=0, **self.padWE)
@@ -451,8 +451,8 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.mainloop()
 
     def update_values(self) -> None:
-        self.init_value.n_cell_init = int(self.n_cell.get())
-        self.init_value.z_unit_init = int(self.z_unit.get())
+        self.init_value.cell_size_xy = int(self.n_cell.get())
+        self.init_value.cell_size_z = int(self.z_unit.get())
         self.init_value.temperature = float(self.temperature.get())
         self.init_value.dep_rate = float(self.deposition_rate.get())
         self.init_value.dep_time = float(self.deposition_time.get())
@@ -460,14 +460,14 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.init_value.prefactor = float(self.prefactor.get())
         #
         for diffuse_entry, diffuse_key in zip(
-            self.diffuse, self.init_value.diffusion_barriers
+            self.diffuse, self.init_value.energies_diffusion
         ):
-            self.init_value.diffusion_barriers[diffuse_key] = float(diffuse_entry.get())
+            self.init_value.energies_diffusion[diffuse_key] = float(diffuse_entry.get())
         #
         for energy_entry, energy_key in zip(
-            self.energies, self.init_value.binding_energies
+            self.energies, self.init_value.energies_binding
         ):
-            self.init_value.binding_energies[energy_key] = float(energy_entry.get())
+            self.init_value.energies_binding[energy_key] = float(energy_entry.get())
         self.init_value.record_name = str(self.record.get())
         self.init_value.img_per = float(self.image_rec.get())
         self.init_value.comments = str(self.comments.get())
@@ -476,22 +476,22 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.init_value.cut_check = self.bln_cut.get()
         self.init_value.limit_check = self.bln_limit.get()
         self.init_value.subtract_check = self.bln_subtract.get()
-        self.init_value.num_defect = int(self.num_defect.get())
-        self.init_value.put_first = int(self.put_first.get())
-        self.init_value.cut_number = int(self.cut.get())
-        self.init_value.limit_val = float(self.limit.get())
+        self.init_value.keep_defect_num = int(self.num_defect.get())
+        self.init_value.first_put_num = int(self.put_first.get())
+        self.init_value.cut_num = int(self.cut.get())
+        self.init_value.limit_num = float(self.limit.get())
         self.init_value.method = self.var_method.get()
-        self.init_value.transformation = self.bln_trans.get()
-        self.init_value.trans_val = int(self.trans_val.get())
+        self.init_value.trans_check = self.bln_trans.get()
+        self.init_value.trans_num = int(self.trans_val.get())
         #
         self.init_value.repeat_val = self.combo_energy.current()
         #
-        self.init_value.start_E1 = float(self.start_E1.get())
-        self.init_value.end_E1 = float(self.end_E1.get())
-        self.init_value.diff_E1 = float(self.diff_E1.get())
-        self.init_value.start_E2 = float(self.start_E2.get())
-        self.init_value.end_E2 = float(self.end_E2.get())
-        self.init_value.diff_E2 = float(self.diff_E2.get())
+        self.init_value.repeat_E1_start = float(self.start_E1.get())
+        self.init_value.repeat_E1_end = float(self.end_E1.get())
+        self.init_value.repeat_E1_diff = float(self.diff_E1.get())
+        self.init_value.repeat_E2_start = float(self.start_E2.get())
+        self.init_value.repeat_E2_end = float(self.end_E2.get())
+        self.init_value.repeat_E2_diff = float(self.diff_E2.get())
 
         self.record_middle = 0
         #
@@ -514,225 +514,12 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.update()
 
     def rewrite_input(self):
-        file_name = "kmc_input_test.yml"
+        file_name = "kmc_input.yml"
         yml_write: OrderedDict = {
             key: val for key, val in self.init_value.__dict__.items()
         }
         with open(file_name, "w") as file:
             yaml.dump(yml_write, file)
-
-        """
-        file_name = "InputParameter.py"
-        temp_rec = []
-        check_val = 0
-        with open(file_name, "r", encoding="utf-8_sig") as f:
-            for row in f:
-                row_sp = row.split()
-                if check_val == 0:
-                    if "@property" in row_sp:
-                        check_val = 1
-                        temp_rec.append(row)
-                    elif "self.n_cell_init" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.n_cell_init))
-                        )
-                    elif "self.z_unit_init" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.z_unit_init))
-                        )
-                    elif "self.temperature" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.temperature))
-                        )
-                    elif "self.dep_rate" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.dep_rate))
-                        )
-                    elif "self.dep_time" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.dep_time))
-                        )
-                    elif "self.prefactor" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.prefactor))
-                        )
-                    elif 'self.binding_energies["Si_first"]' in row_sp:
-                        temp_rec.append(
-                            row.replace(
-                                row_sp[2],
-                                str(self.init_value.binding_energies["Si_first"]),
-                            )
-                        )
-                    elif 'self.binding_energies["Si_second"]' in row_sp:
-                        temp_rec.append(
-                            row.replace(
-                                row_sp[2],
-                                str(self.init_value.binding_energies["Si_second"]),
-                            )
-                        )
-                    elif 'self.binding_energies["Si_third"]' in row_sp:
-                        temp_rec.append(
-                            row.replace(
-                                row_sp[2],
-                                str(self.init_value.binding_energies["Si_third"]),
-                            )
-                        )
-                    elif 'self.binding_energies["Si_else"]' in row_sp:
-                        temp_rec.append(
-                            row.replace(
-                                row_sp[2],
-                                str(self.init_value.binding_energies["Si_else"]),
-                            )
-                        )
-                    elif 'self.diffusion_barriers["Si_first"]' in row_sp:
-                        temp_rec.append(
-                            row.replace(
-                                row_sp[2],
-                                str(self.init_value.diffusion_barriers["Si_first"]),
-                            )
-                        )
-                    elif 'self.diffusion_barriers["Si_second"]' in row_sp:
-                        temp_rec.append(
-                            row.replace(
-                                row_sp[2],
-                                str(self.init_value.diffusion_barriers["Si_second"]),
-                            )
-                        )
-                    elif 'self.diffusion_barriers["Si_third"]' in row_sp:
-                        temp_rec.append(
-                            row.replace(
-                                row_sp[2],
-                                str(self.init_value.diffusion_barriers["Si_third"]),
-                            )
-                        )
-                    elif 'self.diffusion_barriers["Si_else"]' in row_sp:
-                        temp_rec.append(
-                            row.replace(
-                                row_sp[2],
-                                str(self.init_value.diffusion_barriers["Si_else"]),
-                            )
-                        )
-                    elif "self.put_first" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.put_first))
-                        )
-                    elif "self.cut_number" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.cut_number))
-                        )
-                    elif "self.num_defect" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.num_defect))
-                        )
-                    elif "self.record_name" in row_sp:
-                        temp_rec.append(
-                            row.replace(
-                                row_sp[2], '"' + str(self.init_value.record_name) + '"'
-                            )
-                        )
-                    elif "self.img_per" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.img_per))
-                        )
-                    elif "self.comments" in row_sp:
-                        comment = ""
-                        for i in range(2, len(row_sp)):
-                            comment += row_sp[i]
-                            if i != len(row_sp) - 1:
-                                comment += " "
-
-                        temp_rec.append(
-                            row.replace(
-                                comment, '"' + str(self.init_value.comments) + '"'
-                            )
-                        )
-
-                    elif "self.keep_defect_check" in row_sp:
-                        temp_rec.append(
-                            row.replace(
-                                row_sp[2], str(self.init_value.keep_defect_check)
-                            )
-                        )
-                    elif "self.first_put_check" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.first_put_check))
-                        )
-                    elif "self.cut_check" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.cut_check))
-                        )
-                    elif "self.limit_check" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.limit_check))
-                        )
-                    elif "self.limit_val" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.limit_val))
-                        )
-                    elif "self.method" in row_sp:
-                        temp_rec.append(
-                            row.replace(
-                                row_sp[2], '"' + str(self.init_value.method) + '"'
-                            )
-                        )
-                    elif "self.transformation" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.transformation))
-                        )
-                    elif "self.trans_val" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.trans_val))
-                        )
-                    elif "self.subtract_check" in row_sp:
-                        temp_rec.append(
-                            row.replace(
-                                row_sp[2],
-                                str(self.init_value.subtract_check),
-                            )
-                        )
-                    elif "self.repeat_val" in row_sp:
-                        temp_rec.append(
-                            row.replace(
-                                row_sp[2],
-                                str(self.init_value.repeat_val),
-                            )
-                        )
-                    elif "self.start_E1" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.start_E1))
-                        )
-                    elif "self.end_E1" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.end_E1))
-                        )
-                    elif "self.diff_E1" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.diff_E1))
-                        )
-
-                    elif "self.start_E2" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.start_E2))
-                        )
-                    elif "self.end_E2" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.end_E2))
-                        )
-                    elif "self.diff_E2" in row_sp:
-                        temp_rec.append(
-                            row.replace(row_sp[2], str(self.init_value.diff_E2))
-                        )
-
-                    else:
-                        temp_rec.append(row)
-                elif check_val == 1:
-                    temp_rec.append(row)
-
-        file_name = "InputParameter.py"
-        with open(file_name, "w", encoding="utf-8_sig") as f:
-            for rep in temp_rec:
-                f.write(rep)
-        """
 
     def update_click(self, event) -> None:
         self.update_values()
@@ -745,6 +532,7 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.progress_events["text"] = "0"
         self.pbval = 0
         self.progress_bar.configure(value=self.pbval)
+        self.setting_value = 0
         self.update()
 
     def update_progress_tk(self):

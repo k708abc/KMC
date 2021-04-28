@@ -166,7 +166,7 @@ def site_events(
         atom_set, bonds, target, params, energy, diffuse_candidates
     )
     if params.limit_check:
-        rate_list = rate_limit(rate_list, Decimal(float(params.limit_val)))
+        rate_list = rate_limit(rate_list, Decimal(float(params.limit_num)))
     return event_list, rate_list
 
 

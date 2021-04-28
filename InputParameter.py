@@ -83,7 +83,7 @@ class Params:
 
     @property
     def atoms_in_BL(self) -> int:
-        return int(2 * (self.n_cell_init) ** 2)
+        return int(2 * (self.cell_size_xy) ** 2)
 
     @property
     def dep_rate_atoms_persec(self) -> decimal.Decimal:
@@ -110,5 +110,5 @@ class Params:
         return (
             -8.617e-5
             * self.temperature
-            * math.log(float(self.limit_val) / float(self.prefactor))
+            * math.log(float(self.limit_num) / float(self.prefactor))
         )
