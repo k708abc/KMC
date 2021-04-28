@@ -1,7 +1,7 @@
 from typing import List, Dict, Tuple
 from Modules.cal_rates import rate
 from InputParameter import Params
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import Decimal
 
 
 def total_energy(
@@ -10,15 +10,23 @@ def total_energy(
     target: Tuple[int, int, int],
     energy_bonding: List[float],
     energy_diffuse: List[float],
+    trans_val: int,
+    highest_atom: Dict[Tuple, int],
 ):
     bond_energy = 0
-    for bond in bonds[target]:
-        if atom_set[bond] == 1:
-            bond_energy += energy_bonding[max(target[2], bond[2])]
     # Ag-Si interaction
     if target[2] == 0:
         bond_energy += energy_bonding[0]
-    return energy_diffuse[target[2]] + bond_energy
+    if trans_val > highest_atom[(target[0], target[1])]:
+        for bond in bonds[target]:
+            if atom_set[bond] == 1:
+                bond_energy += energy_bonding[max(target[2], bond[2])]
+        return energy_diffuse[target[2]] + bond_energy
+    else:
+        for bond in bonds[target]:
+            if atom_set[bond] == 1:
+                bond_energy += energy_bonding[-1]
+        return energy_diffuse[-1] + bond_energy
 
 
 def find_filled_sites(atom_set, indexes):
@@ -138,13 +146,23 @@ def site_events(
     energy_bonding: List[float],
     energy_diffuse: List[float],
     diffuse_candidates: Dict,
+    highest_atom: Dict,
+    trans_val: int,
 ):
     event_list: List[Tuple] = []
     rate_list: List[float] = []
     # states: List[int] = []
     # trans = params.trans_check
     # calculate total energy
-    energy = total_energy(atom_set, bonds, target, energy_bonding, energy_diffuse)
+    energy = total_energy(
+        atom_set,
+        bonds,
+        target,
+        energy_bonding,
+        energy_diffuse,
+        trans_val,
+        highest_atom,
+    )
 
     # calculate possible events
     event_list, rate_list = possible_events(

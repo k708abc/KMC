@@ -247,6 +247,20 @@ class Window(ttk.Frame, common_functions, null_functions):
             text="(" + "{:.3g}".format(self.init_value.cal_energy) + " eV)",
         )
         #
+        self.bln_trans = tk.BooleanVar()
+        self.bln_trans.set(self.init_value.transformation)
+        self.chk_trans_label = ttk.Label(self.frame_checks, text="Transformation")
+        self.chk_trans = ttk.Checkbutton(self.frame_checks, variable=self.bln_trans)
+
+        self.trans_val = ttk.Entry(self.frame_checks, width=7)
+        self.trans_val.insert(tk.END, self.init_value.trans_val)
+        self.limit.bind("<Return>", self.update_click)
+        self.chk_trans_label2 = ttk.Label(
+            self.frame_checks,
+            text="(layer number)",
+        )
+
+        #
         self.bln_subtract = tk.BooleanVar()
         self.bln_subtract.set(self.init_value.subtract_check)
         self.chk_subtract_label = ttk.Label(
@@ -277,8 +291,13 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.limit.grid(row=3, column=2, **self.padWE)
         self.chk_limit_label2.grid(row=3, column=3, **self.padWE)
         #
-        self.chk_subtract_label.grid(row=4, column=0, **self.padWE)
-        self.chk_subtract.grid(row=4, column=1, **self.padWE)
+        self.chk_trans_label.grid(row=4, column=0, **self.padWE)
+        self.chk_trans.grid(row=4, column=1, **self.padWE)
+        self.trans_val.grid(row=4, column=2, **self.padWE)
+        self.chk_trans_label2.grid(row=4, column=3, **self.padWE)
+        #
+        self.chk_subtract_label.grid(row=5, column=0, **self.padWE)
+        self.chk_subtract.grid(row=5, column=1, **self.padWE)
 
     def create_widgets_records(self) -> None:
         self.record_label = tk.Label(self.frame_records, text="Record")
@@ -460,6 +479,8 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.init_value.cut_number = self.cut.get()
         self.init_value.limit_val = self.limit.get()
         self.init_value.method = self.var_method.get()
+        self.init_value.transformation = self.bln_trans.get()
+        self.init_value.trans_val = self.trans_val.get()
         #
         self.init_value.repeat_val = self.combo_energy.current()
         #
@@ -643,6 +664,14 @@ class Window(ttk.Frame, common_functions, null_functions):
                             row.replace(
                                 row_sp[2], '"' + str(self.init_value.method) + '"'
                             )
+                        )
+                    elif "self.transformation" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.transformation))
+                        )
+                    elif "self.trans_val" in row_sp:
+                        temp_rec.append(
+                            row.replace(row_sp[2], str(self.init_value.trans_val))
                         )
                     elif "self.subtract_check" in row_sp:
                         temp_rec.append(

@@ -15,6 +15,7 @@ event_time: Dict[Tuple, List] = {}
 event_time_tot: Dict[Tuple, float] = {}
 event_state: Dict[Tuple, int] = {}
 diffuse_candidates: Dict[Tuple, List] = {}
+highest_atom: Dict[Tuple, int] = {}
 
 
 def reset_dicts() -> None:
@@ -26,6 +27,8 @@ def reset_dicts() -> None:
     event_time.clear()
     event_time_tot.clear()
     event_state.clear()
+    diffuse_candidates.clear()
+    highest_atom.clear()
 
 
 def form_first_3BL(
@@ -120,6 +123,7 @@ def lattice_form(input_params: Params):  # 　ここ長すぎるので、少な�
     for i in range(unit_length):
         for j in range(unit_length):
             lattice_first[(i, j)] = []
+            highest_atom[(i, j)] = 0
             for k in range(z_units * 6):
                 lattice[(i, j, k)] = []
                 atom_set[(i, j, k)] = 0
@@ -145,6 +149,7 @@ def lattice_form(input_params: Params):  # 　ここ長すぎるので、少な�
         event_time_tot,
         event_state,
         diffuse_candidates,
+        highest_atom,
     )
 
 

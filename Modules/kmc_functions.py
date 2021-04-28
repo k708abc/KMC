@@ -12,6 +12,7 @@ from Modules.recording import record_data
 from Modules.recording import rec_events_per_dep
 import os
 
+
 class common_functions:
     def __init__(self) -> None:
         self.init_value = Params()
@@ -48,8 +49,13 @@ class common_functions:
             self.event_time_tot,
             _,
             self.diffuse_candidates,
+            self.highest_atom,
         ) = lattice_form(self.init_value)
         self.energy_summarize()
+        self.height_change_rem = (0, 0)
+        self.height_change_add = (0, 0)
+        if self.init_value.transformation is False:
+            self.init_value.trans_val = 100
 
     def energy_summarize(self):
         self.energy_bonding = [
@@ -97,6 +103,26 @@ class common_functions:
             for i in range(len(self.energy_diffuse)):
                 self.energy_diffuse[i] -= self.energy_bonding[i]
 
+    def height_check_add(self, pos):
+        prev = self.highest_atom[(pos[0], pos[1])]
+        if prev < pos[2]:
+            self.highest_atom[(pos[0], pos[1])] = pos[2]
+            return (prev, pos[2])
+        else:
+            return (prev, prev)
+
+    def height_check_remove(self, pos):
+        prev = self.highest_atom[(pos[0], pos[1])]
+        if prev == pos[2]:
+            for i in range(pos[2], 0, -1):
+                if self.atom_set[(pos[0], pos[1], i)] == 1:
+                    self.highest_atom[(pos[0], pos[1])] = i
+                    return (i, prev)
+            self.highest_atom[(pos[0], pos[1])] = 0
+            return (0, prev)
+        else:
+            return (prev, prev)
+
     def deposition(self) -> Tuple:
         dep_pos = deposit_an_atom(
             self.atom_set,
@@ -137,6 +163,8 @@ class common_functions:
                     self.energy_bonding,
                     self.energy_diffuse,
                     self.diffuse_candidates,
+                    self.highest_atom,
+                    self.init_value.trans_val,
                 )
             self.total_event_time -= self.event_time_tot[target_rel]
             self.event[target_rel] = events
@@ -171,9 +199,15 @@ class common_functions:
                 + str(self.init_value.cut_number)
             )
         dep_pos = self.deposition()
+        if self.init_value.transformation is True:
+            self.height_change_add = self.height_check_add(dep_pos)
         # 蒸着によりイベントに変化が生じうる原子
         self.related_atoms = recalculate(
-            dep_pos, self.atom_set, self.diffuse_candidates
+            dep_pos,
+            self.atom_set,
+            self.diffuse_candidates,
+            self.height_change_add,
+            self.init_value.trans_val,
         )
         # それぞれのイベント等を格納
         self.update_events()
@@ -187,10 +221,18 @@ class common_functions:
         self.move_atom = self.event[self.target][self.event_number]
         self.event_progress()
         self.related_atoms = recalculate(
-            self.target, self.atom_set, self.diffuse_candidates
+            self.target,
+            self.atom_set,
+            self.diffuse_candidates,
+            self.height_change_rem,
+            self.init_value.trans_val,
         )
         self.related_atoms += recalculate(
-            self.move_atom, self.atom_set, self.diffuse_candidates
+            self.move_atom,
+            self.atom_set,
+            self.diffuse_candidates,
+            self.height_change_add,
+            self.init_value.trans_val,
         )
         self.update_events()
         #
@@ -285,6 +327,9 @@ class common_functions:
         self.atom_set[self.move_atom] = 1
         self.atom_exist.remove(self.target)
         self.atom_exist.append(self.move_atom)
+        if self.init_value.transformation is True:
+            self.height_change_rem = self.height_check_remove(self.target)
+            self.height_change_add = self.height_check_add(self.move_atom)
         if self.move_atom[2] in (0, 1):
             self.empty_firstBL -= 1
         if self.target[2] in (0, 1):

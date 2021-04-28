@@ -66,7 +66,7 @@ def image_formaiton(pos: Dict, lattice: Dict, length: int, maxz: int):
     )
     ax.add_patch(p)
     #
-    for z in range(maxz):
+    for z in range(maxz + 1):
         for x in range(length):
             for y in range(length):
                 if pos[(x, y, z)] == 0:
@@ -303,7 +303,7 @@ def rec_growth_mode(growth_mode, coverage, params):
 
 def height_check(pos_x, pos_y, pos, maxz):
     max_pos = -1
-    for z in range(maxz):
+    for z in range(maxz + 1):
         if pos[(pos_x, pos_y, z)] != 0:
             max_pos = z
     return max_pos

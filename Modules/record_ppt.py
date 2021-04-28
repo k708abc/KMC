@@ -71,7 +71,7 @@ def rec_ppt(
     left = Inches(0.1)
     top = Inches(2.5)
     rows = 3
-    cols = 7
+    cols = 8
     width = Inches(13)
     height = Inches(1)
 
@@ -82,15 +82,17 @@ def rec_ppt(
     table.cell(0, 2).text = "Cut event"
     table.cell(0, 3).text = "Rate limit"
     table.cell(0, 4).text = "Subtract a bond from diffusion"
-    table.cell(0, 5).text = "Method"
-    table.cell(0, 6).text = "time/event (ms)"
+    table.cell(0, 5).text = "Transformation"
+    table.cell(0, 6).text = "Method"
+    table.cell(0, 7).text = "time/event (ms)"
     # table.cell(1, 0).text = str(params.trans_check)
     table.cell(1, 0).text = str(params.keep_defect_check)
     table.cell(1, 1).text = str(params.first_put_check)
     table.cell(1, 2).text = str(params.cut_check)
     table.cell(1, 3).text = str(params.limit_check)
     table.cell(1, 4).text = str(params.subtract_check)
-    table.cell(1, 5).text = str(params.method)
+    table.cell(1, 5).text = str(params.transformation)
+    table.cell(1, 6).text = str(params.method)
 
     # table.cell(2, 0).text = str(params.transformation)
     table.cell(2, 0).text = str(params.num_defect)
@@ -98,10 +100,11 @@ def rec_ppt(
     table.cell(2, 2).text = str(params.cut_number)
     table.cell(2, 3).text = str(params.limit_val)
     table.cell(2, 4).text = str("")
-    table.cell(2, 6).text = str(time_per_dep)
+    table.cell(2, 5).text = str(params.trans_val)
+    table.cell(2, 7).text = str(time_per_dep)
     #
     left = Inches(0.1)
-    top = Inches(4.2)
+    top = Inches(4.8)
     rows = 3
     cols = 5
     width = Inches(13)
@@ -126,7 +129,7 @@ def rec_ppt(
     ##
 
     width = height = Inches(1)
-    top = Inches(5.3)
+    top = Inches(5.9)
     left = Inches(0.2)
     txBox = slide.shapes.add_textbox(left, top, width, height)
     tf = txBox.text_frame

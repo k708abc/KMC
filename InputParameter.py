@@ -17,7 +17,7 @@ class Params:
     kb_eV: float = 8.617e-5
 
     def __init__(self) -> None:
-        self.n_cell_init = 10
+        self.n_cell_init = 20
         self.z_unit_init = 5
         self.temperature = 550.0
         self.dep_rate = 0.1
@@ -29,15 +29,15 @@ class Params:
         self.binding_energies["Si_third"] = 0.2
         self.binding_energies["Si_else"] = 0.2
         self.diffusion_barriers: OrderedDict[str, float] = OrderedDict()
-        self.diffusion_barriers["Si_first"] = 1.2
-        self.diffusion_barriers["Si_second"] = 1.1
-        self.diffusion_barriers["Si_third"] = 1.4
-        self.diffusion_barriers["Si_else"] = 1.4
+        self.diffusion_barriers["Si_first"] = 1.06
+        self.diffusion_barriers["Si_second"] = 1.0
+        self.diffusion_barriers["Si_third"] = 1.3
+        self.diffusion_barriers["Si_else"] = 1.3
         #
         self.put_first = 10
         self.cut_number = 100000
         self.num_defect = 1
-        self.record_name = "Test2"
+        self.record_name = "Test3"
         self.img_per = 5.0
         self.comments = "Test"
         self.intra_distance = 0.204
@@ -47,8 +47,11 @@ class Params:
         self.cut_check = False
         self.limit_check = False
         self.limit_val = 1000
-        self.method = "Rejection_free"
         self.subtract_check = True
+        self.transformation = False
+        self.trans_val = 5
+        self.method = "Rejection_free"
+
         # for repetition
         self.repeat_combos = (
             "Bond E1: 2nd, E2: multi",
