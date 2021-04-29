@@ -3,13 +3,13 @@ from InputParameter import Params
 from Modules.heatmap import form_heatmap
 
 if __name__ == "__main__":
-    first_input = Params()
-    start_E1 = first_input.start_E1
-    end_E1 = first_input.end_E1
-    diff_E1 = first_input.diff_E1
-    start_E2 = first_input.start_E2
-    end_E2 = first_input.end_E2
-    diff_E2 = first_input.diff_E2
+    first_input = Params("kmc_input.yml")
+    start_E1 = first_input.repeat_E1_start
+    end_E1 = first_input.repeat_E1_end
+    diff_E1 = first_input.repeat_E1_diff
+    start_E2 = first_input.repeat_E2_start
+    end_E2 = first_input.repeat_E2_end
+    diff_E2 = first_input.repeat_E2_diff
     or_rec_name = first_input.record_name
     #
     if diff_E1 != 0:
@@ -47,13 +47,13 @@ if __name__ == "__main__":
             rf_class = rejection_free(1)
 
             if first_input.repeat_val == 0:
-                rf_class.init_value.binding_energies["Si_second"] = i
-                rf_class.init_value.binding_energies["Si_third"] = k
-                rf_class.init_value.binding_energies["Si_else"] = k
+                rf_class.init_value.energies_binding["Si_second"] = i
+                rf_class.init_value.energies_binding["Si_third"] = k
+                rf_class.init_value.energies_binding["Si_else"] = k
             elif first_input.repeat_val == 1:
-                rf_class.init_value.diffusion_barriers["Si_second"] = i
-                rf_class.init_value.diffusion_barriers["Si_third"] = k
-                rf_class.init_value.diffusion_barriers["Si_else"] = k
+                rf_class.init_value.energies_diffusion["Si_second"] = i
+                rf_class.init_value.energies_diffusion["Si_third"] = k
+                rf_class.init_value.energies_diffusion["Si_else"] = k
 
             rf_class.init_value.record_name = rec_name
             rf_class.start()

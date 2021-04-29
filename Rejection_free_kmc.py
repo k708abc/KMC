@@ -28,7 +28,8 @@ class rejection_free(common_functions):
             print("Finished: " + str(self.minute) + " min " + str(self.second) + " sec")
             print("Time/event: " + str(self.time_per_event) + " ms")
         if self.setting_value == 0:
-            input()
+            pass
+            # input()
 
 
 if __name__ == "__main__":

@@ -21,14 +21,14 @@ def function(first_input, val1, val2, i, total_cals):
     rf_class = rejection_free(2)
 
     if first_input.repeat_val == 0:
-        rf_class.init_value.binding_energies["Si_second"] = val1
-        rf_class.init_value.binding_energies["Si_third"] = val2
-        rf_class.init_value.binding_energies["Si_else"] = val2
+        rf_class.init_value.energies_binding["Si_second"] = val1
+        rf_class.init_value.energies_binding["Si_third"] = val2
+        rf_class.init_value.energies_binding["Si_else"] = val2
 
     elif first_input.repeat_val == 1:
-        rf_class.init_value.diffusion_barriers["Si_second"] = val1
-        rf_class.init_value.diffusion_barriers["Si_third"] = val2
-        rf_class.init_value.diffusion_barriers["Si_else"] = val2
+        rf_class.init_value.energies_diffusion["Si_second"] = val1
+        rf_class.init_value.energies_diffusion["Si_third"] = val2
+        rf_class.init_value.energies_diffusion["Si_else"] = val2
 
     rf_class.init_value.record_name = rec_name
     rf_class.start()
@@ -37,13 +37,13 @@ def function(first_input, val1, val2, i, total_cals):
 
 
 def run_multi():
-    first_input = Params()
-    start_E1 = first_input.start_E1
-    end_E1 = first_input.end_E1
-    diff_E1 = first_input.diff_E1
-    start_E2 = first_input.start_E2
-    end_E2 = first_input.end_E2
-    diff_E2 = first_input.diff_E2
+    first_input = Params("kmc_input.yml")
+    start_E1 = first_input.repeat_E1_start
+    end_E1 = first_input.repeat_E1_end
+    diff_E1 = first_input.repeat_E1_diff
+    start_E2 = first_input.repeat_E2_start
+    end_E2 = first_input.repeat_E2_end
+    diff_E2 = first_input.repeat_E2_diff
     para_val = first_input.max_workers_val
     if os.path.exists("Record") is False:
         os.mkdir("Record")

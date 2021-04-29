@@ -153,7 +153,6 @@ class common_functions:
             if self.atom_set[target_rel] == 0:
                 events = []
                 rates = []
-
             else:
                 events, rates = site_events(
                     self.atom_set,
@@ -203,6 +202,7 @@ class common_functions:
         self.related_atoms = recalculate(
             dep_pos,
             self.atom_set,
+            self.bonds,
             self.diffuse_candidates,
             self.height_change_add,
             self.init_value.trans_num,
@@ -221,6 +221,7 @@ class common_functions:
         self.related_atoms = recalculate(
             self.target,
             self.atom_set,
+            self.bonds,
             self.diffuse_candidates,
             self.height_change_rem,
             self.init_value.trans_num,
@@ -228,6 +229,7 @@ class common_functions:
         self.related_atoms += recalculate(
             self.move_atom,
             self.atom_set,
+            self.bonds,
             self.diffuse_candidates,
             self.height_change_add,
             self.init_value.trans_num,
@@ -331,6 +333,43 @@ class common_functions:
             self.n_events -= 1
             self.n_events_perdep -= 1
 
+    def isolation_check(self):
+        num_bonds = 0
+        # 移動後の原子が孤立していないか確認
+        for i in self.bonds[self.move_atom]:
+            if self.atom_set[i] == 1:
+                num_bonds += 1
+        if num_bonds == 0 and self.move_atom[2] != 0:
+            print("isolate")
+            print(self.target)
+            print(self.move_atom)
+            print(self.atom_exist)
+            input()
+        #
+
+        for i in self.bonds[self.target]:
+            if self.atom_set[i] == 1:
+                bonding = []
+                for k in self.bonds[i]:
+                    if self.atom_set[k] == 1:
+                        bonding.append(k)
+                if i[2] == 0:
+                    pass
+                elif len(bonding) == 0:
+                    print("isolate 2")
+                    print(i)
+                    print(self.target)
+                    print(self.move_atom)
+                    input()
+                elif (
+                    (len(bonding) == 1)
+                    and (bonding[0] == self.move_atom)
+                    and (num_bonds == 1)
+                    and (self.move_atom[2] != 0)
+                ):
+                    print("isolate 3")
+                    input()
+
     def event_progress(self):
         if (self.empty_firstBL == int(self.init_value.keep_defect_num)) and (
             self.init_value.keep_defect_check is True
@@ -341,6 +380,11 @@ class common_functions:
         self.atom_set[self.move_atom] = 1
         self.atom_exist.remove(self.target)
         self.atom_exist.append(self.move_atom)
+        #
+        #
+        # self.isolation_check()
+        #
+        #
         self.height_change_rem = self.height_check_remove(self.target)
         self.height_change_add = self.height_check_add(self.move_atom)
         if self.move_atom[2] in (0, 1):

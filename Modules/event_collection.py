@@ -53,10 +53,15 @@ def judge_isolation(
     events: List[Tuple[int, int, int]],
 ):
     remove = []
+
+    # print("check isolation")
+    # print("target" + str(target))
+    # print("bonds:target" + str(bonds[target]))
+    # print("events" + str(events))
     for check in events:
         bonds_sites = find_filled_sites(atom_set, bonds[check])
         num_bonds = len(bonds_sites)
-        if num_bonds >= 2 or check[2] == 0:
+        if (num_bonds >= 2) or (check[2] == 0):
             pass
         elif num_bonds == 0:
             remove.append(check)
@@ -65,6 +70,7 @@ def judge_isolation(
                 remove.append(check)
     for i in remove:
         events.remove(i)
+    # print("events2" + str(events))
 
     for check in nn_atom:
         # 隣接原子の周囲の原子数
@@ -92,7 +98,7 @@ def judge_isolation(
                     remove.append(post_move)
             for i in remove:
                 events.remove(i)
-
+    # print("events3" + str(events))
     return events
 
 
@@ -149,9 +155,6 @@ def site_events(
 ):
     event_list: List[Tuple] = []
     rate_list: List[float] = []
-    # states: List[int] = []
-    # trans = params.trans_check
-    # calculate total energy
     energy = total_energy(
         atom_set,
         bonds,

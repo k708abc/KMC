@@ -69,7 +69,7 @@ def rec_modes(xlist, ylist, modelist):
     with open(file_name, "a") as f:
         for x, y, mode in zip(xlist, ylist, modelist):
             print(str(x) + "\t" + str(y) + "\t" + mode, file=f)
-        
+
 
 def form_heatmap(growth_mode, rec_name, E1, E2, diff1, diff2):
     xlist = []
@@ -81,7 +81,5 @@ def form_heatmap(growth_mode, rec_name, E1, E2, diff1, diff2):
             xlist.append(E1[i])
             ylist.append(E2[k])
             modelist.append(growth_mode[i][k][3])
-    heatmap_image(diff1, diff2, xlist, ylist, modelist)
+    # heatmap_image(diff1, diff2, xlist, ylist, modelist)
     rec_modes(xlist, ylist, modelist)
-
-
