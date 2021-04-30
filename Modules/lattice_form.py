@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 from typing import List, Dict, Tuple
-from InputParameter import Params
-from Test_modules.lattice_form_check import check_lattice
+from Modules.InputParameter import Params
 import decimal
 from Modules.find_candidates import find_candidates
 
@@ -151,9 +150,3 @@ def lattice_form(input_params: Params):  # 　ここ長すぎるので、少な�
         diffuse_candidates,
         highest_atom,
     )
-
-
-if __name__ == "__main__":
-    init_values = Params()
-    lattice_formed = lattice_form(init_values)
-    check_lattice(init_values, lattice_formed[0], lattice_formed[1])

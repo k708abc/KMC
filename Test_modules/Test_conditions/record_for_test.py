@@ -1,15 +1,17 @@
 from typing import Dict
 
 
-def rec_for_test(atom_set: Dict, bonds: Dict, lattice: Dict, candidate: Dict) -> None:
-    file_data = open("atm_set_example.txt", "w")
+def rec_for_test(
+    atom_set: Dict, bonds: Dict, lattice: Dict, candidate: Dict, path
+) -> None:
+    file_data = open(path + "atm_set_example.txt", "w")
     for atom_index, state in atom_set.items():
         for component_index in atom_index:
             file_data.write(str(component_index) + " ")
         file_data.write("\t" + str(state) + "\n")
     file_data.close()
     #
-    file_data = open("bonds_example.txt", "w")
+    file_data = open(path + "bonds_example.txt", "w")
     for atom_index, bond_all in bonds.items():
         for component_index in atom_index:
             file_data.write(str(component_index) + " ")
@@ -21,7 +23,7 @@ def rec_for_test(atom_set: Dict, bonds: Dict, lattice: Dict, candidate: Dict) ->
         file_data.write("\n")
     file_data.close()
     #
-    file_data = open("lattice_example.txt", "w")
+    file_data = open(path + "lattice_example.txt", "w")
     for atom_index, position in lattice.items():
         for component in atom_index:
             file_data.write(str(component) + " ")
@@ -31,7 +33,7 @@ def rec_for_test(atom_set: Dict, bonds: Dict, lattice: Dict, candidate: Dict) ->
         file_data.write("\n")
     file_data.close()
     #
-    file_data = open("candidate_example.txt", "w")
+    file_data = open(path + "candidate_example.txt", "w")
     for atom_index, cands in candidate.items():
         for component in atom_index:
             file_data.write(str(component) + " ")

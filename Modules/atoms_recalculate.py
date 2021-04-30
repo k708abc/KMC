@@ -1,4 +1,3 @@
-# from InputParameter import Params
 from typing import List, Dict, Tuple
 
 
@@ -14,7 +13,10 @@ def recalculate(
         target
     ]
     for bond in bonds[target]:
-        candidate += [fill for fill in diffuse_candidates[bond] if atom_set[fill] == 1]
+        if atom_set[bond] == 0:
+            candidate += [
+                fill for fill in diffuse_candidates[bond] if atom_set[fill] == 1
+            ]
 
     if height_change is True:
         candidate += [

@@ -1,6 +1,6 @@
 from concurrent import futures
 from Rejection_free_kmc import rejection_free
-from InputParameter import Params
+from Modules.InputParameter import Params
 from Modules.heatmap import form_heatmap
 import os
 

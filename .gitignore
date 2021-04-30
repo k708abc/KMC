@@ -7,6 +7,10 @@ Keep/
 .vscode/
 KMC_Si_rec/
 Record/
+Test_modules/Deposition_check
+Test_modules/Event_check
+Test_modules/Lattice_check
+Test_modules/Possible_diffusion
 
 # C extensions
 *.so

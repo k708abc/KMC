@@ -1,4 +1,17 @@
 from typing import List, Dict, Tuple
+import sys
+import os
+
+sys.path.append("../../KMC/")
+from Modules.InputParameter import Params
+from Modules.event_collection import site_events
+from Test_conditions.read_examples import (
+    read_atom_set,
+    read_bonds,
+    read_lattice,
+    read_candidate,
+    lattice_size,
+)
 
 
 def existing_atoms(atom_set: Dict):
@@ -17,7 +30,7 @@ def rate_check(atom_set, bonds, rate_list, target):
         else:
             bond.append(0)
 
-    file_name = "Test_modules/Event_check/Check_rates.txt"
+    file_name = "Event_check/Check_rates.txt"
     file_data = open(file_name, "a")
     if len(rate_list) > 0:
         file_data.write(
@@ -62,7 +75,7 @@ def event_check_poscar(
         zp.append(lattice[cand][2] / maxz / 2.448)
         eve_i += 1
     #
-    file_name = "Test_modules/Event_check/Check_events_" + str(target) + ".vasp"
+    file_name = "Event_check/Check_events_" + str(target) + ".vasp"
     file_data = open(file_name, "w")
     file_data.write("check events" + "\n")
     file_data.write("10" + "\n")
@@ -77,3 +90,60 @@ def event_check_poscar(
     for i in range(len(xp)):
         file_data.write(str(xp[i]) + "\t" + str(yp[i]) + "\t" + str(zp[i]) + "\n")
     file_data.close()
+
+
+def highest_z(atom_set):
+    maxz = 1
+    for index, state in atom_set.items():
+        if (state != 0) and (index[2] + 1 > maxz):
+            maxz = index[2] + 1
+    return maxz
+
+
+def trans_formation(atom_set, unit_xy, trans_num):
+    heighest_atom: Dict = {
+        (i, k): 0 for i in range(0, unit_xy) for k in range(0, unit_xy)
+    }
+    for index, val in atom_set.items():
+        if index[2] >= trans_num and val == 1:
+            heighest_atom[(index[0], index[1])] += 1
+
+    return heighest_atom
+
+
+if __name__ == "__main__":
+    lattice = read_lattice()
+    atom_set = read_atom_set()
+    bonds = read_bonds()
+    candidates = read_candidate()
+    parameters = Params("../kmc_input.yml")
+    unit_length = lattice_size(lattice)
+    maxz = highest_z(atom_set)
+    defect = parameters.keep_defect_check
+    empty_first = parameters.keep_defect_num
+    trans_num = parameters.trans_num
+    highest_vals = trans_formation(atom_set, unit_length, trans_num)
+    #
+    energy_bonding = [0.1 for i in range(0, 30)]
+    energy_diffuse = [1 for i in range(0, 30)]
+    #
+    if os.path.exists("Event_check") is False:
+        os.mkdir("Event_check")
+
+    target_cand = existing_atoms(atom_set)
+    #
+    for target in target_cand:
+        event_list, rate_list = site_events(
+            atom_set,
+            bonds,
+            target,
+            parameters,
+            energy_bonding,
+            energy_diffuse,
+            candidates,
+            highest_vals,
+        )
+        #
+        event_check_poscar(atom_set, event_list, lattice, unit_length, maxz, target)
+        rate_check(atom_set, bonds, rate_list, target)
+    print("Poscars for event check are formed.")

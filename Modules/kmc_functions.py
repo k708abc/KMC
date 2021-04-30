@@ -1,6 +1,6 @@
-from InputParameter import Params
+from Modules.InputParameter import Params
 import time
-from typing import List, Dict, Tuple
+from typing import List, Tuple
 from Modules.lattice_form import lattice_form
 from Modules.deposition import deposit_an_atom
 from Modules.atoms_recalculate import recalculate
@@ -30,6 +30,7 @@ class common_functions:
         self.n_events_perdep = 0
         self.n_events_rec: List[int] = []
         self.num_atoms_rec: List[int] = []
+        self.record_middle = 0
         if os.path.exists("Record") is False:
             os.mkdir("Record")
 
@@ -52,8 +53,8 @@ class common_functions:
             self.highest_atom,
         ) = lattice_form(self.init_value)
         self.energy_summarize()
-        self.height_change_rem = (0, 0)
-        self.height_change_add = (0, 0)
+        self.height_change_rem = False
+        self.height_change_add = False
         if self.init_value.trans_check is False:
             self.init_value.trans_num = 100
 
@@ -175,13 +176,13 @@ class common_functions:
         tot_time = self.init_value.dep_rate_atoms_persec
         for times in self.event_time_tot.values():
             tot_time += times
-        if abs(tot_time - self.total_event_time) == 0:
-            pass
+        if abs(tot_time - self.total_event_time) < 0.0000001:
+            print("Time check OK")
         else:
+            print("Time check differt:")
             print("recal_time = " + str(tot_time))
             print("tot_time = " + str(self.total_event_time))
             print("diff = " + str(self.total_event_time - tot_time))
-            print("events = " + str(self.num_events))
             input()
 
     def rejection_free_deposition(self):
@@ -197,6 +198,8 @@ class common_functions:
                 + str(self.init_value.cut_num)
             )
         dep_pos = self.deposition()
+        self.move_atom = dep_pos
+        self.target = dep_pos
         self.height_change_add = self.height_check_add(dep_pos)
         # 蒸着によりイベントに変化が生じうる原子
         self.related_atoms = recalculate(
@@ -235,9 +238,6 @@ class common_functions:
             self.init_value.trans_num,
         )
         self.update_events()
-        #
-        #
-        # self.prev_eve = str(self.target) + ":" + str(self.move_atom)
 
     def rejection_free_loop(self):
         self.target, self.event_number = rejection_free_choise(
@@ -252,44 +252,35 @@ class common_functions:
         else:
             self.rejection_free_event()
 
-        # recoding the positions in the middle
         if self.n_atoms >= self.rec_num_atoms:
             self.rec_num_atoms += self.init_value.rec_num_atom_interval
             self.record_position()
-        # self.middle_check()
 
     def record_position(self) -> None:
         self.pos_rec.append(copy.copy(self.atom_set))
         self.time_rec.append(self.prog_time)
         self.cov_rec.append(self.n_atoms / self.init_value.atoms_in_BL)
 
-    def middle_check(self):
+    def middle_check(self, val):
         # 構造の途中確認用
-        if self.n_atoms == 30 and self.total_event_time < self.min_rates:
-            from Test_modules.record_for_test import rec_for_test
+        if self.n_atoms == val and self.record_middle == 0:
+            from Test_modules.Test_conditions.record_for_test import rec_for_test
             from Modules.recording import rec_poscar
 
+            path = "Test_modules/Test_conditions/"
             rec_for_test(
-                self.atom_set, self.bonds, self.lattice, self.diffuse_candidates
+                self.atom_set, self.bonds, self.lattice, self.diffuse_candidates, path
             )
             rec_poscar(
                 self.atom_set,
                 self.lattice,
                 self.init_value.cell_size_xy,
                 self.init_value.cell_size_z,
-                "middle_structure.vasp",
+                "Test_modules/Test_conditions/middle_structure.vasp",
             )
             print("middle formed")
-            input()
-
-        """
-        # 構造の途中確認用2
-        if self.n_atoms == 80 and self.record_middle == 0:
-            from record_for_test import rec_for_test
-
             self.record_middle = 1
-            rec_for_test(self.atom_set, self.bonds, self.lattice)
-        """
+            input()
 
     def trans_check(self):
         for i in range(0, self.init_value.cell_size_xy):
@@ -301,9 +292,10 @@ class common_functions:
                     if self.atom_set[(i, k, z)] == 1:
                         above_trans += 1
                 if above_trans == self.highest_atom[(i, k)]:
-                    print("OK")
+                    pass
                 else:
-                    print("different")
+                    print("Transformation counts different")
+        print("Trans check finished")
 
     def end_of_loop(self) -> None:
         self.record_position()
@@ -324,8 +316,6 @@ class common_functions:
             self.second,
             self.time_per_event,
         )
-        #
-        # self.trans_check()
 
     def defect_check(self):
         if (self.target[2] not in (0, 1)) and (self.move_atom[2] in (0, 1)):
@@ -335,17 +325,15 @@ class common_functions:
 
     def isolation_check(self):
         num_bonds = 0
-        # 移動後の原子が孤立していないか確認
         for i in self.bonds[self.move_atom]:
             if self.atom_set[i] == 1:
                 num_bonds += 1
         if num_bonds == 0 and self.move_atom[2] != 0:
-            print("isolate")
-            print(self.target)
-            print(self.move_atom)
-            print(self.atom_exist)
+            print("Isolate after move")
+            print("Before move: " + str(self.target))
+            print("After move: " + str(self.move_atom))
+            print("Existing atoms: " + str(self.atom_exist))
             input()
-        #
 
         for i in self.bonds[self.target]:
             if self.atom_set[i] == 1:
@@ -356,10 +344,10 @@ class common_functions:
                 if i[2] == 0:
                     pass
                 elif len(bonding) == 0:
-                    print("isolate 2")
-                    print(i)
-                    print(self.target)
-                    print(self.move_atom)
+                    print("Surrounding atom isolates")
+                    print("Position" + str(i))
+                    print("Atom befor move: " + str(self.target))
+                    print("Atom after move: " + str(self.move_atom))
                     input()
                 elif (
                     (len(bonding) == 1)
@@ -367,7 +355,10 @@ class common_functions:
                     and (num_bonds == 1)
                     and (self.move_atom[2] != 0)
                 ):
-                    print("isolate 3")
+                    print("Dimer isolates")
+                    print("Position" + str(i))
+                    print("Atom befor move: " + str(self.target))
+                    print("Atom after move: " + str(self.move_atom))
                     input()
 
     def event_progress(self):
@@ -381,13 +372,18 @@ class common_functions:
         self.atom_exist.remove(self.target)
         self.atom_exist.append(self.move_atom)
         #
-        #
-        # self.isolation_check()
-        #
-        #
         self.height_change_rem = self.height_check_remove(self.target)
         self.height_change_add = self.height_check_add(self.move_atom)
         if self.move_atom[2] in (0, 1):
             self.empty_firstBL -= 1
         if self.target[2] in (0, 1):
             self.empty_firstBL += 1
+
+    def num_atom_check(self):
+        num_atom = 0
+        for atom_pos, state in self.atom_set.items():
+            if state == 1:
+                num_atom += 1
+        if num_atom != self.n_atoms:
+            print("Current number of atoms: " + str(num_atom))
+            print("Counted number of atoms: " + str(self.n_atoms))

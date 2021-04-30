@@ -3,7 +3,7 @@ from typing import Dict, Tuple, List
 
 def read_atom_set() -> Dict[Tuple, int]:
     atom_set: Dict[Tuple, int] = {}
-    with open("./Test_modules/atm_set_example.txt", "r") as f:
+    with open("Test_conditions/atm_set_example.txt", "r") as f:
         for line in f:
             line_s = line.split("\t")
             indexes = line_s[0].split(" ")
@@ -14,7 +14,7 @@ def read_atom_set() -> Dict[Tuple, int]:
 
 def read_bonds() -> Dict[Tuple, List]:
     bonds: Dict[Tuple, List] = {}
-    with open("./Test_modules/bonds_example.txt", "r") as f:
+    with open("Test_conditions/bonds_example.txt", "r") as f:
         for line in f:
             line_s = line.split("\t")
             indexes = line_s[0].split(" ")
@@ -38,7 +38,7 @@ def read_bonds() -> Dict[Tuple, List]:
 
 def read_lattice() -> Dict:
     lattice: Dict[Tuple, List] = {}
-    with open("./Test_modules/lattice_example.txt", "r") as f:
+    with open("Test_conditions/lattice_example.txt", "r") as f:
         for line in f:
             line_s = line.split("\t")
             indexes = line_s[0].split(" ")
@@ -51,7 +51,7 @@ def read_lattice() -> Dict:
 
 def read_candidate() -> Dict:
     candidate: Dict[Tuple, List] = {}
-    with open("./Test_modules/candidate_example.txt", "r") as f:
+    with open("Test_conditions/candidate_example.txt", "r") as f:
         for line in f:
             line_s = line.split("\t")
             indexes = line_s[0].split(" ")
@@ -72,6 +72,14 @@ def read_candidate() -> Dict:
 
             candidate[index] = values
     return candidate
+
+
+def lattice_size(lattice):
+    unit_xy = 0
+    for index in lattice:
+        if index[0] > unit_xy:
+            unit_xy = index[0]
+    return unit_xy + 1
 
 
 if __name__ == "__main__":

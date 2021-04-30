@@ -1,6 +1,5 @@
 from typing import List, Dict, Tuple
 from Modules.cal_rates import rate
-from InputParameter import Params
 from decimal import Decimal
 
 
@@ -36,15 +35,7 @@ def find_empty_sites(atom_set, indexes):
     return [atom_nn for atom_nn in indexes if atom_set[atom_nn] == 0]
 
 
-def find_aboves(indexes):
-    return [(i[0], i[1], i[2] + 1) for i in indexes]
-
-
-def find_lower_sites(indexes):
-    return [(i[0], i[1], i[2] - 1) for i in indexes]
-
-
-# target が移動することで、結合している周囲原子が孤立するような移動は省く
+# Remove events which cause isolated atoms
 def judge_isolation(
     atom_set,
     bonds,
@@ -53,11 +44,7 @@ def judge_isolation(
     events: List[Tuple[int, int, int]],
 ):
     remove = []
-
-    # print("check isolation")
-    # print("target" + str(target))
-    # print("bonds:target" + str(bonds[target]))
-    # print("events" + str(events))
+    # for sites after move
     for check in events:
         bonds_sites = find_filled_sites(atom_set, bonds[check])
         num_bonds = len(bonds_sites)
@@ -70,44 +57,29 @@ def judge_isolation(
                 remove.append(check)
     for i in remove:
         events.remove(i)
-    # print("events2" + str(events))
-
+    # for neighbor atoms before move
     for check in nn_atom:
-        # 隣接原子の周囲の原子数
         nn_nn_atom = find_filled_sites(atom_set, bonds[check])
-        # 二個以上なら移動後も孤立しない
         if len(nn_nn_atom) >= 2:
             pass
-        # 隣接原子が基板上の時も孤立とは扱わない
         elif check[2] == 0:
             pass
-        # 移動対象としか結合がない
         else:
-            # 移動後の位置について
             remove = []
             for post_move in events:
-                # 移動後も結合し続ける
+                # keep bonding after move
                 if post_move in bonds[check]:
-                    # 移動後のサイトの隣接原子
+                    # nearest neighbor after move
                     post_nn_atom = find_filled_sites(atom_set, bonds[post_move])
-                    # 2原子で孤立している→remove
+                    # dimr isolation →remove
                     if len(post_nn_atom) <= 1:
                         remove.append(post_move)
-                # 結合がなくなる
+                # No bond after move
                 else:
                     remove.append(post_move)
             for i in remove:
                 events.remove(i)
-    # print("events3" + str(events))
     return events
-
-
-def judge_defect(target: Tuple[int, int, int], events):
-    return [
-        event
-        for event in events
-        if ((target[2] not in (0, 1)) and (event[2] in (0, 1)))
-    ]
 
 
 def possible_events(
@@ -125,9 +97,7 @@ def possible_events(
     nn_atom = find_filled_sites(atom_set, bonds[target])
     #
     eve_rate += [cand for cand in diffuse_candidates[target] if atom_set[cand] == 0]
-    #
     event_f = judge_isolation(atom_set, bonds, target, nn_atom, eve_rate)
-    #
     rates_f: List = [rearange_rate for _ in event_f]
     return event_f, rates_f
 
@@ -171,43 +141,3 @@ def site_events(
     if params.limit_check:
         rate_list = rate_limit(rate_list, Decimal(float(params.limit_num)))
     return event_list, rate_list
-
-
-def highest_z(atom_set):
-    maxz = 1
-    for index, state in atom_set.items():
-        if (state != 0) and (index[2] + 1 > maxz):
-            maxz = index[2] + 1
-    return maxz
-
-
-if __name__ == "__main__":
-    from Modules.Test_modules.event_collection_check import (
-        existing_atoms,
-        event_check_poscar,
-    )
-
-    lattice = read_lattice()
-    atom_set = read_atom_set()
-    bonds = read_bonds()
-    parameters = Params()
-    unit_length = parameters.n_cell_init
-    maxz = highest_z(atom_set)
-    defect = True
-    empty_first = 10
-    #
-    energy_bonding = [0.1 for i in range(0, 30)]
-    energy_diffuse = [1 for i in range(0, 30)]
-
-    dir_name = "Event_check/"
-    os.makedirs(dir_name, exist_ok=True)
-    target_cand = existing_atoms(atom_set)
-
-    for target in target_cand:
-        event_list, rate_list = site_events(
-            atom_set, bonds, target, parameters, energy_bonding, energy_diffuse
-        )
-        #
-
-        event_check_poscar(atom_set, event_list, lattice, unit_length, maxz, target)
-    print("Poscars for event check are formed.")
