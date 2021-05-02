@@ -76,13 +76,13 @@ class common_functions:
             self.init_value.energies_binding["Si_third"],  # in third
             (
                 self.init_value.energies_binding["Si_third"]
-                + self.init_value.energies_binding["Si_else"]
+                + self.init_value.energies_binding["Si_upper"]
             )
             / 2,  # inter third and fourth
         ]
         #
         self.energy_bonding += [
-            self.init_value.energies_binding["Si_else"]
+            self.init_value.energies_binding["Si_upper"]
             for i in range(self.init_value.cell_size_z * 6 - 2)
         ]
         #
@@ -97,7 +97,7 @@ class common_functions:
         ]
         #
         self.energy_diffuse += [
-            self.init_value.energies_diffusion["Si_else"]
+            self.init_value.energies_diffusion["Si_upper"]
             for i in range(self.init_value.cell_size_z * 6 - 2)
         ]
         if self.init_value.subtract_check is True:

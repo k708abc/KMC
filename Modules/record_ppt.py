@@ -118,14 +118,14 @@ def rec_ppt(
     table.cell(1, 1).text = str(params.energies_diffusion["Si_first"])
     table.cell(1, 2).text = str(params.energies_diffusion["Si_second"])
     table.cell(1, 3).text = str(params.energies_diffusion["Si_third"])
-    table.cell(1, 4).text = str(params.energies_diffusion["Si_else"])
+    table.cell(1, 4).text = str(params.energies_diffusion["Si_upper"])
 
     #
     table.cell(2, 0).text = "Binding (eV)"
     table.cell(2, 1).text = str(params.energies_binding["Si_first"])
     table.cell(2, 2).text = str(params.energies_binding["Si_second"])
     table.cell(2, 3).text = str(params.energies_binding["Si_third"])
-    table.cell(2, 4).text = str(params.energies_binding["Si_else"])
+    table.cell(2, 4).text = str(params.energies_binding["Si_upper"])
     ##
 
     width = height = Inches(1)
