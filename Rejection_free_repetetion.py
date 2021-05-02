@@ -50,11 +50,11 @@ if __name__ == "__main__":
             if first_input.repeat_val == 0:
                 rf_class.init_value.energies_binding["Si_second"] = i
                 rf_class.init_value.energies_binding["Si_third"] = k
-                rf_class.init_value.energies_binding["Si_else"] = k
+                rf_class.init_value.energies_binding["Si_upper"] = k
             elif first_input.repeat_val == 1:
                 rf_class.init_value.energies_diffusion["Si_second"] = i
                 rf_class.init_value.energies_diffusion["Si_third"] = k
-                rf_class.init_value.energies_diffusion["Si_else"] = k
+                rf_class.init_value.energies_diffusion["Si_upper"] = k
 
             rf_class.init_value.record_name = rec_name
             rf_class.start()

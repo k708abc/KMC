@@ -23,12 +23,12 @@ def function(first_input, val1, val2, i, total_cals):
     if first_input.repeat_val == 0:
         rf_class.init_value.energies_binding["Si_second"] = val1
         rf_class.init_value.energies_binding["Si_third"] = val2
-        rf_class.init_value.energies_binding["Si_else"] = val2
+        rf_class.init_value.energies_binding["Si_upper"] = val2
 
     elif first_input.repeat_val == 1:
         rf_class.init_value.energies_diffusion["Si_second"] = val1
         rf_class.init_value.energies_diffusion["Si_third"] = val2
-        rf_class.init_value.energies_diffusion["Si_else"] = val2
+        rf_class.init_value.energies_diffusion["Si_upper"] = val2
 
     rf_class.init_value.record_name = rec_name
     rf_class.start()
