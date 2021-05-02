@@ -26,7 +26,7 @@ class rejection_free(common_functions):
             self.rejection_free_loop()
             self.update_progress()
             #
-            # self.middle_check(30)
+            # self.middle_check(140)
             # self.isolation_check()
             # self.num_atom_check()
 
