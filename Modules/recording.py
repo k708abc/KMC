@@ -155,12 +155,6 @@ def image_formaiton(args):
     fig.savefig(img_name)
 
 
-def rec_img(img, name: str):
-    img.savefig(name)
-    img.clf()
-    plt.close()
-
-
 def hist_formation(args):
     pos, maxz, n_BL, img_name = args
     hist: List[float] = [0 for _ in range(math.floor(maxz / 2))]
