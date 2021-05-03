@@ -5,7 +5,8 @@ import math
 from Modules.record_ppt import rec_ppt
 import os
 import glob
-from memory_profiler import profile
+
+# from memory_profiler import profile
 
 unit_x: List[float] = [1, 0, 0]
 unit_y: List[float] = [0.5, 0.866, 0]
@@ -48,7 +49,8 @@ def color_determinate(z, maxz):
         color = [(color_num - 1) / maxz_BL, 0, 1 - (color_num - 1) / maxz_BL]
     return color
 
-@profile
+
+# @profile
 def image_formaiton(pos: Dict, lattice: Dict, length: int, maxz: int, img_name: str):
     unit_x: List[float] = [1, 0, 0]
     unit_y: List[float] = [0.5, 0.866, 0]
@@ -154,7 +156,7 @@ def image_formaiton(pos: Dict, lattice: Dict, length: int, maxz: int, img_name: 
 
     #
     fig.savefig(img_name)
-    #plt.close("all")
+    # plt.close("all")
     plt.clf()
     plt.close()
     # return fig
@@ -165,7 +167,8 @@ def rec_img(img, name: str):
     img.clf()
     plt.close()
 
-@profile
+
+# @profile
 def hist_formation(pos: Dict, maxz: int, n_BL: int, img_name):
     hist: List[float] = [0 for _ in range(math.floor(maxz / 2))]
     left: List[float] = [i + 1 for i in range(math.floor(maxz / 2))]
@@ -186,7 +189,7 @@ def hist_formation(pos: Dict, maxz: int, n_BL: int, img_name):
     fig.subplots_adjust(bottom=0.2)
     #
     fig.savefig(img_name)
-    #plt.close("all")
+    # plt.close("all")
     plt.clf()
     plt.close()
 
@@ -470,7 +473,7 @@ def record_data(
         # plt.close("all")
         #
         growth_mode.append(growth_check(pos_i, unit_length, maxz, params.atoms_in_BL))
-        input()
+        # input()
     #
     rec_growth_mode(growth_mode, coverage, params)
     #
