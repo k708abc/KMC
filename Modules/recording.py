@@ -464,7 +464,6 @@ def record_data(
         rec_poscar(pos_i, lattice, unit_length, maxz, poscar_name)
         #
         growth_mode.append(growth_check(pos_i, unit_length, maxz, params.atoms_in_BL))
-
     #
     p = Pool(1)
     p.map(rec_growth_mode, [[growth_mode, coverage, params]])
