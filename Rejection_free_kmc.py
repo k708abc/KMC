@@ -1,6 +1,5 @@
 from Modules.kmc_functions import common_functions
 
-
 class rejection_free(common_functions):
     def __init__(self, setting_value) -> None:
         common_functions.__init__(self)

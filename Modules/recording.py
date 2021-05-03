@@ -5,6 +5,7 @@ import math
 from Modules.record_ppt import rec_ppt
 import os
 import glob
+from memory_profiler import profile
 
 unit_x: List[float] = [1, 0, 0]
 unit_y: List[float] = [0.5, 0.866, 0]
@@ -47,8 +48,8 @@ def color_determinate(z, maxz):
         color = [(color_num - 1) / maxz_BL, 0, 1 - (color_num - 1) / maxz_BL]
     return color
 
-
-def image_formaiton(pos: Dict, lattice: Dict, length: int, maxz: int):
+@profile
+def image_formaiton(pos: Dict, lattice: Dict, length: int, maxz: int, img_name: str):
     unit_x: List[float] = [1, 0, 0]
     unit_y: List[float] = [0.5, 0.866, 0]
     fig = plt.figure()
@@ -151,14 +152,21 @@ def image_formaiton(pos: Dict, lattice: Dict, length: int, maxz: int):
     ax.axes.yaxis.set_visible(False)
     ax.set_aspect("equal")
 
-    return fig
+    #
+    fig.savefig(img_name)
+    #plt.close("all")
+    plt.clf()
+    plt.close()
+    # return fig
 
 
 def rec_img(img, name: str):
     img.savefig(name)
+    img.clf()
+    plt.close()
 
-
-def hist_formation(pos: Dict, maxz: int, n_BL: int):
+@profile
+def hist_formation(pos: Dict, maxz: int, n_BL: int, img_name):
     hist: List[float] = [0 for _ in range(math.floor(maxz / 2))]
     left: List[float] = [i + 1 for i in range(math.floor(maxz / 2))]
     for pos_index, atom_state in pos.items():
@@ -176,7 +184,13 @@ def hist_formation(pos: Dict, maxz: int, n_BL: int):
     plt.ylabel("layer number", fontsize=20)
     plt.tick_params(labelsize=18)
     fig.subplots_adjust(bottom=0.2)
-    return fig
+    #
+    fig.savefig(img_name)
+    #plt.close("all")
+    plt.clf()
+    plt.close()
+
+    # return fig
 
 
 def rec_poscar(pos: Dict, lattice: Dict, unit_length: int, maxz: int, rec_name: str):
@@ -267,6 +281,8 @@ def rec_events_per_dep(num_events: List[int], atoms: List[int], params):
     plt.rcParams["font.size"] = 18
     fig.subplots_adjust(bottom=0.2, left=0.2)
     plt.savefig(dir_name + "Num_events_per_dep.png")
+    plt.clf()
+    plt.close()
     #
     file_data = open(dir_name + "Num_events_per_dep.txt", "w")
     file_data.write("atoms" + "\t" + "events" + "\n")
@@ -299,6 +315,9 @@ def rec_growth_mode(growth_mode, coverage, params):
     plt.rcParams["font.size"] = 18
     fig.subplots_adjust(bottom=0.2, left=0.2)
     plt.savefig(dir_name + "Coverage_change.png")
+    # plt.close("all")
+    plt.clf()
+    plt.close()
 
 
 def height_check(pos_x, pos_y, pos, maxz):
@@ -433,22 +452,25 @@ def record_data(
             + "_ML"
         )
         #
-        img = image_formaiton(pos_i, lattice, unit_length, maxz)
         img_name = dir_name + rec_name + ".png"
-        rec_img(img, img_name)
+        image_formaiton(pos_i, lattice, unit_length, maxz, img_name)
+
+        # rec_img(img, img_name)
         img_names.append(img_name)
         #
-        hist = hist_formation(pos_i, maxz_unit, n_BL)
         hist_name = dir_name + rec_name + "_hist.png"
-        rec_img(hist, hist_name)
+        hist_formation(pos_i, maxz_unit, n_BL, hist_name)
+
+        # rec_img(hist, hist_name)
         hist_names.append(hist_name)
         #
         poscar_name = dir_name + rec_name + "_poscar.vasp"
         rec_poscar(pos_i, lattice, unit_length, maxz, poscar_name)
-        plt.clf()
-        plt.close("all")
+        # plt.clf()
+        # plt.close("all")
         #
         growth_mode.append(growth_check(pos_i, unit_length, maxz, params.atoms_in_BL))
+        input()
     #
     rec_growth_mode(growth_mode, coverage, params)
     #
@@ -468,6 +490,7 @@ def record_data(
         mode_val,
     )
     delete_images(dir_name)
+    # plt.clf()
     plt.close("all")
     return mode_val
     #
