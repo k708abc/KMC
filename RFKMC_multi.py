@@ -24,11 +24,17 @@ def function(first_input, val1, val2, i, total_cals):
         rf_class.init_value.energies_binding["Si_second"] = val1
         rf_class.init_value.energies_binding["Si_third"] = val2
         rf_class.init_value.energies_binding["Si_upper"] = val2
+        val0 = rf_class.init_value.energies_binding["Si_first"]
 
     elif first_input.repeat_val == 1:
         rf_class.init_value.energies_diffusion["Si_second"] = val1
         rf_class.init_value.energies_diffusion["Si_third"] = val2
         rf_class.init_value.energies_diffusion["Si_upper"] = val2
+        val0 = rf_class.init_value.energies_diffusion["Si_first"]
+    #
+    trans_energy_gain = (val2 - val0) + (val2 - val1)
+    if trans_energy_gain < 0:
+        rf_class.init_value.trans_check = False
 
     rf_class.init_value.record_name = rec_name
     rf_class.start()

@@ -37,25 +37,31 @@ if __name__ == "__main__":
     total_cal = len(E1_list) * len(E2_list)
     num_cal = 0
 
-    for i in E1_list:
+    for val1 in E1_list:
         growth_rec.append([])
-        for k in E2_list:
+        for val2 in E2_list:
             num_cal += 1
             print("starting:" + str(num_cal) + "/" + str(total_cal))
-            print("val 1 = " + str(i))
-            print("val 2 = " + str(k))
-            rec_name = or_rec_name + "_" + str(i) + "_" + str(k)
+            print("val 1 = " + str(val1))
+            print("val 2 = " + str(val2))
+            rec_name = or_rec_name + "_" + str(val1) + "_" + str(val2)
             rf_class = rejection_free(1)
 
             if first_input.repeat_val == 0:
-                rf_class.init_value.energies_binding["Si_second"] = i
-                rf_class.init_value.energies_binding["Si_third"] = k
-                rf_class.init_value.energies_binding["Si_upper"] = k
+                rf_class.init_value.energies_binding["Si_second"] = val1
+                rf_class.init_value.energies_binding["Si_third"] = val2
+                rf_class.init_value.energies_binding["Si_upper"] = val2
+                val0 = rf_class.init_value.energies_binding["Si_first"]
             elif first_input.repeat_val == 1:
-                rf_class.init_value.energies_diffusion["Si_second"] = i
-                rf_class.init_value.energies_diffusion["Si_third"] = k
-                rf_class.init_value.energies_diffusion["Si_upper"] = k
-
+                rf_class.init_value.energies_diffusion["Si_second"] = val1
+                rf_class.init_value.energies_diffusion["Si_third"] = val2
+                rf_class.init_value.energies_diffusion["Si_upper"] = val2
+                val0 = rf_class.init_value.energies_diffusion["Si_first"]
+            #
+            trans_energy_gain = (val2 - val0) + (val2 - val1)
+            if trans_energy_gain < 0:
+                rf_class.init_value.trans_check = False
+            #
             rf_class.init_value.record_name = rec_name
             rf_class.start()
             growth_rec[-1].append(rf_class.mode_val)
