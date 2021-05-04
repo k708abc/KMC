@@ -48,6 +48,7 @@ def color_determinate(z, maxz):
         color = [(color_num - 1) / maxz_BL, 0, 1 - (color_num - 1) / maxz_BL]
     return color
 
+
 def image_formaiton(args):
     pos, lattice, length, maxz, img_name = args
 
@@ -265,14 +266,16 @@ def rec_events_per_dep_fig(args):
     fig.subplots_adjust(bottom=0.2, left=0.2)
     plt.savefig(fig_name)
 
+
 def rec_events_per_dep(num_events: List[int], atoms: List[int], params):
     dir_name = "Record/" + params.record_name + "/"
     if os.path.exists(dir_name) is False:
         os.mkdir(dir_name)
     fig_name = dir_name + "Num_events_per_dep.png"
-    p = Pool(1)
-    p.map(rec_events_per_dep_fig, [[atoms, num_events, fig_name]])
-    p.close()
+    p_eve = Pool(1)
+    p_eve.map(rec_events_per_dep_fig, [[atoms, num_events, fig_name]])
+    p_eve.close()
+    # p.join()
     #
     file_data = open(dir_name + "Num_events_per_dep.txt", "w")
     file_data.write("atoms" + "\t" + "events" + "\n")
@@ -415,7 +418,7 @@ def record_data(
     minute: int,
     second: float,
     time_per_eve,
-): 
+):
 
     maxz = highest_z(pos_all)
     maxz_unit = params.cell_size_z * 6
@@ -443,15 +446,17 @@ def record_data(
         #
         img_name = dir_name + rec_name + ".png"
         #
-        p = Pool(1)
-        p.map(image_formaiton, [[pos_i, lattice, unit_length, maxz, img_name]])
-        p.close()
+        p_image = Pool(1)
+        p_image.map(image_formaiton, [[pos_i, lattice, unit_length, maxz, img_name]])
+        p_image.close()
+        # p.join()
         img_names.append(img_name)
         #
         hist_name = dir_name + rec_name + "_hist.png"
-        p = Pool(1)
-        p.map(hist_formation, [[pos_i, maxz_unit, n_BL, hist_name]])
-        p.close()
+        p_hist = Pool(1)
+        p_hist.map(hist_formation, [[pos_i, maxz_unit, n_BL, hist_name]])
+        p_hist.close()
+        # p.join()
         hist_names.append(hist_name)
         #
         poscar_name = dir_name + rec_name + "_poscar.vasp"
@@ -459,9 +464,10 @@ def record_data(
         #
         growth_mode.append(growth_check(pos_i, unit_length, maxz, params.atoms_in_BL))
     #
-    p = Pool(1)
-    p.map(rec_growth_mode, [[growth_mode, coverage, params]])
-    p.close()
+    p_mode = Pool(1)
+    p_mode.map(rec_growth_mode, [[growth_mode, coverage, params]])
+    p_mode.close()
+    # p.join()
     mode_val = mode_check(growth_mode, coverage)
     #
     rec_ppt(
@@ -479,4 +485,3 @@ def record_data(
     )
     delete_images(dir_name)
     return mode_val
-    #
