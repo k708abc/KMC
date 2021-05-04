@@ -6,6 +6,7 @@ from Modules.record_ppt import rec_ppt
 import os
 import glob
 from multiprocessing import Pool
+import yaml
 
 unit_x: List[float] = [1, 0, 0]
 unit_y: List[float] = [0.5, 0.866, 0]
@@ -409,6 +410,13 @@ def delete_images(dir_name, recursive=True):
             os.remove(p)
 
 
+def rec_yaml(init_value, dir_name):
+    file_name = dir_name + "kmc_input.yml"
+    yml_write: OrderedDict = {key: val for key, val in init_value.__dict__.items()}
+    with open(file_name, "w") as file:
+        yaml.dump(yml_write, file)
+
+
 def record_data(
     pos_all: List[dict],
     time: List,
@@ -418,6 +426,7 @@ def record_data(
     minute: int,
     second: float,
     time_per_eve,
+    init_value,
 ):
 
     maxz = highest_z(pos_all)
@@ -484,4 +493,6 @@ def record_data(
         mode_val,
     )
     delete_images(dir_name)
+    #
+    rec_yaml(init_value, dir_name)
     return mode_val

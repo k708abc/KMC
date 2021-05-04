@@ -315,6 +315,7 @@ class common_functions:
             self.minute,
             self.second,
             self.time_per_event,
+            self.init_value,
         )
 
     def defect_check(self):
