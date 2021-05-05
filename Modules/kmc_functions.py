@@ -362,6 +362,95 @@ class common_functions:
                     print("Atom after move: " + str(self.move_atom))
                     input()
 
+    def isolation_full_check(self):
+        checked_atom = []
+        clustering_atoms = []
+        checking_atom = []
+        num_cluster = 0
+
+        for pos in self.atom_exist:
+            if pos in checked_atom:
+                pass
+            else:
+                check = False
+                clustering_atoms = [pos]
+                next_check = [pos]
+
+                while check is False:
+                    check = True
+                    checking_atom = next_check.copy()
+                    next_check = []
+                    for atom in checking_atom:
+                        for bond in self.bonds[atom]:
+                            if (self.atom_set[bond] == 1) and (
+                                bond not in clustering_atoms
+                            ):
+                                next_check.append(bond)
+                                clustering_atoms.append(bond)
+                                check = False
+                        checked_atom.append(atom)
+                #
+                connected_Ag = 0
+                for atom in clustering_atoms:
+                    if atom[2] == 0:
+                        connected_Ag += 1
+                if connected_Ag == 0:
+                    print("floating")
+                    print("Atom befor move: " + str(self.target))
+                    print("Atom after move: " + str(self.move_atom))
+                    print("clustering:" + str(clustering_atoms))
+                    from Test_modules.Test_conditions.record_for_test import (
+                        rec_for_test,
+                    )
+                    from Modules.recording import rec_poscar
+                    import sys
+
+                    path = "Test_modules/middle_rec/"
+                    if os.path.exists(path) is False:
+                        os.mkdir(path)
+                    rec_for_test(
+                        self.atom_set,
+                        self.bonds,
+                        self.lattice,
+                        self.diffuse_candidates,
+                        path,
+                    )
+                    rec_poscar(
+                        self.atom_set,
+                        self.lattice,
+                        self.init_value.cell_size_xy,
+                        self.init_value.cell_size_z,
+                        "Test_modules/middle_rec/middle_structure_"
+                        + str(num_cluster)
+                        + ".vasp",
+                    )
+                    num_cluster += 1
+                    #
+                    #
+                    self.atom_set[self.move_atom] = 0
+                    self.atom_set[self.target] = 1
+                    #
+                    events, rates = site_events(
+                        self.atom_set,
+                        self.bonds,
+                        self.target,
+                        self.init_value,
+                        self.energy_bonding,
+                        self.energy_diffuse,
+                        self.diffuse_candidates,
+                        self.highest_atom,
+                    )
+                    print("possible diffusion: " + str(events))
+                    if self.move_atom in events:
+                        print("isolation function fail")
+                    else:
+                        print("isolation functionis OK")
+                    self.atom_set[self.target] = 0
+                    self.atom_set[self.move_atom] = 1
+
+        if num_cluster != 0:
+            sys.exit()
+
     def event_progress(self):
         if (self.empty_firstBL == int(self.init_value.keep_defect_num)) and (
             self.init_value.keep_defect_check is True

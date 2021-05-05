@@ -1,10 +1,10 @@
 cell_size_xy: 20
 cell_size_z: 5
-comments: Diffusion dependence
+comments: Isolation test
 cut_check: false
 cut_num: 100000
 dep_rate: 0.1
-dep_time: 20.0
+dep_time: 5
 distance_inter: 0.612
 distance_intra: 0.204
 energies_binding:
@@ -14,12 +14,12 @@ energies_binding:
   Si_upper: 0.2
 energies_diffusion:
   Si_first: 1.06
-  Si_second: 1.1
-  Si_third: 1.1
-  Si_upper: 1.1
+  Si_second: 1.16
+  Si_third: 1.2
+  Si_upper: 1.2
 first_put_check: true
 first_put_num: 5
-img_per: 5.0
+img_per: 10
 keep_defect_check: false
 keep_defect_num: 1
 limit_check: false
@@ -27,7 +27,7 @@ limit_num: 1000.0
 max_workers_val: 4
 method: Rejection_free
 prefactor: 1000000000000.0
-record_name: Diffuse_550K
+record_name: isolation_test
 repeat_E1_diff: 0.02
 repeat_E1_end: 1.2
 repeat_E1_start: 0.96

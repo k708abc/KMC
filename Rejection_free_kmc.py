@@ -29,6 +29,7 @@ class rejection_free(common_functions):
             # self.middle_check(140)
             # self.isolation_check()
             # self.num_atom_check()
+            # self.isolation_full_check()
 
         if self.setting_value in (1, 0):
             print("Recording")
