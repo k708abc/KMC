@@ -273,10 +273,13 @@ def rec_events_per_dep(num_events: List[int], atoms: List[int], params):
     if os.path.exists(dir_name) is False:
         os.mkdir(dir_name)
     fig_name = dir_name + "Num_events_per_dep.png"
-    p_eve = Pool(1)
-    p_eve.map(rec_events_per_dep_fig, [[atoms, num_events, fig_name]])
-    p_eve.close()
-    # p.join()
+    #
+    if params.start_from_middle is False:
+        p_eve = Pool(1)
+        p_eve.map(rec_events_per_dep_fig, [[atoms, num_events, fig_name]])
+        p_eve.close()
+    else:
+        rec_events_per_dep_fig([atoms, num_events, fig_name])
     #
     file_data = open(dir_name + "Num_events_per_dep.txt", "w")
     file_data.write("atoms" + "\t" + "events" + "\n")
@@ -428,7 +431,6 @@ def record_data(
     time_per_eve,
     init_value,
 ):
-
     maxz = highest_z(pos_all)
     maxz_unit = params.cell_size_z * 6
     unit_length = params.cell_size_xy
@@ -455,17 +457,29 @@ def record_data(
         #
         img_name = dir_name + rec_name + ".png"
         #
-        p_image = Pool(1)
-        p_image.map(image_formaiton, [[pos_i, lattice, unit_length, maxz, img_name]])
-        p_image.close()
+        if params.start_from_middle is False:
+            p_image = Pool(1)
+            p_image.map(
+                image_formaiton, [[pos_i, lattice, unit_length, maxz, img_name]]
+            )
+            p_image.close()
+        else:
+            image_formaiton([pos_i, lattice, unit_length, maxz, img_name])
+            plt.clf()
+            plt.close()
         # p.join()
         img_names.append(img_name)
         #
         hist_name = dir_name + rec_name + "_hist.png"
-        p_hist = Pool(1)
-        p_hist.map(hist_formation, [[pos_i, maxz_unit, n_BL, hist_name]])
-        p_hist.close()
-        # p.join()
+        if params.start_from_middle is False:
+            p_hist = Pool(1)
+            p_hist.map(hist_formation, [[pos_i, maxz_unit, n_BL, hist_name]])
+            p_hist.close()
+            # p.join()
+        else:
+            hist_formation([pos_i, maxz_unit, n_BL, hist_name])
+            plt.clf()
+            plt.close()
         hist_names.append(hist_name)
         #
         poscar_name = dir_name + rec_name + "_poscar.vasp"
@@ -473,10 +487,15 @@ def record_data(
         #
         growth_mode.append(growth_check(pos_i, unit_length, maxz, params.atoms_in_BL))
     #
-    p_mode = Pool(1)
-    p_mode.map(rec_growth_mode, [[growth_mode, coverage, params]])
-    p_mode.close()
-    # p.join()
+    if params.start_from_middle is False:
+        p_mode = Pool(1)
+        p_mode.map(rec_growth_mode, [[growth_mode, coverage, params]])
+        p_mode.close()
+        # p.join()
+    else:
+        rec_growth_mode([growth_mode, coverage, params])
+        plt.clf()
+        plt.close()
     mode_val = mode_check(growth_mode, coverage)
     #
     rec_ppt(

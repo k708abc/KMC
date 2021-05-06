@@ -12,16 +12,7 @@ class rejection_free(common_functions):
             2   RFKMC_multi.py
         """
 
-    def start(self):
-        if self.setting_value in (1, 0):
-            print("Calculation start")
-        self.start_setting()
-        self.start_rejection_free()
-        # Put first atom
-        self.put_first_atoms_rf()
-        if self.setting_value in (1, 0):
-            print("Loop start")
-
+    def loop(self):
         while int(self.prog_time) <= int(self.init_value.total_time):
             self.rejection_free_loop()
             self.update_progress()
@@ -29,7 +20,9 @@ class rejection_free(common_functions):
             # self.middle_check(140)
             # self.isolation_check()
             # self.num_atom_check()
+            # self.isolation_full_check()
 
+    def end(self):
         if self.setting_value in (1, 0):
             print("Recording")
         self.end_of_loop()
@@ -41,6 +34,22 @@ class rejection_free(common_functions):
         if self.setting_value == 0:
             pass
             # input()
+
+    def start(self):
+        if self.setting_value in (1, 0):
+            print("Calculation start")
+        self.start_setting()
+        self.start_rejection_free()
+        # Put first atom
+        self.put_first_atoms_rf()
+        if self.setting_value in (1, 0):
+            print("Loop start")
+        self.loop()
+        self.end()
+
+    def start_from_middle(self):
+        self.loop()
+        self.end()
 
 
 if __name__ == "__main__":
