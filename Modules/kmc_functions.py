@@ -11,6 +11,7 @@ import copy
 from Modules.recording import record_data
 from Modules.recording import rec_events_per_dep
 import os
+import pickle
 
 
 class common_functions:
@@ -239,6 +240,16 @@ class common_functions:
         )
         self.update_events()
 
+    def pickle_dump(self, obj, path):
+        with open(path, mode="wb") as f:
+            pickle.dump(obj, f)
+
+    def parameter_record(self):
+        dir_name = "Record/" + self.init_value.record_name + "/"
+        os.makedirs(dir_name, exist_ok=True)
+        file_name = dir_name + "selfdata.pickle"
+        self.pickle_dump(self, file_name)
+
     def rejection_free_loop(self):
         self.target, self.event_number = rejection_free_choise(
             self.total_event_time, self.event_time, self.event_time_tot
@@ -255,6 +266,7 @@ class common_functions:
         if self.n_atoms >= self.rec_num_atoms:
             self.rec_num_atoms += self.init_value.rec_num_atom_interval
             self.record_position()
+            self.parameter_record()
 
     def record_position(self) -> None:
         self.pos_rec.append(copy.copy(self.atom_set))
@@ -303,9 +315,7 @@ class common_functions:
         self.minute = math.floor(self.elapsed_time / 60)
         self.second = int(self.elapsed_time % 60)
         self.time_per_event = round(self.elapsed_time / self.n_events * 1000, 3)
-
         rec_events_per_dep(self.n_events_rec, self.num_atoms_rec, self.init_value)
-
         self.mode_val = record_data(
             self.pos_rec,
             self.time_rec,
