@@ -72,7 +72,11 @@ def run_multi():
     #
     energy_list = [(val1, val2) for val1 in E1_list for val2 in E2_list]
     growth_list = [[0 for k in E2_list] for i in E1_list]
-
+    #
+    print("RFKMC_multi started")
+    print("E1: " + str(E1_list))
+    print("E2: " + str(E2_list))
+    #
     with futures.ProcessPoolExecutor(max_workers=para_val) as executor:
         future_dict = {
             executor.submit(
