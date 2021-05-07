@@ -24,7 +24,7 @@ keep_defect_check: false
 keep_defect_num: 1
 limit_check: false
 limit_num: 1000.0
-max_workers_val: 2
+max_workers_val: 4
 method: Rejection_free
 prefactor: 1000000000000.0
 record_name: Test
