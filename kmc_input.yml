@@ -32,8 +32,8 @@ repeat_E1_diff: 0.02
 repeat_E1_end: 1.20
 repeat_E1_start: 0.96
 repeat_E2_diff: 0.02
-repeat_E2_end: 1.02
-repeat_E2_start: 1.0
+repeat_E2_end: 0.98
+repeat_E2_start: 0.96
 repeat_combos:
 - 'Bond E1: 2nd, E2: multi'
 - 'Diffuse E1: 2nd, E2: multi'
