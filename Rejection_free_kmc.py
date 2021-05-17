@@ -48,6 +48,7 @@ class rejection_free(common_functions):
         self.end()
 
     def start_from_middle(self):
+        print("current number of atoms" + str(self.n_atoms))
         self.loop()
         self.end()
 
