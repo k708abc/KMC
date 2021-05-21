@@ -1,4 +1,5 @@
 from Modules.kmc_functions import common_functions
+import datetime
 
 
 class rejection_free(common_functions):
@@ -49,6 +50,7 @@ class rejection_free(common_functions):
 
     def start_from_middle(self):
         print("current number of atoms" + str(self.n_atoms))
+        print("started time" + str(datetime.datetime.fromtimestamp(self.start_time)))
         self.loop()
         self.end()
 
