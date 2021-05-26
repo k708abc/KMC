@@ -1,6 +1,6 @@
 cell_size_xy: 20
 cell_size_z: 5
-comments: Diffusion dependence, trans 4 (at IMS)
+comments: Diffusion dependence, 550K, first = 1.04 eV (at IMS)
 cut_check: false
 cut_num: 100000
 dep_rate: 0.1
@@ -13,12 +13,12 @@ energies_binding:
   Si_third: 0.2
   Si_upper: 0.2
 energies_diffusion:
-  Si_first: 1.06
+  Si_first: 1.04
   Si_second: 1.2
   Si_third: 1.2
   Si_upper: 1.2
 first_put_check: true
-first_put_num: 10
+first_put_num: 5
 img_per: 5.0
 keep_defect_check: false
 keep_defect_num: 1
@@ -27,7 +27,7 @@ limit_num: 1000.0
 max_workers_val: 20
 method: Rejection_free
 prefactor: 1000000000000.0
-record_name: Diffuse_dependent_500K
+record_name: Diffuse_dependent_550K
 repeat_E1_diff: 0.02
 repeat_E1_end: 1.2
 repeat_E1_start: 0.96
@@ -40,6 +40,6 @@ repeat_combos:
 repeat_val: 1
 start_from_middle: false
 subtract_check: true
-temperature: 500.0
+temperature: 550.0
 trans_check: true
 trans_num: 4
