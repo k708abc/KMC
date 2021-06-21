@@ -1,9 +1,9 @@
 cell_size_xy: 20
 cell_size_z: 5
-comments: Diffusion dependence, trans 4 (at my roomPC)
+comments: Diffusion dependence, slow dep time, 500K (at NYCU)
 cut_check: false
 cut_num: 100000
-dep_rate: 0.1
+dep_rate: 0.01
 dep_time: 20.0
 distance_inter: 0.612
 distance_intra: 0.204
@@ -13,7 +13,7 @@ energies_binding:
   Si_third: 0.2
   Si_upper: 0.2
 energies_diffusion:
-  Si_first: 1.06
+  Si_first: 1.04
   Si_second: 1.2
   Si_third: 1.2
   Si_upper: 1.2
@@ -27,19 +27,19 @@ limit_num: 1000.0
 max_workers_val: 3
 method: Rejection_free
 prefactor: 1000000000000.0
-record_name: Diffuse_dependent_trans4
+record_name: Diffuse_dependent_lslow_dep_500K
 repeat_E1_diff: 0.02
 repeat_E1_end: 1.2
 repeat_E1_start: 0.96
 repeat_E2_diff: 0.02
-repeat_E2_end: 1.08
-repeat_E2_start: 1.02
+repeat_E2_end: 1.2
+repeat_E2_start: 0.96
 repeat_combos:
 - 'Bond E1: 2nd, E2: multi'
 - 'Diffuse E1: 2nd, E2: multi'
 repeat_val: 1
 start_from_middle: false
 subtract_check: true
-temperature: 550.0
+temperature: 500
 trans_check: true
 trans_num: 4
