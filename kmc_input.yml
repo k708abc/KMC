@@ -4,7 +4,7 @@ comments: Diffusion dependence, slow dep time, 500K (at NYCU)
 cut_check: false
 cut_num: 100000
 dep_rate: 0.01
-dep_time: 20.0
+dep_time: 200.0
 distance_inter: 0.612
 distance_intra: 0.204
 energies_binding:
