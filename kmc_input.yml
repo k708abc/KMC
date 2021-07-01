@@ -1,6 +1,6 @@
 cell_size_xy: 20
 cell_size_z: 5
-comments: Diffusion dependence, slow dep time, 500K (at NYCU)
+comments: Diffusion dependence, slow dep time, 500K, 1.06 (at NYCU)
 cut_check: false
 cut_num: 100000
 dep_rate: 0.01
@@ -13,7 +13,7 @@ energies_binding:
   Si_third: 0.2
   Si_upper: 0.2
 energies_diffusion:
-  Si_first: 1.04
+  Si_first: 1.06
   Si_second: 1.2
   Si_third: 1.2
   Si_upper: 1.2
@@ -27,7 +27,7 @@ limit_num: 1000.0
 max_workers_val: 3
 method: Rejection_free
 prefactor: 1000000000000.0
-record_name: Diffuse_dependent_lslow_dep_500K
+record_name: Diffuse_dependent_slow_dep_500K
 repeat_E1_diff: 0.02
 repeat_E1_end: 1.2
 repeat_E1_start: 0.96
