@@ -1,10 +1,10 @@
 cell_size_xy: 20
 cell_size_z: 5
-comments: Diffusion dependence, slow dep time, 500K, 1.06 (at NYCU)
+comments: Real parameter (1.06 eV, 630 K)
 cut_check: false
 cut_num: 100000
-dep_rate: 0.01
-dep_time: 200.0
+dep_rate: 0.1
+dep_time: 20.0
 distance_inter: 0.612
 distance_intra: 0.204
 energies_binding:
@@ -14,9 +14,9 @@ energies_binding:
   Si_upper: 0.2
 energies_diffusion:
   Si_first: 1.06
-  Si_second: 1.2
-  Si_third: 1.2
-  Si_upper: 1.2
+  Si_second: 0.41
+  Si_third: 1.10
+  Si_upper: 1.10
 first_put_check: true
 first_put_num: 10
 img_per: 5.0
@@ -27,7 +27,7 @@ limit_num: 1000.0
 max_workers_val: 3
 method: Rejection_free
 prefactor: 1000000000000.0
-record_name: Diffuse_dependent_slow_dep_500K
+record_name: Real_params_106_630K
 repeat_E1_diff: 0.02
 repeat_E1_end: 1.2
 repeat_E1_start: 0.96
@@ -40,6 +40,6 @@ repeat_combos:
 repeat_val: 1
 start_from_middle: false
 subtract_check: true
-temperature: 500
+temperature: 630
 trans_check: true
 trans_num: 4
