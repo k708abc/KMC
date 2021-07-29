@@ -15,6 +15,7 @@ from Test_conditions.read_examples import (
 )
 
 
+
 def existing_atoms(atom_set: Dict):
     candidate = []
     for index, state in atom_set.items():
@@ -27,13 +28,14 @@ def candidate_check_poscar(lattice, unit_length, maxz, target, candidates):
     #
 
     candidate_layers = []
-    min_layer = target[2] - 0
-    max_layer = target[2] + 0
-    lattice_layers = [[] for i in range(1)]
+    min_layer = target[2] - 3
+    max_layer = target[2] + 3
+    lattice_layers = [[] for i in range(7)]
 
-    for index in lattice:
+    for index, coodinate in lattice.items():
         if index[2] >= min_layer and index[2] <= max_layer:
-            lattice_layers[index[2] - min_layer].append(index)
+            if index not in candidates and index != target:
+                lattice_layers[index[2] - min_layer].append(coodinate)
     #
     candidate_layer_num = []
     for index in candidates:
@@ -44,10 +46,11 @@ def candidate_check_poscar(lattice, unit_length, maxz, target, candidates):
             candidate_layers.append([])
     min_val = min(candidate_layer_num)
     for index in candidates:
-        candidate_layers[index[2] - min_val].append(index)
+        if index != target:
+            candidate_layers[index[2] - min_val].append(lattice[index])
 
     #
-    file_name = "Event_check/Check_candidates_" + str(target) + ".vasp"
+    file_name = "Event_check_2/Check_candidates_" + str(target) + ".vasp"
     file_data = open(file_name, "w")
     file_data.write("check events" + "\n")
     file_data.write("10" + "\n")
@@ -56,10 +59,12 @@ def candidate_check_poscar(lattice, unit_length, maxz, target, candidates):
         str(unit_length / 2) + "\t" + str(unit_length / 2 * 1.732) + "\t" + "0" + "\n"
     )
     file_data.write("0" + "\t" + "0" + "\t" + str(maxz * 2.448) + "\n")
-    for i in lattice_layers:
-        file_data.write("Si" + "\t")
-    for i in candidate_layers:
-        file_data.write("Bi" + "\t")
+    atom_list = ["Li", "Be", "B", "C", "N", "O", "F", "Ne", "Na", "Mg", "Ar", "Si", "P", "S", "Cr", "Ar", "K", "Ka"]
+    atom_list2 = ["Ar", "Kr", "Bi", "Sn", "Fe", "Ni"]
+    for i in range(len(lattice_layers)):
+        file_data.write(atom_list[i] + "\t")
+    for i in range(len(candidate_layers)):
+        file_data.write(atom_list2[i] + "\t")
     file_data.write("Ti" + "\n")
     #
     for i in lattice_layers:
@@ -90,11 +95,11 @@ def candidate_check_poscar(lattice, unit_length, maxz, target, candidates):
                 + "\n"
             )
     file_data.write(
-        str(target[0] / unit_length)
+        str(lattice[target][0] / unit_length)
         + "\t"
-        + str(target[1] / unit_length)
+        + str(lattice[target][1] / unit_length)
         + "\t"
-        + str(target[2] / maxz / 2.448)
+        + str(lattice[target][2] / maxz / 2.448)
         + "\n"
     )
     file_data.close()
