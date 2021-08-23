@@ -1,7 +1,7 @@
 cell_size_xy: 20
 cell_size_z: 5
-comments: Low 2nd (1.06 eV, 600 K)
-cut_check: False
+comments: pre 13
+cut_check: false
 cut_num: 3000000
 dep_rate: 0.1
 dep_time: 20.0
@@ -15,8 +15,8 @@ energies_binding:
 energies_diffusion:
   Si_first: 1.06
   Si_second: 0.8
-  Si_third: 1.1
-  Si_upper: 1.1
+  Si_third: 1.14
+  Si_upper: 1.14
 first_put_check: true
 first_put_num: 10
 img_per: 5.0
@@ -26,8 +26,8 @@ limit_check: false
 limit_num: 1000.0
 max_workers_val: 3
 method: Rejection_free
-prefactor: 1000000000000.0
-record_name: low_2nd_106_600K
+prefactor: 10000000000000.0
+record_name: pre13_550K
 repeat_E1_diff: 0.02
 repeat_E1_end: 1.2
 repeat_E1_start: 0.96
@@ -38,8 +38,8 @@ repeat_combos:
 - 'Bond E1: 2nd, E2: multi'
 - 'Diffuse E1: 2nd, E2: multi'
 repeat_val: 1
-start_from_middle: False
+start_from_middle: false
 subtract_check: true
-temperature: 600.0
+temperature: 550.0
 trans_check: true
 trans_num: 4

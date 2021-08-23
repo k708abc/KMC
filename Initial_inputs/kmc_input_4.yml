@@ -1,6 +1,6 @@
 cell_size_xy: 20
 cell_size_z: 5
-comments: Diffusion dependence, 630K, first = 1.06 eV (at IMS)
+comments: pre13,600K (at IMS)
 cut_check: false
 cut_num: 100000
 dep_rate: 0.1
@@ -18,7 +18,7 @@ energies_diffusion:
   Si_third: 1.2
   Si_upper: 1.2
 first_put_check: true
-first_put_num: 5
+first_put_num: 10
 img_per: 5.0
 keep_defect_check: false
 keep_defect_num: 1
@@ -26,20 +26,20 @@ limit_check: false
 limit_num: 1000.0
 max_workers_val: 20
 method: Rejection_free
-prefactor: 1000000000000.0
-record_name: Diffuse_dependent_first06_630K
+prefactor: 10000000000000.0
+record_name: pre13_600K
 repeat_E1_diff: 0.02
 repeat_E1_end: 1.2
-repeat_E1_start: 1.0
+repeat_E1_start: 0.96
 repeat_E2_diff: 0.02
-repeat_E2_end: 1.12
-repeat_E2_start: 1.08
+repeat_E2_end: 1.10
+repeat_E2_start: 1.04
 repeat_combos:
 - 'Bond E1: 2nd, E2: multi'
 - 'Diffuse E1: 2nd, E2: multi'
 repeat_val: 1
 start_from_middle: false
 subtract_check: true
-temperature: 630.0
+temperature: 600.0
 trans_check: true
 trans_num: 4
