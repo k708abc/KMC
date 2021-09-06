@@ -1,6 +1,6 @@
 cell_size_xy: 20
 cell_size_z: 5
-comments: pre 13
+comments: 500K, normal
 cut_check: false
 cut_num: 3000000
 dep_rate: 0.1
@@ -26,8 +26,8 @@ limit_check: false
 limit_num: 1000.0
 max_workers_val: 3
 method: Rejection_free
-prefactor: 10000000000000.0
-record_name: pre13_550K
+prefactor: 1000000000000.0
+record_name: 500K
 repeat_E1_diff: 0.02
 repeat_E1_end: 1.2
 repeat_E1_start: 0.96
@@ -40,6 +40,6 @@ repeat_combos:
 repeat_val: 1
 start_from_middle: false
 subtract_check: true
-temperature: 550.0
+temperature: 500.0
 trans_check: true
 trans_num: 4
