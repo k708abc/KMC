@@ -92,7 +92,7 @@ def event_check_poscar(
         eve_i += 1
         others.append(cand)
     for index in lattice:
-        if index not in others:
+        if (index not in others) and (index[2] <= maxz * 2):
             x_emp.append(lattice[index][0] / unit_length)
             y_emp.append(lattice[index][1] / unit_length)
             z_emp.append((lattice[index][2] + 0.7) / maxz / 2.448)
