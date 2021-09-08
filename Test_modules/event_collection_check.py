@@ -58,22 +58,45 @@ def event_check_poscar(
     maxz: int,
     target: Tuple[int, int, int],
 ):
+
+    #
+    Si_unit = 0.384
+    Ag_unit = 0.289
+    unit_size = unit_length * Si_unit
+    Ag_num = round(unit_size / Ag_unit)
+    x_Ag = [i / Ag_num for i in range(Ag_num) for _ in range(Ag_num)]
+    y_Ag = [i / Ag_num for _ in range(Ag_num) for i in range(Ag_num)]
+    #
+
     xp: List[float] = [lattice[target][0] / unit_length]
     yp: List[float] = [lattice[target][1] / unit_length]
-    zp: List[float] = [lattice[target][2] / maxz / 2.448]
+    zp: List[float] = [(lattice[target][2] + 0.7) / maxz / 2.448]
+    x_emp: List[float] = []
+    y_emp: List[float] = []
+    z_emp: List[float] = []
     atom_i = 0
     eve_i = 0
+    emp_i = 0
+    others = []
     for index, atom_state in atom_set.items():
         if atom_state != 0:
             xp.append(lattice[index][0] / unit_length)
             yp.append(lattice[index][1] / unit_length)
-            zp.append(lattice[index][2] / maxz / 2.448)
+            zp.append((lattice[index][2] + 0.7) / maxz / 2.448)
             atom_i += 1
+            others.append(index)
     for cand in events:
         xp.append(lattice[cand][0] / unit_length)
         yp.append(lattice[cand][1] / unit_length)
-        zp.append(lattice[cand][2] / maxz / 2.448)
+        zp.append((lattice[cand][2] + 0.7) / maxz / 2.448)
         eve_i += 1
+        others.append(cand)
+    for index in lattice:
+        if index not in others:
+            x_emp.append(lattice[index][0] / unit_length)
+            y_emp.append(lattice[index][1] / unit_length)
+            z_emp.append((lattice[index][2] + 0.7) / maxz / 2.448)
+            emp_i += 1
     #
     file_name = "Event_check/Check_events_" + str(target) + ".vasp"
     file_data = open(file_name, "w")
@@ -84,11 +107,28 @@ def event_check_poscar(
         str(unit_length / 2) + "\t" + str(unit_length / 2 * 1.732) + "\t" + "0" + "\n"
     )
     file_data.write("0" + "\t" + "0" + "\t" + str(maxz * 2.448) + "\n")
-    file_data.write("Bi" + "\t" + "Si" + "\t" + "O" + "\n")
-    file_data.write(str(1) + "\t" + str(atom_i) + "\t" + str(eve_i) + "\n")
+    file_data.write("Ag" + "\t" + "Bi" + "\t" + "Si" + "\t" + "O" + "\t" + "Ge" + "\n")
+    file_data.write(
+        str(len(x_Ag))
+        + "\t"
+        + str(1)
+        + "\t"
+        + str(atom_i)
+        + "\t"
+        + str(eve_i)
+        + "\t"
+        + str(emp_i)
+        + "\n"
+    )
     file_data.write("direct" + "\n")
+    for i in range(len(x_Ag)):
+        file_data.write(str(x_Ag[i]) + "\t" + str(y_Ag[i]) + "\t" + str(0) + "\n")
     for i in range(len(xp)):
         file_data.write(str(xp[i]) + "\t" + str(yp[i]) + "\t" + str(zp[i]) + "\n")
+    for i in range(len(x_emp)):
+        file_data.write(
+            str(x_emp[i]) + "\t" + str(y_emp[i]) + "\t" + str(z_emp[i]) + "\n"
+        )
     file_data.close()
 
 
