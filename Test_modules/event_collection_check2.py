@@ -15,7 +15,6 @@ from Test_conditions.read_examples import (
 )
 
 
-
 def existing_atoms(atom_set: Dict):
     candidate = []
     for index, state in atom_set.items():
@@ -28,9 +27,10 @@ def candidate_check_poscar(lattice, unit_length, maxz, target, candidates):
     #
 
     candidate_layers = []
-    min_layer = target[2] - 3
-    max_layer = target[2] + 3
-    lattice_layers = [[] for i in range(7)]
+    num_range = 5
+    min_layer = target[2] - num_range
+    max_layer = target[2] + num_range
+    lattice_layers = [[] for i in range(2 * num_range + 1)]
 
     for index, coodinate in lattice.items():
         if index[2] >= min_layer and index[2] <= max_layer:
@@ -59,8 +59,27 @@ def candidate_check_poscar(lattice, unit_length, maxz, target, candidates):
         str(unit_length / 2) + "\t" + str(unit_length / 2 * 1.732) + "\t" + "0" + "\n"
     )
     file_data.write("0" + "\t" + "0" + "\t" + str(maxz * 2.448) + "\n")
-    atom_list = ["Li", "Be", "B", "C", "N", "O", "F", "Ne", "Na", "Mg", "Ar", "Si", "P", "S", "Cr", "Ar", "K", "Ka"]
-    atom_list2 = ["Ar", "Kr", "Bi", "Sn", "Fe", "Ni"]
+    atom_list = [
+        "Li",
+        "Be",
+        "B",
+        "C",
+        "N",
+        "O",
+        "F",
+        "Ne",
+        "Na",
+        "Mg",
+        "Ar",
+        "Si",
+        "P",
+        "S",
+        "Cr",
+        "Ar",
+        "K",
+        "Ka",
+    ]
+    atom_list2 = ["Te", "Kr", "Bi", "Sn", "Fe", "Ni"]
     for i in range(len(lattice_layers)):
         file_data.write(atom_list[i] + "\t")
     for i in range(len(candidate_layers)):
@@ -143,7 +162,7 @@ if __name__ == "__main__":
     if os.path.exists("Event_check_2") is False:
         os.mkdir("Event_check_2")
 
-    target = (5, 5, 5)
+    target = (5, 5, 7)
     #
     candidates = find_candidates(bonds, target, unit_length, maxz)
     candidate_check_poscar(lattice, unit_length, maxz, target, candidates)

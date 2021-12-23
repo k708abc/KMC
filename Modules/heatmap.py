@@ -7,7 +7,7 @@ from matplotlib import mathtext
 # import os
 
 
-def heatmap_image(dx, dy, xlist, ylist, modelist):
+def heatmap_image(dx, dy, xlist, ylist, modelist, RGB_set, patterns):
     mathtext.FontConstantsBase = mathtext.ComputerModernFontConstants
     plt.rcParams.update(
         {
@@ -18,25 +18,29 @@ def heatmap_image(dx, dy, xlist, ylist, modelist):
             "figure.figsize": (6, 6),
         }
     )
-
     fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111)
     for x, y, mode in zip(ylist, xlist, modelist):
         RGB = [0, 0, 0]
         if mode == "DW":
-            RGB = [1, 0, 0]
+            RGB = RGB_set[0]
+            pattern = patterns[0]
 
         elif mode == "BL":
-            RGB = [0.1, 0.1, 0.1]
+            RGB = RGB_set[1]
+            pattern = patterns[1]
 
         elif mode == "SK":
-            RGB = [0, 1, 0]
+            RGB = RGB_set[2]
+            pattern = patterns[2]
 
         elif mode == "FM":
-            RGB = [0, 0, 1]
+            RGB = RGB_set[3]
+            pattern = patterns[3]
 
         elif mode == "VW":
-            RGB = [1, 1, 0]
+            RGB = RGB_set[4]
+            pattern = patterns[4]
 
         r = patches.Rectangle(
             xy=(x - dx / 2, y - dy / 2),
@@ -44,6 +48,7 @@ def heatmap_image(dx, dy, xlist, ylist, modelist):
             height=dy,
             facecolor=RGB,
             edgecolor="white",
+            hatch=pattern,
             fill=True,
         )
 
@@ -83,3 +88,25 @@ def form_heatmap(growth_mode, rec_name, E1, E2, diff1, diff2):
             modelist.append(growth_mode[i][k][3])
     # heatmap_image(diff1, diff2, xlist, ylist, modelist)
     rec_modes(xlist, ylist, modelist)
+
+
+def form_examples(RGB_set, patterns):
+    for i in range(len(RGB_set)):
+        RGB = RGB_set[i]
+        pattern = patterns[i]
+        fig = plt.figure(figsize=(1, 1))
+        ax = fig.add_subplot(111)
+        r = patches.Rectangle(
+            xy=(0, 0),
+            width=1,
+            height=1,
+            facecolor=RGB,
+            edgecolor="white",
+            hatch=pattern,
+            fill=True,
+        )
+        ax.add_patch(r)
+        ax.axes.xaxis.set_visible(False)
+        ax.axes.yaxis.set_visible(False)
+        heat_name = "Record/example_" + str(i) + ".png"
+        plt.savefig(heat_name)
