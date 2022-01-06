@@ -2,7 +2,6 @@ from typing import List, Dict, Tuple
 from Modules.cal_rates import rate
 from decimal import Decimal
 
-
 def total_energy(
     atom_set: Dict,
     bonds: Dict,
@@ -12,19 +11,19 @@ def total_energy(
     highest_atom: Dict[Tuple, int],
 ):
     bond_energy = 0
-    # Ag-Si interaction
     if target[2] == 0:
         bond_energy += energy_bonding[0]
+    # highest_atom >= 1 if sites above the transformation layer is occupied
     if highest_atom[(target[0], target[1])] == 0:
         for bond in bonds[target]:
             if atom_set[bond] == 1:
                 bond_energy += energy_bonding[max(target[2], bond[2])]
         return energy_diffuse[target[2]] + bond_energy
-    elif highest_atom[(target[0], target[1])] >= 1:
+    elif highest_atom[(target[0], target[1])] >= 1: # transformtion is activated
         for bond in bonds[target]:
             if atom_set[bond] == 1:
-                bond_energy += energy_bonding[-1]
-        return energy_diffuse[-1] + bond_energy
+                bond_energy += energy_bonding[-1] #bulk bonding energy
+        return energy_diffuse[-1] + bond_energy #bulk diffusion energy
 
 
 def find_filled_sites(atom_set, indexes):
@@ -120,17 +119,6 @@ def possible_events(
     return event_f, rates_f
 
 
-def rate_limit(rates, upper_limit) -> List:
-    new_rate: List = []
-    for rate_val in rates:
-        if rate_val > upper_limit:
-            new_rate.append(upper_limit)
-        else:
-            new_rate.append(rate_val)
-
-    return new_rate
-
-
 def site_events(
     atom_set: Dict,
     bonds: Dict,
@@ -156,6 +144,4 @@ def site_events(
     event_list, rate_list = possible_events(
         atom_set, bonds, target, params, energy, diffuse_candidates
     )
-    if params.limit_check:
-        rate_list = rate_limit(rate_list, Decimal(float(params.limit_num)))
     return event_list, rate_list

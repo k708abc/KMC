@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 from typing import List, Dict, Tuple
 from Modules.InputParameter import Params
-import decimal
 from Modules.find_candidates import find_candidates
 
 
@@ -12,7 +11,6 @@ bonds: Dict[Tuple, List] = {}
 event: Dict[Tuple, List] = {}
 event_time: Dict[Tuple, List] = {}
 event_time_tot: Dict[Tuple, float] = {}
-event_state: Dict[Tuple, int] = {}
 diffuse_candidates: Dict[Tuple, List] = {}
 highest_atom: Dict[Tuple, int] = {}
 
@@ -25,14 +23,13 @@ def reset_dicts() -> None:
     event.clear()
     event_time.clear()
     event_time_tot.clear()
-    event_state.clear()
     diffuse_candidates.clear()
     highest_atom.clear()
 
 
 def form_first_3BL(
-    unit_length: int, z_intra: float, z_inter: float
-):  # << index が引数でないのは変でない？
+ z_intra: float, z_inter: float
+):
     for site in lattice_first:
         x, y = site
         lattice_first[site] = [
@@ -53,8 +50,6 @@ def lattice_full_layers(unit_height: int):
             lattice_first[site_xy][site[2] % 6][1],
             lattice_first[site_xy][site[2] % 6][2] + unit_height * (site[2] // 6),
         ]
-    """六方晶系でSiを記述したとき、3BL分のハニカム構造がz方向の単位構造になります。
-    この3BL分の単位格子の高さが2.448(nm)です。"""  # ←そういった細かい情報の結果ならば、コードにその旨書いておかないと絶対ダメ。
 
 
 def neighbor_points(
@@ -102,15 +97,14 @@ def neighbor_points(
     return neighbors
 
 
-def search_bond(unit_length: int, z_max: int):  # << index が引数でないのは変でない？
+def search_bond(unit_length: int, z_max: int):
     # Search for bonding atoms for all the atoms
     for bond_site in bonds:
         z_judge = bond_site[2] % 6
         bonds[bond_site] = neighbor_points(bond_site, z_judge, unit_length, z_max)
 
 
-def lattice_form(input_params: Params):  # 　ここ長すぎるので、少なくとも3つか四つの関数に分ける。
-    # 荒船だったら，多分5個ぐらい。
+def lattice_form(input_params: Params):
     unit_length: int = input_params.cell_size_xy
     z_units: int = input_params.cell_size_z
     z_intra: float = float(input_params.distance_intra)
@@ -129,11 +123,10 @@ def lattice_form(input_params: Params):  # 　ここ長すぎるので、少な�
                 bonds[(i, j, k)] = []
                 event[(i, j, k)] = []
                 event_time[(i, j, k)] = []
-                event_time_tot[(i, j, k)] = decimal.Decimal(0)
-                event_state[(i, j, k)] = []
+                event_time_tot[(i, j, k)] = 0
                 diffuse_candidates[(i, j, k)] = []
     #
-    form_first_3BL(unit_length, z_intra, z_inter)
+    form_first_3BL(z_intra, z_inter)
     lattice_full_layers(unit_height)
     search_bond(unit_length, z_max)
     for index in diffuse_candidates:
@@ -146,7 +139,6 @@ def lattice_form(input_params: Params):  # 　ここ長すぎるので、少な�
         event,
         event_time,
         event_time_tot,
-        event_state,
         diffuse_candidates,
         highest_atom,
     )

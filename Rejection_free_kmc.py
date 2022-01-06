@@ -34,7 +34,6 @@ class rejection_free(common_functions):
             print("Time/event: " + str(self.time_per_event) + " ms")
         if self.setting_value == 0:
             pass
-            # input()
 
     def start(self):
         if self.setting_value in (1, 0):

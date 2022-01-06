@@ -160,12 +160,12 @@ class Window(ttk.Frame, common_functions):
             self.diffuse.append(ttk.Entry(self.frame_energies, width=7))
             self.energies.append(ttk.Entry(self.frame_energies, width=7))
             self.rate_labels.append(ttk.Label(self.frame_energies, text="0"))
-        for (energy, (key, val)) in zip(
+        for (energy, (_, val)) in zip(
             self.energies, self.init_value.energies_binding.items()
         ):
             energy.insert(tk.END, val)
             energy.bind("<Return>", self.update_click)
-        for (diffuse, (key, val)) in zip(
+        for (diffuse, (_, val)) in zip(
             self.diffuse, self.init_value.energies_diffusion.items()
         ):
             diffuse.insert(tk.END, val)
@@ -368,7 +368,6 @@ class Window(ttk.Frame, common_functions):
         self.init_value.temperature = float(self.temperature.get())
         self.init_value.dep_rate = float(self.deposition_rate.get())
         self.init_value.dep_time = float(self.deposition_time.get())
-
         self.init_value.prefactor = float(self.prefactor.get())
         #
         for diffuse_entry, diffuse_key in zip(
@@ -459,6 +458,7 @@ class Window(ttk.Frame, common_functions):
 
         self.update()
 
+    """
     def cal_expected_events(self) -> None:
         dep_success = self.init_value.dep_rate_atoms_persec / self.normarize
         if dep_success > 1:
@@ -468,6 +468,7 @@ class Window(ttk.Frame, common_functions):
         self.progress_expectation["text"] = (
             "Expected: " + str(int(self.expected_num_events)) + " events"
         )
+    """
 
     def end_of_loop_tk(self):
         self.progress_label["text"] = (
@@ -483,12 +484,9 @@ class Window(ttk.Frame, common_functions):
         self.start_setting()
         self.progress_expectation["text"] = "---"
         self.start_rejection_free()
-        # 最初の二原子を配置
         self.put_first_atoms_rf()
         #
-        # self.prev_eve = "dep"
         while int(self.prog_time) <= int(self.init_value.total_time):
-
             self.rejection_free_loop()
             self.update_progress()
             self.update_progress_tk()
