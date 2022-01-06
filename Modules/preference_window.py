@@ -1,36 +1,32 @@
 #!/usr/bin/env python3
 
-from typing import List, Dict, Tuple
+from typing import List, Dict
 import tkinter as tk
 import tkinter.ttk as ttk
 import math
 from Modules.cal_rates import rate
 import time
 from Modules.kmc_functions import common_functions
-from Modules.Null_kmc_functions import null_functions
 import yaml
 from collections import OrderedDict
 
 
-class Window(ttk.Frame, common_functions, null_functions):
+class Window(ttk.Frame, common_functions):
     kb_eV = 8.617e-5
     padWE: Dict = dict(sticky=(tk.W, tk.E), padx=15, pady=2)
 
     def __init__(self, master) -> None:
         super().__init__(master, padding=2)
-        # self.init_value = Params()
         common_functions.__init__(self)
-        null_functions.__init__(self)
         self.create_frame_basics()
         self.create_frame_energies()
         self.create_frame_checks()
         self.create_frame_memos()
-        self.create_method()
         self.create_frame_buttons()
         self.create_frame_progress()
         self.create_frame_bar()
         self.cerate_frame_repeat()
-        master.title("KMC_Si")
+        master.title("KMC_GUI")
         self.update_values()
 
     def create_frame_basics(self) -> None:
@@ -56,12 +52,6 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.create_widgets_records()
         self.create_layout_records()
         self.frame_records.pack()
-
-    def create_method(self) -> None:
-        self.frame_method = ttk.Frame()
-        self.create_widgets_method()
-        self.create_layout_method()
-        self.frame_method.pack()
 
     def create_frame_buttons(self) -> None:
         self.frame_buttons = ttk.Frame()
@@ -89,11 +79,11 @@ class Window(ttk.Frame, common_functions, null_functions):
 
     def create_widgets_basics(self) -> None:
         # The first row
-        self.n_cell_label = ttk.Label(self.frame_basics, text="Number of cell")
+        self.n_cell_label = ttk.Label(self.frame_basics, text="Number of cells")
         self.n_cell = ttk.Entry(self.frame_basics, width=7)
         self.n_cell.insert(tk.END, self.init_value.cell_size_xy)
         self.n_cell.bind("<Return>", self.update_click)
-        self.z_unit_label = ttk.Label(self.frame_basics, text="Z unit")
+        self.z_unit_label = ttk.Label(self.frame_basics, text="Z units")
         self.z_unit = ttk.Entry(self.frame_basics, width=7)
         self.z_unit.insert(tk.END, self.init_value.cell_size_z)
         self.z_unit.bind("<Return>", self.update_click)
@@ -146,23 +136,20 @@ class Window(ttk.Frame, common_functions, null_functions):
         # the second row
         self.deposition_rate_label.grid(row=1, column=0, **self.padWE)
         self.deposition_rate.grid(row=1, column=1, **self.padWE)
-
         self.dep_rate_conv_label.grid(row=1, column=2, **self.padWE)
         self.dep_rate_conv_val.grid(row=1, column=3, **self.padWE)
-
         self.deposition_time_label.grid(row=1, column=4, **self.padWE)
         self.deposition_time.grid(row=1, column=5, **self.padWE)
-
         self.prefactor_label.grid(row=1, column=6, **self.padWE)
         self.prefactor.grid(row=1, column=7, **self.padWE)
 
     def create_widgets_energies(self) -> None:
         self.labels: List[str] = [
             "  ",
-            "Si_1st BL",
-            "Si_2nd BL",
-            "Si_3rd BL",
-            "Si_else",
+            "1st BL",
+            "2nd BL",
+            "3rd BL",
+            "Else",
         ]
 
         self.energylabels = []
@@ -209,16 +196,6 @@ class Window(ttk.Frame, common_functions, null_functions):
             ratelabel.grid(row=3, column=i + 1)
 
     def create_widgets_checks(self) -> None:
-        self.bln_defect = tk.BooleanVar()
-        self.bln_defect.set(self.init_value.keep_defect_check)
-        self.chk_defect_label = ttk.Label(
-            self.frame_checks, text="Keep defect in the first layer"
-        )
-        self.chk_defect = ttk.Checkbutton(self.frame_checks, variable=self.bln_defect)
-        self.num_defect = ttk.Entry(self.frame_checks, width=7)
-        self.num_defect.insert(tk.END, self.init_value.keep_defect_num)
-        self.chk_defect_label2 = ttk.Label(self.frame_checks, text="")
-        #
         self.bln_first = tk.BooleanVar()
         self.bln_first.set(self.init_value.first_put_check)
         self.chk_first_put_label = ttk.Label(
@@ -229,26 +206,6 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.put_first.insert(tk.END, self.init_value.first_put_num)
         self.chk_first_put_label2 = ttk.Label(self.frame_checks, text="")
         #
-        self.bln_cut = tk.BooleanVar()
-        self.bln_cut.set(self.init_value.cut_check)
-        self.chk_cut_label = ttk.Label(self.frame_checks, text="Cut event")
-        self.chk_cut = ttk.Checkbutton(self.frame_checks, variable=self.bln_cut)
-        self.cut = ttk.Entry(self.frame_checks, width=7)
-        self.cut.insert(tk.END, self.init_value.cut_num)
-        self.chk_cut_label2 = ttk.Label(self.frame_checks, text="")
-        #
-        self.bln_limit = tk.BooleanVar()
-        self.bln_limit.set(self.init_value.limit_check)
-        self.chk_limit_label = ttk.Label(self.frame_checks, text="Rate limit")
-        self.chk_limit = ttk.Checkbutton(self.frame_checks, variable=self.bln_limit)
-        self.limit = ttk.Entry(self.frame_checks, width=7)
-        self.limit.insert(tk.END, self.init_value.limit_num)
-        self.limit.bind("<Return>", self.update_click)
-        self.chk_limit_label2 = ttk.Label(
-            self.frame_checks,
-            text="(" + "{:.3g}".format(self.init_value.cal_energy) + " eV)",
-        )
-        #
         self.bln_trans = tk.BooleanVar()
         self.bln_trans.set(self.init_value.trans_check)
         self.chk_trans_label = ttk.Label(self.frame_checks, text="Transformation")
@@ -256,50 +213,21 @@ class Window(ttk.Frame, common_functions, null_functions):
 
         self.trans_val = ttk.Entry(self.frame_checks, width=7)
         self.trans_val.insert(tk.END, self.init_value.trans_num)
-        self.limit.bind("<Return>", self.update_click)
         self.chk_trans_label2 = ttk.Label(
             self.frame_checks,
             text="(layer number)",
         )
 
-        #
-        self.bln_subtract = tk.BooleanVar()
-        self.bln_subtract.set(self.init_value.subtract_check)
-        self.chk_subtract_label = ttk.Label(
-            self.frame_checks, text="Subtract a bond from diffusion"
-        )
-        self.chk_subtract = ttk.Checkbutton(
-            self.frame_checks, variable=self.bln_subtract
-        )
-
     def create_layout_checks(self) -> None:
-        self.chk_defect_label.grid(row=0, column=0, **self.padWE)
-        self.chk_defect.grid(row=0, column=1, **self.padWE)
-        self.num_defect.grid(row=0, column=2, **self.padWE)
-        self.chk_defect_label2.grid(row=0, column=3, **self.padWE)
-        #
         self.chk_first_put_label.grid(row=1, column=0, **self.padWE)
         self.chk_first_put.grid(row=1, column=1, **self.padWE)
         self.put_first.grid(row=1, column=2, **self.padWE)
         self.chk_first_put_label2.grid(row=1, column=3, **self.padWE)
         #
-        self.chk_cut_label.grid(row=2, column=0, **self.padWE)
-        self.chk_cut.grid(row=2, column=1, **self.padWE)
-        self.cut.grid(row=2, column=2, **self.padWE)
-        self.chk_cut_label2.grid(row=2, column=3, **self.padWE)
-        #
-        self.chk_limit_label.grid(row=3, column=0, **self.padWE)
-        self.chk_limit.grid(row=3, column=1, **self.padWE)
-        self.limit.grid(row=3, column=2, **self.padWE)
-        self.chk_limit_label2.grid(row=3, column=3, **self.padWE)
-        #
         self.chk_trans_label.grid(row=4, column=0, **self.padWE)
         self.chk_trans.grid(row=4, column=1, **self.padWE)
         self.trans_val.grid(row=4, column=2, **self.padWE)
         self.chk_trans_label2.grid(row=4, column=3, **self.padWE)
-        #
-        self.chk_subtract_label.grid(row=5, column=0, **self.padWE)
-        self.chk_subtract.grid(row=5, column=1, **self.padWE)
 
     def create_widgets_records(self) -> None:
         self.record_label = tk.Label(self.frame_records, text="Record")
@@ -319,22 +247,6 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.image_rec.grid(row=0, column=3, **self.padWE)
         self.comments_label.grid(row=1, column=0, **self.padWE)
         self.comments.grid(row=1, column=1, columnspan=3, **self.padWE)
-
-    def create_widgets_method(self) -> None:
-        self.var_method = tk.StringVar()
-        methods = ("Null_event", "Rejection_free")
-        self.method_label = tk.Label(self.frame_method, text="Method")
-        self.method_cb = ttk.Combobox(
-            self.frame_method,
-            textvariable=self.var_method,
-            values=methods,
-            state="readonly",
-        )
-        self.method_cb.current(methods.index(self.init_value.method))
-
-    def create_layout_method(self) -> None:
-        self.method_label.grid(row=0, column=0, **self.padWE)
-        self.method_cb.grid(row=0, column=1, **self.padWE)
 
     def create_widgets_buttons(self) -> None:
         self.start = tk.Button(
@@ -471,16 +383,8 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.init_value.record_name = str(self.record.get())
         self.init_value.img_per = float(self.image_rec.get())
         self.init_value.comments = str(self.comments.get())
-        self.init_value.keep_defect_check = self.bln_defect.get()
         self.init_value.first_put_check = self.bln_first.get()
-        self.init_value.cut_check = self.bln_cut.get()
-        self.init_value.limit_check = self.bln_limit.get()
-        self.init_value.subtract_check = self.bln_subtract.get()
-        self.init_value.keep_defect_num = int(self.num_defect.get())
         self.init_value.first_put_num = int(self.put_first.get())
-        self.init_value.cut_num = int(self.cut.get())
-        self.init_value.limit_num = float(self.limit.get())
-        self.init_value.method = self.var_method.get()
         self.init_value.trans_check = self.bln_trans.get()
         self.init_value.trans_num = int(self.trans_val.get())
         #
@@ -492,7 +396,6 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.init_value.repeat_E2_start = float(self.start_E2.get())
         self.init_value.repeat_E2_end = float(self.end_E2.get())
         self.init_value.repeat_E2_diff = float(self.diff_E2.get())
-
         self.record_middle = 0
         #
         kbt = self.init_value.temperature_eV
@@ -506,11 +409,6 @@ class Window(ttk.Frame, common_functions, null_functions):
         self.dep_rate_conv_val["text"] = "{:.3f}".format(
             self.init_value.dep_rate_atoms_persec
         )
-
-        self.chk_limit_label2["text"] = (
-            "(" + "{:.3g}".format(self.init_value.cal_energy) + " eV)"
-        )
-
         self.update()
 
     def rewrite_input(self):
@@ -577,44 +475,6 @@ class Window(ttk.Frame, common_functions, null_functions):
         )
         self.update()
 
-    def null_event_kmc(self) -> None:  # 長過ぎ！　Helper function 作ってコンパクトにしないと見通し悪い。
-        self.start_setting_tk()
-        self.start_setting()
-        self.start_null()
-        self.cal_expected_events()
-        self.put_first_atoms_null()
-
-        while int(self.prog_time) <= int(self.init_value.total_time):
-            self.null_event_loop()
-            # end of an event
-            self.update_progress()
-            self.update_progress_tk()
-        # end of the loop
-        self.end_of_loop()
-        self.end_of_loop_tk()
-
-    def num_atom_check(self):
-        num = 0
-        for state in self.atom_set.values():
-            if state != 0:
-                num += 1
-        num_ex = len(self.atom_exist)
-        #
-        if self.n_atoms != num:
-            print("Atom number not match")
-            print("Rec. num : " + str(self.n_atoms))
-            print("Real num : " + str(num))
-            print("Exist num :" + str(num_ex))
-            print(self.prev_eve)
-            input()
-        if num_ex != num:
-            print("Atom_number not much with existing list")
-            print("Rec. num : " + str(self.n_atoms))
-            print("Real num : " + str(num))
-            print("Exist num :" + str(num_ex))
-            print(self.prev_eve)
-            input()
-
     def rejection_free_kmc(self) -> None:
         #
         self.min_rates = 10000000000
@@ -628,22 +488,16 @@ class Window(ttk.Frame, common_functions, null_functions):
         #
         # self.prev_eve = "dep"
         while int(self.prog_time) <= int(self.init_value.total_time):
-            # self.num_atom_check()
-            # self.atom_count()
+
             self.rejection_free_loop()
             self.update_progress()
             self.update_progress_tk()
-
-            # self.middle_check()
         self.end_of_loop()
         self.end_of_loop_tk()
 
     def start_function(self) -> None:
         self.update_values()
-        if self.var_method.get() == "Null_event":
-            self.null_event_kmc()
-        elif self.var_method.get() == "Rejection_free":
-            self.rejection_free_kmc()
+        self.rejection_free_kmc()
 
 
 if __name__ == "__main__":

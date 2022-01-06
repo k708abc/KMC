@@ -1,8 +1,6 @@
 from Rejection_free_kmc import rejection_free
 from Modules.InputParameter import Params
 
-# from Modules.heatmap import form_heatmap
-
 if __name__ == "__main__":
     first_input = Params("kmc_input.yml")
     start_E1 = first_input.repeat_E1_start
@@ -66,5 +64,4 @@ if __name__ == "__main__":
             rf_class.start()
             growth_rec[-1].append(rf_class.mode_val)
 
-    # form_heatmap(growth_rec, rf_class.init_value.record_name, E1_list, E2_list, diff_E1, diff_E2)
     print("Repetition finished")

@@ -1,7 +1,5 @@
 ﻿#! /usr/bin/env python3
 
-from collections import OrderedDict
-import math
 import decimal
 from typing import Union
 import yaml
@@ -53,11 +51,3 @@ class Params:
     @property
     def rec_num_atom_interval(self) -> int:
         return int(round(self.total_atoms * self.img_per / 100))
-
-    @property
-    def cal_energy(self) -> float:
-        return (
-            -8.617e-5
-            * self.temperature
-            * math.log(float(self.limit_num) / float(self.prefactor))
-        )

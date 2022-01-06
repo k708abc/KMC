@@ -23,7 +23,6 @@ class common_functions:
         self.prog_time = 0
         self.n_atoms = 0
         self.n_events = 0
-        self.empty_firstBL = self.init_value.atoms_in_BL
         self.pos_rec: List[dict] = []
         self.time_rec: List[float] = []
         self.cov_rec: List[float] = []
@@ -129,8 +128,6 @@ class common_functions:
         dep_pos = deposit_an_atom(
             self.atom_set,
             self.bonds,
-            self.init_value,
-            self.empty_firstBL,
         )
         self.update_after_deposition(dep_pos)
         return dep_pos
