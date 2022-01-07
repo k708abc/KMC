@@ -16,6 +16,7 @@ def rec_ppt(
     time_per_dep,
     growth_mode,
     mode_val,
+    mode_val2,
 ):
     ppt_name = dir_name + "Layer_analysis_results.pptx"
     if os.path.exists(ppt_name):
@@ -256,7 +257,37 @@ def rec_ppt(
     table_mode.cell(1, 1).text = str(mode_val[0])
     table_mode.cell(1, 2).text = str(mode_val[1])
     table_mode.cell(1, 3).text = str(mode_val[2])
-
+    #
+    #
+    slide = prs.slides.add_slide(blank_slide_layout)
+    width = height = Inches(1)
+    top = Inches(-0.1)
+    left = Inches(0.5)
+    txBox = slide.shapes.add_textbox(left, top, width, height)
+    tf = txBox.text_frame
+    p = tf.add_paragraph()
+    p.text = "Growth mode2"
+    p.font.size = Pt(28)
+    #
+    width = Inches(13)
+    height = Inches(1)
+    left = Inches(0.1)
+    top = Inches(2.5)
+    rows = 2
+    cols = 4
+    table_mode2 = slide.shapes.add_table(rows, cols, left, top, width, height).table
+    table_mode2.cell(0, 0).text = "Mode"
+    table_mode2.cell(0, 1).text = "value 1"
+    table_mode2.cell(0, 2).text = "value 2"
+    table_mode2.cell(0, 3).text = "value 3"
+    table_mode2.cell(1, 0).text = str(mode_val2[3])
+    table_mode2.cell(1, 1).text = str(mode_val2[0])
+    table_mode2.cell(1, 2).text = str(mode_val2[1])
+    table_mode2.cell(1, 3).text = str(mode_val2[2])
+    #
+    #
+    #
+    #
     #
     slide = prs.slides.add_slide(blank_slide_layout)
     width = height = Inches(1)

@@ -41,7 +41,7 @@ def function(first_input, val1, val2, i, total_cals):
     rf_class.init_value.record_name = rec_name
     rf_class.start()
     print("(" + str(val1) + ", " + str(val2) + ")" + " finished")
-    return rf_class.mode_val
+    return rf_class.mode_val, rf_class.mode_val2
 
 
 def run_multi():
@@ -74,6 +74,7 @@ def run_multi():
     #
     energy_list = [(val1, val2) for val1 in E1_list for val2 in E2_list]
     growth_list = [[0 for k in E2_list] for i in E1_list]
+    growth_list2 = [[0 for k in E2_list] for i in E1_list]
     #
     print("RFKMC_multi started")
     print("E1: " + str(E1_list))
@@ -91,10 +92,14 @@ def run_multi():
             values = future_dict[future]
             val1_index = E1_list.index(values[0])
             val2_index = E2_list.index(values[1])
-            growth_list[val1_index][val2_index] = future.result()
+            growth_list[val1_index][val2_index] = future.result()[0]
+            growth_list2[val1_index][val2_index] = future.result()[1]
 
     form_heatmap(
-        growth_list, first_input.record_name, E1_list, E2_list, diff_E1, diff_E2
+        growth_list, first_input.record_name, E1_list, E2_list, diff_E1, diff_E2, 1
+    )
+    form_heatmap(
+        growth_list2, first_input.record_name, E1_list, E2_list, diff_E1, diff_E2, 2
     )
     print("complete")
 

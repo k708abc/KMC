@@ -7,6 +7,7 @@ import os
 import glob
 from multiprocessing import Pool
 import yaml
+from Modules.growth_mode_determination import growth_check, mode_check, mode_check2
 
 unit_x: List[float] = [1, 0, 0]
 unit_y: List[float] = [0.5, 0.866, 0]
@@ -19,6 +20,10 @@ def highest_z(pos_all: List[Dict]) -> int:
             if (state != 0) and (index[2] > maxz):
                 maxz = index[2]
     return maxz
+
+
+def dir_formarion(name: str):
+    os.makedirs(name, exist_ok=True)
 
 
 def triangle(xp, yp, z):
@@ -157,14 +162,20 @@ def image_formaiton(args):
     fig.savefig(img_name)
 
 
-def hist_formation(args):
-    pos, maxz, n_BL, img_name = args
+def occupation_of_layers(maxz, pos, n_BL):
     hist: List[float] = [0 for _ in range(math.floor(maxz / 2))]
-    left: List[float] = [i + 1 for i in range(math.floor(maxz / 2))]
     for pos_index, atom_state in pos.items():
         if atom_state == 1:
             hist[pos_index[2] // 2] += 1 / n_BL * 100
+    return hist
 
+
+def hist_formation(args):
+    pos, maxz, n_BL, img_name = args
+    left: List[float] = [i + 1 for i in range(math.floor(maxz / 2))]
+    #
+    hist = occupation_of_layers(maxz, pos, n_BL)
+    #
     fig = plt.figure()
     bx = fig.add_subplot(111)
     bx.barh(left, hist, label="Number")
@@ -253,10 +264,6 @@ def rec_poscar(pos: Dict, lattice: Dict, unit_length: int, maxz: int, rec_name: 
     file_data.close()
 
 
-def dir_formarion(name: str):
-    os.makedirs(name, exist_ok=True)
-
-
 def rec_events_per_dep_fig(args):
     atoms, num_events, fig_name = args
     fig = plt.figure()
@@ -315,97 +322,6 @@ def rec_growth_mode(args):
     plt.savefig(dir_name + "Coverage_change.png")
 
 
-def height_check(pos_x, pos_y, pos, maxz):
-    max_pos = -1
-    for z in range(maxz + 1):
-        if pos[(pos_x, pos_y, z)] != 0:
-            max_pos = z
-    return max_pos
-
-
-def growth_check(pos, unit_length, maxz, atom_BL):
-    num_ag = 0
-    num_1st = 0
-    num_2nd = 0
-    num_multi = 0
-    for i in range(unit_length):
-        for k in range(unit_length):
-            height = height_check(i, k, pos, maxz)
-            if height == -1:
-                num_ag += 2
-            elif height == 0:
-                num_ag += 1
-                num_1st += 1
-            elif height == 1:
-                num_1st += 2
-            elif height == 2:
-                num_1st += 1
-                num_2nd += 1
-            elif height == 3:
-                num_2nd += 2
-            elif height == 4:
-                num_2nd += 1
-                num_multi += 1
-            else:
-                num_multi += 2
-    return (
-        round(num_ag / atom_BL * 100, 2),
-        round(num_1st / atom_BL * 100, 2),
-        round(num_2nd / atom_BL * 100, 2),
-        round(num_multi / atom_BL * 100, 2),
-    )
-
-
-def num_check(coverage, num):
-    value = 100
-    number = 0
-    for i in range(len(coverage)):
-        cf_val = abs(num - coverage[i])
-        if value > cf_val:
-            number = i
-            value = cf_val
-    return number
-
-
-def growth_val(growth_mode, coverage, num_1ML, num_2ML):
-    First_at_1ML = growth_mode[num_1ML][1]
-    Second_at_2ML = growth_mode[num_2ML][2]
-    if growth_mode[num_2ML][3] == 100:
-        First_at_second = 0
-    else:
-        First_at_second = (
-            growth_mode[num_2ML][1] / (100 - growth_mode[num_2ML][3]) * 100
-        )
-    if First_at_1ML < 50:
-        if Second_at_2ML < 50:
-            mode = "VW"
-        else:
-            mode = "BL"
-    else:
-        if Second_at_2ML >= 50:
-            mode = "FM"
-        else:
-            if First_at_second >= 50:
-                mode = "SK"
-            else:
-                mode = "DW"
-
-    return [
-        First_at_1ML,
-        Second_at_2ML,
-        First_at_second,
-        mode,
-        coverage[num_1ML],
-        coverage[num_2ML],
-    ]
-
-
-def mode_check(growth_mode, coverage):
-    num_1ML = num_check(coverage, 1)
-    num_2ML = num_check(coverage, 2)
-    return growth_val(growth_mode, coverage, num_1ML, num_2ML)
-
-
 def delete_images(dir_name, recursive=True):
     dir_name = dir_name + "*.png"
     for p in glob.glob(dir_name, recursive=recursive):
@@ -442,6 +358,7 @@ def record_data(
 
     dir_formarion(dir_name)
     growth_mode = []
+    occupation = []
 
     for rec_num, (pos_i, time_i, cov_i) in enumerate(zip(pos_all, time, coverage)):
         rec_name = (
@@ -486,6 +403,7 @@ def record_data(
         rec_poscar(pos_i, lattice, unit_length, maxz, poscar_name)
         #
         growth_mode.append(growth_check(pos_i, unit_length, maxz, params.atoms_in_BL))
+        occupation.append(occupation_of_layers(maxz_unit, pos_i, n_BL))
     #
     if params.start_from_middle is False:
         p_mode = Pool(1)
@@ -497,6 +415,9 @@ def record_data(
         plt.clf()
         plt.close()
     mode_val = mode_check(growth_mode, coverage)
+    #
+    # 2021/1/7 Other judgement
+    mode_val2 = mode_check2(occupation, coverage)
     #
     rec_ppt(
         params,
@@ -510,8 +431,9 @@ def record_data(
         time_per_eve,
         growth_mode,
         mode_val,
+        mode_val2,
     )
     delete_images(dir_name)
     #
     rec_yaml(init_value, dir_name)
-    return mode_val
+    return mode_val, mode_val2
