@@ -12,7 +12,7 @@ energies_binding:
   upper: 0.2
 energies_diffusion:
   first: 1.2
-  second: 1.1
+  second: 1.2
   third: 1.14
   upper: 1.14
 first_put_check: true

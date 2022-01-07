@@ -2,10 +2,6 @@ import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 from matplotlib import mathtext
 
-# from pptx import Presentation
-# from pptx.util import Inches, Pt
-# import os
-
 
 def heatmap_image(dx, dy, xlist, ylist, modelist, RGB_set, patterns):
     mathtext.FontConstantsBase = mathtext.ComputerModernFontConstants

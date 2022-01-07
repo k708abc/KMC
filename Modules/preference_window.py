@@ -270,12 +270,6 @@ class Window(ttk.Frame, common_functions):
         self.progress_coverage = ttk.Label(self.frame_progress, text="Coverage")
         self.progress_atoms = ttk.Label(self.frame_progress, text="Num. atoms")
         self.progress_events = ttk.Label(self.frame_progress, text="Num. events")
-        self.progress_expectation = ttk.Label(
-            self.frame_progress, text="Expected Num. events"
-        )
-        self.expectd_cal_time = ttk.Label(
-            self.frame_progress, text="Expected cal. time"
-        )
 
     def create_layout_progress(self) -> None:
         self.progress_label.grid(row=0, column=0, padx=4, pady=10)
@@ -283,8 +277,6 @@ class Window(ttk.Frame, common_functions):
         self.progress_coverage.grid(row=0, column=2, padx=4, pady=10)
         self.progress_atoms.grid(row=0, column=3, padx=4, pady=10)
         self.progress_events.grid(row=0, column=4, padx=4, pady=10)
-        self.progress_expectation.grid(row=0, column=5, padx=4, pady=10)
-        self.expectd_cal_time.grid(row=0, column=6, padx=4, pady=10)
 
     def create_widgets_bar(self) -> None:
         self.pbval = 0
@@ -429,7 +421,7 @@ class Window(ttk.Frame, common_functions):
         self.progress_events["text"] = "0"
         self.pbval = 0
         self.progress_bar.configure(value=self.pbval)
-        self.setting_value = 0
+        self.setting_value = -1
         self.update()
 
     def update_progress_tk(self):
@@ -442,33 +434,8 @@ class Window(ttk.Frame, common_functions):
         )
         self.progress_atoms["text"] = str(self.n_atoms) + " atoms"
         self.progress_events["text"] = str(self.n_events) + " events"
-        if (self.n_events == 100) and (self.init_value.method == "Null event"):
-            time_middle = time.time() - self.start_time
-            expected_time = int(self.expected_num_events) / 100 * time_middle
-            self.expectd_cal_time["text"] = (
-                str(math.floor(expected_time / 3600))
-                + " h"
-                + str(int((expected_time % 3600) / 60))
-                + " min"
-                + str(int(expected_time % 60))
-                + " sec"
-            )
-        elif self.n_events == 100:
-            self.expectd_cal_time["text"] = "---"
 
         self.update()
-
-    """
-    def cal_expected_events(self) -> None:
-        dep_success = self.init_value.dep_rate_atoms_persec / self.normarize
-        if dep_success > 1:
-            dep_success = 1
-        num_atom_total = self.init_value.total_atoms + 1
-        self.expected_num_events = 1 / dep_success * num_atom_total * num_atom_total / 2
-        self.progress_expectation["text"] = (
-            "Expected: " + str(int(self.expected_num_events)) + " events"
-        )
-    """
 
     def end_of_loop_tk(self):
         self.progress_label["text"] = (
@@ -482,7 +449,6 @@ class Window(ttk.Frame, common_functions):
         #
         self.start_setting_tk()
         self.start_setting()
-        self.progress_expectation["text"] = "---"
         self.start_rejection_free()
         self.put_first_atoms_rf()
         #
@@ -490,6 +456,8 @@ class Window(ttk.Frame, common_functions):
             self.rejection_free_loop()
             self.update_progress()
             self.update_progress_tk()
+        self.progress_label["text"] = "Recording "
+        self.update()
         self.end_of_loop()
         self.end_of_loop_tk()
 

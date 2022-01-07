@@ -40,7 +40,7 @@ class common_functions:
 
     def start_rejection_free(self):
         self.total_event_time = self.init_value.dep_rate_atoms_persec
-        #self.atom_exist: List[Tuple[int, int, int]] = []
+        # self.atom_exist: List[Tuple[int, int, int]] = []
         (
             self.lattice,
             self.bonds,
@@ -145,7 +145,6 @@ class common_functions:
         self.n_events += 1
         self.prog_time += 1 / (self.init_value.dep_rate_atoms_persec)
 
-
     def update_events(self):
         self.related_atoms = list(set(self.related_atoms))
         for target_rel in self.related_atoms:
@@ -170,14 +169,12 @@ class common_functions:
             self.total_event_time += self.event_time_tot[target_rel]
         self.related_atoms = []
 
-
-
     def rejection_free_deposition(self):
         dep_pos = self.deposition()
         self.move_atom = dep_pos
         self.target = dep_pos
         self.height_change_add = self.height_check_add(dep_pos)
-        # 
+        #
         self.related_atoms = recalculate(
             dep_pos,
             self.atom_set,
@@ -185,7 +182,7 @@ class common_functions:
             self.diffuse_candidates,
             self.height_change_add,
             self.init_value.trans_num,
-        ) # Picking up atoms that possibly affectsd by the deposition
+        )  # Picking up atoms that possibly affectsd by the deposition
         #
         self.update_events()
 
@@ -215,16 +212,14 @@ class common_functions:
         )
         self.update_events()
 
-
     def event_progress(self):
         self.atom_set[self.target] = 0
         self.atom_set[self.move_atom] = 1
-        #self.atom_exist.remove(self.target)
-        #self.atom_exist.append(self.move_atom)
+        # self.atom_exist.remove(self.target)
+        # self.atom_exist.append(self.move_atom)
         #
         self.height_change_rem = self.height_check_remove(self.target)
         self.height_change_add = self.height_check_add(self.move_atom)
-
 
     def pickle_dump(self, obj, path):
         with open(path, mode="wb") as f:
@@ -248,7 +243,8 @@ class common_functions:
         if self.n_atoms >= self.rec_num_atoms:
             self.rec_num_atoms += self.init_value.rec_num_atom_interval
             self.record_position()
-            self.parameter_record()
+            if self.setting_value != -1:
+                self.parameter_record()
 
     def record_position(self) -> None:
         self.pos_rec.append(copy.copy(self.atom_set))
@@ -273,7 +269,6 @@ class common_functions:
             self.time_per_event,
             self.init_value,
         )
-
 
     """
     def middle_check(self, val):
