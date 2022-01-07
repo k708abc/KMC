@@ -7,7 +7,16 @@ import os
 import glob
 from multiprocessing import Pool
 import yaml
-from Modules.growth_mode_determination import growth_check, mode_check, mode_check2
+from Modules.growth_mode_determination import (
+    growth_check,
+    mode_check_prev,
+    mode_check_1,
+    mode_check_2,
+    mode_check_3,
+    mode_check_4,
+    mode_check_5,
+    mode_check_6,
+)
 
 unit_x: List[float] = [1, 0, 0]
 unit_y: List[float] = [0.5, 0.866, 0]
@@ -414,10 +423,23 @@ def record_data(
         rec_growth_mode([growth_mode, coverage, params])
         plt.clf()
         plt.close()
-    mode_val = mode_check(growth_mode, coverage)
+    mode_val = mode_check_prev(growth_mode, coverage)
     #
     # 2021/1/7 Other judgement
-    mode_val2 = mode_check2(occupation, coverage)
+    mode_val_1 = mode_check_1(growth_mode, coverage)
+    mode_val_2 = mode_check_2(growth_mode, coverage)
+    mode_val_3 = mode_check_3(occupation, coverage)
+    mode_val_4 = mode_check_4(occupation, coverage)
+    mode_val_5 = mode_check_5(occupation, coverage)
+    mode_val_6 = mode_check_6(occupation, coverage)
+    other_mode_vals = [
+        mode_val_1,
+        mode_val_2,
+        mode_val_3,
+        mode_val_4,
+        mode_val_5,
+        mode_val_6,
+    ]
     #
     rec_ppt(
         params,
@@ -431,9 +453,9 @@ def record_data(
         time_per_eve,
         growth_mode,
         mode_val,
-        mode_val2,
+        other_mode_vals,
     )
     delete_images(dir_name)
     #
     rec_yaml(init_value, dir_name)
-    return mode_val, mode_val2
+    return mode_val, other_mode_vals

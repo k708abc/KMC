@@ -41,7 +41,7 @@ def function(first_input, val1, val2, i, total_cals):
     rf_class.init_value.record_name = rec_name
     rf_class.start()
     print("(" + str(val1) + ", " + str(val2) + ")" + " finished")
-    return rf_class.mode_val, rf_class.mode_val2
+    return rf_class.mode_val, rf_class.other_modes
 
 
 def run_multi():
@@ -74,7 +74,12 @@ def run_multi():
     #
     energy_list = [(val1, val2) for val1 in E1_list for val2 in E2_list]
     growth_list = [[0 for k in E2_list] for i in E1_list]
-    growth_list2 = [[0 for k in E2_list] for i in E1_list]
+    growth_list_1 = [[0 for k in E2_list] for i in E1_list]
+    growth_list_2 = [[0 for k in E2_list] for i in E1_list]
+    growth_list_3 = [[0 for k in E2_list] for i in E1_list]
+    growth_list_4 = [[0 for k in E2_list] for i in E1_list]
+    growth_list_5 = [[0 for k in E2_list] for i in E1_list]
+    growth_list_6 = [[0 for k in E2_list] for i in E1_list]
     #
     print("RFKMC_multi started")
     print("E1: " + str(E1_list))
@@ -93,13 +98,33 @@ def run_multi():
             val1_index = E1_list.index(values[0])
             val2_index = E2_list.index(values[1])
             growth_list[val1_index][val2_index] = future.result()[0]
-            growth_list2[val1_index][val2_index] = future.result()[1]
+            growth_list_1[val1_index][val2_index] = future.result()[1][0]
+            growth_list_2[val1_index][val2_index] = future.result()[1][1]
+            growth_list_3[val1_index][val2_index] = future.result()[1][2]
+            growth_list_4[val1_index][val2_index] = future.result()[1][3]
+            growth_list_5[val1_index][val2_index] = future.result()[1][4]
+            growth_list_6[val1_index][val2_index] = future.result()[1][5]
 
     form_heatmap(
-        growth_list, first_input.record_name, E1_list, E2_list, diff_E1, diff_E2, 1
+        growth_list, first_input.record_name, E1_list, E2_list, diff_E1, diff_E2, 0
     )
     form_heatmap(
-        growth_list2, first_input.record_name, E1_list, E2_list, diff_E1, diff_E2, 2
+        growth_list_1, first_input.record_name, E1_list, E2_list, diff_E1, diff_E2, 1
+    )
+    form_heatmap(
+        growth_list_2, first_input.record_name, E1_list, E2_list, diff_E1, diff_E2, 2
+    )
+    form_heatmap(
+        growth_list_3, first_input.record_name, E1_list, E2_list, diff_E1, diff_E2, 3
+    )
+    form_heatmap(
+        growth_list_4, first_input.record_name, E1_list, E2_list, diff_E1, diff_E2, 4
+    )
+    form_heatmap(
+        growth_list_5, first_input.record_name, E1_list, E2_list, diff_E1, diff_E2, 5
+    )
+    form_heatmap(
+        growth_list_6, first_input.record_name, E1_list, E2_list, diff_E1, diff_E2, 6
     )
     print("complete")
 
