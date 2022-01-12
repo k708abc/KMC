@@ -1,4 +1,4 @@
-from typing import List, Dict, OrderedDict
+from typing import List, Dict
 import matplotlib.pyplot as plt
 import matplotlib.patches as pat
 import math
@@ -340,7 +340,7 @@ def delete_images(dir_name, recursive=True):
 
 def rec_yaml(init_value, dir_name):
     file_name = dir_name + "kmc_input.yml"
-    yml_write: OrderedDict = {key: val for key, val in init_value.__dict__.items()}
+    yml_write = {key: val for key, val in init_value.__dict__.items()}
     with open(file_name, "w") as file:
         yaml.dump(yml_write, file)
 
