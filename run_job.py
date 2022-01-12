@@ -5,7 +5,7 @@ import shutil
 
 njobs=5
 
-listdirs=['Main_keep','Modules','Test_modules']
+listdirs=['Modules','Test_modules']
 inputdir='Initial_inputs'
 execfile=glob.glob('*.py')
 
