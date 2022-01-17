@@ -1,6 +1,6 @@
 cell_size_xy: 20
 cell_size_z: 5
-comments: 550K, trans always on (at IMS)
+comments: 600K, trans always on (at IMS)
 dep_rate: 0.1
 dep_time: 20.0
 distance_inter: 0.612
@@ -20,7 +20,7 @@ first_put_num: 10
 img_per: 5.0
 max_workers_val: 20
 prefactor: 1000000000000.0
-record_name: 550K_trans_on
+record_name: 600K_trans_on
 repeat_E1_diff: 0.02
 repeat_E1_end: 1.2
 repeat_E1_start: 0.96
@@ -32,6 +32,6 @@ repeat_combos:
 - 'Diffuse E1: 2nd, E2: multi'
 repeat_val: 1
 start_from_middle: false
-temperature: 550.0
+temperature: 600.0
 trans_check: true
 trans_num: 4
