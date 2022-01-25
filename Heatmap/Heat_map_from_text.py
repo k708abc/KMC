@@ -86,7 +86,7 @@ def heatmap_image(dx, dy, xlist, ylist, modelist, RGB_set, patterns, data_name):
     plt.tight_layout()
     #
 
-    heat_name = os.path.splitext(os.path.basename(data_name))[0] + ".png"
+    heat_name = os.path.splitext(os.path.basename(data_name))[0] + ".pdf"
 
     plt.savefig(heat_name)
 
