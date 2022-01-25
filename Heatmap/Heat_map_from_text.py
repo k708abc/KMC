@@ -28,10 +28,9 @@ def form_examples(RGB_set, patterns):
 
 
 def heatmap_image(dx, dy, xlist, ylist, modelist, RGB_set, patterns, data_name):
-    mathtext.FontConstantsBase = mathtext.ComputerModernFontConstants
+    # mathtext.FontConstantsBase = mathtext.ComputerModernFontConstants
     plt.rcParams.update(
         {
-            "mathtext.default": "default",
             "mathtext.fontset": "stix",
             "font.family": "Times New Roman",
             "font.size": 12,
