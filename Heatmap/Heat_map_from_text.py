@@ -23,7 +23,7 @@ def form_examples(RGB_set, patterns):
         ax.add_patch(r)
         ax.axes.xaxis.set_visible(False)
         ax.axes.yaxis.set_visible(False)
-        heat_name = "example_" + str(i) + ".png"
+        heat_name = "example_" + str(i) + ".pdf"
         plt.savefig(heat_name)
 
 
