@@ -88,6 +88,9 @@ def heatmap_image(dx, dy, xlist, ylist, modelist, RGB_set, patterns, data_name):
     heat_name = os.path.splitext(os.path.basename(data_name))[0] + ".pdf"
 
     plt.savefig(heat_name)
+    heat_name = os.path.splitext(os.path.basename(data_name))[0] + ".bmp"
+
+    plt.savefig(heat_name)
 
 
 if __name__ == "__main__":
