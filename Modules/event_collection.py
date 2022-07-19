@@ -1,6 +1,8 @@
 from typing import List, Dict, Tuple
 from Modules.cal_rates import rate
-from decimal import Decimal
+
+# from decimal import Decimal
+
 
 def total_energy(
     atom_set: Dict,
@@ -19,11 +21,11 @@ def total_energy(
             if atom_set[bond] == 1:
                 bond_energy += energy_bonding[max(target[2], bond[2])]
         return energy_diffuse[target[2]] + bond_energy
-    elif highest_atom[(target[0], target[1])] >= 1: # transformtion is activated
+    elif highest_atom[(target[0], target[1])] >= 1:  # transformtion is activated
         for bond in bonds[target]:
             if atom_set[bond] == 1:
-                bond_energy += energy_bonding[-1] #bulk bonding energy
-        return energy_diffuse[-1] + bond_energy #bulk diffusion energy
+                bond_energy += energy_bonding[-1]  # bulk bonding energy
+        return energy_diffuse[-1] + bond_energy  # bulk diffusion energy
 
 
 def find_filled_sites(atom_set, indexes):
@@ -110,7 +112,8 @@ def possible_events(
     pre = float(params.prefactor)
     kbt = params.temperature_eV
     eve_rate: List = []
-    rearange_rate = Decimal(rate(pre, kbt, energy)).quantize(Decimal("0.00000001"))
+    # rearange_rate = Decimal(rate(pre, kbt, energy)).quantize(Decimal("0.00000001"))
+    rearange_rate = rate(pre, kbt, energy)
     nn_atom = find_filled_sites(atom_set, bonds[target])
     #
     eve_rate += [cand for cand in diffuse_candidates[target] if atom_set[cand] == 0]

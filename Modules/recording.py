@@ -425,7 +425,7 @@ def record_data(
         plt.close()
     mode_val = mode_check_prev(growth_mode, coverage)
     #
-    # 2021/1/7 Other judgement
+    # 2022/1/7 Other judgement
     mode_val_1 = mode_check_1(growth_mode, coverage)
     mode_val_2 = mode_check_2(growth_mode, coverage)
     mode_val_3 = mode_check_3(occupation, coverage)

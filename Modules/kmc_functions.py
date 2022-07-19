@@ -144,6 +144,7 @@ class common_functions:
 
         self.n_events += 1
         self.prog_time += 1 / (self.init_value.dep_rate_atoms_persec)
+        print(self.n_atoms)
 
     def update_events(self):
         self.related_atoms = list(set(self.related_atoms))
