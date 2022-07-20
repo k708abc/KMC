@@ -15,18 +15,20 @@ def choose_an_event(r_tot: float, event_rates: List[float]) -> int:
 def rejection_free_choise(
     total_event_time: float,
     event_time: Dict[Tuple, List[float]],
-    event_time_tot: Dict[Tuple, float],
+    event_time_tot: List[float],
+    list_site_correspondance: Dict[int, Tuple],
     dep_rate: float,
 ):
     # random_val = decimal.Decimal(random.random())
     random_val = random.random()
     r_tot = total_event_time * random_val
 
-    for rate_site, rate in event_time_tot.items():
+    for i, rate in enumerate(event_time_tot):
         if rate >= r_tot:
             if rate == 0:
                 pass
             else:
+                rate_site = list_site_correspondance[i]
                 event_number = choose_an_event(r_tot, event_time[rate_site])
                 return rate_site, event_number
         else:

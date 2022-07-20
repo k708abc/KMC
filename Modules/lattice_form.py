@@ -10,7 +10,9 @@ atom_set: Dict[Tuple, int] = {}
 bonds: Dict[Tuple, List] = {}
 event: Dict[Tuple, List] = {}
 event_time: Dict[Tuple, List] = {}
-event_time_tot: Dict[Tuple, float] = {}
+event_time_tot: List[float] = []
+site_list_correspondance: Dict[int, Tuple] = {}
+list_site_correspondance: Dict[int, Tuple] = {}
 diffuse_candidates: Dict[Tuple, List] = {}
 highest_atom: Dict[Tuple, int] = {}
 
@@ -23,13 +25,13 @@ def reset_dicts() -> None:
     event.clear()
     event_time.clear()
     event_time_tot.clear()
+    site_list_correspondance.clear()
+    list_site_correspondance.clear()
     diffuse_candidates.clear()
     highest_atom.clear()
 
 
-def form_first_3BL(
- z_intra: float, z_inter: float
-):
+def form_first_3BL(z_intra: float, z_inter: float):
     for site in lattice_first:
         x, y = site
         lattice_first[site] = [
@@ -123,7 +125,9 @@ def lattice_form(input_params: Params):
                 bonds[(i, j, k)] = []
                 event[(i, j, k)] = []
                 event_time[(i, j, k)] = []
-                event_time_tot[(i, j, k)] = 0
+                event_time_tot.append(0)
+                list_site_correspondance[len(event_time_tot)] = (i, j, k)
+                site_list_correspondance[(i, j, k)] = len(event_time_tot)
                 diffuse_candidates[(i, j, k)] = []
     #
     form_first_3BL(z_intra, z_inter)
@@ -139,6 +143,8 @@ def lattice_form(input_params: Params):
         event,
         event_time,
         event_time_tot,
+        site_list_correspondance,
+        list_site_correspondance,
         diffuse_candidates,
         highest_atom,
     )

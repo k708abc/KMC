@@ -48,6 +48,8 @@ class common_functions:
             self.event,
             self.event_time,
             self.event_time_tot,
+            self.site_list_correspondance,
+            self.list_site_correspondance,
             self.diffuse_candidates,
             self.highest_atom,
         ) = lattice_form(self.init_value)
@@ -163,11 +165,13 @@ class common_functions:
                     self.diffuse_candidates,
                     self.highest_atom,
                 )
-            self.total_event_time -= self.event_time_tot[target_rel]
+
+            list_num = self.site_list_correspondance[target_rel]
+            self.total_event_time -= self.event_time_tot[list_num]
             self.event[target_rel] = events
             self.event_time[target_rel] = rates
-            self.event_time_tot[target_rel] = sum(rates)
-            self.total_event_time += self.event_time_tot[target_rel]
+            self.event_time_tot[list_num] = sum(rates)
+            self.total_event_time += self.event_time_tot[list_num]
         self.related_atoms = []
         """
         self.total_event_time = self.init_value.dep_rate_atoms_persec
@@ -242,6 +246,7 @@ class common_functions:
             self.total_event_time,
             self.event_time,
             self.event_time_tot,
+            self.list_site_correspondance,
             self.init_value.dep_rate_atoms_persec,
         )
         if self.target == (-1, -1, -1):
@@ -278,9 +283,9 @@ class common_functions:
             self.time_per_event,
             self.init_value,
         )
-        total_time_dir = self.init_value.dep_rate_atoms_persec
-        for _, rate in self.event_time_tot.items():
-            total_time_dir += rate
+        total_time_dir = (
+            sum(self.event_time_tot) + self.init_value.dep_rate_atoms_persec
+        )
         diff = self.total_event_time - total_time_dir
         print("diff_time = " + str(diff))
 
