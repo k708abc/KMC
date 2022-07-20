@@ -169,6 +169,11 @@ class common_functions:
             self.event_time_tot[target_rel] = sum(rates)
             self.total_event_time += self.event_time_tot[target_rel]
         self.related_atoms = []
+        """
+        self.total_event_time = self.init_value.dep_rate_atoms_persec
+        for _, rate in self.event_time_tot.items():
+            self.total_event_time += rate
+        """
 
     def rejection_free_deposition(self):
         dep_pos = self.deposition()
@@ -234,7 +239,10 @@ class common_functions:
 
     def rejection_free_loop(self):
         self.target, self.event_number = rejection_free_choise(
-            self.total_event_time, self.event_time, self.event_time_tot
+            self.total_event_time,
+            self.event_time,
+            self.event_time_tot,
+            self.init_value.dep_rate_atoms_persec,
         )
         if self.target == (-1, -1, -1):
             self.rejection_free_deposition()
@@ -270,6 +278,11 @@ class common_functions:
             self.time_per_event,
             self.init_value,
         )
+        total_time_dir = self.init_value.dep_rate_atoms_persec
+        for _, rate in self.event_time_tot.items():
+            total_time_dir += rate
+        diff = self.total_event_time - total_time_dir
+        print("diff_time = " + str(diff))
 
     """
     def middle_check(self, val):

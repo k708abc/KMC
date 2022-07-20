@@ -1,6 +1,7 @@
 import random
 from typing import List, Tuple, Dict
-import decimal
+
+# import decimal
 
 
 def choose_an_event(r_tot: float, event_rates: List[float]) -> int:
@@ -15,8 +16,10 @@ def rejection_free_choise(
     total_event_time: float,
     event_time: Dict[Tuple, List[float]],
     event_time_tot: Dict[Tuple, float],
+    dep_rate: float,
 ):
-    random_val = decimal.Decimal(random.random())
+    # random_val = decimal.Decimal(random.random())
+    random_val = random.random()
     r_tot = total_event_time * random_val
 
     for rate_site, rate in event_time_tot.items():
@@ -28,8 +31,11 @@ def rejection_free_choise(
                 return rate_site, event_number
         else:
             r_tot -= rate
-    if r_tot >= 0:
+    if r_tot <= dep_rate:
         return (-1, -1, -1), 0
     else:
-        print("Something wrong in rejection free")
-        input()
+        print("total: " + str(total_event_time))
+        print("r_tot: " + str(r_tot))
+        print("dep_rate: " + str(dep_rate))
+        print("random: " + str(random_val))
+        return (-1, -1, -1), 0

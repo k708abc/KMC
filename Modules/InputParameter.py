@@ -1,6 +1,6 @@
 ﻿#! /usr/bin/env python3
 
-import decimal
+# import decimal
 from typing import Union
 import yaml
 from pathlib import Path
@@ -33,16 +33,16 @@ class Params:
         return int(2 * (self.cell_size_xy) ** 2)
 
     @property
-    def dep_rate_atoms_persec(self) -> decimal.Decimal:
-        return decimal.Decimal(self.dep_rate / 60 * self.atoms_in_BL)
+    def dep_rate_atoms_persec(self) -> float:
+        return self.dep_rate / 60 * self.atoms_in_BL
 
     @property
-    def total_time(self) -> decimal.Decimal:
-        return decimal.Decimal(self.dep_time) * 60
+    def total_time(self) -> float:
+        return self.dep_time * 60
 
     @property
-    def interval(self) -> decimal.Decimal:
-        return self.total_time * decimal.Decimal(self.img_per) / 100
+    def interval(self) -> float:
+        return self.total_time * self.img_per / 100
 
     @property
     def total_atoms(self) -> int:
