@@ -1,4 +1,3 @@
-#! /usr/bin/env python3
 from typing import List, Dict, Tuple
 from Modules.InputParameter import Params
 from Modules.find_candidates import find_candidates

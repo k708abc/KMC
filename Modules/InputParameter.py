@@ -1,6 +1,4 @@
-﻿#! /usr/bin/env python3
-
-# import decimal
+﻿# import decimal
 from typing import Union
 import yaml
 from pathlib import Path

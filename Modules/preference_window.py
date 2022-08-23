@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from typing import List, Dict
 import tkinter as tk
 import tkinter.ttk as ttk
