@@ -34,9 +34,24 @@ class common_functions:
         if os.path.exists("Record") is False:
             os.mkdir("Record")
 
+        """
+        self.diff_rec = []
+        self.eve_num_rec = []
+        """
+
     def update_progress(self) -> None:
         self.n_events += 1
         self.n_events_perdep += 1
+
+        if self.n_events % 100000 == 0:
+            self.recalculate_total_rate()
+        """      
+        if self.n_events % 1000 == 0:
+            tot_rate = self.compare_rate()
+            diff = self.total_event_time - tot_rate
+            self.diff_rec.append(diff)
+            self.eve_num_rec.append(self.n_events)
+        """
 
     def start_rejection_free(self):
         self.total_event_time = self.init_value.dep_rate_atoms_persec
@@ -144,7 +159,7 @@ class common_functions:
         self.atom_set[dep_pos] = 1
         # self.atom_exist.append(dep_pos)
 
-        self.n_events += 1
+        # self.n_events += 1
         self.prog_time += 1 / (self.init_value.dep_rate_atoms_persec)
         print(self.n_atoms)
 
@@ -178,6 +193,17 @@ class common_functions:
         for _, rate in self.event_time_tot.items():
             self.total_event_time += rate
         """
+
+    def recalculate_total_rate(self):
+        self.total_event_time = self.init_value.dep_rate_atoms_persec
+        for rate in self.event_time_tot:
+            self.total_event_time += rate
+
+    def compare_rate(self):
+        total_event_time = self.init_value.dep_rate_atoms_persec
+        for rate in self.event_time_tot:
+            total_event_time += rate
+        return total_event_time
 
     def rejection_free_deposition(self):
         dep_pos = self.deposition()

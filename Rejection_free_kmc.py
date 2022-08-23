@@ -1,6 +1,8 @@
 from Modules.kmc_functions import common_functions
 import datetime
 
+# import matplotlib.pyplot as plt
+
 
 class rejection_free(common_functions):
     def __init__(self, setting_value) -> None:
@@ -34,6 +36,12 @@ class rejection_free(common_functions):
             print("Time/event: " + str(self.time_per_event) + " ms")
         if self.setting_value == 0:
             pass
+
+        """
+        fig = plt.figure()
+        plt.plot(self.eve_num_rec, self.diff_rec)
+        plt.show()
+        """
 
     def start(self):
         if self.setting_value in (1, 0):
