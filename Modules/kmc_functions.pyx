@@ -14,8 +14,16 @@ import os
 import pickle
 
 
-class common_functions:
-    def __init__(self) -> None:
+cdef class common_functions:
+    cdef double start_time, prog_time, total_event_time, elapsed_time, minute, second, time_per_event
+    cdef int n_atoms, n_events, rec_num_atoms, n_events_perdep, event_number, setting_value
+    cdef list pos_rec, time_rec, cov_rec, n_events_rec, num_atoms_rec, event_time_tot, energy_bonding, energy_diffuse, related_atoms
+    cdef dict lattice, bonds, atom_set, event, event_time, site_list_correspondance, diffuse_candidates,highest_atom
+    cdef bint height_change_rem, height_change_add
+    cdef tuple move_atom, target
+
+
+    def __init__(self):
         self.init_value = Params("kmc_input.yml")
 
     def start_setting(self):
@@ -23,13 +31,13 @@ class common_functions:
         self.prog_time = 0
         self.n_atoms = 0
         self.n_events = 0
-        self.pos_rec: List[dict] = []
-        self.time_rec: List[float] = []
-        self.cov_rec: List[float] = []
+        self.pos_rec = []
+        self.time_rec = []
+        self.cov_rec = []
         self.rec_num_atoms = 0
         self.n_events_perdep = 0
-        self.n_events_rec: List[int] = []
-        self.num_atoms_rec: List[int] = []
+        self.n_events_rec = []
+        self.num_atoms_rec = []
         # self.record_middle = 0
         if os.path.exists("Record") is False:
             os.mkdir("Record")
@@ -39,7 +47,7 @@ class common_functions:
         self.eve_num_rec = []
         """
 
-    def update_progress(self) -> None:
+    def update_progress(self):
         self.n_events += 1
         self.n_events_perdep += 1
 
@@ -141,7 +149,7 @@ class common_functions:
         else:
             return False
 
-    def deposition(self) -> Tuple:
+    def tuple deposition(self):
         dep_pos = deposit_an_atom(
             self.atom_set,
             self.bonds,
@@ -149,7 +157,7 @@ class common_functions:
         self.update_after_deposition(dep_pos)
         return dep_pos
 
-    def update_after_deposition(self, dep_pos) -> None:
+    def update_after_deposition(self, dep_pos):
         #
         self.n_events_rec.append(self.n_events_perdep)
         self.n_events_perdep = 0
