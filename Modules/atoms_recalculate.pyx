@@ -1,15 +1,14 @@
-from typing import List, Dict, Tuple
-import cython
-
-
-def recalculate(
-    target: Tuple[int, int, int],
-    atom_set: Dict[Tuple[int, int, int], int],
-    bonds,
-    diffuse_candidates: Dict[Tuple[int, int, int], List[Tuple[int, int, int]]],
-    height_change,
-    trans_val,
+cpdef list recalculate(
+    tuple target,
+    dict atom_set,
+    dict bonds,
+    dict diffuse_candidates,
+    bint height_change,
+    int trans_val,
 ):
+    cdef list candidate, 
+    cdef tuple fill, bond
+    cdef int i
     candidate = [fill for fill in diffuse_candidates[target] if atom_set[fill] == 1] + [
         target
     ]
@@ -19,7 +18,7 @@ def recalculate(
                 fill for fill in diffuse_candidates[bond] if atom_set[fill] == 1
             ]
 
-    if height_change is True:
+    if height_change:
         candidate += [
             (target[0], target[1], i)
             for i in range(trans_val, -1, -1)
