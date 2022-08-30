@@ -1,6 +1,6 @@
 cell_size_xy: 10
 cell_size_z: 5
-comments: 'calculation speed test: Trying Cython'
+comments: 'calculation speed test: Trying Cython, kmc_function cythonied'
 dep_rate: 0.1
 dep_time: 20.0
 distance_inter: 0.612
