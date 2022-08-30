@@ -15,6 +15,7 @@ class rejection_free(common_functions):
             2   RFKMC_multi.py
         """
 
+    """
     def loop(self):
         while int(self.prog_time) <= int(self.init_value.total_time):
             self.rejection_free_loop()
@@ -24,6 +25,7 @@ class rejection_free(common_functions):
             # self.isolation_check()
             # self.num_atom_check()
             # self.isolation_full_check()
+    """
 
     def end(self):
         if self.setting_value in (1, 0):
