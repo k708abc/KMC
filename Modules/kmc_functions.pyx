@@ -1,11 +1,11 @@
 from Modules.InputParameter import Params
 import time
-from typing import List, Tuple
 from Modules.lattice_form import lattice_form
 from Modules.deposition import deposit_an_atom
 from Modules.atoms_recalculate import recalculate
 from Modules.rejection_free_choose import rejection_free_choise
 from Modules.event_collection import site_events
+from Modules.Calc_grid_index import grid_num
 import math
 import copy
 from Modules.recording import record_data
@@ -15,18 +15,31 @@ import pickle
 
 
 cdef class common_functions:
-    cdef double start_time, prog_time, total_event_time, elapsed_time, minute, second, time_per_event
-    cdef int n_atoms, n_events, rec_num_atoms, n_events_perdep, event_number, setting_value
+    cdef double start_time, total_event_time, elapsed_time, prog_time
+    cdef int n_atoms, n_events, rec_num_atoms, n_events_perdep, event_number, setting_value, unit_length
     cdef list pos_rec, time_rec, cov_rec, n_events_rec, num_atoms_rec, event_time_tot, energy_bonding, energy_diffuse, related_atoms
-    cdef dict lattice, bonds, atom_set, event, event_time, site_list_correspondance, diffuse_candidates,highest_atom
+    cdef list lattice, bonds, atom_set, event, event_time, site_list_correspondance, diffuse_candidates,highest_atom, index_list
     cdef bint height_change_rem, height_change_add
     cdef tuple move_atom, target
 
 
     def __init__(self):
         self.init_value = Params("kmc_input.yml")
+        self.unit_length = self.init_value.cell_size_xy
 
-    def start_setting(self):
+    cpdef loop(self):
+        while int(self.prog_time) <= int(self.init_value.total_time):
+            self.rejection_free_loop()
+            self.update_progress()
+            #
+            # self.middle_check(60)
+            # self.isolation_check()
+            # self.num_atom_check()
+            # self.isolation_full_check()
+
+
+    cpdef start_setting(self):
+        self.init_value = Params("kmc_input.yml")
         self.start_time = time.time()
         self.prog_time = 0
         self.n_atoms = 0
@@ -47,7 +60,7 @@ cdef class common_functions:
         self.eve_num_rec = []
         """
 
-    def update_progress(self):
+    cpdef update_progress(self):
         self.n_events += 1
         self.n_events_perdep += 1
 
@@ -61,7 +74,7 @@ cdef class common_functions:
             self.eve_num_rec.append(self.n_events)
         """
 
-    def start_rejection_free(self):
+    cpdef start_rejection_free(self):
         self.total_event_time = self.init_value.dep_rate_atoms_persec
         # self.atom_exist: List[Tuple[int, int, int]] = []
         (
@@ -71,10 +84,9 @@ cdef class common_functions:
             self.event,
             self.event_time,
             self.event_time_tot,
-            self.site_list_correspondance,
-            self.list_site_correspondance,
             self.diffuse_candidates,
             self.highest_atom,
+            self.index_list
         ) = lattice_form(self.init_value)
         self.energy_summarize()
         self.height_change_rem = False
@@ -82,7 +94,8 @@ cdef class common_functions:
         if self.init_value.trans_check is False:
             self.init_value.trans_num = 100
 
-    def energy_summarize(self):
+    cpdef energy_summarize(self):
+        cdef int _, i
         # interlayer bonding is the average of the intralayer bonding
         self.energy_bonding = [
             self.init_value.energies_binding["first"],  # with Ag
@@ -129,49 +142,38 @@ cdef class common_functions:
         for i in range(len(self.energy_diffuse)):
             self.energy_diffuse[i] -= self.energy_bonding[i]
 
-    def height_check_add(self, pos):
-        if pos[2] >= self.init_value.trans_num:
-            self.highest_atom[(pos[0], pos[1])] += 1
-            if self.highest_atom[(pos[0], pos[1])] == 1:
+    cpdef bint height_check_add(self, int pos):
+        index = self.index_list[pos]
+        if index[2] >= self.init_value.trans_num:
+            grid_index = grid_num(pos[0], pos[1], 0, self.unit_length)
+            self.highest_atom[grid_index] += 1
+            if self.highest_atom[grid_index] == 1:
                 return True
             else:
                 return False
         else:
             return False
 
-    def height_check_remove(self, pos):
-        if pos[2] >= self.init_value.trans_num:
-            self.highest_atom[(pos[0], pos[1])] -= 1
-            if self.highest_atom[(pos[0], pos[1])] == 0:
+    cpdef bint height_check_remove(self, int pos):
+        index = self.index_list[pos]
+        if index[2] >= self.init_value.trans_num:
+            grid_index = grid_num(pos[0], pos[1], 0, self.unit_length)
+            self.highest_atom[grid_index] -= 1
+            if self.highest_atom[index] == 0:
                 return True
             else:
                 return False
         else:
             return False
 
-    def tuple deposition(self):
-        dep_pos = deposit_an_atom(
-            self.atom_set,
-            self.bonds,
-        )
-        self.update_after_deposition(dep_pos)
-        return dep_pos
 
-    def update_after_deposition(self, dep_pos):
-        #
-        self.n_events_rec.append(self.n_events_perdep)
-        self.n_events_perdep = 0
-        self.num_atoms_rec.append(self.n_atoms)
-        self.n_atoms += 1
-        #
-        self.atom_set[dep_pos] = 1
-        # self.atom_exist.append(dep_pos)
 
-        # self.n_events += 1
-        self.prog_time += 1 / (self.init_value.dep_rate_atoms_persec)
-        print(self.n_atoms)
 
-    def update_events(self):
+
+    cpdef update_events(self):ここから
+        cdef int target_rel
+        cdef list events, rates
+        cdef int list_num 
         self.related_atoms = list(set(self.related_atoms))
         for target_rel in self.related_atoms:
             if self.atom_set[target_rel] == 0:
@@ -202,18 +204,49 @@ cdef class common_functions:
             self.total_event_time += rate
         """
 
-    def recalculate_total_rate(self):
+    cpdef recalculate_total_rate(self):
+        cdef double rate
         self.total_event_time = self.init_value.dep_rate_atoms_persec
         for rate in self.event_time_tot:
             self.total_event_time += rate
 
-    def compare_rate(self):
+    cpdef double compare_rate(self):
+        cdef double total_event_time, rate
         total_event_time = self.init_value.dep_rate_atoms_persec
         for rate in self.event_time_tot:
             total_event_time += rate
         return total_event_time
 
-    def rejection_free_deposition(self):
+
+
+
+
+    cpdef update_after_deposition(self, int dep_pos):
+        #
+        self.n_events_rec.append(self.n_events_perdep)
+        self.n_events_perdep = 0
+        self.num_atoms_rec.append(self.n_atoms)
+        self.n_atoms += 1
+        #
+        self.atom_set[dep_pos] = 1
+        # self.atom_exist.append(dep_pos)
+        # self.n_events += 1
+        self.prog_time += 1 / (self.init_value.dep_rate_atoms_persec)
+        print(self.n_atoms)
+
+    cpdef int deposition(self):
+        cdef int dep_pos
+        dep_pos = deposit_an_atom(
+            self.atom_set,
+            self.bonds,
+            self.index_list
+        )
+        self.update_after_deposition(dep_pos)
+        return dep_pos
+
+
+    cpdef rejection_free_deposition(self):
+        cdef int dep_pos
         dep_pos = self.deposition()
         self.move_atom = dep_pos
         self.target = dep_pos
@@ -226,16 +259,19 @@ cdef class common_functions:
             self.diffuse_candidates,
             self.height_change_add,
             self.init_value.trans_num,
+            self.index_list,
+            self.unit_length,
         )  # Picking up atoms that possibly affectsd by the deposition
         #
         self.update_events()
 
-    def put_first_atoms_rf(self):
+    cpdef put_first_atoms_rf(self):
+        cdef int _
         if self.init_value.first_put_check is True:
             for _ in range(int(self.init_value.first_put_num)):
                 self.rejection_free_deposition()
 
-    def rejection_free_event(self):
+    cpdef rejection_free_event(self):
         self.move_atom = self.event[self.target][self.event_number]
         self.event_progress()
         self.related_atoms = recalculate(
@@ -256,7 +292,7 @@ cdef class common_functions:
         )
         self.update_events()
 
-    def event_progress(self):
+    cpdef event_progress(self):
         self.atom_set[self.target] = 0
         self.atom_set[self.move_atom] = 1
         # self.atom_exist.remove(self.target)
@@ -265,17 +301,18 @@ cdef class common_functions:
         self.height_change_rem = self.height_check_remove(self.target)
         self.height_change_add = self.height_check_add(self.move_atom)
 
-    def pickle_dump(self, obj, path):
+    cpdef pickle_dump(self, obj, path):
         with open(path, mode="wb") as f:
             pickle.dump(obj, f)
 
-    def parameter_record(self):
+    cpdef parameter_record(self):
+        cdef unicode dir_name, file_name
         dir_name = "Record/" + self.init_value.record_name + "/"
         os.makedirs(dir_name, exist_ok=True)
         file_name = dir_name + "selfdata.pickle"
         self.pickle_dump(self, file_name)
 
-    def rejection_free_loop(self):
+    cpdef rejection_free_loop(self):
         self.target, self.event_number = rejection_free_choise(
             self.total_event_time,
             self.event_time,
@@ -294,12 +331,13 @@ cdef class common_functions:
             if self.setting_value != -1:
                 self.parameter_record()
 
-    def record_position(self) -> None:
+    cpdef record_position(self):
         self.pos_rec.append(copy.copy(self.atom_set))
         self.time_rec.append(self.prog_time)
         self.cov_rec.append(self.n_atoms / self.init_value.atoms_in_BL)
 
-    def end_of_loop(self) -> None:
+    cpdef end_of_loop(self):
+        cdef double total_time_dir, diff
         self.record_position()
         self.elapsed_time = time.time() - self.start_time
         self.minute = math.floor(self.elapsed_time / 60)

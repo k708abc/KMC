@@ -1,14 +1,17 @@
+from Modules.Calc_grid_index import grid_num
+
 cpdef list recalculate(
-    tuple target,
-    dict atom_set,
-    dict bonds,
-    dict diffuse_candidates,
+    int target,
+    list atom_set,
+    list bonds,
+    list diffuse_candidates,
     bint height_change,
     int trans_val,
+    list index_list,
+    int unit_length
 ):
     cdef list candidate, 
-    cdef tuple fill, bond
-    cdef int i
+    cdef int i, fill, bond, t_x, t_y, t_z
     candidate = [fill for fill in diffuse_candidates[target] if atom_set[fill] == 1] + [
         target
     ]
@@ -17,11 +20,11 @@ cpdef list recalculate(
             candidate += [
                 fill for fill in diffuse_candidates[bond] if atom_set[fill] == 1
             ]
-
     if height_change:
+        tx, t_y, t_z = index_list[target]
         candidate += [
-            (target[0], target[1], i)
+            grid_index(t_x, t_y, i, unit_length)
             for i in range(trans_val, -1, -1)
-            if atom_set[(target[0], target[1], i)] == 1
+            if atom_set[grid_index(t_x, t_y, i, unit_length)] == 1
         ]
     return candidate
