@@ -11,7 +11,7 @@ cdef list find_candidates(list atom_set, list bonds, list index_list):
         if condition == 1:
             pass
         elif atom_index[2] == 0:
-            candidate.append(atom_index)
+            candidate.append(index)
         else:
             for bond in bonds[index]:
                 if atom_set[bond] == 1:
@@ -26,5 +26,7 @@ cdef int dep_position(list candidate):
 
 cpdef int deposit_an_atom(list atom_set, list bonds, list index_list):
     cdef list caindidate 
+    cdef int dep_pos
     candidate = find_candidates(atom_set, bonds, index_list)
-    return dep_position(candidate)
+    dep_pos = dep_position(candidate)
+    return dep_pos

@@ -1189,16 +1189,27 @@ static CYTHON_INLINE PyObject *__Pyx_PyCFunction_FastCall(PyObject *func, PyObje
 /* PyObjectCallOneArg.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg);
 
-/* DictGetItem.proto */
-#if PY_MAJOR_VERSION >= 3 && !CYTHON_COMPILING_IN_PYPY
-static PyObject *__Pyx_PyDict_GetItem(PyObject *d, PyObject* key);
-#define __Pyx_PyObject_Dict_GetItem(obj, name)\
-    (likely(PyDict_CheckExact(obj)) ?\
-     __Pyx_PyDict_GetItem(obj, name) : PyObject_GetItem(obj, name))
-#else
-#define __Pyx_PyDict_GetItem(d, key) PyObject_GetItem(d, key)
-#define __Pyx_PyObject_Dict_GetItem(obj, name)  PyObject_GetItem(obj, name)
-#endif
+/* GetItemInt.proto */
+#define __Pyx_GetItemInt(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
+    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
+    __Pyx_GetItemInt_Fast(o, (Py_ssize_t)i, is_list, wraparound, boundscheck) :\
+    (is_list ? (PyErr_SetString(PyExc_IndexError, "list index out of range"), (PyObject*)NULL) :\
+               __Pyx_GetItemInt_Generic(o, to_py_func(i))))
+#define __Pyx_GetItemInt_List(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
+    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
+    __Pyx_GetItemInt_List_Fast(o, (Py_ssize_t)i, wraparound, boundscheck) :\
+    (PyErr_SetString(PyExc_IndexError, "list index out of range"), (PyObject*)NULL))
+static CYTHON_INLINE PyObject *__Pyx_GetItemInt_List_Fast(PyObject *o, Py_ssize_t i,
+                                                              int wraparound, int boundscheck);
+#define __Pyx_GetItemInt_Tuple(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
+    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
+    __Pyx_GetItemInt_Tuple_Fast(o, (Py_ssize_t)i, wraparound, boundscheck) :\
+    (PyErr_SetString(PyExc_IndexError, "tuple index out of range"), (PyObject*)NULL))
+static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Tuple_Fast(PyObject *o, Py_ssize_t i,
+                                                              int wraparound, int boundscheck);
+static PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j);
+static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Fast(PyObject *o, Py_ssize_t i,
+                                                     int is_list, int wraparound, int boundscheck);
 
 /* RaiseArgTupleInvalid.proto */
 static void __Pyx_RaiseArgtupleInvalid(const char* func_name, int exact,
@@ -1296,7 +1307,7 @@ static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
 /* Module declarations from 'rejection_free_choose' */
 static int __pyx_f_21rejection_free_choose_choose_an_event(double, PyObject *); /*proto*/
-static PyObject *__pyx_f_21rejection_free_choose_rejection_free_choise(double, PyObject *, PyObject *, PyObject *, double, int __pyx_skip_dispatch); /*proto*/
+static PyObject *__pyx_f_21rejection_free_choose_rejection_free_choise(double, PyObject *, PyObject *, double, int __pyx_skip_dispatch); /*proto*/
 #define __Pyx_MODULE_NAME "rejection_free_choose"
 extern int __pyx_module_is_main_rejection_free_choose;
 int __pyx_module_is_main_rejection_free_choose = 0;
@@ -1321,7 +1332,6 @@ static const char __pyx_k_event_time[] = "event_time";
 static const char __pyx_k_event_time_tot[] = "event_time_tot";
 static const char __pyx_k_total_event_time[] = "total_event_time";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
-static const char __pyx_k_list_site_correspondance[] = "list_site_correspondance";
 static PyObject *__pyx_n_s_cline_in_traceback;
 static PyObject *__pyx_kp_s_dep_rate;
 static PyObject *__pyx_n_s_dep_rate_2;
@@ -1331,7 +1341,6 @@ static PyObject *__pyx_n_s_event_time;
 static PyObject *__pyx_n_s_event_time_tot;
 static PyObject *__pyx_n_s_file;
 static PyObject *__pyx_n_s_import;
-static PyObject *__pyx_n_s_list_site_correspondance;
 static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_n_s_print;
@@ -1341,15 +1350,14 @@ static PyObject *__pyx_kp_s_random_2;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_kp_s_total;
 static PyObject *__pyx_n_s_total_event_time;
-static PyObject *__pyx_pf_21rejection_free_choose_rejection_free_choise(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_total_event_time, PyObject *__pyx_v_event_time, PyObject *__pyx_v_event_time_tot, PyObject *__pyx_v_list_site_correspondance, double __pyx_v_dep_rate); /* proto */
+static PyObject *__pyx_pf_21rejection_free_choose_rejection_free_choise(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_total_event_time, PyObject *__pyx_v_event_time, PyObject *__pyx_v_event_time_tot, double __pyx_v_dep_rate); /* proto */
 static PyObject *__pyx_int_0;
 static PyObject *__pyx_int_neg_1;
 static PyObject *__pyx_tuple_;
-static PyObject *__pyx_tuple__2;
 /* Late includes */
 
-/* "rejection_free_choose.pyx":6
- * 
+/* "rejection_free_choose.pyx":3
+ * import random
  * 
  * cdef int choose_an_event(double r_tot, list event_rates):             # <<<<<<<<<<<<<<
  *     cdef int i
@@ -1372,7 +1380,7 @@ static int __pyx_f_21rejection_free_choose_choose_an_event(double __pyx_v_r_tot,
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("choose_an_event", 0);
 
-  /* "rejection_free_choose.pyx":9
+  /* "rejection_free_choose.pyx":6
  *     cdef int i
  *     cdef double event_rate
  *     for i, event_rate in enumerate(event_rates):             # <<<<<<<<<<<<<<
@@ -1384,18 +1392,18 @@ static int __pyx_f_21rejection_free_choose_choose_an_event(double __pyx_v_r_tot,
   for (;;) {
     if (__pyx_t_3 >= PyList_GET_SIZE(__pyx_t_2)) break;
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-    __pyx_t_4 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_4); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 9, __pyx_L1_error)
+    __pyx_t_4 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_4); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 6, __pyx_L1_error)
     #else
-    __pyx_t_4 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 9, __pyx_L1_error)
+    __pyx_t_4 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 6, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     #endif
-    __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 9, __pyx_L1_error)
+    __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 6, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_event_rate = __pyx_t_5;
     __pyx_v_i = __pyx_t_1;
     __pyx_t_1 = (__pyx_t_1 + 1);
 
-    /* "rejection_free_choose.pyx":10
+    /* "rejection_free_choose.pyx":7
  *     cdef double event_rate
  *     for i, event_rate in enumerate(event_rates):
  *         if event_rate >= r_tot:             # <<<<<<<<<<<<<<
@@ -1405,7 +1413,7 @@ static int __pyx_f_21rejection_free_choose_choose_an_event(double __pyx_v_r_tot,
     __pyx_t_6 = ((__pyx_v_event_rate >= __pyx_v_r_tot) != 0);
     if (__pyx_t_6) {
 
-      /* "rejection_free_choose.pyx":11
+      /* "rejection_free_choose.pyx":8
  *     for i, event_rate in enumerate(event_rates):
  *         if event_rate >= r_tot:
  *             return i             # <<<<<<<<<<<<<<
@@ -1416,7 +1424,7 @@ static int __pyx_f_21rejection_free_choose_choose_an_event(double __pyx_v_r_tot,
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       goto __pyx_L0;
 
-      /* "rejection_free_choose.pyx":10
+      /* "rejection_free_choose.pyx":7
  *     cdef double event_rate
  *     for i, event_rate in enumerate(event_rates):
  *         if event_rate >= r_tot:             # <<<<<<<<<<<<<<
@@ -1425,7 +1433,7 @@ static int __pyx_f_21rejection_free_choose_choose_an_event(double __pyx_v_r_tot,
  */
     }
 
-    /* "rejection_free_choose.pyx":13
+    /* "rejection_free_choose.pyx":10
  *             return i
  *         else:
  *             r_tot -= event_rate             # <<<<<<<<<<<<<<
@@ -1436,7 +1444,7 @@ static int __pyx_f_21rejection_free_choose_choose_an_event(double __pyx_v_r_tot,
       __pyx_v_r_tot = (__pyx_v_r_tot - __pyx_v_event_rate);
     }
 
-    /* "rejection_free_choose.pyx":9
+    /* "rejection_free_choose.pyx":6
  *     cdef int i
  *     cdef double event_rate
  *     for i, event_rate in enumerate(event_rates):             # <<<<<<<<<<<<<<
@@ -1446,8 +1454,8 @@ static int __pyx_f_21rejection_free_choose_choose_an_event(double __pyx_v_r_tot,
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "rejection_free_choose.pyx":6
- * 
+  /* "rejection_free_choose.pyx":3
+ * import random
  * 
  * cdef int choose_an_event(double r_tot, list event_rates):             # <<<<<<<<<<<<<<
  *     cdef int i
@@ -1467,22 +1475,21 @@ static int __pyx_f_21rejection_free_choose_choose_an_event(double __pyx_v_r_tot,
   return __pyx_r;
 }
 
-/* "rejection_free_choose.pyx":16
+/* "rejection_free_choose.pyx":13
  * 
  * 
  * cpdef tuple rejection_free_choise(             # <<<<<<<<<<<<<<
  *     double total_event_time,
- *     dict event_time,
+ *     list event_time,
  */
 
 static PyObject *__pyx_pw_21rejection_free_choose_1rejection_free_choise(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_f_21rejection_free_choose_rejection_free_choise(double __pyx_v_total_event_time, PyObject *__pyx_v_event_time, PyObject *__pyx_v_event_time_tot, PyObject *__pyx_v_list_site_correspondance, double __pyx_v_dep_rate, CYTHON_UNUSED int __pyx_skip_dispatch) {
+static PyObject *__pyx_f_21rejection_free_choose_rejection_free_choise(double __pyx_v_total_event_time, PyObject *__pyx_v_event_time, PyObject *__pyx_v_event_time_tot, double __pyx_v_dep_rate, CYTHON_UNUSED int __pyx_skip_dispatch) {
   double __pyx_v_random_val;
   double __pyx_v_r_tot;
   double __pyx_v_rate;
   int __pyx_v_i;
   int __pyx_v_event_number;
-  PyObject *__pyx_v_rate_site = 0;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -1492,21 +1499,22 @@ static PyObject *__pyx_f_21rejection_free_choose_rejection_free_choise(double __
   int __pyx_t_5;
   Py_ssize_t __pyx_t_6;
   int __pyx_t_7;
+  PyObject *__pyx_t_8 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("rejection_free_choise", 0);
 
-  /* "rejection_free_choose.pyx":27
- *     cdef tuple rate_site
+  /* "rejection_free_choose.pyx":22
+ *     cdef int i, event_number
  * 
  *     random_val = random.random()             # <<<<<<<<<<<<<<
  *     r_tot = total_event_time * random_val
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_random); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 27, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_random); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 22, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_random); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 27, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_random); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 22, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -1521,14 +1529,14 @@ static PyObject *__pyx_f_21rejection_free_choose_rejection_free_choise(double __
   }
   __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 27, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 22, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 27, __pyx_L1_error)
+  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 22, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_random_val = __pyx_t_4;
 
-  /* "rejection_free_choose.pyx":28
+  /* "rejection_free_choose.pyx":23
  * 
  *     random_val = random.random()
  *     r_tot = total_event_time * random_val             # <<<<<<<<<<<<<<
@@ -1537,7 +1545,7 @@ static PyObject *__pyx_f_21rejection_free_choose_rejection_free_choise(double __
  */
   __pyx_v_r_tot = (__pyx_v_total_event_time * __pyx_v_random_val);
 
-  /* "rejection_free_choose.pyx":30
+  /* "rejection_free_choose.pyx":25
  *     r_tot = total_event_time * random_val
  * 
  *     for i, rate in enumerate(event_time_tot):             # <<<<<<<<<<<<<<
@@ -1549,18 +1557,18 @@ static PyObject *__pyx_f_21rejection_free_choose_rejection_free_choise(double __
   for (;;) {
     if (__pyx_t_6 >= PyList_GET_SIZE(__pyx_t_1)) break;
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-    __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_6); __Pyx_INCREF(__pyx_t_3); __pyx_t_6++; if (unlikely(0 < 0)) __PYX_ERR(0, 30, __pyx_L1_error)
+    __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_6); __Pyx_INCREF(__pyx_t_3); __pyx_t_6++; if (unlikely(0 < 0)) __PYX_ERR(0, 25, __pyx_L1_error)
     #else
-    __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 30, __pyx_L1_error)
+    __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 25, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     #endif
-    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 30, __pyx_L1_error)
+    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 25, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_v_rate = __pyx_t_4;
     __pyx_v_i = __pyx_t_5;
     __pyx_t_5 = (__pyx_t_5 + 1);
 
-    /* "rejection_free_choose.pyx":31
+    /* "rejection_free_choose.pyx":26
  * 
  *     for i, rate in enumerate(event_time_tot):
  *         if rate >= r_tot:             # <<<<<<<<<<<<<<
@@ -1570,7 +1578,7 @@ static PyObject *__pyx_f_21rejection_free_choose_rejection_free_choise(double __
     __pyx_t_7 = ((__pyx_v_rate >= __pyx_v_r_tot) != 0);
     if (__pyx_t_7) {
 
-      /* "rejection_free_choose.pyx":32
+      /* "rejection_free_choose.pyx":27
  *     for i, rate in enumerate(event_time_tot):
  *         if rate >= r_tot:
  *             if rate == 0:             # <<<<<<<<<<<<<<
@@ -1582,70 +1590,52 @@ static PyObject *__pyx_f_21rejection_free_choose_rejection_free_choise(double __
         goto __pyx_L6;
       }
 
-      /* "rejection_free_choose.pyx":35
+      /* "rejection_free_choose.pyx":30
  *                 pass
  *             else:
- *                 rate_site = list_site_correspondance[i]             # <<<<<<<<<<<<<<
- *                 event_number = choose_an_event(r_tot, event_time[rate_site])
- *                 return rate_site, event_number
- */
-      /*else*/ {
-        if (unlikely(__pyx_v_list_site_correspondance == Py_None)) {
-          PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-          __PYX_ERR(0, 35, __pyx_L1_error)
-        }
-        __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 35, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_list_site_correspondance, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 35, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        if (!(likely(PyTuple_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "tuple", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 35, __pyx_L1_error)
-        __pyx_v_rate_site = ((PyObject*)__pyx_t_2);
-        __pyx_t_2 = 0;
-
-        /* "rejection_free_choose.pyx":36
- *             else:
- *                 rate_site = list_site_correspondance[i]
- *                 event_number = choose_an_event(r_tot, event_time[rate_site])             # <<<<<<<<<<<<<<
- *                 return rate_site, event_number
+ *                 event_number = choose_an_event(r_tot, event_time[i])             # <<<<<<<<<<<<<<
+ *                 return i, event_number
  *         else:
  */
+      /*else*/ {
         if (unlikely(__pyx_v_event_time == Py_None)) {
           PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-          __PYX_ERR(0, 36, __pyx_L1_error)
+          __PYX_ERR(0, 30, __pyx_L1_error)
         }
-        __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_event_time, __pyx_v_rate_site); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 36, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        if (!(likely(PyList_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "list", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 36, __pyx_L1_error)
-        __pyx_v_event_number = __pyx_f_21rejection_free_choose_choose_an_event(__pyx_v_r_tot, ((PyObject*)__pyx_t_2));
-        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+        __pyx_t_3 = __Pyx_GetItemInt_List(__pyx_v_event_time, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 30, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_3);
+        if (!(likely(PyList_CheckExact(__pyx_t_3))||((__pyx_t_3) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "list", Py_TYPE(__pyx_t_3)->tp_name), 0))) __PYX_ERR(0, 30, __pyx_L1_error)
+        __pyx_v_event_number = __pyx_f_21rejection_free_choose_choose_an_event(__pyx_v_r_tot, ((PyObject*)__pyx_t_3));
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-        /* "rejection_free_choose.pyx":37
- *                 rate_site = list_site_correspondance[i]
- *                 event_number = choose_an_event(r_tot, event_time[rate_site])
- *                 return rate_site, event_number             # <<<<<<<<<<<<<<
+        /* "rejection_free_choose.pyx":31
+ *             else:
+ *                 event_number = choose_an_event(r_tot, event_time[i])
+ *                 return i, event_number             # <<<<<<<<<<<<<<
  *         else:
  *             r_tot -= rate
  */
         __Pyx_XDECREF(__pyx_r);
-        __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_event_number); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 37, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 37, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 31, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __Pyx_INCREF(__pyx_v_rate_site);
-        __Pyx_GIVEREF(__pyx_v_rate_site);
-        PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_v_rate_site);
+        __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_event_number); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 31, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __pyx_t_8 = PyTuple_New(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 31, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_8);
+        __Pyx_GIVEREF(__pyx_t_3);
+        PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_3);
         __Pyx_GIVEREF(__pyx_t_2);
-        PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_2);
-        __pyx_t_2 = 0;
-        __pyx_r = ((PyObject*)__pyx_t_3);
+        PyTuple_SET_ITEM(__pyx_t_8, 1, __pyx_t_2);
         __pyx_t_3 = 0;
+        __pyx_t_2 = 0;
+        __pyx_r = ((PyObject*)__pyx_t_8);
+        __pyx_t_8 = 0;
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
         goto __pyx_L0;
       }
       __pyx_L6:;
 
-      /* "rejection_free_choose.pyx":31
+      /* "rejection_free_choose.pyx":26
  * 
  *     for i, rate in enumerate(event_time_tot):
  *         if rate >= r_tot:             # <<<<<<<<<<<<<<
@@ -1655,19 +1645,19 @@ static PyObject *__pyx_f_21rejection_free_choose_rejection_free_choise(double __
       goto __pyx_L5;
     }
 
-    /* "rejection_free_choose.pyx":39
- *                 return rate_site, event_number
+    /* "rejection_free_choose.pyx":33
+ *                 return i, event_number
  *         else:
  *             r_tot -= rate             # <<<<<<<<<<<<<<
  *     if r_tot <= dep_rate:
- *         return (-1, -1, -1), 0
+ *         return -1, 0
  */
     /*else*/ {
       __pyx_v_r_tot = (__pyx_v_r_tot - __pyx_v_rate);
     }
     __pyx_L5:;
 
-    /* "rejection_free_choose.pyx":30
+    /* "rejection_free_choose.pyx":25
  *     r_tot = total_event_time * random_val
  * 
  *     for i, rate in enumerate(event_time_tot):             # <<<<<<<<<<<<<<
@@ -1677,126 +1667,126 @@ static PyObject *__pyx_f_21rejection_free_choose_rejection_free_choise(double __
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "rejection_free_choose.pyx":40
+  /* "rejection_free_choose.pyx":34
  *         else:
  *             r_tot -= rate
  *     if r_tot <= dep_rate:             # <<<<<<<<<<<<<<
- *         return (-1, -1, -1), 0
+ *         return -1, 0
  *     else:
  */
   __pyx_t_7 = ((__pyx_v_r_tot <= __pyx_v_dep_rate) != 0);
   if (__pyx_t_7) {
 
-    /* "rejection_free_choose.pyx":41
+    /* "rejection_free_choose.pyx":35
  *             r_tot -= rate
  *     if r_tot <= dep_rate:
- *         return (-1, -1, -1), 0             # <<<<<<<<<<<<<<
+ *         return -1, 0             # <<<<<<<<<<<<<<
  *     else:
  *         print("total: " + str(total_event_time))
  */
     __Pyx_XDECREF(__pyx_r);
-    __Pyx_INCREF(__pyx_tuple__2);
-    __pyx_r = __pyx_tuple__2;
+    __Pyx_INCREF(__pyx_tuple_);
+    __pyx_r = __pyx_tuple_;
     goto __pyx_L0;
 
-    /* "rejection_free_choose.pyx":40
+    /* "rejection_free_choose.pyx":34
  *         else:
  *             r_tot -= rate
  *     if r_tot <= dep_rate:             # <<<<<<<<<<<<<<
- *         return (-1, -1, -1), 0
+ *         return -1, 0
  *     else:
  */
   }
 
-  /* "rejection_free_choose.pyx":43
- *         return (-1, -1, -1), 0
+  /* "rejection_free_choose.pyx":37
+ *         return -1, 0
  *     else:
  *         print("total: " + str(total_event_time))             # <<<<<<<<<<<<<<
  *         print("r_tot: " + str(r_tot))
  *         print("dep_rate: " + str(dep_rate))
  */
   /*else*/ {
-    __pyx_t_1 = PyFloat_FromDouble(__pyx_v_total_event_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 43, __pyx_L1_error)
+    __pyx_t_1 = PyFloat_FromDouble(__pyx_v_total_event_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 37, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 43, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_8 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 37, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = PyNumber_Add(__pyx_kp_s_total, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 43, __pyx_L1_error)
+    __pyx_t_1 = PyNumber_Add(__pyx_kp_s_total, __pyx_t_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 37, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (__Pyx_PrintOne(0, __pyx_t_1) < 0) __PYX_ERR(0, 43, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    if (__Pyx_PrintOne(0, __pyx_t_1) < 0) __PYX_ERR(0, 37, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "rejection_free_choose.pyx":44
+    /* "rejection_free_choose.pyx":38
  *     else:
  *         print("total: " + str(total_event_time))
  *         print("r_tot: " + str(r_tot))             # <<<<<<<<<<<<<<
  *         print("dep_rate: " + str(dep_rate))
  *         print("random: " + str(random_val))
  */
-    __pyx_t_1 = PyFloat_FromDouble(__pyx_v_r_tot); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
+    __pyx_t_1 = PyFloat_FromDouble(__pyx_v_r_tot); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 44, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_8 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 38, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = PyNumber_Add(__pyx_kp_s_r_tot, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
+    __pyx_t_1 = PyNumber_Add(__pyx_kp_s_r_tot, __pyx_t_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (__Pyx_PrintOne(0, __pyx_t_1) < 0) __PYX_ERR(0, 44, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    if (__Pyx_PrintOne(0, __pyx_t_1) < 0) __PYX_ERR(0, 38, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "rejection_free_choose.pyx":45
+    /* "rejection_free_choose.pyx":39
  *         print("total: " + str(total_event_time))
  *         print("r_tot: " + str(r_tot))
  *         print("dep_rate: " + str(dep_rate))             # <<<<<<<<<<<<<<
  *         print("random: " + str(random_val))
- *         return (-1, -1, -1), 0
+ *         return -1, 0
  */
-    __pyx_t_1 = PyFloat_FromDouble(__pyx_v_dep_rate); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 45, __pyx_L1_error)
+    __pyx_t_1 = PyFloat_FromDouble(__pyx_v_dep_rate); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 39, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 45, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_8 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 39, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = PyNumber_Add(__pyx_kp_s_dep_rate, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 45, __pyx_L1_error)
+    __pyx_t_1 = PyNumber_Add(__pyx_kp_s_dep_rate, __pyx_t_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 39, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (__Pyx_PrintOne(0, __pyx_t_1) < 0) __PYX_ERR(0, 45, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    if (__Pyx_PrintOne(0, __pyx_t_1) < 0) __PYX_ERR(0, 39, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "rejection_free_choose.pyx":46
+    /* "rejection_free_choose.pyx":40
  *         print("r_tot: " + str(r_tot))
  *         print("dep_rate: " + str(dep_rate))
  *         print("random: " + str(random_val))             # <<<<<<<<<<<<<<
- *         return (-1, -1, -1), 0
+ *         return -1, 0
  */
-    __pyx_t_1 = PyFloat_FromDouble(__pyx_v_random_val); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 46, __pyx_L1_error)
+    __pyx_t_1 = PyFloat_FromDouble(__pyx_v_random_val); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 40, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 46, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_8 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 40, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = PyNumber_Add(__pyx_kp_s_random_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 46, __pyx_L1_error)
+    __pyx_t_1 = PyNumber_Add(__pyx_kp_s_random_2, __pyx_t_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 40, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (__Pyx_PrintOne(0, __pyx_t_1) < 0) __PYX_ERR(0, 46, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    if (__Pyx_PrintOne(0, __pyx_t_1) < 0) __PYX_ERR(0, 40, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "rejection_free_choose.pyx":47
+    /* "rejection_free_choose.pyx":41
  *         print("dep_rate: " + str(dep_rate))
  *         print("random: " + str(random_val))
- *         return (-1, -1, -1), 0             # <<<<<<<<<<<<<<
+ *         return -1, 0             # <<<<<<<<<<<<<<
  */
     __Pyx_XDECREF(__pyx_r);
-    __Pyx_INCREF(__pyx_tuple__2);
-    __pyx_r = __pyx_tuple__2;
+    __Pyx_INCREF(__pyx_tuple_);
+    __pyx_r = __pyx_tuple_;
     goto __pyx_L0;
   }
 
-  /* "rejection_free_choose.pyx":16
+  /* "rejection_free_choose.pyx":13
  * 
  * 
  * cpdef tuple rejection_free_choise(             # <<<<<<<<<<<<<<
  *     double total_event_time,
- *     dict event_time,
+ *     list event_time,
  */
 
   /* function exit code */
@@ -1804,10 +1794,10 @@ static PyObject *__pyx_f_21rejection_free_choose_rejection_free_choise(double __
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_8);
   __Pyx_AddTraceback("rejection_free_choose.rejection_free_choise", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
-  __Pyx_XDECREF(__pyx_v_rate_site);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
@@ -1819,7 +1809,6 @@ static PyObject *__pyx_pw_21rejection_free_choose_1rejection_free_choise(PyObjec
   double __pyx_v_total_event_time;
   PyObject *__pyx_v_event_time = 0;
   PyObject *__pyx_v_event_time_tot = 0;
-  PyObject *__pyx_v_list_site_correspondance = 0;
   double __pyx_v_dep_rate;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
@@ -1828,14 +1817,12 @@ static PyObject *__pyx_pw_21rejection_free_choose_1rejection_free_choise(PyObjec
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("rejection_free_choise (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_total_event_time,&__pyx_n_s_event_time,&__pyx_n_s_event_time_tot,&__pyx_n_s_list_site_correspondance,&__pyx_n_s_dep_rate_2,0};
-    PyObject* values[5] = {0,0,0,0,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_total_event_time,&__pyx_n_s_event_time,&__pyx_n_s_event_time_tot,&__pyx_n_s_dep_rate_2,0};
+    PyObject* values[4] = {0,0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
       switch (pos_args) {
-        case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
-        CYTHON_FALLTHROUGH;
         case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
         CYTHON_FALLTHROUGH;
         case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
@@ -1856,57 +1843,48 @@ static PyObject *__pyx_pw_21rejection_free_choose_1rejection_free_choise(PyObjec
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_event_time)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("rejection_free_choise", 1, 5, 5, 1); __PYX_ERR(0, 16, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("rejection_free_choise", 1, 4, 4, 1); __PYX_ERR(0, 13, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_event_time_tot)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("rejection_free_choise", 1, 5, 5, 2); __PYX_ERR(0, 16, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("rejection_free_choise", 1, 4, 4, 2); __PYX_ERR(0, 13, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
-        if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_list_site_correspondance)) != 0)) kw_args--;
+        if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_dep_rate_2)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("rejection_free_choise", 1, 5, 5, 3); __PYX_ERR(0, 16, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case  4:
-        if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_dep_rate_2)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("rejection_free_choise", 1, 5, 5, 4); __PYX_ERR(0, 16, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("rejection_free_choise", 1, 4, 4, 3); __PYX_ERR(0, 13, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "rejection_free_choise") < 0)) __PYX_ERR(0, 16, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "rejection_free_choise") < 0)) __PYX_ERR(0, 13, __pyx_L3_error)
       }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 5) {
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 4) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
       values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
-      values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
     }
-    __pyx_v_total_event_time = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_total_event_time == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 17, __pyx_L3_error)
+    __pyx_v_total_event_time = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_total_event_time == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 14, __pyx_L3_error)
     __pyx_v_event_time = ((PyObject*)values[1]);
     __pyx_v_event_time_tot = ((PyObject*)values[2]);
-    __pyx_v_list_site_correspondance = ((PyObject*)values[3]);
-    __pyx_v_dep_rate = __pyx_PyFloat_AsDouble(values[4]); if (unlikely((__pyx_v_dep_rate == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 21, __pyx_L3_error)
+    __pyx_v_dep_rate = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_dep_rate == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 17, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("rejection_free_choise", 1, 5, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 16, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("rejection_free_choise", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 13, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("rejection_free_choose.rejection_free_choise", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_event_time), (&PyDict_Type), 1, "event_time", 1))) __PYX_ERR(0, 18, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_event_time_tot), (&PyList_Type), 1, "event_time_tot", 1))) __PYX_ERR(0, 19, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_list_site_correspondance), (&PyDict_Type), 1, "list_site_correspondance", 1))) __PYX_ERR(0, 20, __pyx_L1_error)
-  __pyx_r = __pyx_pf_21rejection_free_choose_rejection_free_choise(__pyx_self, __pyx_v_total_event_time, __pyx_v_event_time, __pyx_v_event_time_tot, __pyx_v_list_site_correspondance, __pyx_v_dep_rate);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_event_time), (&PyList_Type), 1, "event_time", 1))) __PYX_ERR(0, 15, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_event_time_tot), (&PyList_Type), 1, "event_time_tot", 1))) __PYX_ERR(0, 16, __pyx_L1_error)
+  __pyx_r = __pyx_pf_21rejection_free_choose_rejection_free_choise(__pyx_self, __pyx_v_total_event_time, __pyx_v_event_time, __pyx_v_event_time_tot, __pyx_v_dep_rate);
 
   /* function exit code */
   goto __pyx_L0;
@@ -1917,7 +1895,7 @@ static PyObject *__pyx_pw_21rejection_free_choose_1rejection_free_choise(PyObjec
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_21rejection_free_choose_rejection_free_choise(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_total_event_time, PyObject *__pyx_v_event_time, PyObject *__pyx_v_event_time_tot, PyObject *__pyx_v_list_site_correspondance, double __pyx_v_dep_rate) {
+static PyObject *__pyx_pf_21rejection_free_choose_rejection_free_choise(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_total_event_time, PyObject *__pyx_v_event_time, PyObject *__pyx_v_event_time_tot, double __pyx_v_dep_rate) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -1926,7 +1904,7 @@ static PyObject *__pyx_pf_21rejection_free_choose_rejection_free_choise(CYTHON_U
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("rejection_free_choise", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_21rejection_free_choose_rejection_free_choise(__pyx_v_total_event_time, __pyx_v_event_time, __pyx_v_event_time_tot, __pyx_v_list_site_correspondance, __pyx_v_dep_rate, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 16, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_21rejection_free_choose_rejection_free_choise(__pyx_v_total_event_time, __pyx_v_event_time, __pyx_v_event_time_tot, __pyx_v_dep_rate, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 13, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -1999,7 +1977,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_event_time_tot, __pyx_k_event_time_tot, sizeof(__pyx_k_event_time_tot), 0, 0, 1, 1},
   {&__pyx_n_s_file, __pyx_k_file, sizeof(__pyx_k_file), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
-  {&__pyx_n_s_list_site_correspondance, __pyx_k_list_site_correspondance, sizeof(__pyx_k_list_site_correspondance), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
   {&__pyx_n_s_name, __pyx_k_name, sizeof(__pyx_k_name), 0, 0, 1, 1},
   {&__pyx_n_s_print, __pyx_k_print, sizeof(__pyx_k_print), 0, 0, 1, 1},
@@ -2012,7 +1989,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_enumerate = __Pyx_GetBuiltinName(__pyx_n_s_enumerate); if (!__pyx_builtin_enumerate) __PYX_ERR(0, 9, __pyx_L1_error)
+  __pyx_builtin_enumerate = __Pyx_GetBuiltinName(__pyx_n_s_enumerate); if (!__pyx_builtin_enumerate) __PYX_ERR(0, 6, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -2022,19 +1999,16 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "rejection_free_choose.pyx":41
+  /* "rejection_free_choose.pyx":35
  *             r_tot -= rate
  *     if r_tot <= dep_rate:
- *         return (-1, -1, -1), 0             # <<<<<<<<<<<<<<
+ *         return -1, 0             # <<<<<<<<<<<<<<
  *     else:
  *         print("total: " + str(total_event_time))
  */
-  __pyx_tuple_ = PyTuple_Pack(3, __pyx_int_neg_1, __pyx_int_neg_1, __pyx_int_neg_1); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 41, __pyx_L1_error)
+  __pyx_tuple_ = PyTuple_Pack(2, __pyx_int_neg_1, __pyx_int_0); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
-  __pyx_tuple__2 = PyTuple_Pack(2, __pyx_tuple_, __pyx_int_0); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 41, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__2);
-  __Pyx_GIVEREF(__pyx_tuple__2);
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -2318,19 +2292,19 @@ if (!__Pyx_RefNanny) {
   /* "rejection_free_choose.pyx":1
  * import random             # <<<<<<<<<<<<<<
  * 
- * # import decimal
+ * cdef int choose_an_event(double r_tot, list event_rates):
  */
   __pyx_t_1 = __Pyx_Import(__pyx_n_s_random, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_random, __pyx_t_1) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "rejection_free_choose.pyx":16
+  /* "rejection_free_choose.pyx":13
  * 
  * 
  * cpdef tuple rejection_free_choise(             # <<<<<<<<<<<<<<
  *     double total_event_time,
- *     dict event_time,
+ *     list event_time,
  */
   __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -2778,29 +2752,92 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObjec
 }
 #endif
 
-/* DictGetItem */
-#if PY_MAJOR_VERSION >= 3 && !CYTHON_COMPILING_IN_PYPY
-static PyObject *__Pyx_PyDict_GetItem(PyObject *d, PyObject* key) {
-    PyObject *value;
-    value = PyDict_GetItemWithError(d, key);
-    if (unlikely(!value)) {
-        if (!PyErr_Occurred()) {
-            if (unlikely(PyTuple_Check(key))) {
-                PyObject* args = PyTuple_Pack(1, key);
-                if (likely(args)) {
-                    PyErr_SetObject(PyExc_KeyError, args);
-                    Py_DECREF(args);
-                }
-            } else {
-                PyErr_SetObject(PyExc_KeyError, key);
-            }
-        }
-        return NULL;
-    }
-    Py_INCREF(value);
-    return value;
+/* GetItemInt */
+static PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j) {
+    PyObject *r;
+    if (!j) return NULL;
+    r = PyObject_GetItem(o, j);
+    Py_DECREF(j);
+    return r;
 }
+static CYTHON_INLINE PyObject *__Pyx_GetItemInt_List_Fast(PyObject *o, Py_ssize_t i,
+                                                              CYTHON_NCP_UNUSED int wraparound,
+                                                              CYTHON_NCP_UNUSED int boundscheck) {
+#if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+    Py_ssize_t wrapped_i = i;
+    if (wraparound & unlikely(i < 0)) {
+        wrapped_i += PyList_GET_SIZE(o);
+    }
+    if ((!boundscheck) || likely(__Pyx_is_valid_index(wrapped_i, PyList_GET_SIZE(o)))) {
+        PyObject *r = PyList_GET_ITEM(o, wrapped_i);
+        Py_INCREF(r);
+        return r;
+    }
+    return __Pyx_GetItemInt_Generic(o, PyInt_FromSsize_t(i));
+#else
+    return PySequence_GetItem(o, i);
 #endif
+}
+static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Tuple_Fast(PyObject *o, Py_ssize_t i,
+                                                              CYTHON_NCP_UNUSED int wraparound,
+                                                              CYTHON_NCP_UNUSED int boundscheck) {
+#if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+    Py_ssize_t wrapped_i = i;
+    if (wraparound & unlikely(i < 0)) {
+        wrapped_i += PyTuple_GET_SIZE(o);
+    }
+    if ((!boundscheck) || likely(__Pyx_is_valid_index(wrapped_i, PyTuple_GET_SIZE(o)))) {
+        PyObject *r = PyTuple_GET_ITEM(o, wrapped_i);
+        Py_INCREF(r);
+        return r;
+    }
+    return __Pyx_GetItemInt_Generic(o, PyInt_FromSsize_t(i));
+#else
+    return PySequence_GetItem(o, i);
+#endif
+}
+static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Fast(PyObject *o, Py_ssize_t i, int is_list,
+                                                     CYTHON_NCP_UNUSED int wraparound,
+                                                     CYTHON_NCP_UNUSED int boundscheck) {
+#if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS && CYTHON_USE_TYPE_SLOTS
+    if (is_list || PyList_CheckExact(o)) {
+        Py_ssize_t n = ((!wraparound) | likely(i >= 0)) ? i : i + PyList_GET_SIZE(o);
+        if ((!boundscheck) || (likely(__Pyx_is_valid_index(n, PyList_GET_SIZE(o))))) {
+            PyObject *r = PyList_GET_ITEM(o, n);
+            Py_INCREF(r);
+            return r;
+        }
+    }
+    else if (PyTuple_CheckExact(o)) {
+        Py_ssize_t n = ((!wraparound) | likely(i >= 0)) ? i : i + PyTuple_GET_SIZE(o);
+        if ((!boundscheck) || likely(__Pyx_is_valid_index(n, PyTuple_GET_SIZE(o)))) {
+            PyObject *r = PyTuple_GET_ITEM(o, n);
+            Py_INCREF(r);
+            return r;
+        }
+    } else {
+        PySequenceMethods *m = Py_TYPE(o)->tp_as_sequence;
+        if (likely(m && m->sq_item)) {
+            if (wraparound && unlikely(i < 0) && likely(m->sq_length)) {
+                Py_ssize_t l = m->sq_length(o);
+                if (likely(l >= 0)) {
+                    i += l;
+                } else {
+                    if (!PyErr_ExceptionMatches(PyExc_OverflowError))
+                        return NULL;
+                    PyErr_Clear();
+                }
+            }
+            return m->sq_item(o, i);
+        }
+    }
+#else
+    if (is_list || PySequence_Check(o)) {
+        return PySequence_GetItem(o, i);
+    }
+#endif
+    return __Pyx_GetItemInt_Generic(o, PyInt_FromSsize_t(i));
+}
 
 /* RaiseArgTupleInvalid */
 static void __Pyx_RaiseArgtupleInvalid(

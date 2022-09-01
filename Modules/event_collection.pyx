@@ -1,45 +1,46 @@
 from Modules.cal_rates import rate
-
+from Modules.Calc_grid_index import grid_num
 
 cpdef double total_energy(
-    dict atom_set, dict bonds, tuple target, list energy_bonding, list energy_diffuse, dict highest_atom
+    list atom_set, list bonds, int target, list energy_bonding, list energy_diffuse, list highest_atom, list index_list, int unit_length
 ):
-    cdef double bond_energy
-    cdef tuple bond
-    bond_energy = 0
-    if target[2] == 0:
+    cdef double bond_energy = 0
+    cdef int x ,y, z, bond,b_x,b_y, b_z
+    x, y, z = index_list[target]
+    if z == 0:
         bond_energy += energy_bonding[0]
     # highest_atom >= 1 if sites above the transformation layer is occupied
-    if highest_atom[(target[0], target[1])] == 0:
+    if highest_atom[grid_num(x, y, 0, unit_length)] == 0:
         for bond in bonds[target]:
             if atom_set[bond] == 1:
-                bond_energy += energy_bonding[max(target[2], bond[2])]
-
-        return energy_diffuse[target[2]] + bond_energy
-    elif highest_atom[(target[0], target[1])] >= 1:  # transformtion is activated
+                b_x, b_y, b_z = index_list[bond]
+                bond_energy += energy_bonding[max(z, b_z)]
+        return energy_diffuse[z] + bond_energy
+    elif highest_atom[grid_num(x, y, 0, unit_length)] >= 1:  # transformtion is activated
         for bond in bonds[target]:
             if atom_set[bond] == 1:
                 bond_energy += energy_bonding[-1]  # bulk bonding energy
         return energy_diffuse[-1] + bond_energy  # bulk diffusion energy
 
 
-cdef list find_filled_sites(dict atom_set, list indexes):
-    cdef tuple atom_nn
+cdef list find_filled_sites(list atom_set, list indexes):
+    cdef int atom_nn
     return [atom_nn for atom_nn in indexes if atom_set[atom_nn] == 1]
 
 
-cdef list find_empty_sites(dict atom_set, list indexes):
-    cdef tuple atom_nn
+cdef list find_empty_sites(list atom_set, list indexes):
+    cdef int atom_nn
     return [atom_nn for atom_nn in indexes if atom_set[atom_nn] == 0]
 
 
-cdef tuple check_cluster(tuple c_target, dict atom_set, dict bonds, list cluster_start):
+cdef tuple check_cluster(int c_target, list atom_set, list bonds, list cluster_start, list index_list):
     cdef list cluster, next_atoms, check_atoms
-    cdef tuple bond, atom
+    cdef int bond, atom, c_x, c_y, c_z, b_x, b_y, b_z
     cluster = cluster_start.copy()
     cluster += [c_target]
     next_atoms = [c_target]
-    if c_target[2] == 0:
+    c_x, c_y, c_z = index_list[c_target]
+    if c_z == 0:
         return [], False
     while next_atoms != []:
         check_atoms = next_atoms.copy()
@@ -49,21 +50,23 @@ cdef tuple check_cluster(tuple c_target, dict atom_set, dict bonds, list cluster
                 if (atom_set[bond] == 1) and (bond not in cluster):
                     cluster += [bond]
                     next_atoms += [bond]
-                    if (bond[2] == 0) or (len(cluster) >= 5):
+                    b_x, b_y, b_z = index_list[bond]
+                    if (b_z == 0) or (len(cluster) >= 5):
                         return cluster, False
     return cluster, True
 
 
 # Remove events which cause isolated atoms
 cpdef list judge_isolation(
-    dict atom_set,
-    dict bonds,
-    tuple target,
+    list atom_set,
+    list bonds,
+    int target,
     list nn_atoms,
     list events,
+    list index_list
 ):
     cdef list clusters, checked, remove, cluster, nn_nn_list, common, nonused, empty
-    cdef tuple nn_atom, event, nn_nn, i 
+    cdef int nn_atom, event, nn_nn, i ,e_x, e_y, e_z
     cdef bint z_judge
     atom_set[target] = 0
     clusters = []
@@ -72,7 +75,7 @@ cpdef list judge_isolation(
     empty = []
     for nn_atom in nn_atoms:
         if nn_atom not in checked:
-            cluster, z_judge = check_cluster(nn_atom, atom_set, bonds, empty)
+            cluster, z_judge = check_cluster(nn_atom, atom_set, bonds, empty, index_list)
             checked += cluster
             if z_judge is True:
                 clusters.append(cluster)
@@ -82,8 +85,9 @@ cpdef list judge_isolation(
 
     if clusters == []:
         for event in events:
+            e_x,e_y, e_z = index_list[event]
             nn_nn_list = [nn_nn for nn_nn in bonds[event] if atom_set[nn_nn] == 1]
-            if nn_nn_list == [] and event[2] != 0:
+            if nn_nn_list == [] and e_z != 0:
                 remove += [event]
     else:
         for event in events:
@@ -94,7 +98,7 @@ cpdef list judge_isolation(
                     remove += [event]
                     break
                 else:
-                    nonused, z_judge = check_cluster(event, atom_set, bonds, cluster)
+                    nonused, z_judge = check_cluster(event, atom_set, bonds, cluster, index_list)
                     if z_judge:
                         remove += [event]
             atom_set[event] = 0
@@ -106,39 +110,40 @@ cpdef list judge_isolation(
 
 
 cpdef tuple possible_events(
-    dict atom_set,
-    dict bonds,
-    tuple target,
+    list atom_set,
+    list bonds,
+    int target,
     params,
     double energy,
-    dict diffuse_candidates,
+    list diffuse_candidates,
+    list index_list
 ):
     cdef double pre, kbt,rearange_rate
     cdef list eve_rate, nn_atom,event_f, rates_f
-    cdef tuple cand, nonused
+    cdef int cand, nonused
     pre = float(params.prefactor)
     kbt = params.temperature_eV
     eve_rate = []
-    # rearange_rate = Decimal(rate(pre, kbt, energy)).quantize(Decimal("0.00000001"))
     rearange_rate = rate(pre, kbt, energy)
     nn_atom = find_filled_sites(atom_set, bonds[target])
     #
     eve_rate += [cand for cand in diffuse_candidates[target] if atom_set[cand] == 0]
-    event_f = judge_isolation(atom_set, bonds, target, nn_atom, eve_rate)
+    event_f = judge_isolation(atom_set, bonds, target, nn_atom, eve_rate, index_list)
     rates_f = [rearange_rate for nonused in event_f]
 
     return event_f, rates_f
 
 
 cpdef tuple site_events(
-    dict atom_set,
-    dict bonds,
-    tuple target,
+    list atom_set,
+    list bonds,
+    int target,
     params,
     list energy_bonding,
     list energy_diffuse,
-    dict diffuse_candidates,
-    dict highest_atom,
+    list diffuse_candidates,
+    list highest_atom,
+    list index_list
 ):
     cdef list event_list = []
     cdef list rate_list = []
@@ -150,9 +155,11 @@ cpdef tuple site_events(
         energy_bonding,
         energy_diffuse,
         highest_atom,
+        index_list,
+        params.cell_size_xy
     )
     # calculate possible events
     event_list, rate_list = possible_events(
-        atom_set, bonds, target, params, energy, diffuse_candidates
+        atom_set, bonds, target, params, energy, diffuse_candidates, index_list
     )
     return event_list, rate_list

@@ -19,6 +19,7 @@
   #define DL_IMPORT(_T) _T
 #endif
 
+__PYX_EXTERN_C PyObject *lattice_first;
 __PYX_EXTERN_C PyObject *lattice;
 __PYX_EXTERN_C PyObject *atom_set;
 __PYX_EXTERN_C PyObject *bonds;
@@ -29,6 +30,7 @@ __PYX_EXTERN_C PyObject *site_list_correspondance;
 __PYX_EXTERN_C PyObject *list_site_correspondance;
 __PYX_EXTERN_C PyObject *diffuse_candidates;
 __PYX_EXTERN_C PyObject *highest_atom;
+__PYX_EXTERN_C PyObject *index_list;
 
 #endif /* !__PYX_HAVE_API__lattice_form */
 

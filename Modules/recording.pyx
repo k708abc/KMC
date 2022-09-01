@@ -89,11 +89,12 @@ def image_formaiton(args):
     for z in range(maxz + 1):
         for x in range(length):
             for y in range(length):
-                if pos[(x, y, z)] == 0:
+                index = grid_num(x, y, z, length)
+                if pos[index] == 0:
                     pass
                 else:
-                    xp = lattice[(x, y, z)][0]
-                    yp = lattice[(x, y, z)][1]
+                    xp = lattice[index][0]
+                    yp = lattice[index][1]
                     tri_pos = triangle(xp, yp, z)
                     color = color_determinate(z, maxz)
                     p = pat.Polygon(xy=tri_pos, fc=color, ec=color)
@@ -173,19 +174,20 @@ def image_formaiton(args):
     fig.savefig(img_name)
 
 
-def occupation_of_layers(maxz, pos, n_BL):
+def occupation_of_layers(maxz, pos, n_BL, index_list):
     hist: List[float] = [0 for _ in range(math.floor(maxz / 2))]
-    for pos_index, atom_state in pos.items():
+    for pos_index, atom_state in enumerate(pos):
         if atom_state == 1:
-            hist[pos_index[2] // 2] += 1 / n_BL * 100
+            _, _, z = index_list[pos_index]
+            hist[z // 2] += 1 / n_BL * 100
     return hist
 
 
 def hist_formation(args):
-    pos, maxz, n_BL, img_name = args
+    pos, maxz, n_BL, img_name, index_list = args
     left: List[float] = [i + 1 for i in range(math.floor(maxz / 2))]
     #
-    hist = occupation_of_layers(maxz, pos, n_BL)
+    hist = occupation_of_layers(maxz, pos, n_BL, index_list)
     #
     fig = plt.figure()
     bx = fig.add_subplot(111)
@@ -202,7 +204,7 @@ def hist_formation(args):
     fig.savefig(img_name)
 
 
-def rec_poscar(pos: Dict, lattice: Dict, unit_length: int, maxz: int, rec_name: str):
+def rec_poscar(pos: List, lattice: List, unit_length: int, maxz: int, rec_name: str, index_list: List):
     xp: list[float] = [[]]
     yp: list[float] = [[]]
     zp: list[float] = [[]]
@@ -235,9 +237,9 @@ def rec_poscar(pos: Dict, lattice: Dict, unit_length: int, maxz: int, rec_name: 
     y_Ag = [i / Ag_num for _ in range(Ag_num) for i in range(Ag_num)]
     #
 
-    for index, atom_state in pos.items():
+    for index, atom_state in enumerate(pos):
+        x_val, y_val, z_val = index_list[index]
         if atom_state != 0:
-            z_val = index[2]
             if z_val > zmax:
                 while zmax < z_val:
                     xp.append([])
@@ -402,20 +404,20 @@ def record_data(
         hist_name = dir_name + rec_name + "_hist.png"
         if params.start_from_middle is False:
             p_hist = Pool(1)
-            p_hist.map(hist_formation, [[pos_i, maxz_unit, n_BL, hist_name]])
+            p_hist.map(hist_formation, [[pos_i, maxz_unit, n_BL, hist_name, index_list]])
             p_hist.close()
             # p.join()
         else:
-            hist_formation([pos_i, maxz_unit, n_BL, hist_name])
+            hist_formation([pos_i, maxz_unit, n_BL, hist_name, index_list])
             plt.clf()
             plt.close()
         hist_names.append(hist_name)
         #
         poscar_name = dir_name + rec_name + "_poscar.vasp"
-        rec_poscar(pos_i, lattice, unit_length, maxz, poscar_name)
+        rec_poscar(pos_i, lattice, unit_length, maxz, poscar_name, index_list)
         #
-        growth_mode.append(growth_check(pos_i, unit_length, maxz, params.atoms_in_BL))
-        occupation.append(occupation_of_layers(maxz_unit, pos_i, n_BL))
+        growth_mode.append(growth_check(pos_i, unit_length, maxz, params.atoms_in_BL, index_list))
+        occupation.append(occupation_of_layers(maxz_unit, pos_i, n_BL, index_list))
     #
     if params.start_from_middle is False:
         p_mode = Pool(1)

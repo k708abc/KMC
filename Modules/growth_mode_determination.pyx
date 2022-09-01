@@ -1,10 +1,11 @@
 from typing import ValuesView
+from Modules.Calc_grid_index import grid_num
 
-
-def height_check(pos_x, pos_y, pos, maxz):
+def height_check(pos_x, pos_y, pos, maxz, unit_length):
     max_pos = -1
     for z in range(maxz + 1):
-        if pos[(pos_x, pos_y, z)] != 0:
+        index = grid_num(pos_x, pos_y, z, unit_length)
+        if pos[index] != 0:
             max_pos = z
     return max_pos
 
@@ -16,7 +17,7 @@ def growth_check(pos, unit_length, maxz, atom_BL, index_list):
     num_multi = 0
     for i in range(unit_length):
         for k in range(unit_length):
-            height = height_check(i, k, pos, maxz, index_list)
+            height = height_check(i, k, pos, maxz, unit_length)
             if height == -1:
                 num_ag += 2
             elif height == 0:

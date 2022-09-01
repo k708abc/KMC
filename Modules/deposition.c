@@ -1474,7 +1474,7 @@ static PyObject *__pyx_f_10deposition_find_candidates(PyObject *__pyx_v_atom_set
  *         if condition == 1:
  *             pass
  *         elif atom_index[2] == 0:             # <<<<<<<<<<<<<<
- *             candidate.append(atom_index)
+ *             candidate.append(index)
  *         else:
  */
     if (unlikely(__pyx_v_atom_index == Py_None)) {
@@ -1493,24 +1493,27 @@ static PyObject *__pyx_f_10deposition_find_candidates(PyObject *__pyx_v_atom_set
       /* "deposition.pyx":14
  *             pass
  *         elif atom_index[2] == 0:
- *             candidate.append(atom_index)             # <<<<<<<<<<<<<<
+ *             candidate.append(index)             # <<<<<<<<<<<<<<
  *         else:
  *             for bond in bonds[index]:
  */
-      __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_candidate, __pyx_v_atom_index); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 14, __pyx_L1_error)
+      __pyx_t_7 = PyInt_FromSsize_t(__pyx_v_index); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 14, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_candidate, __pyx_t_7); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 14, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
       /* "deposition.pyx":13
  *         if condition == 1:
  *             pass
  *         elif atom_index[2] == 0:             # <<<<<<<<<<<<<<
- *             candidate.append(atom_index)
+ *             candidate.append(index)
  *         else:
  */
       goto __pyx_L5;
     }
 
     /* "deposition.pyx":16
- *             candidate.append(atom_index)
+ *             candidate.append(index)
  *         else:
  *             for bond in bonds[index]:             # <<<<<<<<<<<<<<
  *                 if atom_set[bond] == 1:
@@ -1618,7 +1621,7 @@ static PyObject *__pyx_f_10deposition_find_candidates(PyObject *__pyx_v_atom_set
         }
 
         /* "deposition.pyx":16
- *             candidate.append(atom_index)
+ *             candidate.append(index)
  *         else:
  *             for bond in bonds[index]:             # <<<<<<<<<<<<<<
  *                 if atom_set[bond] == 1:
@@ -1792,11 +1795,12 @@ static int __pyx_f_10deposition_dep_position(PyObject *__pyx_v_candidate) {
  * 
  * cpdef int deposit_an_atom(list atom_set, list bonds, list index_list):             # <<<<<<<<<<<<<<
  *     cdef list caindidate
- *     candidate = find_candidates(atom_set, bonds, index_list)
+ *     cdef int dep_pos
  */
 
 static PyObject *__pyx_pw_10deposition_1deposit_an_atom(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static int __pyx_f_10deposition_deposit_an_atom(PyObject *__pyx_v_atom_set, PyObject *__pyx_v_bonds, PyObject *__pyx_v_index_list, CYTHON_UNUSED int __pyx_skip_dispatch) {
+  int __pyx_v_dep_pos;
   PyObject *__pyx_v_candidate = NULL;
   int __pyx_r;
   __Pyx_RefNannyDeclarations
@@ -1806,23 +1810,32 @@ static int __pyx_f_10deposition_deposit_an_atom(PyObject *__pyx_v_atom_set, PyOb
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("deposit_an_atom", 0);
 
-  /* "deposition.pyx":29
- * cpdef int deposit_an_atom(list atom_set, list bonds, list index_list):
+  /* "deposition.pyx":30
  *     cdef list caindidate
+ *     cdef int dep_pos
  *     candidate = find_candidates(atom_set, bonds, index_list)             # <<<<<<<<<<<<<<
- *     return dep_position(candidate)
+ *     dep_pos = dep_position(candidate)
+ *     return dep_pos
  */
-  __pyx_t_1 = __pyx_f_10deposition_find_candidates(__pyx_v_atom_set, __pyx_v_bonds, __pyx_v_index_list); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 29, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_10deposition_find_candidates(__pyx_v_atom_set, __pyx_v_bonds, __pyx_v_index_list); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 30, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_candidate = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "deposition.pyx":30
- *     cdef list caindidate
+  /* "deposition.pyx":31
+ *     cdef int dep_pos
  *     candidate = find_candidates(atom_set, bonds, index_list)
- *     return dep_position(candidate)             # <<<<<<<<<<<<<<
+ *     dep_pos = dep_position(candidate)             # <<<<<<<<<<<<<<
+ *     return dep_pos
  */
-  __pyx_r = __pyx_f_10deposition_dep_position(__pyx_v_candidate);
+  __pyx_v_dep_pos = __pyx_f_10deposition_dep_position(__pyx_v_candidate);
+
+  /* "deposition.pyx":32
+ *     candidate = find_candidates(atom_set, bonds, index_list)
+ *     dep_pos = dep_position(candidate)
+ *     return dep_pos             # <<<<<<<<<<<<<<
+ */
+  __pyx_r = __pyx_v_dep_pos;
   goto __pyx_L0;
 
   /* "deposition.pyx":27
@@ -1830,7 +1843,7 @@ static int __pyx_f_10deposition_deposit_an_atom(PyObject *__pyx_v_atom_set, PyOb
  * 
  * cpdef int deposit_an_atom(list atom_set, list bonds, list index_list):             # <<<<<<<<<<<<<<
  *     cdef list caindidate
- *     candidate = find_candidates(atom_set, bonds, index_list)
+ *     cdef int dep_pos
  */
 
   /* function exit code */

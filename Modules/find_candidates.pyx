@@ -6,7 +6,7 @@ cpdef list find_aboves(list indexes, list index_list, int unit_length):
     cdef int x, y, z, new_index, index
     above_list = []
     for index in indexes:
-        x, y, z = index_list(index)
+        x, y, z = index_list[index]
         new_index = grid_num(x, y, z + 1, unit_length)
         above_list.append(new_index)
     return above_list
@@ -16,7 +16,7 @@ cpdef list find_lower_sites(list indexes, list index_list, int unit_length):
     cdef list below_list = []
     cdef int x, y, z, new_index, index
     for index in indexes:
-        x, y, z = index_list(index)
+        x, y, z = index_list[index]
         new_index = grid_num(x, y, z - 1, unit_length)
         below_list.append(new_index)
     return below_list
@@ -25,7 +25,6 @@ cpdef list find_lower_sites(list indexes, list index_list, int unit_length):
 cpdef list find_shares(list sites_list, list bonds):
     cdef list all_bonds = [], sfared_sites
     cdef int index, count, site
-    cdef dict counts
     for index in sites_list:
         all_bonds += bonds[index]
     counts = collections.Counter(all_bonds)

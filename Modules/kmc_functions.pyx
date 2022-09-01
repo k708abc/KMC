@@ -16,19 +16,20 @@ import pickle
 
 cdef class common_functions:
     cdef double start_time, total_event_time, elapsed_time, prog_time
-    cdef int n_atoms, n_events, rec_num_atoms, n_events_perdep, event_number, setting_value, unit_length
+    cdef int n_atoms, n_events, rec_num_atoms, n_events_perdep, event_number, setting_value, unit_length, total_time
     cdef list pos_rec, time_rec, cov_rec, n_events_rec, num_atoms_rec, event_time_tot, energy_bonding, energy_diffuse, related_atoms
     cdef list lattice, bonds, atom_set, event, event_time, site_list_correspondance, diffuse_candidates,highest_atom, index_list
     cdef bint height_change_rem, height_change_add
-    cdef tuple move_atom, target
+    cdef int move_atom, target
 
 
     def __init__(self):
         self.init_value = Params("kmc_input.yml")
         self.unit_length = self.init_value.cell_size_xy
+        self.total_time = int(self.init_value.total_time)
 
     cpdef loop(self):
-        while int(self.prog_time) <= int(self.init_value.total_time):
+        while int(self.prog_time) <= self.total_time:
             self.rejection_free_loop()
             self.update_progress()
             #
@@ -63,7 +64,6 @@ cdef class common_functions:
     cpdef update_progress(self):
         self.n_events += 1
         self.n_events_perdep += 1
-
         if self.n_events % 100000 == 0:
             self.recalculate_total_rate()
         """      
@@ -143,9 +143,10 @@ cdef class common_functions:
             self.energy_diffuse[i] -= self.energy_bonding[i]
 
     cpdef bint height_check_add(self, int pos):
-        index = self.index_list[pos]
-        if index[2] >= self.init_value.trans_num:
-            grid_index = grid_num(pos[0], pos[1], 0, self.unit_length)
+        cdef int x, y, z, grid_index
+        x, y, z = self.index_list[pos]
+        if z >= self.init_value.trans_num:
+            grid_index = grid_num(x, y, 0, self.unit_length)
             self.highest_atom[grid_index] += 1
             if self.highest_atom[grid_index] == 1:
                 return True
@@ -155,11 +156,12 @@ cdef class common_functions:
             return False
 
     cpdef bint height_check_remove(self, int pos):
-        index = self.index_list[pos]
-        if index[2] >= self.init_value.trans_num:
-            grid_index = grid_num(pos[0], pos[1], 0, self.unit_length)
+        cdef int x, y, z, grid_index
+        x, y, z = self.index_list[pos]
+        if z >= self.init_value.trans_num:
+            grid_index = grid_num(x, y, 0, self.unit_length)
             self.highest_atom[grid_index] -= 1
-            if self.highest_atom[index] == 0:
+            if self.highest_atom[grid_index] == 0:
                 return True
             else:
                 return False
@@ -167,10 +169,7 @@ cdef class common_functions:
             return False
 
 
-
-
-
-    cpdef update_events(self):ここから
+    cpdef update_events(self):
         cdef int target_rel
         cdef list events, rates
         cdef int list_num 
@@ -189,14 +188,14 @@ cdef class common_functions:
                     self.energy_diffuse,
                     self.diffuse_candidates,
                     self.highest_atom,
+                    self.index_list
                 )
 
-            list_num = self.site_list_correspondance[target_rel]
-            self.total_event_time -= self.event_time_tot[list_num]
+            self.total_event_time -= self.event_time_tot[target_rel]
             self.event[target_rel] = events
             self.event_time[target_rel] = rates
-            self.event_time_tot[list_num] = sum(rates)
-            self.total_event_time += self.event_time_tot[list_num]
+            self.event_time_tot[target_rel] = sum(rates)
+            self.total_event_time += self.event_time_tot[target_rel]
         self.related_atoms = []
         """
         self.total_event_time = self.init_value.dep_rate_atoms_persec
@@ -281,6 +280,8 @@ cdef class common_functions:
             self.diffuse_candidates,
             self.height_change_rem,
             self.init_value.trans_num,
+            self.index_list,
+            self.unit_length,
         )
         self.related_atoms += recalculate(
             self.move_atom,
@@ -289,6 +290,8 @@ cdef class common_functions:
             self.diffuse_candidates,
             self.height_change_add,
             self.init_value.trans_num,
+            self.index_list,
+            self.unit_length,
         )
         self.update_events()
 
@@ -317,10 +320,9 @@ cdef class common_functions:
             self.total_event_time,
             self.event_time,
             self.event_time_tot,
-            self.list_site_correspondance,
             self.init_value.dep_rate_atoms_persec,
         )
-        if self.target == (-1, -1, -1):
+        if self.target == -1:
             self.rejection_free_deposition()
         else:
             self.rejection_free_event()
@@ -355,6 +357,7 @@ cdef class common_functions:
             self.second,
             self.time_per_event,
             self.init_value,
+            self.index_list
         )
 
         total_time_dir = (
