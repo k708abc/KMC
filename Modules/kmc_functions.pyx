@@ -217,9 +217,6 @@ cdef class common_functions:
         return total_event_time
 
 
-
-
-
     cpdef update_after_deposition(self, int dep_pos):
         #
         self.n_events_rec.append(self.n_events_perdep)

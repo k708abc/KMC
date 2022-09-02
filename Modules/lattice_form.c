@@ -1346,17 +1346,13 @@ static PyObject *__pyx_builtin_RuntimeError;
 static const char __pyx_k_x[] = "x";
 static const char __pyx_k_y[] = "y";
 static const char __pyx_k_z[] = "z";
-static const char __pyx_k_Dict[] = "Dict";
-static const char __pyx_k_List[] = "List";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_name[] = "__name__";
 static const char __pyx_k_test[] = "__test__";
-static const char __pyx_k_Tuple[] = "Tuple";
 static const char __pyx_k_range[] = "range";
 static const char __pyx_k_z_max[] = "z_max";
 static const char __pyx_k_Params[] = "Params";
 static const char __pyx_k_import[] = "__import__";
-static const char __pyx_k_typing[] = "typing";
 static const char __pyx_k_z_inter[] = "z_inter";
 static const char __pyx_k_z_intra[] = "z_intra";
 static const char __pyx_k_grid_num[] = "grid_num";
@@ -1375,15 +1371,12 @@ static const char __pyx_k_Modules_InputParameter[] = "Modules.InputParameter";
 static const char __pyx_k_Modules_Calc_grid_index[] = "Modules.Calc_grid_index";
 static const char __pyx_k_Modules_find_candidates[] = "Modules.find_candidates";
 static const char __pyx_k_Something_wrong_happens_check_z[] = "Something wrong happens. check z_judge value";
-static PyObject *__pyx_n_s_Dict;
-static PyObject *__pyx_n_s_List;
 static PyObject *__pyx_n_s_Modules_Calc_grid_index;
 static PyObject *__pyx_n_s_Modules_InputParameter;
 static PyObject *__pyx_n_s_Modules_find_candidates;
 static PyObject *__pyx_n_s_Params;
 static PyObject *__pyx_n_s_RuntimeError;
 static PyObject *__pyx_kp_s_Something_wrong_happens_check_z;
-static PyObject *__pyx_n_s_Tuple;
 static PyObject *__pyx_n_s_cell_size_xy;
 static PyObject *__pyx_n_s_cell_size_z;
 static PyObject *__pyx_n_s_cline_in_traceback;
@@ -1398,7 +1391,6 @@ static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_n_s_num_grids;
 static PyObject *__pyx_n_s_range;
 static PyObject *__pyx_n_s_test;
-static PyObject *__pyx_n_s_typing;
 static PyObject *__pyx_n_s_unit_height;
 static PyObject *__pyx_n_s_unit_length;
 static PyObject *__pyx_n_s_x;
@@ -1416,7 +1408,7 @@ static PyObject *__pyx_int_0;
 static PyObject *__pyx_tuple_;
 /* Late includes */
 
-/* "lattice_form.pyx":7
+/* "lattice_form.pyx":6
  * 
  * 
  * cpdef list form_first_3BL(double z_intra, double z_inter, int unit_length):             # <<<<<<<<<<<<<<
@@ -1453,16 +1445,16 @@ static PyObject *__pyx_f_12lattice_form_form_first_3BL(double __pyx_v_z_intra, d
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("form_first_3BL", 0);
 
-  /* "lattice_form.pyx":9
+  /* "lattice_form.pyx":8
  * cpdef list form_first_3BL(double z_intra, double z_inter, int unit_length):
  *     cdef int x, y, index
  *     cdef list lattice_first = [[]]*unit_length**2             # <<<<<<<<<<<<<<
  *     for x in range(0, unit_length):
  *         for y in range(0, unit_length):
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 9, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 8, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyList_New(1 * ((__Pyx_pow_long(((long)__pyx_v_unit_length), 2)<0) ? 0:__Pyx_pow_long(((long)__pyx_v_unit_length), 2))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 9, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(1 * ((__Pyx_pow_long(((long)__pyx_v_unit_length), 2)<0) ? 0:__Pyx_pow_long(((long)__pyx_v_unit_length), 2))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 8, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   { Py_ssize_t __pyx_temp;
     for (__pyx_temp=0; __pyx_temp < __Pyx_pow_long(((long)__pyx_v_unit_length), 2); __pyx_temp++) {
@@ -1475,7 +1467,7 @@ static PyObject *__pyx_f_12lattice_form_form_first_3BL(double __pyx_v_z_intra, d
   __pyx_v_lattice_first = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "lattice_form.pyx":10
+  /* "lattice_form.pyx":9
  *     cdef int x, y, index
  *     cdef list lattice_first = [[]]*unit_length**2
  *     for x in range(0, unit_length):             # <<<<<<<<<<<<<<
@@ -1487,7 +1479,7 @@ static PyObject *__pyx_f_12lattice_form_form_first_3BL(double __pyx_v_z_intra, d
   for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
     __pyx_v_x = __pyx_t_5;
 
-    /* "lattice_form.pyx":11
+    /* "lattice_form.pyx":10
  *     cdef list lattice_first = [[]]*unit_length**2
  *     for x in range(0, unit_length):
  *         for y in range(0, unit_length):             # <<<<<<<<<<<<<<
@@ -1499,20 +1491,20 @@ static PyObject *__pyx_f_12lattice_form_form_first_3BL(double __pyx_v_z_intra, d
     for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
       __pyx_v_y = __pyx_t_8;
 
-      /* "lattice_form.pyx":12
+      /* "lattice_form.pyx":11
  *     for x in range(0, unit_length):
  *         for y in range(0, unit_length):
  *             index = grid_num(x, y, 0, unit_length)             # <<<<<<<<<<<<<<
  *             lattice_first[index] = [
  *                 [x, y, 0],
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 12, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 11, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 12, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 11, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
-      __pyx_t_10 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 12, __pyx_L1_error)
+      __pyx_t_10 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 11, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
-      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 12, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 11, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __pyx_t_12 = NULL;
       __pyx_t_13 = 0;
@@ -1529,7 +1521,7 @@ static PyObject *__pyx_f_12lattice_form_form_first_3BL(double __pyx_v_z_intra, d
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[5] = {__pyx_t_12, __pyx_t_9, __pyx_t_10, __pyx_int_0, __pyx_t_11};
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_13, 4+__pyx_t_13); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 12, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_13, 4+__pyx_t_13); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 11, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
@@ -1540,7 +1532,7 @@ static PyObject *__pyx_f_12lattice_form_form_first_3BL(double __pyx_v_z_intra, d
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[5] = {__pyx_t_12, __pyx_t_9, __pyx_t_10, __pyx_int_0, __pyx_t_11};
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_13, 4+__pyx_t_13); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 12, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_13, 4+__pyx_t_13); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 11, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
@@ -1549,7 +1541,7 @@ static PyObject *__pyx_f_12lattice_form_form_first_3BL(double __pyx_v_z_intra, d
       } else
       #endif
       {
-        __pyx_t_14 = PyTuple_New(4+__pyx_t_13); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 12, __pyx_L1_error)
+        __pyx_t_14 = PyTuple_New(4+__pyx_t_13); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 11, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_14);
         if (__pyx_t_12) {
           __Pyx_GIVEREF(__pyx_t_12); PyTuple_SET_ITEM(__pyx_t_14, 0, __pyx_t_12); __pyx_t_12 = NULL;
@@ -1566,27 +1558,27 @@ static PyObject *__pyx_f_12lattice_form_form_first_3BL(double __pyx_v_z_intra, d
         __pyx_t_9 = 0;
         __pyx_t_10 = 0;
         __pyx_t_11 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_14, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 12, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_14, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 11, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
       }
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_13 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_13 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 12, __pyx_L1_error)
+      __pyx_t_13 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_13 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 11, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __pyx_v_index = __pyx_t_13;
 
-      /* "lattice_form.pyx":14
+      /* "lattice_form.pyx":13
  *             index = grid_num(x, y, 0, unit_length)
  *             lattice_first[index] = [
  *                 [x, y, 0],             # <<<<<<<<<<<<<<
  *                 [x + 1 / 3.0, y + 1 / 3.0, z_intra],
  *                 [x + 1 / 3.0, y + 1 / 3.0, z_intra + z_inter],
  */
-      __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 14, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 13, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 14, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 13, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_14 = PyList_New(3); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 14, __pyx_L1_error)
+      __pyx_t_14 = PyList_New(3); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 13, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_14);
       __Pyx_GIVEREF(__pyx_t_2);
       PyList_SET_ITEM(__pyx_t_14, 0, __pyx_t_2);
@@ -1598,20 +1590,20 @@ static PyObject *__pyx_f_12lattice_form_form_first_3BL(double __pyx_v_z_intra, d
       __pyx_t_2 = 0;
       __pyx_t_1 = 0;
 
-      /* "lattice_form.pyx":15
+      /* "lattice_form.pyx":14
  *             lattice_first[index] = [
  *                 [x, y, 0],
  *                 [x + 1 / 3.0, y + 1 / 3.0, z_intra],             # <<<<<<<<<<<<<<
  *                 [x + 1 / 3.0, y + 1 / 3.0, z_intra + z_inter],
  *                 [x + 2 / 3.0, y + 2 / 3.0, 2 * z_intra + z_inter],
  */
-      __pyx_t_1 = PyFloat_FromDouble((__pyx_v_x + (1.0 / 3.0))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 15, __pyx_L1_error)
+      __pyx_t_1 = PyFloat_FromDouble((__pyx_v_x + (1.0 / 3.0))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 14, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_2 = PyFloat_FromDouble((__pyx_v_y + (1.0 / 3.0))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 15, __pyx_L1_error)
+      __pyx_t_2 = PyFloat_FromDouble((__pyx_v_y + (1.0 / 3.0))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 14, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_11 = PyFloat_FromDouble(__pyx_v_z_intra); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 15, __pyx_L1_error)
+      __pyx_t_11 = PyFloat_FromDouble(__pyx_v_z_intra); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 14, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
-      __pyx_t_10 = PyList_New(3); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 15, __pyx_L1_error)
+      __pyx_t_10 = PyList_New(3); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 14, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
       __Pyx_GIVEREF(__pyx_t_1);
       PyList_SET_ITEM(__pyx_t_10, 0, __pyx_t_1);
@@ -1623,20 +1615,20 @@ static PyObject *__pyx_f_12lattice_form_form_first_3BL(double __pyx_v_z_intra, d
       __pyx_t_2 = 0;
       __pyx_t_11 = 0;
 
-      /* "lattice_form.pyx":16
+      /* "lattice_form.pyx":15
  *                 [x, y, 0],
  *                 [x + 1 / 3.0, y + 1 / 3.0, z_intra],
  *                 [x + 1 / 3.0, y + 1 / 3.0, z_intra + z_inter],             # <<<<<<<<<<<<<<
  *                 [x + 2 / 3.0, y + 2 / 3.0, 2 * z_intra + z_inter],
  *                 [x + 2 / 3.0, y + 2 / 3.0, 2 * (z_inter + z_intra)],
  */
-      __pyx_t_11 = PyFloat_FromDouble((__pyx_v_x + (1.0 / 3.0))); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 16, __pyx_L1_error)
+      __pyx_t_11 = PyFloat_FromDouble((__pyx_v_x + (1.0 / 3.0))); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 15, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
-      __pyx_t_2 = PyFloat_FromDouble((__pyx_v_y + (1.0 / 3.0))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 16, __pyx_L1_error)
+      __pyx_t_2 = PyFloat_FromDouble((__pyx_v_y + (1.0 / 3.0))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 15, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_1 = PyFloat_FromDouble((__pyx_v_z_intra + __pyx_v_z_inter)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 16, __pyx_L1_error)
+      __pyx_t_1 = PyFloat_FromDouble((__pyx_v_z_intra + __pyx_v_z_inter)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 15, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_9 = PyList_New(3); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 16, __pyx_L1_error)
+      __pyx_t_9 = PyList_New(3); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 15, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
       __Pyx_GIVEREF(__pyx_t_11);
       PyList_SET_ITEM(__pyx_t_9, 0, __pyx_t_11);
@@ -1648,20 +1640,20 @@ static PyObject *__pyx_f_12lattice_form_form_first_3BL(double __pyx_v_z_intra, d
       __pyx_t_2 = 0;
       __pyx_t_1 = 0;
 
-      /* "lattice_form.pyx":17
+      /* "lattice_form.pyx":16
  *                 [x + 1 / 3.0, y + 1 / 3.0, z_intra],
  *                 [x + 1 / 3.0, y + 1 / 3.0, z_intra + z_inter],
  *                 [x + 2 / 3.0, y + 2 / 3.0, 2 * z_intra + z_inter],             # <<<<<<<<<<<<<<
  *                 [x + 2 / 3.0, y + 2 / 3.0, 2 * (z_inter + z_intra)],
  *                 [x, y, 2 * (z_inter + z_intra) + z_intra],
  */
-      __pyx_t_1 = PyFloat_FromDouble((__pyx_v_x + (2.0 / 3.0))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
+      __pyx_t_1 = PyFloat_FromDouble((__pyx_v_x + (2.0 / 3.0))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 16, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_2 = PyFloat_FromDouble((__pyx_v_y + (2.0 / 3.0))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 17, __pyx_L1_error)
+      __pyx_t_2 = PyFloat_FromDouble((__pyx_v_y + (2.0 / 3.0))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 16, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_11 = PyFloat_FromDouble(((2.0 * __pyx_v_z_intra) + __pyx_v_z_inter)); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 17, __pyx_L1_error)
+      __pyx_t_11 = PyFloat_FromDouble(((2.0 * __pyx_v_z_intra) + __pyx_v_z_inter)); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 16, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
-      __pyx_t_12 = PyList_New(3); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 17, __pyx_L1_error)
+      __pyx_t_12 = PyList_New(3); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 16, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
       __Pyx_GIVEREF(__pyx_t_1);
       PyList_SET_ITEM(__pyx_t_12, 0, __pyx_t_1);
@@ -1673,20 +1665,20 @@ static PyObject *__pyx_f_12lattice_form_form_first_3BL(double __pyx_v_z_intra, d
       __pyx_t_2 = 0;
       __pyx_t_11 = 0;
 
-      /* "lattice_form.pyx":18
+      /* "lattice_form.pyx":17
  *                 [x + 1 / 3.0, y + 1 / 3.0, z_intra + z_inter],
  *                 [x + 2 / 3.0, y + 2 / 3.0, 2 * z_intra + z_inter],
  *                 [x + 2 / 3.0, y + 2 / 3.0, 2 * (z_inter + z_intra)],             # <<<<<<<<<<<<<<
  *                 [x, y, 2 * (z_inter + z_intra) + z_intra],
  *             ]
  */
-      __pyx_t_11 = PyFloat_FromDouble((__pyx_v_x + (2.0 / 3.0))); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 18, __pyx_L1_error)
+      __pyx_t_11 = PyFloat_FromDouble((__pyx_v_x + (2.0 / 3.0))); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 17, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
-      __pyx_t_2 = PyFloat_FromDouble((__pyx_v_y + (2.0 / 3.0))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 18, __pyx_L1_error)
+      __pyx_t_2 = PyFloat_FromDouble((__pyx_v_y + (2.0 / 3.0))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 17, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_1 = PyFloat_FromDouble((2.0 * (__pyx_v_z_inter + __pyx_v_z_intra))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 18, __pyx_L1_error)
+      __pyx_t_1 = PyFloat_FromDouble((2.0 * (__pyx_v_z_inter + __pyx_v_z_intra))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_15 = PyList_New(3); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 18, __pyx_L1_error)
+      __pyx_t_15 = PyList_New(3); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 17, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
       __Pyx_GIVEREF(__pyx_t_11);
       PyList_SET_ITEM(__pyx_t_15, 0, __pyx_t_11);
@@ -1698,20 +1690,20 @@ static PyObject *__pyx_f_12lattice_form_form_first_3BL(double __pyx_v_z_intra, d
       __pyx_t_2 = 0;
       __pyx_t_1 = 0;
 
-      /* "lattice_form.pyx":19
+      /* "lattice_form.pyx":18
  *                 [x + 2 / 3.0, y + 2 / 3.0, 2 * z_intra + z_inter],
  *                 [x + 2 / 3.0, y + 2 / 3.0, 2 * (z_inter + z_intra)],
  *                 [x, y, 2 * (z_inter + z_intra) + z_intra],             # <<<<<<<<<<<<<<
  *             ]
  *     return lattice_first
  */
-      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 19, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 18, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 19, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 18, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_11 = PyFloat_FromDouble(((2.0 * (__pyx_v_z_inter + __pyx_v_z_intra)) + __pyx_v_z_intra)); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 19, __pyx_L1_error)
+      __pyx_t_11 = PyFloat_FromDouble(((2.0 * (__pyx_v_z_inter + __pyx_v_z_intra)) + __pyx_v_z_intra)); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 18, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
-      __pyx_t_16 = PyList_New(3); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 19, __pyx_L1_error)
+      __pyx_t_16 = PyList_New(3); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 18, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_16);
       __Pyx_GIVEREF(__pyx_t_1);
       PyList_SET_ITEM(__pyx_t_16, 0, __pyx_t_1);
@@ -1723,14 +1715,14 @@ static PyObject *__pyx_f_12lattice_form_form_first_3BL(double __pyx_v_z_intra, d
       __pyx_t_2 = 0;
       __pyx_t_11 = 0;
 
-      /* "lattice_form.pyx":13
+      /* "lattice_form.pyx":12
  *         for y in range(0, unit_length):
  *             index = grid_num(x, y, 0, unit_length)
  *             lattice_first[index] = [             # <<<<<<<<<<<<<<
  *                 [x, y, 0],
  *                 [x + 1 / 3.0, y + 1 / 3.0, z_intra],
  */
-      __pyx_t_11 = PyList_New(6); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 13, __pyx_L1_error)
+      __pyx_t_11 = PyList_New(6); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 12, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_GIVEREF(__pyx_t_14);
       PyList_SET_ITEM(__pyx_t_11, 0, __pyx_t_14);
@@ -1750,12 +1742,12 @@ static PyObject *__pyx_f_12lattice_form_form_first_3BL(double __pyx_v_z_intra, d
       __pyx_t_12 = 0;
       __pyx_t_15 = 0;
       __pyx_t_16 = 0;
-      if (unlikely(__Pyx_SetItemInt(__pyx_v_lattice_first, __pyx_v_index, __pyx_t_11, int, 1, __Pyx_PyInt_From_int, 1, 1, 1) < 0)) __PYX_ERR(0, 13, __pyx_L1_error)
+      if (unlikely(__Pyx_SetItemInt(__pyx_v_lattice_first, __pyx_v_index, __pyx_t_11, int, 1, __Pyx_PyInt_From_int, 1, 1, 1) < 0)) __PYX_ERR(0, 12, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     }
   }
 
-  /* "lattice_form.pyx":21
+  /* "lattice_form.pyx":20
  *                 [x, y, 2 * (z_inter + z_intra) + z_intra],
  *             ]
  *     return lattice_first             # <<<<<<<<<<<<<<
@@ -1767,7 +1759,7 @@ static PyObject *__pyx_f_12lattice_form_form_first_3BL(double __pyx_v_z_intra, d
   __pyx_r = __pyx_v_lattice_first;
   goto __pyx_L0;
 
-  /* "lattice_form.pyx":7
+  /* "lattice_form.pyx":6
  * 
  * 
  * cpdef list form_first_3BL(double z_intra, double z_inter, int unit_length):             # <<<<<<<<<<<<<<
@@ -1832,17 +1824,17 @@ static PyObject *__pyx_pw_12lattice_form_1form_first_3BL(PyObject *__pyx_self, P
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_z_inter)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("form_first_3BL", 1, 3, 3, 1); __PYX_ERR(0, 7, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("form_first_3BL", 1, 3, 3, 1); __PYX_ERR(0, 6, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_unit_length)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("form_first_3BL", 1, 3, 3, 2); __PYX_ERR(0, 7, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("form_first_3BL", 1, 3, 3, 2); __PYX_ERR(0, 6, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "form_first_3BL") < 0)) __PYX_ERR(0, 7, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "form_first_3BL") < 0)) __PYX_ERR(0, 6, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -1851,13 +1843,13 @@ static PyObject *__pyx_pw_12lattice_form_1form_first_3BL(PyObject *__pyx_self, P
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
-    __pyx_v_z_intra = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_z_intra == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 7, __pyx_L3_error)
-    __pyx_v_z_inter = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_z_inter == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 7, __pyx_L3_error)
-    __pyx_v_unit_length = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_unit_length == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 7, __pyx_L3_error)
+    __pyx_v_z_intra = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_z_intra == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 6, __pyx_L3_error)
+    __pyx_v_z_inter = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_z_inter == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 6, __pyx_L3_error)
+    __pyx_v_unit_length = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_unit_length == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 6, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("form_first_3BL", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 7, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("form_first_3BL", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 6, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lattice_form.form_first_3BL", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -1879,7 +1871,7 @@ static PyObject *__pyx_pf_12lattice_form_form_first_3BL(CYTHON_UNUSED PyObject *
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("form_first_3BL", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_12lattice_form_form_first_3BL(__pyx_v_z_intra, __pyx_v_z_inter, __pyx_v_unit_length, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 7, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_12lattice_form_form_first_3BL(__pyx_v_z_intra, __pyx_v_z_inter, __pyx_v_unit_length, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 6, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -1896,7 +1888,7 @@ static PyObject *__pyx_pf_12lattice_form_form_first_3BL(CYTHON_UNUSED PyObject *
   return __pyx_r;
 }
 
-/* "lattice_form.pyx":23
+/* "lattice_form.pyx":22
  *     return lattice_first
  * 
  * cpdef list lattice_full_layers(double unit_height, int unit_length, int z_max, list lattice_first, int num_grids):             # <<<<<<<<<<<<<<
@@ -1938,16 +1930,16 @@ static PyObject *__pyx_f_12lattice_form_lattice_full_layers(double __pyx_v_unit_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("lattice_full_layers", 0);
 
-  /* "lattice_form.pyx":25
+  /* "lattice_form.pyx":24
  * cpdef list lattice_full_layers(double unit_height, int unit_length, int z_max, list lattice_first, int num_grids):
  *     cdef int x, y, z, index, index_xy
  *     cdef list lattice = [[]]*num_grids             # <<<<<<<<<<<<<<
  *     for x in range(0, unit_length):
  *         for y in range(0, unit_length):
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 25, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 24, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyList_New(1 * ((__pyx_v_num_grids<0) ? 0:__pyx_v_num_grids)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 25, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(1 * ((__pyx_v_num_grids<0) ? 0:__pyx_v_num_grids)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 24, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   { Py_ssize_t __pyx_temp;
     for (__pyx_temp=0; __pyx_temp < __pyx_v_num_grids; __pyx_temp++) {
@@ -1960,7 +1952,7 @@ static PyObject *__pyx_f_12lattice_form_lattice_full_layers(double __pyx_v_unit_
   __pyx_v_lattice = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "lattice_form.pyx":26
+  /* "lattice_form.pyx":25
  *     cdef int x, y, z, index, index_xy
  *     cdef list lattice = [[]]*num_grids
  *     for x in range(0, unit_length):             # <<<<<<<<<<<<<<
@@ -1972,7 +1964,7 @@ static PyObject *__pyx_f_12lattice_form_lattice_full_layers(double __pyx_v_unit_
   for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
     __pyx_v_x = __pyx_t_5;
 
-    /* "lattice_form.pyx":27
+    /* "lattice_form.pyx":26
  *     cdef list lattice = [[]]*num_grids
  *     for x in range(0, unit_length):
  *         for y in range(0, unit_length):             # <<<<<<<<<<<<<<
@@ -1984,7 +1976,7 @@ static PyObject *__pyx_f_12lattice_form_lattice_full_layers(double __pyx_v_unit_
     for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
       __pyx_v_y = __pyx_t_8;
 
-      /* "lattice_form.pyx":28
+      /* "lattice_form.pyx":27
  *     for x in range(0, unit_length):
  *         for y in range(0, unit_length):
  *             for z in range(0, z_max):             # <<<<<<<<<<<<<<
@@ -1996,22 +1988,22 @@ static PyObject *__pyx_f_12lattice_form_lattice_full_layers(double __pyx_v_unit_
       for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
         __pyx_v_z = __pyx_t_11;
 
-        /* "lattice_form.pyx":29
+        /* "lattice_form.pyx":28
  *         for y in range(0, unit_length):
  *             for z in range(0, z_max):
  *                 index = grid_num(x, y, z, unit_length)             # <<<<<<<<<<<<<<
  *                 index_xy = grid_num(x, y, 0, unit_length)
  *                 lattice[index] = [
  */
-        __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 29, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 28, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 29, __pyx_L1_error)
+        __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 28, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_12);
-        __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 29, __pyx_L1_error)
+        __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 28, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_13);
-        __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_z); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 29, __pyx_L1_error)
+        __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_z); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 28, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_14);
-        __pyx_t_15 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 29, __pyx_L1_error)
+        __pyx_t_15 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 28, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_15);
         __pyx_t_16 = NULL;
         __pyx_t_17 = 0;
@@ -2028,7 +2020,7 @@ static PyObject *__pyx_f_12lattice_form_lattice_full_layers(double __pyx_v_unit_
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_1)) {
           PyObject *__pyx_temp[5] = {__pyx_t_16, __pyx_t_12, __pyx_t_13, __pyx_t_14, __pyx_t_15};
-          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_17, 4+__pyx_t_17); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 29, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_17, 4+__pyx_t_17); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 28, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
@@ -2040,7 +2032,7 @@ static PyObject *__pyx_f_12lattice_form_lattice_full_layers(double __pyx_v_unit_
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
           PyObject *__pyx_temp[5] = {__pyx_t_16, __pyx_t_12, __pyx_t_13, __pyx_t_14, __pyx_t_15};
-          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_17, 4+__pyx_t_17); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 29, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_17, 4+__pyx_t_17); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 28, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
@@ -2050,7 +2042,7 @@ static PyObject *__pyx_f_12lattice_form_lattice_full_layers(double __pyx_v_unit_
         } else
         #endif
         {
-          __pyx_t_18 = PyTuple_New(4+__pyx_t_17); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 29, __pyx_L1_error)
+          __pyx_t_18 = PyTuple_New(4+__pyx_t_17); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 28, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_18);
           if (__pyx_t_16) {
             __Pyx_GIVEREF(__pyx_t_16); PyTuple_SET_ITEM(__pyx_t_18, 0, __pyx_t_16); __pyx_t_16 = NULL;
@@ -2067,29 +2059,29 @@ static PyObject *__pyx_f_12lattice_form_lattice_full_layers(double __pyx_v_unit_
           __pyx_t_13 = 0;
           __pyx_t_14 = 0;
           __pyx_t_15 = 0;
-          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_18, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 29, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_18, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 28, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
         }
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_17 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_17 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 29, __pyx_L1_error)
+        __pyx_t_17 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_17 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 28, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __pyx_v_index = __pyx_t_17;
 
-        /* "lattice_form.pyx":30
+        /* "lattice_form.pyx":29
  *             for z in range(0, z_max):
  *                 index = grid_num(x, y, z, unit_length)
  *                 index_xy = grid_num(x, y, 0, unit_length)             # <<<<<<<<<<<<<<
  *                 lattice[index] = [
  *                     lattice_first[index_xy][z%6][0],
  */
-        __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 30, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 29, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_18 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 30, __pyx_L1_error)
+        __pyx_t_18 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 29, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_18);
-        __pyx_t_15 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 30, __pyx_L1_error)
+        __pyx_t_15 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 29, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_15);
-        __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 30, __pyx_L1_error)
+        __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 29, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_14);
         __pyx_t_13 = NULL;
         __pyx_t_17 = 0;
@@ -2106,7 +2098,7 @@ static PyObject *__pyx_f_12lattice_form_lattice_full_layers(double __pyx_v_unit_
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_1)) {
           PyObject *__pyx_temp[5] = {__pyx_t_13, __pyx_t_18, __pyx_t_15, __pyx_int_0, __pyx_t_14};
-          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_17, 4+__pyx_t_17); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 30, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_17, 4+__pyx_t_17); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 29, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
@@ -2117,7 +2109,7 @@ static PyObject *__pyx_f_12lattice_form_lattice_full_layers(double __pyx_v_unit_
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
           PyObject *__pyx_temp[5] = {__pyx_t_13, __pyx_t_18, __pyx_t_15, __pyx_int_0, __pyx_t_14};
-          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_17, 4+__pyx_t_17); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 30, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_17, 4+__pyx_t_17); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 29, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
@@ -2126,7 +2118,7 @@ static PyObject *__pyx_f_12lattice_form_lattice_full_layers(double __pyx_v_unit_
         } else
         #endif
         {
-          __pyx_t_12 = PyTuple_New(4+__pyx_t_17); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 30, __pyx_L1_error)
+          __pyx_t_12 = PyTuple_New(4+__pyx_t_17); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 29, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_12);
           if (__pyx_t_13) {
             __Pyx_GIVEREF(__pyx_t_13); PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_13); __pyx_t_13 = NULL;
@@ -2143,16 +2135,16 @@ static PyObject *__pyx_f_12lattice_form_lattice_full_layers(double __pyx_v_unit_
           __pyx_t_18 = 0;
           __pyx_t_15 = 0;
           __pyx_t_14 = 0;
-          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_12, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 30, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_12, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 29, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
         }
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_17 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_17 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 30, __pyx_L1_error)
+        __pyx_t_17 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_17 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 29, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __pyx_v_index_xy = __pyx_t_17;
 
-        /* "lattice_form.pyx":32
+        /* "lattice_form.pyx":31
  *                 index_xy = grid_num(x, y, 0, unit_length)
  *                 lattice[index] = [
  *                     lattice_first[index_xy][z%6][0],             # <<<<<<<<<<<<<<
@@ -2161,19 +2153,19 @@ static PyObject *__pyx_f_12lattice_form_lattice_full_layers(double __pyx_v_unit_
  */
         if (unlikely(__pyx_v_lattice_first == Py_None)) {
           PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-          __PYX_ERR(0, 32, __pyx_L1_error)
+          __PYX_ERR(0, 31, __pyx_L1_error)
         }
-        __pyx_t_2 = __Pyx_GetItemInt_List(__pyx_v_lattice_first, __pyx_v_index_xy, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 32, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_GetItemInt_List(__pyx_v_lattice_first, __pyx_v_index_xy, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 31, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __pyx_t_19 = __Pyx_mod_long(__pyx_v_z, 6);
-        __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_2, __pyx_t_19, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 32, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_2, __pyx_t_19, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 31, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __pyx_t_2 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 32, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 31, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-        /* "lattice_form.pyx":33
+        /* "lattice_form.pyx":32
  *                 lattice[index] = [
  *                     lattice_first[index_xy][z%6][0],
  *                     lattice_first[index_xy][z%6][1],             # <<<<<<<<<<<<<<
@@ -2182,19 +2174,19 @@ static PyObject *__pyx_f_12lattice_form_lattice_full_layers(double __pyx_v_unit_
  */
         if (unlikely(__pyx_v_lattice_first == Py_None)) {
           PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-          __PYX_ERR(0, 33, __pyx_L1_error)
+          __PYX_ERR(0, 32, __pyx_L1_error)
         }
-        __pyx_t_1 = __Pyx_GetItemInt_List(__pyx_v_lattice_first, __pyx_v_index_xy, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 33, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_GetItemInt_List(__pyx_v_lattice_first, __pyx_v_index_xy, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 32, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __pyx_t_19 = __Pyx_mod_long(__pyx_v_z, 6);
-        __pyx_t_12 = __Pyx_GetItemInt(__pyx_t_1, __pyx_t_19, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 33, __pyx_L1_error)
+        __pyx_t_12 = __Pyx_GetItemInt(__pyx_t_1, __pyx_t_19, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 32, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_12);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_12, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 33, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_12, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 32, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
 
-        /* "lattice_form.pyx":34
+        /* "lattice_form.pyx":33
  *                     lattice_first[index_xy][z%6][0],
  *                     lattice_first[index_xy][z%6][1],
  *                     lattice_first[index_xy][z%6][2] + unit_height * (z//6),             # <<<<<<<<<<<<<<
@@ -2203,32 +2195,32 @@ static PyObject *__pyx_f_12lattice_form_lattice_full_layers(double __pyx_v_unit_
  */
         if (unlikely(__pyx_v_lattice_first == Py_None)) {
           PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-          __PYX_ERR(0, 34, __pyx_L1_error)
+          __PYX_ERR(0, 33, __pyx_L1_error)
         }
-        __pyx_t_12 = __Pyx_GetItemInt_List(__pyx_v_lattice_first, __pyx_v_index_xy, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 34, __pyx_L1_error)
+        __pyx_t_12 = __Pyx_GetItemInt_List(__pyx_v_lattice_first, __pyx_v_index_xy, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 33, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_12);
         __pyx_t_19 = __Pyx_mod_long(__pyx_v_z, 6);
-        __pyx_t_14 = __Pyx_GetItemInt(__pyx_t_12, __pyx_t_19, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 34, __pyx_L1_error)
+        __pyx_t_14 = __Pyx_GetItemInt(__pyx_t_12, __pyx_t_19, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 33, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_14);
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-        __pyx_t_12 = __Pyx_GetItemInt(__pyx_t_14, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 34, __pyx_L1_error)
+        __pyx_t_12 = __Pyx_GetItemInt(__pyx_t_14, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 33, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_12);
         __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-        __pyx_t_14 = PyFloat_FromDouble((__pyx_v_unit_height * __Pyx_div_long(__pyx_v_z, 6))); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 34, __pyx_L1_error)
+        __pyx_t_14 = PyFloat_FromDouble((__pyx_v_unit_height * __Pyx_div_long(__pyx_v_z, 6))); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 33, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_14);
-        __pyx_t_15 = PyNumber_Add(__pyx_t_12, __pyx_t_14); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 34, __pyx_L1_error)
+        __pyx_t_15 = PyNumber_Add(__pyx_t_12, __pyx_t_14); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 33, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_15);
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
         __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
 
-        /* "lattice_form.pyx":31
+        /* "lattice_form.pyx":30
  *                 index = grid_num(x, y, z, unit_length)
  *                 index_xy = grid_num(x, y, 0, unit_length)
  *                 lattice[index] = [             # <<<<<<<<<<<<<<
  *                     lattice_first[index_xy][z%6][0],
  *                     lattice_first[index_xy][z%6][1],
  */
-        __pyx_t_14 = PyList_New(3); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 31, __pyx_L1_error)
+        __pyx_t_14 = PyList_New(3); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 30, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_14);
         __Pyx_GIVEREF(__pyx_t_2);
         PyList_SET_ITEM(__pyx_t_14, 0, __pyx_t_2);
@@ -2239,13 +2231,13 @@ static PyObject *__pyx_f_12lattice_form_lattice_full_layers(double __pyx_v_unit_
         __pyx_t_2 = 0;
         __pyx_t_1 = 0;
         __pyx_t_15 = 0;
-        if (unlikely(__Pyx_SetItemInt(__pyx_v_lattice, __pyx_v_index, __pyx_t_14, int, 1, __Pyx_PyInt_From_int, 1, 1, 1) < 0)) __PYX_ERR(0, 31, __pyx_L1_error)
+        if (unlikely(__Pyx_SetItemInt(__pyx_v_lattice, __pyx_v_index, __pyx_t_14, int, 1, __Pyx_PyInt_From_int, 1, 1, 1) < 0)) __PYX_ERR(0, 30, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
       }
     }
   }
 
-  /* "lattice_form.pyx":36
+  /* "lattice_form.pyx":35
  *                     lattice_first[index_xy][z%6][2] + unit_height * (z//6),
  *                 ]
  *     return lattice             # <<<<<<<<<<<<<<
@@ -2257,7 +2249,7 @@ static PyObject *__pyx_f_12lattice_form_lattice_full_layers(double __pyx_v_unit_
   __pyx_r = __pyx_v_lattice;
   goto __pyx_L0;
 
-  /* "lattice_form.pyx":23
+  /* "lattice_form.pyx":22
  *     return lattice_first
  * 
  * cpdef list lattice_full_layers(double unit_height, int unit_length, int z_max, list lattice_first, int num_grids):             # <<<<<<<<<<<<<<
@@ -2327,29 +2319,29 @@ static PyObject *__pyx_pw_12lattice_form_3lattice_full_layers(PyObject *__pyx_se
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_unit_length)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("lattice_full_layers", 1, 5, 5, 1); __PYX_ERR(0, 23, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("lattice_full_layers", 1, 5, 5, 1); __PYX_ERR(0, 22, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_z_max)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("lattice_full_layers", 1, 5, 5, 2); __PYX_ERR(0, 23, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("lattice_full_layers", 1, 5, 5, 2); __PYX_ERR(0, 22, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_lattice_first)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("lattice_full_layers", 1, 5, 5, 3); __PYX_ERR(0, 23, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("lattice_full_layers", 1, 5, 5, 3); __PYX_ERR(0, 22, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_num_grids)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("lattice_full_layers", 1, 5, 5, 4); __PYX_ERR(0, 23, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("lattice_full_layers", 1, 5, 5, 4); __PYX_ERR(0, 22, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "lattice_full_layers") < 0)) __PYX_ERR(0, 23, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "lattice_full_layers") < 0)) __PYX_ERR(0, 22, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 5) {
       goto __pyx_L5_argtuple_error;
@@ -2360,21 +2352,21 @@ static PyObject *__pyx_pw_12lattice_form_3lattice_full_layers(PyObject *__pyx_se
       values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
       values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
     }
-    __pyx_v_unit_height = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_unit_height == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 23, __pyx_L3_error)
-    __pyx_v_unit_length = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_unit_length == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 23, __pyx_L3_error)
-    __pyx_v_z_max = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_z_max == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 23, __pyx_L3_error)
+    __pyx_v_unit_height = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_unit_height == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 22, __pyx_L3_error)
+    __pyx_v_unit_length = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_unit_length == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 22, __pyx_L3_error)
+    __pyx_v_z_max = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_z_max == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 22, __pyx_L3_error)
     __pyx_v_lattice_first = ((PyObject*)values[3]);
-    __pyx_v_num_grids = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_num_grids == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 23, __pyx_L3_error)
+    __pyx_v_num_grids = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_num_grids == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 22, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("lattice_full_layers", 1, 5, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 23, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("lattice_full_layers", 1, 5, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 22, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lattice_form.lattice_full_layers", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_lattice_first), (&PyList_Type), 1, "lattice_first", 1))) __PYX_ERR(0, 23, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_lattice_first), (&PyList_Type), 1, "lattice_first", 1))) __PYX_ERR(0, 22, __pyx_L1_error)
   __pyx_r = __pyx_pf_12lattice_form_2lattice_full_layers(__pyx_self, __pyx_v_unit_height, __pyx_v_unit_length, __pyx_v_z_max, __pyx_v_lattice_first, __pyx_v_num_grids);
 
   /* function exit code */
@@ -2395,7 +2387,7 @@ static PyObject *__pyx_pf_12lattice_form_2lattice_full_layers(CYTHON_UNUSED PyOb
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("lattice_full_layers", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_12lattice_form_lattice_full_layers(__pyx_v_unit_height, __pyx_v_unit_length, __pyx_v_z_max, __pyx_v_lattice_first, __pyx_v_num_grids, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 23, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_12lattice_form_lattice_full_layers(__pyx_v_unit_height, __pyx_v_unit_length, __pyx_v_z_max, __pyx_v_lattice_first, __pyx_v_num_grids, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 22, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -2412,7 +2404,7 @@ static PyObject *__pyx_pf_12lattice_form_2lattice_full_layers(CYTHON_UNUSED PyOb
   return __pyx_r;
 }
 
-/* "lattice_form.pyx":40
+/* "lattice_form.pyx":39
  * 
  * 
  * cpdef list neighbor_points(             # <<<<<<<<<<<<<<
@@ -2447,7 +2439,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("neighbor_points", 0);
 
-  /* "lattice_form.pyx":45
+  /* "lattice_form.pyx":44
  *     cdef list neighbors
  *     cdef int z_judge
  *     z_judge = z % 6             # <<<<<<<<<<<<<<
@@ -2456,7 +2448,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
  */
   __pyx_v_z_judge = __Pyx_mod_long(__pyx_v_z, 6);
 
-  /* "lattice_form.pyx":46
+  /* "lattice_form.pyx":45
  *     cdef int z_judge
  *     z_judge = z % 6
  *     if z == z_max - 1:             # <<<<<<<<<<<<<<
@@ -2466,27 +2458,27 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
   __pyx_t_1 = ((__pyx_v_z == (__pyx_v_z_max - 1)) != 0);
   if (__pyx_t_1) {
 
-    /* "lattice_form.pyx":48
+    /* "lattice_form.pyx":47
  *     if z == z_max - 1:
  *         neighbors = [
  *             grid_num((x - 1) % unit_length, y, z-1, unit_length),             # <<<<<<<<<<<<<<
  *             grid_num(x, (y - 1) % unit_length, z-1, unit_length),
  *             grid_num((x - 1) % unit_length, (y - 1) % unit_length, z - 1, unit_length)
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 48, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 47, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = (__pyx_v_x - 1);
     if (unlikely(__pyx_v_unit_length == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-      __PYX_ERR(0, 48, __pyx_L1_error)
+      __PYX_ERR(0, 47, __pyx_L1_error)
     }
-    __pyx_t_5 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 48, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 47, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 48, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 47, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_7 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 48, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 47, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 48, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 47, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __pyx_t_9 = NULL;
     __pyx_t_10 = 0;
@@ -2503,7 +2495,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[5] = {__pyx_t_9, __pyx_t_5, __pyx_t_6, __pyx_t_7, __pyx_t_8};
-      __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 48, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 47, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -2515,7 +2507,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[5] = {__pyx_t_9, __pyx_t_5, __pyx_t_6, __pyx_t_7, __pyx_t_8};
-      __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 48, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 47, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -2525,7 +2517,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     } else
     #endif
     {
-      __pyx_t_11 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 48, __pyx_L1_error)
+      __pyx_t_11 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 47, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       if (__pyx_t_9) {
         __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_9); __pyx_t_9 = NULL;
@@ -2542,33 +2534,33 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
       __pyx_t_6 = 0;
       __pyx_t_7 = 0;
       __pyx_t_8 = 0;
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_11, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 48, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_11, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 47, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "lattice_form.pyx":49
+    /* "lattice_form.pyx":48
  *         neighbors = [
  *             grid_num((x - 1) % unit_length, y, z-1, unit_length),
  *             grid_num(x, (y - 1) % unit_length, z-1, unit_length),             # <<<<<<<<<<<<<<
  *             grid_num((x - 1) % unit_length, (y - 1) % unit_length, z - 1, unit_length)
  *             ]
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 49, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 48, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
-    __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 49, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 48, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __pyx_t_4 = (__pyx_v_y - 1);
     if (unlikely(__pyx_v_unit_length == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-      __PYX_ERR(0, 49, __pyx_L1_error)
+      __PYX_ERR(0, 48, __pyx_L1_error)
     }
-    __pyx_t_7 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 49, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 48, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_6 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 49, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 48, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 49, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 48, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_9 = NULL;
     __pyx_t_10 = 0;
@@ -2585,7 +2577,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_11)) {
       PyObject *__pyx_temp[5] = {__pyx_t_9, __pyx_t_8, __pyx_t_7, __pyx_t_6, __pyx_t_5};
-      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_11, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 49, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_11, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 48, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -2597,7 +2589,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_11)) {
       PyObject *__pyx_temp[5] = {__pyx_t_9, __pyx_t_8, __pyx_t_7, __pyx_t_6, __pyx_t_5};
-      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_11, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 49, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_11, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 48, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -2607,7 +2599,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     } else
     #endif
     {
-      __pyx_t_12 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 49, __pyx_L1_error)
+      __pyx_t_12 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 48, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
       if (__pyx_t_9) {
         __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_9); __pyx_t_9 = NULL;
@@ -2624,38 +2616,38 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
       __pyx_t_7 = 0;
       __pyx_t_6 = 0;
       __pyx_t_5 = 0;
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_11, __pyx_t_12, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 49, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_11, __pyx_t_12, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 48, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
     }
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-    /* "lattice_form.pyx":50
+    /* "lattice_form.pyx":49
  *             grid_num((x - 1) % unit_length, y, z-1, unit_length),
  *             grid_num(x, (y - 1) % unit_length, z-1, unit_length),
  *             grid_num((x - 1) % unit_length, (y - 1) % unit_length, z - 1, unit_length)             # <<<<<<<<<<<<<<
  *             ]
  *     elif z_judge in (0, 2):
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 50, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 49, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
     __pyx_t_4 = (__pyx_v_x - 1);
     if (unlikely(__pyx_v_unit_length == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-      __PYX_ERR(0, 50, __pyx_L1_error)
+      __PYX_ERR(0, 49, __pyx_L1_error)
     }
-    __pyx_t_5 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 50, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 49, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_4 = (__pyx_v_y - 1);
     if (unlikely(__pyx_v_unit_length == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-      __PYX_ERR(0, 50, __pyx_L1_error)
+      __PYX_ERR(0, 49, __pyx_L1_error)
     }
-    __pyx_t_6 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 50, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 49, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_7 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 50, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 49, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 50, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 49, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __pyx_t_9 = NULL;
     __pyx_t_10 = 0;
@@ -2672,7 +2664,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_12)) {
       PyObject *__pyx_temp[5] = {__pyx_t_9, __pyx_t_5, __pyx_t_6, __pyx_t_7, __pyx_t_8};
-      __pyx_t_11 = __Pyx_PyFunction_FastCall(__pyx_t_12, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 50, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyFunction_FastCall(__pyx_t_12, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 49, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -2684,7 +2676,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_12)) {
       PyObject *__pyx_temp[5] = {__pyx_t_9, __pyx_t_5, __pyx_t_6, __pyx_t_7, __pyx_t_8};
-      __pyx_t_11 = __Pyx_PyCFunction_FastCall(__pyx_t_12, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 50, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyCFunction_FastCall(__pyx_t_12, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 49, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -2694,7 +2686,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     } else
     #endif
     {
-      __pyx_t_13 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 50, __pyx_L1_error)
+      __pyx_t_13 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 49, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_13);
       if (__pyx_t_9) {
         __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_13, 0, __pyx_t_9); __pyx_t_9 = NULL;
@@ -2711,20 +2703,20 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
       __pyx_t_6 = 0;
       __pyx_t_7 = 0;
       __pyx_t_8 = 0;
-      __pyx_t_11 = __Pyx_PyObject_Call(__pyx_t_12, __pyx_t_13, NULL); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 50, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyObject_Call(__pyx_t_12, __pyx_t_13, NULL); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 49, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
     }
     __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
 
-    /* "lattice_form.pyx":47
+    /* "lattice_form.pyx":46
  *     z_judge = z % 6
  *     if z == z_max - 1:
  *         neighbors = [             # <<<<<<<<<<<<<<
  *             grid_num((x - 1) % unit_length, y, z-1, unit_length),
  *             grid_num(x, (y - 1) % unit_length, z-1, unit_length),
  */
-    __pyx_t_12 = PyList_New(3); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 47, __pyx_L1_error)
+    __pyx_t_12 = PyList_New(3); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 46, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
     __Pyx_GIVEREF(__pyx_t_2);
     PyList_SET_ITEM(__pyx_t_12, 0, __pyx_t_2);
@@ -2738,7 +2730,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     __pyx_v_neighbors = ((PyObject*)__pyx_t_12);
     __pyx_t_12 = 0;
 
-    /* "lattice_form.pyx":46
+    /* "lattice_form.pyx":45
  *     cdef int z_judge
  *     z_judge = z % 6
  *     if z == z_max - 1:             # <<<<<<<<<<<<<<
@@ -2748,7 +2740,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     goto __pyx_L3;
   }
 
-  /* "lattice_form.pyx":52
+  /* "lattice_form.pyx":51
  *             grid_num((x - 1) % unit_length, (y - 1) % unit_length, z - 1, unit_length)
  *             ]
  *     elif z_judge in (0, 2):             # <<<<<<<<<<<<<<
@@ -2767,27 +2759,27 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
   __pyx_t_14 = (__pyx_t_1 != 0);
   if (__pyx_t_14) {
 
-    /* "lattice_form.pyx":54
+    /* "lattice_form.pyx":53
  *     elif z_judge in (0, 2):
  *         neighbors = [
  *             grid_num((x - 1) % unit_length, y, z + 1, unit_length),             # <<<<<<<<<<<<<<
  *             grid_num(x, (y - 1) % unit_length, z + 1, unit_length),
  *             grid_num(x, y, z + 1, unit_length),
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 54, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 53, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
     __pyx_t_4 = (__pyx_v_x - 1);
     if (unlikely(__pyx_v_unit_length == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-      __PYX_ERR(0, 54, __pyx_L1_error)
+      __PYX_ERR(0, 53, __pyx_L1_error)
     }
-    __pyx_t_3 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 54, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 53, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 54, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 53, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_13 = __Pyx_PyInt_From_long((__pyx_v_z + 1)); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 54, __pyx_L1_error)
+    __pyx_t_13 = __Pyx_PyInt_From_long((__pyx_v_z + 1)); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 53, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_13);
-    __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 54, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 53, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __pyx_t_7 = NULL;
     __pyx_t_10 = 0;
@@ -2804,7 +2796,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_11)) {
       PyObject *__pyx_temp[5] = {__pyx_t_7, __pyx_t_3, __pyx_t_2, __pyx_t_13, __pyx_t_8};
-      __pyx_t_12 = __Pyx_PyFunction_FastCall(__pyx_t_11, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 54, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyFunction_FastCall(__pyx_t_11, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 53, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_GOTREF(__pyx_t_12);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -2816,7 +2808,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_11)) {
       PyObject *__pyx_temp[5] = {__pyx_t_7, __pyx_t_3, __pyx_t_2, __pyx_t_13, __pyx_t_8};
-      __pyx_t_12 = __Pyx_PyCFunction_FastCall(__pyx_t_11, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 54, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyCFunction_FastCall(__pyx_t_11, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 53, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_GOTREF(__pyx_t_12);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -2826,7 +2818,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     } else
     #endif
     {
-      __pyx_t_6 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 54, __pyx_L1_error)
+      __pyx_t_6 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 53, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       if (__pyx_t_7) {
         __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_7); __pyx_t_7 = NULL;
@@ -2843,33 +2835,33 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
       __pyx_t_2 = 0;
       __pyx_t_13 = 0;
       __pyx_t_8 = 0;
-      __pyx_t_12 = __Pyx_PyObject_Call(__pyx_t_11, __pyx_t_6, NULL); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 54, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyObject_Call(__pyx_t_11, __pyx_t_6, NULL); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 53, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     }
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-    /* "lattice_form.pyx":55
+    /* "lattice_form.pyx":54
  *         neighbors = [
  *             grid_num((x - 1) % unit_length, y, z + 1, unit_length),
  *             grid_num(x, (y - 1) % unit_length, z + 1, unit_length),             # <<<<<<<<<<<<<<
  *             grid_num(x, y, z + 1, unit_length),
  *         ]
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 55, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 54, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 55, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 54, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __pyx_t_4 = (__pyx_v_y - 1);
     if (unlikely(__pyx_v_unit_length == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-      __PYX_ERR(0, 55, __pyx_L1_error)
+      __PYX_ERR(0, 54, __pyx_L1_error)
     }
-    __pyx_t_13 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 55, __pyx_L1_error)
+    __pyx_t_13 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 54, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_13);
-    __pyx_t_2 = __Pyx_PyInt_From_long((__pyx_v_z + 1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 55, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyInt_From_long((__pyx_v_z + 1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 54, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 55, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 54, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_7 = NULL;
     __pyx_t_10 = 0;
@@ -2886,7 +2878,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_6)) {
       PyObject *__pyx_temp[5] = {__pyx_t_7, __pyx_t_8, __pyx_t_13, __pyx_t_2, __pyx_t_3};
-      __pyx_t_11 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 55, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 54, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -2898,7 +2890,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_6)) {
       PyObject *__pyx_temp[5] = {__pyx_t_7, __pyx_t_8, __pyx_t_13, __pyx_t_2, __pyx_t_3};
-      __pyx_t_11 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 55, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 54, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -2908,7 +2900,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     } else
     #endif
     {
-      __pyx_t_5 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 55, __pyx_L1_error)
+      __pyx_t_5 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 54, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       if (__pyx_t_7) {
         __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_7); __pyx_t_7 = NULL;
@@ -2925,28 +2917,28 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
       __pyx_t_13 = 0;
       __pyx_t_2 = 0;
       __pyx_t_3 = 0;
-      __pyx_t_11 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_5, NULL); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 55, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_5, NULL); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 54, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     }
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-    /* "lattice_form.pyx":56
+    /* "lattice_form.pyx":55
  *             grid_num((x - 1) % unit_length, y, z + 1, unit_length),
  *             grid_num(x, (y - 1) % unit_length, z + 1, unit_length),
  *             grid_num(x, y, z + 1, unit_length),             # <<<<<<<<<<<<<<
  *         ]
  *         if z != 0:
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 56, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 55, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 56, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 55, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 56, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 55, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_13 = __Pyx_PyInt_From_long((__pyx_v_z + 1)); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 56, __pyx_L1_error)
+    __pyx_t_13 = __Pyx_PyInt_From_long((__pyx_v_z + 1)); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 55, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_13);
-    __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 56, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 55, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __pyx_t_7 = NULL;
     __pyx_t_10 = 0;
@@ -2963,7 +2955,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_5)) {
       PyObject *__pyx_temp[5] = {__pyx_t_7, __pyx_t_3, __pyx_t_2, __pyx_t_13, __pyx_t_8};
-      __pyx_t_6 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 56, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 55, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -2975,7 +2967,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
       PyObject *__pyx_temp[5] = {__pyx_t_7, __pyx_t_3, __pyx_t_2, __pyx_t_13, __pyx_t_8};
-      __pyx_t_6 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 56, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 55, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -2985,7 +2977,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     } else
     #endif
     {
-      __pyx_t_9 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 56, __pyx_L1_error)
+      __pyx_t_9 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 55, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
       if (__pyx_t_7) {
         __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_7); __pyx_t_7 = NULL;
@@ -3002,20 +2994,20 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
       __pyx_t_2 = 0;
       __pyx_t_13 = 0;
       __pyx_t_8 = 0;
-      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_9, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 56, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_9, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 55, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
     }
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "lattice_form.pyx":53
+    /* "lattice_form.pyx":52
  *             ]
  *     elif z_judge in (0, 2):
  *         neighbors = [             # <<<<<<<<<<<<<<
  *             grid_num((x - 1) % unit_length, y, z + 1, unit_length),
  *             grid_num(x, (y - 1) % unit_length, z + 1, unit_length),
  */
-    __pyx_t_5 = PyList_New(3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 53, __pyx_L1_error)
+    __pyx_t_5 = PyList_New(3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 52, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_GIVEREF(__pyx_t_12);
     PyList_SET_ITEM(__pyx_t_5, 0, __pyx_t_12);
@@ -3029,7 +3021,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     __pyx_v_neighbors = ((PyObject*)__pyx_t_5);
     __pyx_t_5 = 0;
 
-    /* "lattice_form.pyx":58
+    /* "lattice_form.pyx":57
  *             grid_num(x, y, z + 1, unit_length),
  *         ]
  *         if z != 0:             # <<<<<<<<<<<<<<
@@ -3039,22 +3031,22 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     __pyx_t_14 = ((__pyx_v_z != 0) != 0);
     if (__pyx_t_14) {
 
-      /* "lattice_form.pyx":59
+      /* "lattice_form.pyx":58
  *         ]
  *         if z != 0:
  *             neighbors.append(grid_num(x, y, z - 1, unit_length))             # <<<<<<<<<<<<<<
  *     elif z_judge in (1, 3):
  *         neighbors = [
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 59, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 58, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 59, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 58, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
-      __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 59, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 58, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
-      __pyx_t_9 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 59, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 58, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
-      __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 59, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 58, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
       __pyx_t_13 = NULL;
       __pyx_t_10 = 0;
@@ -3071,7 +3063,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_6)) {
         PyObject *__pyx_temp[5] = {__pyx_t_13, __pyx_t_11, __pyx_t_12, __pyx_t_9, __pyx_t_8};
-        __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 59, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 58, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
@@ -3083,7 +3075,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_6)) {
         PyObject *__pyx_temp[5] = {__pyx_t_13, __pyx_t_11, __pyx_t_12, __pyx_t_9, __pyx_t_8};
-        __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 59, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 58, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
@@ -3093,7 +3085,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
       } else
       #endif
       {
-        __pyx_t_2 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 59, __pyx_L1_error)
+        __pyx_t_2 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 58, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         if (__pyx_t_13) {
           __Pyx_GIVEREF(__pyx_t_13); PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_13); __pyx_t_13 = NULL;
@@ -3110,15 +3102,15 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
         __pyx_t_12 = 0;
         __pyx_t_9 = 0;
         __pyx_t_8 = 0;
-        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_2, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 59, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_2, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 58, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       }
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __pyx_t_15 = __Pyx_PyList_Append(__pyx_v_neighbors, __pyx_t_5); if (unlikely(__pyx_t_15 == ((int)-1))) __PYX_ERR(0, 59, __pyx_L1_error)
+      __pyx_t_15 = __Pyx_PyList_Append(__pyx_v_neighbors, __pyx_t_5); if (unlikely(__pyx_t_15 == ((int)-1))) __PYX_ERR(0, 58, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-      /* "lattice_form.pyx":58
+      /* "lattice_form.pyx":57
  *             grid_num(x, y, z + 1, unit_length),
  *         ]
  *         if z != 0:             # <<<<<<<<<<<<<<
@@ -3127,7 +3119,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
  */
     }
 
-    /* "lattice_form.pyx":52
+    /* "lattice_form.pyx":51
  *             grid_num((x - 1) % unit_length, (y - 1) % unit_length, z - 1, unit_length)
  *             ]
  *     elif z_judge in (0, 2):             # <<<<<<<<<<<<<<
@@ -3137,7 +3129,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     goto __pyx_L3;
   }
 
-  /* "lattice_form.pyx":60
+  /* "lattice_form.pyx":59
  *         if z != 0:
  *             neighbors.append(grid_num(x, y, z - 1, unit_length))
  *     elif z_judge in (1, 3):             # <<<<<<<<<<<<<<
@@ -3156,27 +3148,27 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
   __pyx_t_1 = (__pyx_t_14 != 0);
   if (__pyx_t_1) {
 
-    /* "lattice_form.pyx":62
+    /* "lattice_form.pyx":61
  *     elif z_judge in (1, 3):
  *         neighbors = [
  *             grid_num((x + 1) % unit_length, y, z - 1, unit_length),             # <<<<<<<<<<<<<<
  *             grid_num(x, (y + 1) % unit_length, z - 1, unit_length),
  *             grid_num(x, y, z - 1, unit_length),
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 62, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 61, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_t_4 = (__pyx_v_x + 1);
     if (unlikely(__pyx_v_unit_length == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-      __PYX_ERR(0, 62, __pyx_L1_error)
+      __PYX_ERR(0, 61, __pyx_L1_error)
     }
-    __pyx_t_2 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 62, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 61, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 62, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 61, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
-    __pyx_t_9 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 62, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 61, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
-    __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 62, __pyx_L1_error)
+    __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 61, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
     __pyx_t_11 = NULL;
     __pyx_t_10 = 0;
@@ -3193,7 +3185,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_6)) {
       PyObject *__pyx_temp[5] = {__pyx_t_11, __pyx_t_2, __pyx_t_8, __pyx_t_9, __pyx_t_12};
-      __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 62, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 61, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -3205,7 +3197,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_6)) {
       PyObject *__pyx_temp[5] = {__pyx_t_11, __pyx_t_2, __pyx_t_8, __pyx_t_9, __pyx_t_12};
-      __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 62, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 61, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -3215,7 +3207,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     } else
     #endif
     {
-      __pyx_t_13 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 62, __pyx_L1_error)
+      __pyx_t_13 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 61, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_13);
       if (__pyx_t_11) {
         __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_13, 0, __pyx_t_11); __pyx_t_11 = NULL;
@@ -3232,33 +3224,33 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
       __pyx_t_8 = 0;
       __pyx_t_9 = 0;
       __pyx_t_12 = 0;
-      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_13, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 62, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_13, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 61, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
     }
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-    /* "lattice_form.pyx":63
+    /* "lattice_form.pyx":62
  *         neighbors = [
  *             grid_num((x + 1) % unit_length, y, z - 1, unit_length),
  *             grid_num(x, (y + 1) % unit_length, z - 1, unit_length),             # <<<<<<<<<<<<<<
  *             grid_num(x, y, z - 1, unit_length),
  *             grid_num(x, y, z + 1, unit_length),
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_13, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 63, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_13, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 62, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_13);
-    __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 63, __pyx_L1_error)
+    __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 62, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
     __pyx_t_4 = (__pyx_v_y + 1);
     if (unlikely(__pyx_v_unit_length == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-      __PYX_ERR(0, 63, __pyx_L1_error)
+      __PYX_ERR(0, 62, __pyx_L1_error)
     }
-    __pyx_t_9 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 63, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 62, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
-    __pyx_t_8 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 63, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 62, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
-    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 63, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 62, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_11 = NULL;
     __pyx_t_10 = 0;
@@ -3275,7 +3267,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_13)) {
       PyObject *__pyx_temp[5] = {__pyx_t_11, __pyx_t_12, __pyx_t_9, __pyx_t_8, __pyx_t_2};
-      __pyx_t_6 = __Pyx_PyFunction_FastCall(__pyx_t_13, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 63, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyFunction_FastCall(__pyx_t_13, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 62, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
@@ -3287,7 +3279,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_13)) {
       PyObject *__pyx_temp[5] = {__pyx_t_11, __pyx_t_12, __pyx_t_9, __pyx_t_8, __pyx_t_2};
-      __pyx_t_6 = __Pyx_PyCFunction_FastCall(__pyx_t_13, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 63, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyCFunction_FastCall(__pyx_t_13, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 62, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
@@ -3297,7 +3289,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     } else
     #endif
     {
-      __pyx_t_3 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 63, __pyx_L1_error)
+      __pyx_t_3 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 62, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       if (__pyx_t_11) {
         __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_11); __pyx_t_11 = NULL;
@@ -3314,28 +3306,28 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
       __pyx_t_9 = 0;
       __pyx_t_8 = 0;
       __pyx_t_2 = 0;
-      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_13, __pyx_t_3, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 63, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_13, __pyx_t_3, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 62, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     }
     __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
 
-    /* "lattice_form.pyx":64
+    /* "lattice_form.pyx":63
  *             grid_num((x + 1) % unit_length, y, z - 1, unit_length),
  *             grid_num(x, (y + 1) % unit_length, z - 1, unit_length),
  *             grid_num(x, y, z - 1, unit_length),             # <<<<<<<<<<<<<<
  *             grid_num(x, y, z + 1, unit_length),
  *         ]
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 64, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 63, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 64, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 63, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 64, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 63, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
-    __pyx_t_9 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 64, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 63, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
-    __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 64, __pyx_L1_error)
+    __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 63, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
     __pyx_t_11 = NULL;
     __pyx_t_10 = 0;
@@ -3352,7 +3344,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[5] = {__pyx_t_11, __pyx_t_2, __pyx_t_8, __pyx_t_9, __pyx_t_12};
-      __pyx_t_13 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 64, __pyx_L1_error)
+      __pyx_t_13 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 63, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
       __Pyx_GOTREF(__pyx_t_13);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -3364,7 +3356,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[5] = {__pyx_t_11, __pyx_t_2, __pyx_t_8, __pyx_t_9, __pyx_t_12};
-      __pyx_t_13 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 64, __pyx_L1_error)
+      __pyx_t_13 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 63, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
       __Pyx_GOTREF(__pyx_t_13);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -3374,7 +3366,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     } else
     #endif
     {
-      __pyx_t_7 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 64, __pyx_L1_error)
+      __pyx_t_7 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 63, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       if (__pyx_t_11) {
         __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_11); __pyx_t_11 = NULL;
@@ -3391,28 +3383,28 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
       __pyx_t_8 = 0;
       __pyx_t_9 = 0;
       __pyx_t_12 = 0;
-      __pyx_t_13 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_7, NULL); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 64, __pyx_L1_error)
+      __pyx_t_13 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_7, NULL); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 63, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_13);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "lattice_form.pyx":65
+    /* "lattice_form.pyx":64
  *             grid_num(x, (y + 1) % unit_length, z - 1, unit_length),
  *             grid_num(x, y, z - 1, unit_length),
  *             grid_num(x, y, z + 1, unit_length),             # <<<<<<<<<<<<<<
  *         ]
  *     elif z_judge == 4:
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 65, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 64, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 65, __pyx_L1_error)
+    __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 64, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
-    __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 65, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 64, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
-    __pyx_t_8 = __Pyx_PyInt_From_long((__pyx_v_z + 1)); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 65, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyInt_From_long((__pyx_v_z + 1)); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 64, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
-    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 65, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 64, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_11 = NULL;
     __pyx_t_10 = 0;
@@ -3429,7 +3421,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_7)) {
       PyObject *__pyx_temp[5] = {__pyx_t_11, __pyx_t_12, __pyx_t_9, __pyx_t_8, __pyx_t_2};
-      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 65, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 64, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
@@ -3441,7 +3433,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
       PyObject *__pyx_temp[5] = {__pyx_t_11, __pyx_t_12, __pyx_t_9, __pyx_t_8, __pyx_t_2};
-      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 65, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 64, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
@@ -3451,7 +3443,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     } else
     #endif
     {
-      __pyx_t_16 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 65, __pyx_L1_error)
+      __pyx_t_16 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 64, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_16);
       if (__pyx_t_11) {
         __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_16, 0, __pyx_t_11); __pyx_t_11 = NULL;
@@ -3468,20 +3460,20 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
       __pyx_t_9 = 0;
       __pyx_t_8 = 0;
       __pyx_t_2 = 0;
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_16, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 65, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_16, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 64, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
     }
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "lattice_form.pyx":61
+    /* "lattice_form.pyx":60
  *             neighbors.append(grid_num(x, y, z - 1, unit_length))
  *     elif z_judge in (1, 3):
  *         neighbors = [             # <<<<<<<<<<<<<<
  *             grid_num((x + 1) % unit_length, y, z - 1, unit_length),
  *             grid_num(x, (y + 1) % unit_length, z - 1, unit_length),
  */
-    __pyx_t_7 = PyList_New(4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 61, __pyx_L1_error)
+    __pyx_t_7 = PyList_New(4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 60, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_GIVEREF(__pyx_t_5);
     PyList_SET_ITEM(__pyx_t_7, 0, __pyx_t_5);
@@ -3498,7 +3490,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     __pyx_v_neighbors = ((PyObject*)__pyx_t_7);
     __pyx_t_7 = 0;
 
-    /* "lattice_form.pyx":60
+    /* "lattice_form.pyx":59
  *         if z != 0:
  *             neighbors.append(grid_num(x, y, z - 1, unit_length))
  *     elif z_judge in (1, 3):             # <<<<<<<<<<<<<<
@@ -3508,7 +3500,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     goto __pyx_L3;
   }
 
-  /* "lattice_form.pyx":67
+  /* "lattice_form.pyx":66
  *             grid_num(x, y, z + 1, unit_length),
  *         ]
  *     elif z_judge == 4:             # <<<<<<<<<<<<<<
@@ -3518,27 +3510,27 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
   __pyx_t_1 = ((__pyx_v_z_judge == 4) != 0);
   if (__pyx_t_1) {
 
-    /* "lattice_form.pyx":69
+    /* "lattice_form.pyx":68
  *     elif z_judge == 4:
  *         neighbors = [
  *             grid_num((x + 1) % unit_length, y, z + 1, unit_length),             # <<<<<<<<<<<<<<
  *             grid_num((x + 1) % unit_length, (y + 1) % unit_length, z + 1, unit_length),
  *             grid_num(x, (y + 1) % unit_length, z + 1, unit_length),
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 69, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 68, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = (__pyx_v_x + 1);
     if (unlikely(__pyx_v_unit_length == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-      __PYX_ERR(0, 69, __pyx_L1_error)
+      __PYX_ERR(0, 68, __pyx_L1_error)
     }
-    __pyx_t_13 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 69, __pyx_L1_error)
+    __pyx_t_13 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 68, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_13);
-    __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 69, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 68, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_5 = __Pyx_PyInt_From_long((__pyx_v_z + 1)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 69, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_From_long((__pyx_v_z + 1)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 68, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_16 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 69, __pyx_L1_error)
+    __pyx_t_16 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 68, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_16);
     __pyx_t_2 = NULL;
     __pyx_t_10 = 0;
@@ -3555,7 +3547,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[5] = {__pyx_t_2, __pyx_t_13, __pyx_t_6, __pyx_t_5, __pyx_t_16};
-      __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 69, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 68, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
@@ -3567,7 +3559,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[5] = {__pyx_t_2, __pyx_t_13, __pyx_t_6, __pyx_t_5, __pyx_t_16};
-      __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 69, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 68, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
@@ -3577,7 +3569,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     } else
     #endif
     {
-      __pyx_t_8 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 69, __pyx_L1_error)
+      __pyx_t_8 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 68, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
       if (__pyx_t_2) {
         __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_2); __pyx_t_2 = NULL;
@@ -3594,38 +3586,38 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
       __pyx_t_6 = 0;
       __pyx_t_5 = 0;
       __pyx_t_16 = 0;
-      __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_8, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 69, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_8, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 68, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "lattice_form.pyx":70
+    /* "lattice_form.pyx":69
  *         neighbors = [
  *             grid_num((x + 1) % unit_length, y, z + 1, unit_length),
  *             grid_num((x + 1) % unit_length, (y + 1) % unit_length, z + 1, unit_length),             # <<<<<<<<<<<<<<
  *             grid_num(x, (y + 1) % unit_length, z + 1, unit_length),
  *             grid_num(x, y, z - 1, unit_length),
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 70, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 69, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __pyx_t_4 = (__pyx_v_x + 1);
     if (unlikely(__pyx_v_unit_length == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-      __PYX_ERR(0, 70, __pyx_L1_error)
+      __PYX_ERR(0, 69, __pyx_L1_error)
     }
-    __pyx_t_16 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 70, __pyx_L1_error)
+    __pyx_t_16 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 69, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_16);
     __pyx_t_4 = (__pyx_v_y + 1);
     if (unlikely(__pyx_v_unit_length == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-      __PYX_ERR(0, 70, __pyx_L1_error)
+      __PYX_ERR(0, 69, __pyx_L1_error)
     }
-    __pyx_t_5 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 70, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 69, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = __Pyx_PyInt_From_long((__pyx_v_z + 1)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 70, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyInt_From_long((__pyx_v_z + 1)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 69, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 70, __pyx_L1_error)
+    __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 69, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_13);
     __pyx_t_2 = NULL;
     __pyx_t_10 = 0;
@@ -3642,7 +3634,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_8)) {
       PyObject *__pyx_temp[5] = {__pyx_t_2, __pyx_t_16, __pyx_t_5, __pyx_t_6, __pyx_t_13};
-      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 70, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 69, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
@@ -3654,7 +3646,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_8)) {
       PyObject *__pyx_temp[5] = {__pyx_t_2, __pyx_t_16, __pyx_t_5, __pyx_t_6, __pyx_t_13};
-      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 70, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 69, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
@@ -3664,7 +3656,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     } else
     #endif
     {
-      __pyx_t_9 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 70, __pyx_L1_error)
+      __pyx_t_9 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 69, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
       if (__pyx_t_2) {
         __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_2); __pyx_t_2 = NULL;
@@ -3681,33 +3673,33 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
       __pyx_t_5 = 0;
       __pyx_t_6 = 0;
       __pyx_t_13 = 0;
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_9, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 70, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_9, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 69, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
     }
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-    /* "lattice_form.pyx":71
+    /* "lattice_form.pyx":70
  *             grid_num((x + 1) % unit_length, y, z + 1, unit_length),
  *             grid_num((x + 1) % unit_length, (y + 1) % unit_length, z + 1, unit_length),
  *             grid_num(x, (y + 1) % unit_length, z + 1, unit_length),             # <<<<<<<<<<<<<<
  *             grid_num(x, y, z - 1, unit_length),
  *         ]
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 71, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 70, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
-    __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 71, __pyx_L1_error)
+    __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 70, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_13);
     __pyx_t_4 = (__pyx_v_y + 1);
     if (unlikely(__pyx_v_unit_length == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-      __PYX_ERR(0, 71, __pyx_L1_error)
+      __PYX_ERR(0, 70, __pyx_L1_error)
     }
-    __pyx_t_6 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 71, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 70, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_5 = __Pyx_PyInt_From_long((__pyx_v_z + 1)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 71, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_From_long((__pyx_v_z + 1)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 70, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_16 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 71, __pyx_L1_error)
+    __pyx_t_16 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 70, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_16);
     __pyx_t_2 = NULL;
     __pyx_t_10 = 0;
@@ -3724,7 +3716,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_9)) {
       PyObject *__pyx_temp[5] = {__pyx_t_2, __pyx_t_13, __pyx_t_6, __pyx_t_5, __pyx_t_16};
-      __pyx_t_8 = __Pyx_PyFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 71, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 70, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
@@ -3736,7 +3728,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_9)) {
       PyObject *__pyx_temp[5] = {__pyx_t_2, __pyx_t_13, __pyx_t_6, __pyx_t_5, __pyx_t_16};
-      __pyx_t_8 = __Pyx_PyCFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 71, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyCFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 70, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
@@ -3746,7 +3738,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     } else
     #endif
     {
-      __pyx_t_12 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 71, __pyx_L1_error)
+      __pyx_t_12 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 70, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
       if (__pyx_t_2) {
         __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_2); __pyx_t_2 = NULL;
@@ -3763,28 +3755,28 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
       __pyx_t_6 = 0;
       __pyx_t_5 = 0;
       __pyx_t_16 = 0;
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_12, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 71, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_12, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 70, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
     }
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-    /* "lattice_form.pyx":72
+    /* "lattice_form.pyx":71
  *             grid_num((x + 1) % unit_length, (y + 1) % unit_length, z + 1, unit_length),
  *             grid_num(x, (y + 1) % unit_length, z + 1, unit_length),
  *             grid_num(x, y, z - 1, unit_length),             # <<<<<<<<<<<<<<
  *         ]
  *     elif z_judge == 5:
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 72, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 71, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
-    __pyx_t_16 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 72, __pyx_L1_error)
+    __pyx_t_16 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 71, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_16);
-    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 72, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 71, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 72, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 71, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 72, __pyx_L1_error)
+    __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 71, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_13);
     __pyx_t_2 = NULL;
     __pyx_t_10 = 0;
@@ -3801,7 +3793,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_12)) {
       PyObject *__pyx_temp[5] = {__pyx_t_2, __pyx_t_16, __pyx_t_5, __pyx_t_6, __pyx_t_13};
-      __pyx_t_9 = __Pyx_PyFunction_FastCall(__pyx_t_12, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 72, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyFunction_FastCall(__pyx_t_12, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 71, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_GOTREF(__pyx_t_9);
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
@@ -3813,7 +3805,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_12)) {
       PyObject *__pyx_temp[5] = {__pyx_t_2, __pyx_t_16, __pyx_t_5, __pyx_t_6, __pyx_t_13};
-      __pyx_t_9 = __Pyx_PyCFunction_FastCall(__pyx_t_12, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 72, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyCFunction_FastCall(__pyx_t_12, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 71, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_GOTREF(__pyx_t_9);
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
@@ -3823,7 +3815,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     } else
     #endif
     {
-      __pyx_t_11 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 72, __pyx_L1_error)
+      __pyx_t_11 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 71, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       if (__pyx_t_2) {
         __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_2); __pyx_t_2 = NULL;
@@ -3840,20 +3832,20 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
       __pyx_t_5 = 0;
       __pyx_t_6 = 0;
       __pyx_t_13 = 0;
-      __pyx_t_9 = __Pyx_PyObject_Call(__pyx_t_12, __pyx_t_11, NULL); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 72, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyObject_Call(__pyx_t_12, __pyx_t_11, NULL); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 71, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     }
     __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
 
-    /* "lattice_form.pyx":68
+    /* "lattice_form.pyx":67
  *         ]
  *     elif z_judge == 4:
  *         neighbors = [             # <<<<<<<<<<<<<<
  *             grid_num((x + 1) % unit_length, y, z + 1, unit_length),
  *             grid_num((x + 1) % unit_length, (y + 1) % unit_length, z + 1, unit_length),
  */
-    __pyx_t_12 = PyList_New(4); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 68, __pyx_L1_error)
+    __pyx_t_12 = PyList_New(4); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 67, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
     __Pyx_GIVEREF(__pyx_t_7);
     PyList_SET_ITEM(__pyx_t_12, 0, __pyx_t_7);
@@ -3870,7 +3862,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     __pyx_v_neighbors = ((PyObject*)__pyx_t_12);
     __pyx_t_12 = 0;
 
-    /* "lattice_form.pyx":67
+    /* "lattice_form.pyx":66
  *             grid_num(x, y, z + 1, unit_length),
  *         ]
  *     elif z_judge == 4:             # <<<<<<<<<<<<<<
@@ -3880,7 +3872,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     goto __pyx_L3;
   }
 
-  /* "lattice_form.pyx":74
+  /* "lattice_form.pyx":73
  *             grid_num(x, y, z - 1, unit_length),
  *         ]
  *     elif z_judge == 5:             # <<<<<<<<<<<<<<
@@ -3890,27 +3882,27 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
   __pyx_t_1 = ((__pyx_v_z_judge == 5) != 0);
   if (likely(__pyx_t_1)) {
 
-    /* "lattice_form.pyx":76
+    /* "lattice_form.pyx":75
  *     elif z_judge == 5:
  *         neighbors = [
  *             grid_num((x - 1) % unit_length, y, z - 1, unit_length),             # <<<<<<<<<<<<<<
  *             grid_num(x, (y - 1) % unit_length, z - 1, unit_length),
  *             grid_num((x - 1) % unit_length, (y - 1) % unit_length, z - 1, unit_length),
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 76, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 75, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
     __pyx_t_4 = (__pyx_v_x - 1);
     if (unlikely(__pyx_v_unit_length == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-      __PYX_ERR(0, 76, __pyx_L1_error)
+      __PYX_ERR(0, 75, __pyx_L1_error)
     }
-    __pyx_t_8 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 76, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 75, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 76, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 75, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_7 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 76, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 75, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 76, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 75, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
     __pyx_t_13 = NULL;
     __pyx_t_10 = 0;
@@ -3927,7 +3919,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_9)) {
       PyObject *__pyx_temp[5] = {__pyx_t_13, __pyx_t_8, __pyx_t_3, __pyx_t_7, __pyx_t_11};
-      __pyx_t_12 = __Pyx_PyFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 76, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 75, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
       __Pyx_GOTREF(__pyx_t_12);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -3939,7 +3931,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_9)) {
       PyObject *__pyx_temp[5] = {__pyx_t_13, __pyx_t_8, __pyx_t_3, __pyx_t_7, __pyx_t_11};
-      __pyx_t_12 = __Pyx_PyCFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 76, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyCFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 75, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
       __Pyx_GOTREF(__pyx_t_12);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -3949,7 +3941,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     } else
     #endif
     {
-      __pyx_t_6 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 76, __pyx_L1_error)
+      __pyx_t_6 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 75, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       if (__pyx_t_13) {
         __Pyx_GIVEREF(__pyx_t_13); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_13); __pyx_t_13 = NULL;
@@ -3966,33 +3958,33 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
       __pyx_t_3 = 0;
       __pyx_t_7 = 0;
       __pyx_t_11 = 0;
-      __pyx_t_12 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_6, NULL); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 76, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_6, NULL); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 75, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     }
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-    /* "lattice_form.pyx":77
+    /* "lattice_form.pyx":76
  *         neighbors = [
  *             grid_num((x - 1) % unit_length, y, z - 1, unit_length),
  *             grid_num(x, (y - 1) % unit_length, z - 1, unit_length),             # <<<<<<<<<<<<<<
  *             grid_num((x - 1) % unit_length, (y - 1) % unit_length, z - 1, unit_length),
  *             grid_num(x, y, z + 1, unit_length),
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 77, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 76, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 77, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 76, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
     __pyx_t_4 = (__pyx_v_y - 1);
     if (unlikely(__pyx_v_unit_length == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-      __PYX_ERR(0, 77, __pyx_L1_error)
+      __PYX_ERR(0, 76, __pyx_L1_error)
     }
-    __pyx_t_7 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 77, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 76, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_3 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 77, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 76, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 77, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 76, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __pyx_t_13 = NULL;
     __pyx_t_10 = 0;
@@ -4009,7 +4001,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_6)) {
       PyObject *__pyx_temp[5] = {__pyx_t_13, __pyx_t_11, __pyx_t_7, __pyx_t_3, __pyx_t_8};
-      __pyx_t_9 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 77, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 76, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
       __Pyx_GOTREF(__pyx_t_9);
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
@@ -4021,7 +4013,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_6)) {
       PyObject *__pyx_temp[5] = {__pyx_t_13, __pyx_t_11, __pyx_t_7, __pyx_t_3, __pyx_t_8};
-      __pyx_t_9 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 77, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 76, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
       __Pyx_GOTREF(__pyx_t_9);
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
@@ -4031,7 +4023,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     } else
     #endif
     {
-      __pyx_t_5 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 77, __pyx_L1_error)
+      __pyx_t_5 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 76, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       if (__pyx_t_13) {
         __Pyx_GIVEREF(__pyx_t_13); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_13); __pyx_t_13 = NULL;
@@ -4048,38 +4040,38 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
       __pyx_t_7 = 0;
       __pyx_t_3 = 0;
       __pyx_t_8 = 0;
-      __pyx_t_9 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_5, NULL); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 77, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_5, NULL); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 76, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     }
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-    /* "lattice_form.pyx":78
+    /* "lattice_form.pyx":77
  *             grid_num((x - 1) % unit_length, y, z - 1, unit_length),
  *             grid_num(x, (y - 1) % unit_length, z - 1, unit_length),
  *             grid_num((x - 1) % unit_length, (y - 1) % unit_length, z - 1, unit_length),             # <<<<<<<<<<<<<<
  *             grid_num(x, y, z + 1, unit_length),
  *         ]
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 78, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 77, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_4 = (__pyx_v_x - 1);
     if (unlikely(__pyx_v_unit_length == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-      __PYX_ERR(0, 78, __pyx_L1_error)
+      __PYX_ERR(0, 77, __pyx_L1_error)
     }
-    __pyx_t_8 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 78, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 77, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __pyx_t_4 = (__pyx_v_y - 1);
     if (unlikely(__pyx_v_unit_length == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-      __PYX_ERR(0, 78, __pyx_L1_error)
+      __PYX_ERR(0, 77, __pyx_L1_error)
     }
-    __pyx_t_3 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 78, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_t_4, __pyx_v_unit_length)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 77, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_7 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 78, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyInt_From_long((__pyx_v_z - 1)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 77, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 78, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 77, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
     __pyx_t_13 = NULL;
     __pyx_t_10 = 0;
@@ -4096,7 +4088,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_5)) {
       PyObject *__pyx_temp[5] = {__pyx_t_13, __pyx_t_8, __pyx_t_3, __pyx_t_7, __pyx_t_11};
-      __pyx_t_6 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 78, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 77, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -4108,7 +4100,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
       PyObject *__pyx_temp[5] = {__pyx_t_13, __pyx_t_8, __pyx_t_3, __pyx_t_7, __pyx_t_11};
-      __pyx_t_6 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 78, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 77, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -4118,7 +4110,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     } else
     #endif
     {
-      __pyx_t_16 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 78, __pyx_L1_error)
+      __pyx_t_16 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 77, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_16);
       if (__pyx_t_13) {
         __Pyx_GIVEREF(__pyx_t_13); PyTuple_SET_ITEM(__pyx_t_16, 0, __pyx_t_13); __pyx_t_13 = NULL;
@@ -4135,28 +4127,28 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
       __pyx_t_3 = 0;
       __pyx_t_7 = 0;
       __pyx_t_11 = 0;
-      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_16, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 78, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_16, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 77, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
     }
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "lattice_form.pyx":79
+    /* "lattice_form.pyx":78
  *             grid_num(x, (y - 1) % unit_length, z - 1, unit_length),
  *             grid_num((x - 1) % unit_length, (y - 1) % unit_length, z - 1, unit_length),
  *             grid_num(x, y, z + 1, unit_length),             # <<<<<<<<<<<<<<
  *         ]
  *     else:
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_16, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 79, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_16, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 78, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_16);
-    __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 79, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 78, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
-    __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 79, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 78, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_3 = __Pyx_PyInt_From_long((__pyx_v_z + 1)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 79, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_long((__pyx_v_z + 1)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 78, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 79, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 78, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __pyx_t_13 = NULL;
     __pyx_t_10 = 0;
@@ -4173,7 +4165,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_16)) {
       PyObject *__pyx_temp[5] = {__pyx_t_13, __pyx_t_11, __pyx_t_7, __pyx_t_3, __pyx_t_8};
-      __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_16, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 79, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_16, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 78, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
@@ -4185,7 +4177,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_16)) {
       PyObject *__pyx_temp[5] = {__pyx_t_13, __pyx_t_11, __pyx_t_7, __pyx_t_3, __pyx_t_8};
-      __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_16, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 79, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_16, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 78, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
@@ -4195,7 +4187,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     } else
     #endif
     {
-      __pyx_t_2 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 79, __pyx_L1_error)
+      __pyx_t_2 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 78, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       if (__pyx_t_13) {
         __Pyx_GIVEREF(__pyx_t_13); PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_13); __pyx_t_13 = NULL;
@@ -4212,20 +4204,20 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
       __pyx_t_7 = 0;
       __pyx_t_3 = 0;
       __pyx_t_8 = 0;
-      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_16, __pyx_t_2, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 79, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_16, __pyx_t_2, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 78, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     }
     __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
 
-    /* "lattice_form.pyx":75
+    /* "lattice_form.pyx":74
  *         ]
  *     elif z_judge == 5:
  *         neighbors = [             # <<<<<<<<<<<<<<
  *             grid_num((x - 1) % unit_length, y, z - 1, unit_length),
  *             grid_num(x, (y - 1) % unit_length, z - 1, unit_length),
  */
-    __pyx_t_16 = PyList_New(4); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 75, __pyx_L1_error)
+    __pyx_t_16 = PyList_New(4); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 74, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_16);
     __Pyx_GIVEREF(__pyx_t_12);
     PyList_SET_ITEM(__pyx_t_16, 0, __pyx_t_12);
@@ -4242,7 +4234,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     __pyx_v_neighbors = ((PyObject*)__pyx_t_16);
     __pyx_t_16 = 0;
 
-    /* "lattice_form.pyx":74
+    /* "lattice_form.pyx":73
  *             grid_num(x, y, z - 1, unit_length),
  *         ]
  *     elif z_judge == 5:             # <<<<<<<<<<<<<<
@@ -4252,7 +4244,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
     goto __pyx_L3;
   }
 
-  /* "lattice_form.pyx":82
+  /* "lattice_form.pyx":81
  *         ]
  *     else:
  *         raise RuntimeError("Something wrong happens. check z_judge value")             # <<<<<<<<<<<<<<
@@ -4260,15 +4252,15 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
  * 
  */
   /*else*/ {
-    __pyx_t_16 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 82, __pyx_L1_error)
+    __pyx_t_16 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 81, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_16);
     __Pyx_Raise(__pyx_t_16, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-    __PYX_ERR(0, 82, __pyx_L1_error)
+    __PYX_ERR(0, 81, __pyx_L1_error)
   }
   __pyx_L3:;
 
-  /* "lattice_form.pyx":83
+  /* "lattice_form.pyx":82
  *     else:
  *         raise RuntimeError("Something wrong happens. check z_judge value")
  *     return neighbors             # <<<<<<<<<<<<<<
@@ -4280,7 +4272,7 @@ static PyObject *__pyx_f_12lattice_form_neighbor_points(int __pyx_v_x, int __pyx
   __pyx_r = __pyx_v_neighbors;
   goto __pyx_L0;
 
-  /* "lattice_form.pyx":40
+  /* "lattice_form.pyx":39
  * 
  * 
  * cpdef list neighbor_points(             # <<<<<<<<<<<<<<
@@ -4353,29 +4345,29 @@ static PyObject *__pyx_pw_12lattice_form_5neighbor_points(PyObject *__pyx_self, 
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_y)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("neighbor_points", 1, 5, 5, 1); __PYX_ERR(0, 40, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("neighbor_points", 1, 5, 5, 1); __PYX_ERR(0, 39, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_z)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("neighbor_points", 1, 5, 5, 2); __PYX_ERR(0, 40, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("neighbor_points", 1, 5, 5, 2); __PYX_ERR(0, 39, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_unit_length)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("neighbor_points", 1, 5, 5, 3); __PYX_ERR(0, 40, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("neighbor_points", 1, 5, 5, 3); __PYX_ERR(0, 39, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_z_max)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("neighbor_points", 1, 5, 5, 4); __PYX_ERR(0, 40, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("neighbor_points", 1, 5, 5, 4); __PYX_ERR(0, 39, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "neighbor_points") < 0)) __PYX_ERR(0, 40, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "neighbor_points") < 0)) __PYX_ERR(0, 39, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 5) {
       goto __pyx_L5_argtuple_error;
@@ -4386,15 +4378,15 @@ static PyObject *__pyx_pw_12lattice_form_5neighbor_points(PyObject *__pyx_self, 
       values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
       values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
     }
-    __pyx_v_x = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_x == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 41, __pyx_L3_error)
-    __pyx_v_y = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_y == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 41, __pyx_L3_error)
-    __pyx_v_z = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_z == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 41, __pyx_L3_error)
-    __pyx_v_unit_length = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_unit_length == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 41, __pyx_L3_error)
-    __pyx_v_z_max = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_z_max == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 41, __pyx_L3_error)
+    __pyx_v_x = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_x == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 40, __pyx_L3_error)
+    __pyx_v_y = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_y == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 40, __pyx_L3_error)
+    __pyx_v_z = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_z == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 40, __pyx_L3_error)
+    __pyx_v_unit_length = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_unit_length == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 40, __pyx_L3_error)
+    __pyx_v_z_max = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_z_max == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 40, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("neighbor_points", 1, 5, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 40, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("neighbor_points", 1, 5, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 39, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lattice_form.neighbor_points", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -4416,7 +4408,7 @@ static PyObject *__pyx_pf_12lattice_form_4neighbor_points(CYTHON_UNUSED PyObject
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("neighbor_points", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_12lattice_form_neighbor_points(__pyx_v_x, __pyx_v_y, __pyx_v_z, __pyx_v_unit_length, __pyx_v_z_max, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_12lattice_form_neighbor_points(__pyx_v_x, __pyx_v_y, __pyx_v_z, __pyx_v_unit_length, __pyx_v_z_max, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -4433,7 +4425,7 @@ static PyObject *__pyx_pf_12lattice_form_4neighbor_points(CYTHON_UNUSED PyObject
   return __pyx_r;
 }
 
-/* "lattice_form.pyx":86
+/* "lattice_form.pyx":85
  * 
  * 
  * cpdef list search_bond(int unit_length, int z_max, int num_grids):             # <<<<<<<<<<<<<<
@@ -4473,16 +4465,16 @@ static PyObject *__pyx_f_12lattice_form_search_bond(int __pyx_v_unit_length, int
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("search_bond", 0);
 
-  /* "lattice_form.pyx":89
+  /* "lattice_form.pyx":88
  *     # Search for bonding atoms for all the atoms
  *     cdef int x, y, z, index
  *     cdef list bonds = [[]]*num_grids             # <<<<<<<<<<<<<<
  *     for x in range(0, unit_length):
  *         for y in range(0, unit_length):
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 88, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyList_New(1 * ((__pyx_v_num_grids<0) ? 0:__pyx_v_num_grids)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(1 * ((__pyx_v_num_grids<0) ? 0:__pyx_v_num_grids)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 88, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   { Py_ssize_t __pyx_temp;
     for (__pyx_temp=0; __pyx_temp < __pyx_v_num_grids; __pyx_temp++) {
@@ -4495,7 +4487,7 @@ static PyObject *__pyx_f_12lattice_form_search_bond(int __pyx_v_unit_length, int
   __pyx_v_bonds = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "lattice_form.pyx":90
+  /* "lattice_form.pyx":89
  *     cdef int x, y, z, index
  *     cdef list bonds = [[]]*num_grids
  *     for x in range(0, unit_length):             # <<<<<<<<<<<<<<
@@ -4507,7 +4499,7 @@ static PyObject *__pyx_f_12lattice_form_search_bond(int __pyx_v_unit_length, int
   for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
     __pyx_v_x = __pyx_t_5;
 
-    /* "lattice_form.pyx":91
+    /* "lattice_form.pyx":90
  *     cdef list bonds = [[]]*num_grids
  *     for x in range(0, unit_length):
  *         for y in range(0, unit_length):             # <<<<<<<<<<<<<<
@@ -4519,7 +4511,7 @@ static PyObject *__pyx_f_12lattice_form_search_bond(int __pyx_v_unit_length, int
     for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
       __pyx_v_y = __pyx_t_8;
 
-      /* "lattice_form.pyx":92
+      /* "lattice_form.pyx":91
  *     for x in range(0, unit_length):
  *         for y in range(0, unit_length):
  *             for z in range(0, z_max):             # <<<<<<<<<<<<<<
@@ -4531,22 +4523,22 @@ static PyObject *__pyx_f_12lattice_form_search_bond(int __pyx_v_unit_length, int
       for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
         __pyx_v_z = __pyx_t_11;
 
-        /* "lattice_form.pyx":93
+        /* "lattice_form.pyx":92
  *         for y in range(0, unit_length):
  *             for z in range(0, z_max):
  *                 index = grid_num(x, y, z, unit_length)             # <<<<<<<<<<<<<<
  *                 bonds[index] = neighbor_points(x, y, z, unit_length, z_max)
  *     return bonds
  */
-        __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 93, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 92, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 93, __pyx_L1_error)
+        __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 92, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_12);
-        __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 93, __pyx_L1_error)
+        __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 92, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_13);
-        __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_z); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 93, __pyx_L1_error)
+        __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_z); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 92, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_14);
-        __pyx_t_15 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 93, __pyx_L1_error)
+        __pyx_t_15 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 92, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_15);
         __pyx_t_16 = NULL;
         __pyx_t_17 = 0;
@@ -4563,7 +4555,7 @@ static PyObject *__pyx_f_12lattice_form_search_bond(int __pyx_v_unit_length, int
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_1)) {
           PyObject *__pyx_temp[5] = {__pyx_t_16, __pyx_t_12, __pyx_t_13, __pyx_t_14, __pyx_t_15};
-          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_17, 4+__pyx_t_17); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 93, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_17, 4+__pyx_t_17); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 92, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
@@ -4575,7 +4567,7 @@ static PyObject *__pyx_f_12lattice_form_search_bond(int __pyx_v_unit_length, int
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
           PyObject *__pyx_temp[5] = {__pyx_t_16, __pyx_t_12, __pyx_t_13, __pyx_t_14, __pyx_t_15};
-          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_17, 4+__pyx_t_17); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 93, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_17, 4+__pyx_t_17); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 92, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
@@ -4585,7 +4577,7 @@ static PyObject *__pyx_f_12lattice_form_search_bond(int __pyx_v_unit_length, int
         } else
         #endif
         {
-          __pyx_t_18 = PyTuple_New(4+__pyx_t_17); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 93, __pyx_L1_error)
+          __pyx_t_18 = PyTuple_New(4+__pyx_t_17); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 92, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_18);
           if (__pyx_t_16) {
             __Pyx_GIVEREF(__pyx_t_16); PyTuple_SET_ITEM(__pyx_t_18, 0, __pyx_t_16); __pyx_t_16 = NULL;
@@ -4602,31 +4594,31 @@ static PyObject *__pyx_f_12lattice_form_search_bond(int __pyx_v_unit_length, int
           __pyx_t_13 = 0;
           __pyx_t_14 = 0;
           __pyx_t_15 = 0;
-          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_18, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 93, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_18, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 92, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
         }
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_17 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_17 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 93, __pyx_L1_error)
+        __pyx_t_17 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_17 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 92, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __pyx_v_index = __pyx_t_17;
 
-        /* "lattice_form.pyx":94
+        /* "lattice_form.pyx":93
  *             for z in range(0, z_max):
  *                 index = grid_num(x, y, z, unit_length)
  *                 bonds[index] = neighbor_points(x, y, z, unit_length, z_max)             # <<<<<<<<<<<<<<
  *     return bonds
  * 
  */
-        __pyx_t_2 = __pyx_f_12lattice_form_neighbor_points(__pyx_v_x, __pyx_v_y, __pyx_v_z, __pyx_v_unit_length, __pyx_v_z_max, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 94, __pyx_L1_error)
+        __pyx_t_2 = __pyx_f_12lattice_form_neighbor_points(__pyx_v_x, __pyx_v_y, __pyx_v_z, __pyx_v_unit_length, __pyx_v_z_max, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 93, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        if (unlikely(__Pyx_SetItemInt(__pyx_v_bonds, __pyx_v_index, __pyx_t_2, int, 1, __Pyx_PyInt_From_int, 1, 1, 1) < 0)) __PYX_ERR(0, 94, __pyx_L1_error)
+        if (unlikely(__Pyx_SetItemInt(__pyx_v_bonds, __pyx_v_index, __pyx_t_2, int, 1, __Pyx_PyInt_From_int, 1, 1, 1) < 0)) __PYX_ERR(0, 93, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       }
     }
   }
 
-  /* "lattice_form.pyx":95
+  /* "lattice_form.pyx":94
  *                 index = grid_num(x, y, z, unit_length)
  *                 bonds[index] = neighbor_points(x, y, z, unit_length, z_max)
  *     return bonds             # <<<<<<<<<<<<<<
@@ -4638,7 +4630,7 @@ static PyObject *__pyx_f_12lattice_form_search_bond(int __pyx_v_unit_length, int
   __pyx_r = __pyx_v_bonds;
   goto __pyx_L0;
 
-  /* "lattice_form.pyx":86
+  /* "lattice_form.pyx":85
  * 
  * 
  * cpdef list search_bond(int unit_length, int z_max, int num_grids):             # <<<<<<<<<<<<<<
@@ -4702,17 +4694,17 @@ static PyObject *__pyx_pw_12lattice_form_7search_bond(PyObject *__pyx_self, PyOb
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_z_max)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("search_bond", 1, 3, 3, 1); __PYX_ERR(0, 86, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("search_bond", 1, 3, 3, 1); __PYX_ERR(0, 85, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_num_grids)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("search_bond", 1, 3, 3, 2); __PYX_ERR(0, 86, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("search_bond", 1, 3, 3, 2); __PYX_ERR(0, 85, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "search_bond") < 0)) __PYX_ERR(0, 86, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "search_bond") < 0)) __PYX_ERR(0, 85, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -4721,13 +4713,13 @@ static PyObject *__pyx_pw_12lattice_form_7search_bond(PyObject *__pyx_self, PyOb
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
-    __pyx_v_unit_length = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_unit_length == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 86, __pyx_L3_error)
-    __pyx_v_z_max = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_z_max == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 86, __pyx_L3_error)
-    __pyx_v_num_grids = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_num_grids == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 86, __pyx_L3_error)
+    __pyx_v_unit_length = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_unit_length == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 85, __pyx_L3_error)
+    __pyx_v_z_max = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_z_max == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 85, __pyx_L3_error)
+    __pyx_v_num_grids = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_num_grids == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 85, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("search_bond", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 86, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("search_bond", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 85, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lattice_form.search_bond", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -4749,7 +4741,7 @@ static PyObject *__pyx_pf_12lattice_form_6search_bond(CYTHON_UNUSED PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("search_bond", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_12lattice_form_search_bond(__pyx_v_unit_length, __pyx_v_z_max, __pyx_v_num_grids, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 86, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_12lattice_form_search_bond(__pyx_v_unit_length, __pyx_v_z_max, __pyx_v_num_grids, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 85, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -4766,7 +4758,7 @@ static PyObject *__pyx_pf_12lattice_form_6search_bond(CYTHON_UNUSED PyObject *__
   return __pyx_r;
 }
 
-/* "lattice_form.pyx":98
+/* "lattice_form.pyx":97
  * 
  * 
  * cpdef tuple lattice_form(input_params):             # <<<<<<<<<<<<<<
@@ -4825,59 +4817,59 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("lattice_form", 0);
 
-  /* "lattice_form.pyx":114
+  /* "lattice_form.pyx":113
  *     cdef list index_list
  *     #
  *     unit_length = input_params.cell_size_xy             # <<<<<<<<<<<<<<
  *     z_units = input_params.cell_size_z
  *     z_intra = float(input_params.distance_intra)
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_input_params, __pyx_n_s_cell_size_xy); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 114, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_input_params, __pyx_n_s_cell_size_xy); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 113, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 114, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 113, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_unit_length = __pyx_t_2;
 
-  /* "lattice_form.pyx":115
+  /* "lattice_form.pyx":114
  *     #
  *     unit_length = input_params.cell_size_xy
  *     z_units = input_params.cell_size_z             # <<<<<<<<<<<<<<
  *     z_intra = float(input_params.distance_intra)
  *     z_inter = float(input_params.distance_inter)
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_input_params, __pyx_n_s_cell_size_z); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 115, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_input_params, __pyx_n_s_cell_size_z); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 114, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 115, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 114, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_z_units = __pyx_t_2;
 
-  /* "lattice_form.pyx":116
+  /* "lattice_form.pyx":115
  *     unit_length = input_params.cell_size_xy
  *     z_units = input_params.cell_size_z
  *     z_intra = float(input_params.distance_intra)             # <<<<<<<<<<<<<<
  *     z_inter = float(input_params.distance_inter)
  *     unit_height = 3 * (z_intra + z_inter)
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_input_params, __pyx_n_s_distance_intra); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 116, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_input_params, __pyx_n_s_distance_intra); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 115, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __Pyx_PyObject_AsDouble(__pyx_t_1); if (unlikely(__pyx_t_3 == ((double)((double)-1)) && PyErr_Occurred())) __PYX_ERR(0, 116, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_AsDouble(__pyx_t_1); if (unlikely(__pyx_t_3 == ((double)((double)-1)) && PyErr_Occurred())) __PYX_ERR(0, 115, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_z_intra = __pyx_t_3;
 
-  /* "lattice_form.pyx":117
+  /* "lattice_form.pyx":116
  *     z_units = input_params.cell_size_z
  *     z_intra = float(input_params.distance_intra)
  *     z_inter = float(input_params.distance_inter)             # <<<<<<<<<<<<<<
  *     unit_height = 3 * (z_intra + z_inter)
  *     z_max = z_units * 6 -1
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_input_params, __pyx_n_s_distance_inter); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 117, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_input_params, __pyx_n_s_distance_inter); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 116, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __Pyx_PyObject_AsDouble(__pyx_t_1); if (unlikely(__pyx_t_3 == ((double)((double)-1)) && PyErr_Occurred())) __PYX_ERR(0, 117, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_AsDouble(__pyx_t_1); if (unlikely(__pyx_t_3 == ((double)((double)-1)) && PyErr_Occurred())) __PYX_ERR(0, 116, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_z_inter = __pyx_t_3;
 
-  /* "lattice_form.pyx":118
+  /* "lattice_form.pyx":117
  *     z_intra = float(input_params.distance_intra)
  *     z_inter = float(input_params.distance_inter)
  *     unit_height = 3 * (z_intra + z_inter)             # <<<<<<<<<<<<<<
@@ -4886,7 +4878,7 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
  */
   __pyx_v_unit_height = (3.0 * (__pyx_v_z_intra + __pyx_v_z_inter));
 
-  /* "lattice_form.pyx":119
+  /* "lattice_form.pyx":118
  *     z_inter = float(input_params.distance_inter)
  *     unit_height = 3 * (z_intra + z_inter)
  *     z_max = z_units * 6 -1             # <<<<<<<<<<<<<<
@@ -4895,7 +4887,7 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
  */
   __pyx_v_z_max = ((__pyx_v_z_units * 6) - 1);
 
-  /* "lattice_form.pyx":121
+  /* "lattice_form.pyx":120
  *     z_max = z_units * 6 -1
  *     #
  *     num_one_layer = unit_length**2             # <<<<<<<<<<<<<<
@@ -4904,7 +4896,7 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
  */
   __pyx_v_num_one_layer = __Pyx_pow_long(((long)__pyx_v_unit_length), 2);
 
-  /* "lattice_form.pyx":122
+  /* "lattice_form.pyx":121
  *     #
  *     num_one_layer = unit_length**2
  *     num_grids = num_one_layer * z_max             # <<<<<<<<<<<<<<
@@ -4913,14 +4905,14 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
  */
   __pyx_v_num_grids = (__pyx_v_num_one_layer * __pyx_v_z_max);
 
-  /* "lattice_form.pyx":124
+  /* "lattice_form.pyx":123
  *     num_grids = num_one_layer * z_max
  *     #
  *     highest_atom = [0]*num_one_layer             # <<<<<<<<<<<<<<
  *     atom_set = [0]*num_grids
  *     event = [[]]*num_grids
  */
-  __pyx_t_1 = PyList_New(1 * ((__pyx_v_num_one_layer<0) ? 0:__pyx_v_num_one_layer)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 124, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(1 * ((__pyx_v_num_one_layer<0) ? 0:__pyx_v_num_one_layer)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 123, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   { Py_ssize_t __pyx_temp;
     for (__pyx_temp=0; __pyx_temp < __pyx_v_num_one_layer; __pyx_temp++) {
@@ -4932,14 +4924,14 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
   __pyx_v_highest_atom = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "lattice_form.pyx":125
+  /* "lattice_form.pyx":124
  *     #
  *     highest_atom = [0]*num_one_layer
  *     atom_set = [0]*num_grids             # <<<<<<<<<<<<<<
  *     event = [[]]*num_grids
  *     event_time = [[]]*num_grids
  */
-  __pyx_t_1 = PyList_New(1 * ((__pyx_v_num_grids<0) ? 0:__pyx_v_num_grids)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 125, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(1 * ((__pyx_v_num_grids<0) ? 0:__pyx_v_num_grids)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 124, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   { Py_ssize_t __pyx_temp;
     for (__pyx_temp=0; __pyx_temp < __pyx_v_num_grids; __pyx_temp++) {
@@ -4951,16 +4943,16 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
   __pyx_v_atom_set = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "lattice_form.pyx":126
+  /* "lattice_form.pyx":125
  *     highest_atom = [0]*num_one_layer
  *     atom_set = [0]*num_grids
  *     event = [[]]*num_grids             # <<<<<<<<<<<<<<
  *     event_time = [[]]*num_grids
  *     event_time_tot = [0]*num_grids
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 126, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 125, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = PyList_New(1 * ((__pyx_v_num_grids<0) ? 0:__pyx_v_num_grids)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 126, __pyx_L1_error)
+  __pyx_t_4 = PyList_New(1 * ((__pyx_v_num_grids<0) ? 0:__pyx_v_num_grids)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 125, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   { Py_ssize_t __pyx_temp;
     for (__pyx_temp=0; __pyx_temp < __pyx_v_num_grids; __pyx_temp++) {
@@ -4973,16 +4965,16 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
   __pyx_v_event = ((PyObject*)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "lattice_form.pyx":127
+  /* "lattice_form.pyx":126
  *     atom_set = [0]*num_grids
  *     event = [[]]*num_grids
  *     event_time = [[]]*num_grids             # <<<<<<<<<<<<<<
  *     event_time_tot = [0]*num_grids
  *     diffuse_candidates = [[]]*num_grids
  */
-  __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 127, __pyx_L1_error)
+  __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 126, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_1 = PyList_New(1 * ((__pyx_v_num_grids<0) ? 0:__pyx_v_num_grids)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 127, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(1 * ((__pyx_v_num_grids<0) ? 0:__pyx_v_num_grids)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 126, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   { Py_ssize_t __pyx_temp;
     for (__pyx_temp=0; __pyx_temp < __pyx_v_num_grids; __pyx_temp++) {
@@ -4995,14 +4987,14 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
   __pyx_v_event_time = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "lattice_form.pyx":128
+  /* "lattice_form.pyx":127
  *     event = [[]]*num_grids
  *     event_time = [[]]*num_grids
  *     event_time_tot = [0]*num_grids             # <<<<<<<<<<<<<<
  *     diffuse_candidates = [[]]*num_grids
  *     index_list = [(int, int, int)]*num_grids
  */
-  __pyx_t_1 = PyList_New(1 * ((__pyx_v_num_grids<0) ? 0:__pyx_v_num_grids)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 128, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(1 * ((__pyx_v_num_grids<0) ? 0:__pyx_v_num_grids)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 127, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   { Py_ssize_t __pyx_temp;
     for (__pyx_temp=0; __pyx_temp < __pyx_v_num_grids; __pyx_temp++) {
@@ -5014,16 +5006,16 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
   __pyx_v_event_time_tot = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "lattice_form.pyx":129
+  /* "lattice_form.pyx":128
  *     event_time = [[]]*num_grids
  *     event_time_tot = [0]*num_grids
  *     diffuse_candidates = [[]]*num_grids             # <<<<<<<<<<<<<<
  *     index_list = [(int, int, int)]*num_grids
  *     #
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 129, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 128, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = PyList_New(1 * ((__pyx_v_num_grids<0) ? 0:__pyx_v_num_grids)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 129, __pyx_L1_error)
+  __pyx_t_4 = PyList_New(1 * ((__pyx_v_num_grids<0) ? 0:__pyx_v_num_grids)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 128, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   { Py_ssize_t __pyx_temp;
     for (__pyx_temp=0; __pyx_temp < __pyx_v_num_grids; __pyx_temp++) {
@@ -5036,14 +5028,14 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
   __pyx_v_diffuse_candidates = ((PyObject*)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "lattice_form.pyx":130
+  /* "lattice_form.pyx":129
  *     event_time_tot = [0]*num_grids
  *     diffuse_candidates = [[]]*num_grids
  *     index_list = [(int, int, int)]*num_grids             # <<<<<<<<<<<<<<
  *     #
  *     lattice_first = form_first_3BL(z_intra, z_inter, unit_length)
  */
-  __pyx_t_4 = PyTuple_New(3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 130, __pyx_L1_error)
+  __pyx_t_4 = PyTuple_New(3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 129, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_INCREF(((PyObject *)(&PyInt_Type)));
   __Pyx_GIVEREF(((PyObject *)(&PyInt_Type)));
@@ -5054,7 +5046,7 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
   __Pyx_INCREF(((PyObject *)(&PyInt_Type)));
   __Pyx_GIVEREF(((PyObject *)(&PyInt_Type)));
   PyTuple_SET_ITEM(__pyx_t_4, 2, ((PyObject *)(&PyInt_Type)));
-  __pyx_t_1 = PyList_New(1 * ((__pyx_v_num_grids<0) ? 0:__pyx_v_num_grids)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 130, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(1 * ((__pyx_v_num_grids<0) ? 0:__pyx_v_num_grids)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 129, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   { Py_ssize_t __pyx_temp;
     for (__pyx_temp=0; __pyx_temp < __pyx_v_num_grids; __pyx_temp++) {
@@ -5067,43 +5059,43 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
   __pyx_v_index_list = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "lattice_form.pyx":132
+  /* "lattice_form.pyx":131
  *     index_list = [(int, int, int)]*num_grids
  *     #
  *     lattice_first = form_first_3BL(z_intra, z_inter, unit_length)             # <<<<<<<<<<<<<<
  *     lattice = lattice_full_layers(unit_height, unit_length, z_max, lattice_first, num_grids)
  *     bonds = search_bond(unit_length, z_max, num_grids)
  */
-  __pyx_t_1 = __pyx_f_12lattice_form_form_first_3BL(__pyx_v_z_intra, __pyx_v_z_inter, __pyx_v_unit_length, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 132, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_12lattice_form_form_first_3BL(__pyx_v_z_intra, __pyx_v_z_inter, __pyx_v_unit_length, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 131, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_lattice_first = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "lattice_form.pyx":133
+  /* "lattice_form.pyx":132
  *     #
  *     lattice_first = form_first_3BL(z_intra, z_inter, unit_length)
  *     lattice = lattice_full_layers(unit_height, unit_length, z_max, lattice_first, num_grids)             # <<<<<<<<<<<<<<
  *     bonds = search_bond(unit_length, z_max, num_grids)
  *     #
  */
-  __pyx_t_1 = __pyx_f_12lattice_form_lattice_full_layers(__pyx_v_unit_height, __pyx_v_unit_length, __pyx_v_z_max, __pyx_v_lattice_first, __pyx_v_num_grids, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 133, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_12lattice_form_lattice_full_layers(__pyx_v_unit_height, __pyx_v_unit_length, __pyx_v_z_max, __pyx_v_lattice_first, __pyx_v_num_grids, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 132, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_lattice = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "lattice_form.pyx":134
+  /* "lattice_form.pyx":133
  *     lattice_first = form_first_3BL(z_intra, z_inter, unit_length)
  *     lattice = lattice_full_layers(unit_height, unit_length, z_max, lattice_first, num_grids)
  *     bonds = search_bond(unit_length, z_max, num_grids)             # <<<<<<<<<<<<<<
  *     #
  *     for x in range(unit_length):
  */
-  __pyx_t_1 = __pyx_f_12lattice_form_search_bond(__pyx_v_unit_length, __pyx_v_z_max, __pyx_v_num_grids, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 134, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_12lattice_form_search_bond(__pyx_v_unit_length, __pyx_v_z_max, __pyx_v_num_grids, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 133, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_bonds = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "lattice_form.pyx":136
+  /* "lattice_form.pyx":135
  *     bonds = search_bond(unit_length, z_max, num_grids)
  *     #
  *     for x in range(unit_length):             # <<<<<<<<<<<<<<
@@ -5115,7 +5107,7 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
   for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
     __pyx_v_x = __pyx_t_6;
 
-    /* "lattice_form.pyx":137
+    /* "lattice_form.pyx":136
  *     #
  *     for x in range(unit_length):
  *         for y in range(unit_length):             # <<<<<<<<<<<<<<
@@ -5127,7 +5119,7 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
     for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
       __pyx_v_y = __pyx_t_9;
 
-      /* "lattice_form.pyx":138
+      /* "lattice_form.pyx":137
  *     for x in range(unit_length):
  *         for y in range(unit_length):
  *             for z in range(z_max):             # <<<<<<<<<<<<<<
@@ -5139,22 +5131,22 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
       for (__pyx_t_12 = 0; __pyx_t_12 < __pyx_t_11; __pyx_t_12+=1) {
         __pyx_v_z = __pyx_t_12;
 
-        /* "lattice_form.pyx":139
+        /* "lattice_form.pyx":138
  *         for y in range(unit_length):
  *             for z in range(z_max):
  *                 index = grid_num(x, y, z, unit_length)             # <<<<<<<<<<<<<<
  *                 index_list[index] = (x, y, z)
  *     for x in range(unit_length):
  */
-        __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 139, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 138, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 139, __pyx_L1_error)
+        __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 138, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_13);
-        __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 139, __pyx_L1_error)
+        __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 138, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_14);
-        __pyx_t_15 = __Pyx_PyInt_From_int(__pyx_v_z); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 139, __pyx_L1_error)
+        __pyx_t_15 = __Pyx_PyInt_From_int(__pyx_v_z); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 138, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_15);
-        __pyx_t_16 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 139, __pyx_L1_error)
+        __pyx_t_16 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 138, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_16);
         __pyx_t_17 = NULL;
         __pyx_t_18 = 0;
@@ -5171,7 +5163,7 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_4)) {
           PyObject *__pyx_temp[5] = {__pyx_t_17, __pyx_t_13, __pyx_t_14, __pyx_t_15, __pyx_t_16};
-          __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_18, 4+__pyx_t_18); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 139, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_18, 4+__pyx_t_18); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 138, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
@@ -5183,7 +5175,7 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
           PyObject *__pyx_temp[5] = {__pyx_t_17, __pyx_t_13, __pyx_t_14, __pyx_t_15, __pyx_t_16};
-          __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_18, 4+__pyx_t_18); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 139, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_18, 4+__pyx_t_18); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 138, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
@@ -5193,7 +5185,7 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
         } else
         #endif
         {
-          __pyx_t_19 = PyTuple_New(4+__pyx_t_18); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 139, __pyx_L1_error)
+          __pyx_t_19 = PyTuple_New(4+__pyx_t_18); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 138, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_19);
           if (__pyx_t_17) {
             __Pyx_GIVEREF(__pyx_t_17); PyTuple_SET_ITEM(__pyx_t_19, 0, __pyx_t_17); __pyx_t_17 = NULL;
@@ -5210,29 +5202,29 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
           __pyx_t_14 = 0;
           __pyx_t_15 = 0;
           __pyx_t_16 = 0;
-          __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_19, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 139, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_19, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 138, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF(__pyx_t_19); __pyx_t_19 = 0;
         }
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_t_18 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_18 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 139, __pyx_L1_error)
+        __pyx_t_18 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_18 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 138, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
         __pyx_v_index = __pyx_t_18;
 
-        /* "lattice_form.pyx":140
+        /* "lattice_form.pyx":139
  *             for z in range(z_max):
  *                 index = grid_num(x, y, z, unit_length)
  *                 index_list[index] = (x, y, z)             # <<<<<<<<<<<<<<
  *     for x in range(unit_length):
  *         for y in range(unit_length):
  */
-        __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 140, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 139, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 140, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 139, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_19 = __Pyx_PyInt_From_int(__pyx_v_z); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 140, __pyx_L1_error)
+        __pyx_t_19 = __Pyx_PyInt_From_int(__pyx_v_z); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 139, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_19);
-        __pyx_t_16 = PyTuple_New(3); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 140, __pyx_L1_error)
+        __pyx_t_16 = PyTuple_New(3); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 139, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_16);
         __Pyx_GIVEREF(__pyx_t_1);
         PyTuple_SET_ITEM(__pyx_t_16, 0, __pyx_t_1);
@@ -5243,13 +5235,13 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
         __pyx_t_1 = 0;
         __pyx_t_4 = 0;
         __pyx_t_19 = 0;
-        if (unlikely(__Pyx_SetItemInt(__pyx_v_index_list, __pyx_v_index, __pyx_t_16, int, 1, __Pyx_PyInt_From_int, 1, 1, 1) < 0)) __PYX_ERR(0, 140, __pyx_L1_error)
+        if (unlikely(__Pyx_SetItemInt(__pyx_v_index_list, __pyx_v_index, __pyx_t_16, int, 1, __Pyx_PyInt_From_int, 1, 1, 1) < 0)) __PYX_ERR(0, 139, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
       }
     }
   }
 
-  /* "lattice_form.pyx":141
+  /* "lattice_form.pyx":140
  *                 index = grid_num(x, y, z, unit_length)
  *                 index_list[index] = (x, y, z)
  *     for x in range(unit_length):             # <<<<<<<<<<<<<<
@@ -5261,56 +5253,54 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
   for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
     __pyx_v_x = __pyx_t_6;
 
-    /* "lattice_form.pyx":142
+    /* "lattice_form.pyx":141
  *                 index_list[index] = (x, y, z)
  *     for x in range(unit_length):
  *         for y in range(unit_length):             # <<<<<<<<<<<<<<
  *             for z in range(z_max):
- *                 diffuse_candidates[index] = find_candidates(bonds, index_list, x, y, z, unit_length, z_max)
+ *                 index = grid_num(x, y, z, unit_length)
  */
     __pyx_t_7 = __pyx_v_unit_length;
     __pyx_t_8 = __pyx_t_7;
     for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
       __pyx_v_y = __pyx_t_9;
 
-      /* "lattice_form.pyx":143
+      /* "lattice_form.pyx":142
  *     for x in range(unit_length):
  *         for y in range(unit_length):
  *             for z in range(z_max):             # <<<<<<<<<<<<<<
+ *                 index = grid_num(x, y, z, unit_length)
  *                 diffuse_candidates[index] = find_candidates(bonds, index_list, x, y, z, unit_length, z_max)
- *     return (
  */
       __pyx_t_10 = __pyx_v_z_max;
       __pyx_t_11 = __pyx_t_10;
       for (__pyx_t_12 = 0; __pyx_t_12 < __pyx_t_11; __pyx_t_12+=1) {
         __pyx_v_z = __pyx_t_12;
 
-        /* "lattice_form.pyx":144
+        /* "lattice_form.pyx":143
  *         for y in range(unit_length):
  *             for z in range(z_max):
- *                 diffuse_candidates[index] = find_candidates(bonds, index_list, x, y, z, unit_length, z_max)             # <<<<<<<<<<<<<<
+ *                 index = grid_num(x, y, z, unit_length)             # <<<<<<<<<<<<<<
+ *                 diffuse_candidates[index] = find_candidates(bonds, index_list, x, y, z, unit_length, z_max)
  *     return (
- *         lattice,
  */
-        __Pyx_GetModuleGlobalName(__pyx_t_19, __pyx_n_s_find_candidates); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 144, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_19, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 143, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_19);
-        __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 144, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 143, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 144, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 143, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_15 = __Pyx_PyInt_From_int(__pyx_v_z); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 144, __pyx_L1_error)
+        __pyx_t_15 = __Pyx_PyInt_From_int(__pyx_v_z); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 143, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_15);
-        __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 144, __pyx_L1_error)
+        __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 143, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_14);
-        __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_z_max); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 144, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_13);
-        __pyx_t_17 = NULL;
+        __pyx_t_13 = NULL;
         __pyx_t_18 = 0;
         if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_19))) {
-          __pyx_t_17 = PyMethod_GET_SELF(__pyx_t_19);
-          if (likely(__pyx_t_17)) {
+          __pyx_t_13 = PyMethod_GET_SELF(__pyx_t_19);
+          if (likely(__pyx_t_13)) {
             PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_19);
-            __Pyx_INCREF(__pyx_t_17);
+            __Pyx_INCREF(__pyx_t_13);
             __Pyx_INCREF(function);
             __Pyx_DECREF_SET(__pyx_t_19, function);
             __pyx_t_18 = 1;
@@ -5318,35 +5308,117 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
         }
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_19)) {
-          PyObject *__pyx_temp[8] = {__pyx_t_17, __pyx_v_bonds, __pyx_v_index_list, __pyx_t_4, __pyx_t_1, __pyx_t_15, __pyx_t_14, __pyx_t_13};
-          __pyx_t_16 = __Pyx_PyFunction_FastCall(__pyx_t_19, __pyx_temp+1-__pyx_t_18, 7+__pyx_t_18); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 144, __pyx_L1_error)
-          __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
+          PyObject *__pyx_temp[5] = {__pyx_t_13, __pyx_t_4, __pyx_t_1, __pyx_t_15, __pyx_t_14};
+          __pyx_t_16 = __Pyx_PyFunction_FastCall(__pyx_t_19, __pyx_temp+1-__pyx_t_18, 4+__pyx_t_18); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 143, __pyx_L1_error)
+          __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
           __Pyx_GOTREF(__pyx_t_16);
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-          __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
         } else
         #endif
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_19)) {
-          PyObject *__pyx_temp[8] = {__pyx_t_17, __pyx_v_bonds, __pyx_v_index_list, __pyx_t_4, __pyx_t_1, __pyx_t_15, __pyx_t_14, __pyx_t_13};
-          __pyx_t_16 = __Pyx_PyCFunction_FastCall(__pyx_t_19, __pyx_temp+1-__pyx_t_18, 7+__pyx_t_18); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 144, __pyx_L1_error)
-          __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
+          PyObject *__pyx_temp[5] = {__pyx_t_13, __pyx_t_4, __pyx_t_1, __pyx_t_15, __pyx_t_14};
+          __pyx_t_16 = __Pyx_PyCFunction_FastCall(__pyx_t_19, __pyx_temp+1-__pyx_t_18, 4+__pyx_t_18); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 143, __pyx_L1_error)
+          __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
           __Pyx_GOTREF(__pyx_t_16);
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-          __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+        } else
+        #endif
+        {
+          __pyx_t_17 = PyTuple_New(4+__pyx_t_18); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 143, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_17);
+          if (__pyx_t_13) {
+            __Pyx_GIVEREF(__pyx_t_13); PyTuple_SET_ITEM(__pyx_t_17, 0, __pyx_t_13); __pyx_t_13 = NULL;
+          }
+          __Pyx_GIVEREF(__pyx_t_4);
+          PyTuple_SET_ITEM(__pyx_t_17, 0+__pyx_t_18, __pyx_t_4);
+          __Pyx_GIVEREF(__pyx_t_1);
+          PyTuple_SET_ITEM(__pyx_t_17, 1+__pyx_t_18, __pyx_t_1);
+          __Pyx_GIVEREF(__pyx_t_15);
+          PyTuple_SET_ITEM(__pyx_t_17, 2+__pyx_t_18, __pyx_t_15);
+          __Pyx_GIVEREF(__pyx_t_14);
+          PyTuple_SET_ITEM(__pyx_t_17, 3+__pyx_t_18, __pyx_t_14);
+          __pyx_t_4 = 0;
+          __pyx_t_1 = 0;
+          __pyx_t_15 = 0;
+          __pyx_t_14 = 0;
+          __pyx_t_16 = __Pyx_PyObject_Call(__pyx_t_19, __pyx_t_17, NULL); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 143, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_16);
+          __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
+        }
+        __Pyx_DECREF(__pyx_t_19); __pyx_t_19 = 0;
+        __pyx_t_18 = __Pyx_PyInt_As_int(__pyx_t_16); if (unlikely((__pyx_t_18 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 143, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
+        __pyx_v_index = __pyx_t_18;
+
+        /* "lattice_form.pyx":144
+ *             for z in range(z_max):
+ *                 index = grid_num(x, y, z, unit_length)
+ *                 diffuse_candidates[index] = find_candidates(bonds, index_list, x, y, z, unit_length, z_max)             # <<<<<<<<<<<<<<
+ *     return (
+ *         lattice,
+ */
+        __Pyx_GetModuleGlobalName(__pyx_t_19, __pyx_n_s_find_candidates); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 144, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_19);
+        __pyx_t_17 = __Pyx_PyInt_From_int(__pyx_v_x); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 144, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_17);
+        __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_y); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 144, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_14);
+        __pyx_t_15 = __Pyx_PyInt_From_int(__pyx_v_z); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 144, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_15);
+        __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_unit_length); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 144, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_z_max); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 144, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_4);
+        __pyx_t_13 = NULL;
+        __pyx_t_18 = 0;
+        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_19))) {
+          __pyx_t_13 = PyMethod_GET_SELF(__pyx_t_19);
+          if (likely(__pyx_t_13)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_19);
+            __Pyx_INCREF(__pyx_t_13);
+            __Pyx_INCREF(function);
+            __Pyx_DECREF_SET(__pyx_t_19, function);
+            __pyx_t_18 = 1;
+          }
+        }
+        #if CYTHON_FAST_PYCALL
+        if (PyFunction_Check(__pyx_t_19)) {
+          PyObject *__pyx_temp[8] = {__pyx_t_13, __pyx_v_bonds, __pyx_v_index_list, __pyx_t_17, __pyx_t_14, __pyx_t_15, __pyx_t_1, __pyx_t_4};
+          __pyx_t_16 = __Pyx_PyFunction_FastCall(__pyx_t_19, __pyx_temp+1-__pyx_t_18, 7+__pyx_t_18); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 144, __pyx_L1_error)
+          __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
+          __Pyx_GOTREF(__pyx_t_16);
+          __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
+          __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
+          __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        } else
+        #endif
+        #if CYTHON_FAST_PYCCALL
+        if (__Pyx_PyFastCFunction_Check(__pyx_t_19)) {
+          PyObject *__pyx_temp[8] = {__pyx_t_13, __pyx_v_bonds, __pyx_v_index_list, __pyx_t_17, __pyx_t_14, __pyx_t_15, __pyx_t_1, __pyx_t_4};
+          __pyx_t_16 = __Pyx_PyCFunction_FastCall(__pyx_t_19, __pyx_temp+1-__pyx_t_18, 7+__pyx_t_18); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 144, __pyx_L1_error)
+          __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
+          __Pyx_GOTREF(__pyx_t_16);
+          __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
+          __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
+          __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         } else
         #endif
         {
           __pyx_t_20 = PyTuple_New(7+__pyx_t_18); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 144, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_20);
-          if (__pyx_t_17) {
-            __Pyx_GIVEREF(__pyx_t_17); PyTuple_SET_ITEM(__pyx_t_20, 0, __pyx_t_17); __pyx_t_17 = NULL;
+          if (__pyx_t_13) {
+            __Pyx_GIVEREF(__pyx_t_13); PyTuple_SET_ITEM(__pyx_t_20, 0, __pyx_t_13); __pyx_t_13 = NULL;
           }
           __Pyx_INCREF(__pyx_v_bonds);
           __Pyx_GIVEREF(__pyx_v_bonds);
@@ -5354,21 +5426,21 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
           __Pyx_INCREF(__pyx_v_index_list);
           __Pyx_GIVEREF(__pyx_v_index_list);
           PyTuple_SET_ITEM(__pyx_t_20, 1+__pyx_t_18, __pyx_v_index_list);
-          __Pyx_GIVEREF(__pyx_t_4);
-          PyTuple_SET_ITEM(__pyx_t_20, 2+__pyx_t_18, __pyx_t_4);
-          __Pyx_GIVEREF(__pyx_t_1);
-          PyTuple_SET_ITEM(__pyx_t_20, 3+__pyx_t_18, __pyx_t_1);
+          __Pyx_GIVEREF(__pyx_t_17);
+          PyTuple_SET_ITEM(__pyx_t_20, 2+__pyx_t_18, __pyx_t_17);
+          __Pyx_GIVEREF(__pyx_t_14);
+          PyTuple_SET_ITEM(__pyx_t_20, 3+__pyx_t_18, __pyx_t_14);
           __Pyx_GIVEREF(__pyx_t_15);
           PyTuple_SET_ITEM(__pyx_t_20, 4+__pyx_t_18, __pyx_t_15);
-          __Pyx_GIVEREF(__pyx_t_14);
-          PyTuple_SET_ITEM(__pyx_t_20, 5+__pyx_t_18, __pyx_t_14);
-          __Pyx_GIVEREF(__pyx_t_13);
-          PyTuple_SET_ITEM(__pyx_t_20, 6+__pyx_t_18, __pyx_t_13);
-          __pyx_t_4 = 0;
-          __pyx_t_1 = 0;
-          __pyx_t_15 = 0;
+          __Pyx_GIVEREF(__pyx_t_1);
+          PyTuple_SET_ITEM(__pyx_t_20, 5+__pyx_t_18, __pyx_t_1);
+          __Pyx_GIVEREF(__pyx_t_4);
+          PyTuple_SET_ITEM(__pyx_t_20, 6+__pyx_t_18, __pyx_t_4);
+          __pyx_t_17 = 0;
           __pyx_t_14 = 0;
-          __pyx_t_13 = 0;
+          __pyx_t_15 = 0;
+          __pyx_t_1 = 0;
+          __pyx_t_4 = 0;
           __pyx_t_16 = __Pyx_PyObject_Call(__pyx_t_19, __pyx_t_20, NULL); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 144, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_16);
           __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
@@ -5381,7 +5453,7 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
   }
 
   /* "lattice_form.pyx":145
- *             for z in range(z_max):
+ *                 index = grid_num(x, y, z, unit_length)
  *                 diffuse_candidates[index] = find_candidates(bonds, index_list, x, y, z, unit_length, z_max)
  *     return (             # <<<<<<<<<<<<<<
  *         lattice,
@@ -5429,7 +5501,7 @@ static PyObject *__pyx_f_12lattice_form_lattice_form(PyObject *__pyx_v_input_par
   __pyx_t_16 = 0;
   goto __pyx_L0;
 
-  /* "lattice_form.pyx":98
+  /* "lattice_form.pyx":97
  * 
  * 
  * cpdef tuple lattice_form(input_params):             # <<<<<<<<<<<<<<
@@ -5488,7 +5560,7 @@ static PyObject *__pyx_pf_12lattice_form_8lattice_form(CYTHON_UNUSED PyObject *_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("lattice_form", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_12lattice_form_lattice_form(__pyx_v_input_params, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 98, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_12lattice_form_lattice_form(__pyx_v_input_params, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 97, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -5556,15 +5628,12 @@ static struct PyModuleDef __pyx_moduledef = {
 #endif
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
-  {&__pyx_n_s_Dict, __pyx_k_Dict, sizeof(__pyx_k_Dict), 0, 0, 1, 1},
-  {&__pyx_n_s_List, __pyx_k_List, sizeof(__pyx_k_List), 0, 0, 1, 1},
   {&__pyx_n_s_Modules_Calc_grid_index, __pyx_k_Modules_Calc_grid_index, sizeof(__pyx_k_Modules_Calc_grid_index), 0, 0, 1, 1},
   {&__pyx_n_s_Modules_InputParameter, __pyx_k_Modules_InputParameter, sizeof(__pyx_k_Modules_InputParameter), 0, 0, 1, 1},
   {&__pyx_n_s_Modules_find_candidates, __pyx_k_Modules_find_candidates, sizeof(__pyx_k_Modules_find_candidates), 0, 0, 1, 1},
   {&__pyx_n_s_Params, __pyx_k_Params, sizeof(__pyx_k_Params), 0, 0, 1, 1},
   {&__pyx_n_s_RuntimeError, __pyx_k_RuntimeError, sizeof(__pyx_k_RuntimeError), 0, 0, 1, 1},
   {&__pyx_kp_s_Something_wrong_happens_check_z, __pyx_k_Something_wrong_happens_check_z, sizeof(__pyx_k_Something_wrong_happens_check_z), 0, 0, 1, 0},
-  {&__pyx_n_s_Tuple, __pyx_k_Tuple, sizeof(__pyx_k_Tuple), 0, 0, 1, 1},
   {&__pyx_n_s_cell_size_xy, __pyx_k_cell_size_xy, sizeof(__pyx_k_cell_size_xy), 0, 0, 1, 1},
   {&__pyx_n_s_cell_size_z, __pyx_k_cell_size_z, sizeof(__pyx_k_cell_size_z), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
@@ -5579,7 +5648,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_num_grids, __pyx_k_num_grids, sizeof(__pyx_k_num_grids), 0, 0, 1, 1},
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
-  {&__pyx_n_s_typing, __pyx_k_typing, sizeof(__pyx_k_typing), 0, 0, 1, 1},
   {&__pyx_n_s_unit_height, __pyx_k_unit_height, sizeof(__pyx_k_unit_height), 0, 0, 1, 1},
   {&__pyx_n_s_unit_length, __pyx_k_unit_length, sizeof(__pyx_k_unit_length), 0, 0, 1, 1},
   {&__pyx_n_s_x, __pyx_k_x, sizeof(__pyx_k_x), 0, 0, 1, 1},
@@ -5591,8 +5659,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 10, __pyx_L1_error)
-  __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(0, 82, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 9, __pyx_L1_error)
+  __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(0, 81, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -5602,14 +5670,14 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "lattice_form.pyx":82
+  /* "lattice_form.pyx":81
  *         ]
  *     else:
  *         raise RuntimeError("Something wrong happens. check z_judge value")             # <<<<<<<<<<<<<<
  *     return neighbors
  * 
  */
-  __pyx_tuple_ = PyTuple_Pack(1, __pyx_kp_s_Something_wrong_happens_check_z); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 82, __pyx_L1_error)
+  __pyx_tuple_ = PyTuple_Pack(1, __pyx_kp_s_Something_wrong_happens_check_z); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 81, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
   __Pyx_RefNannyFinishContext();
@@ -5893,109 +5961,74 @@ if (!__Pyx_RefNanny) {
   #endif
 
   /* "lattice_form.pyx":1
- * from typing import List, Dict, Tuple             # <<<<<<<<<<<<<<
- * from Modules.InputParameter import Params
- * from Modules.find_candidates import find_candidates
- */
-  __pyx_t_1 = PyList_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_INCREF(__pyx_n_s_List);
-  __Pyx_GIVEREF(__pyx_n_s_List);
-  PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_List);
-  __Pyx_INCREF(__pyx_n_s_Dict);
-  __Pyx_GIVEREF(__pyx_n_s_Dict);
-  PyList_SET_ITEM(__pyx_t_1, 1, __pyx_n_s_Dict);
-  __Pyx_INCREF(__pyx_n_s_Tuple);
-  __Pyx_GIVEREF(__pyx_n_s_Tuple);
-  PyList_SET_ITEM(__pyx_t_1, 2, __pyx_n_s_Tuple);
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_typing, __pyx_t_1, -1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_List); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_List, __pyx_t_1) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_Dict); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Dict, __pyx_t_1) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_Tuple); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Tuple, __pyx_t_1) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-
-  /* "lattice_form.pyx":2
- * from typing import List, Dict, Tuple
  * from Modules.InputParameter import Params             # <<<<<<<<<<<<<<
  * from Modules.find_candidates import find_candidates
  * from Modules.Calc_grid_index import grid_num
  */
-  __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_n_s_Params);
   __Pyx_GIVEREF(__pyx_n_s_Params);
-  PyList_SET_ITEM(__pyx_t_2, 0, __pyx_n_s_Params);
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_Modules_InputParameter, __pyx_t_2, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_Params); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2, __pyx_L1_error)
+  PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_Params);
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_Modules_InputParameter, __pyx_t_1, -1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Params, __pyx_t_2) < 0) __PYX_ERR(0, 2, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_Params); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Params, __pyx_t_1) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "lattice_form.pyx":3
- * from typing import List, Dict, Tuple
+  /* "lattice_form.pyx":2
  * from Modules.InputParameter import Params
  * from Modules.find_candidates import find_candidates             # <<<<<<<<<<<<<<
  * from Modules.Calc_grid_index import grid_num
  * 
  */
-  __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 3, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_n_s_find_candidates);
   __Pyx_GIVEREF(__pyx_n_s_find_candidates);
-  PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_find_candidates);
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_Modules_find_candidates, __pyx_t_1, -1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 3, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_find_candidates); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 3, __pyx_L1_error)
+  PyList_SET_ITEM(__pyx_t_2, 0, __pyx_n_s_find_candidates);
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_Modules_find_candidates, __pyx_t_2, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_find_candidates, __pyx_t_1) < 0) __PYX_ERR(0, 3, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_find_candidates); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_find_candidates, __pyx_t_2) < 0) __PYX_ERR(0, 2, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "lattice_form.pyx":4
+  /* "lattice_form.pyx":3
  * from Modules.InputParameter import Params
  * from Modules.find_candidates import find_candidates
  * from Modules.Calc_grid_index import grid_num             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 3, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_n_s_grid_num);
   __Pyx_GIVEREF(__pyx_n_s_grid_num);
-  PyList_SET_ITEM(__pyx_t_2, 0, __pyx_n_s_grid_num);
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_Modules_Calc_grid_index, __pyx_t_2, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 4, __pyx_L1_error)
+  PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_grid_num);
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_Modules_Calc_grid_index, __pyx_t_1, -1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_grid_num, __pyx_t_2) < 0) __PYX_ERR(0, 4, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_grid_num); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 3, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_grid_num, __pyx_t_1) < 0) __PYX_ERR(0, 3, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "lattice_form.pyx":1
- * from typing import List, Dict, Tuple             # <<<<<<<<<<<<<<
- * from Modules.InputParameter import Params
+ * from Modules.InputParameter import Params             # <<<<<<<<<<<<<<
  * from Modules.find_candidates import find_candidates
+ * from Modules.Calc_grid_index import grid_num
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_1) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_2) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /*--- Wrapped vars code ---*/
 

@@ -1,4 +1,3 @@
-from typing import List, Dict, Tuple
 from Modules.InputParameter import Params
 from Modules.find_candidates import find_candidates
 from Modules.Calc_grid_index import grid_num
@@ -141,6 +140,7 @@ cpdef tuple lattice_form(input_params):
     for x in range(unit_length):
         for y in range(unit_length):
             for z in range(z_max):
+                index = grid_num(x, y, z, unit_length)
                 diffuse_candidates[index] = find_candidates(bonds, index_list, x, y, z, unit_length, z_max)
     return (
         lattice,
