@@ -11,9 +11,13 @@ Test_modules/Deposition_check
 Test_modules/Event_check
 Test_modules/Lattice_check
 Test_modules/Possible_diffusion
+build/
 
 # C extensions
 *.so
+*.c
+*.h
+*.html
 
 # Distribution / packaging
 .Python
