@@ -1,3 +1,5 @@
+# cython: language_level=3, boundscheck=False, wraparound=False
+
 from typing import ValuesView
 from Modules.Calc_grid_index import grid_num
 

@@ -1,6 +1,7 @@
-import math
+# cython: language_level=3, boundscheck=False, wraparound=False
 
-# 2021/0401 checked
+
+import math
 
 cpdef double rate(double pre, kbt, energy):
     """Return reaction the rate.

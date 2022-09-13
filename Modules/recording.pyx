@@ -1,3 +1,5 @@
+# cython: language_level=3, boundscheck=False, wraparound=False
+
 from typing import List, Dict
 import matplotlib.pyplot as plt
 import matplotlib.patches as pat

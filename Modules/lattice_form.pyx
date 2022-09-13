@@ -1,3 +1,6 @@
+# cython: language_level=3, boundscheck=False, wraparound=False
+
+
 from Modules.InputParameter import Params
 from Modules.find_candidates import find_candidates
 from Modules.Calc_grid_index import grid_num
@@ -18,6 +21,7 @@ cpdef list form_first_3BL(double z_intra, double z_inter, int unit_length):
                 [x, y, 2 * (z_inter + z_intra) + z_intra],
             ]
     return lattice_first
+
 
 cpdef list lattice_full_layers(double unit_height, int unit_length, int z_max, list lattice_first, int num_grids):
     cdef int x, y, z, index, index_xy

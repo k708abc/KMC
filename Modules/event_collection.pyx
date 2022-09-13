@@ -1,3 +1,5 @@
+# cython: language_level=3, boundscheck=False, wraparound=False
+
 from Modules.cal_rates import rate
 from Modules.Calc_grid_index import grid_num
 
@@ -19,8 +21,8 @@ cpdef double total_energy(
     elif highest_atom[grid_num(x, y, 0, unit_length)] >= 1:  # transformtion is activated
         for bond in bonds[target]:
             if atom_set[bond] == 1:
-                bond_energy += energy_bonding[-1]  # bulk bonding energy
-        return energy_diffuse[-1] + bond_energy  # bulk diffusion energy
+                bond_energy += energy_bonding[len(energy_bonding)-1]  # bulk bonding energy
+        return energy_diffuse[len(energy_diffuse)-1] + bond_energy  # bulk diffusion energy
 
 
 cdef list find_filled_sites(list atom_set, list indexes):

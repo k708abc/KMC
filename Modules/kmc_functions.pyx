@@ -1,3 +1,5 @@
+# cython: language_level=3, boundscheck=False, wraparound=False
+
 from Modules.InputParameter import Params
 import time
 from Modules.lattice_form import lattice_form

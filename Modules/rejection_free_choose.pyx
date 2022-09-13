@@ -1,3 +1,6 @@
+# cython: language_level=3, boundscheck=False, wraparound=False
+
+
 import random
 
 cdef int choose_an_event(double r_tot, list event_rates):
