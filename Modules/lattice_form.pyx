@@ -1,14 +1,14 @@
+# distutils: language = c++
 # cython: language_level=3, boundscheck=False, wraparound=False
 
+from InputParameter cimport Params
+from find_candidates cimport find_candidates
+from Calc_grid_index cimport grid_num
+from libcpp.vector cimport vector
 
-from Modules.InputParameter import Params
-from Modules.find_candidates import find_candidates
-from Modules.Calc_grid_index import grid_num
-
-
-cpdef list form_first_3BL(double z_intra, double z_inter, int unit_length):
+cdef vector[vector[vector[double]]] form_first_3BL(double z_intra, double z_inter, int unit_length):
     cdef int x, y, index
-    cdef list lattice_first = [[]]*unit_length**2
+    cdef vector[vector[vector[double]]] lattice_first = [[]]*unit_length**2
     for x in range(0, unit_length):
         for y in range(0, unit_length):
             index = grid_num(x, y, 0, unit_length)
@@ -23,9 +23,10 @@ cpdef list form_first_3BL(double z_intra, double z_inter, int unit_length):
     return lattice_first
 
 
-cpdef list lattice_full_layers(double unit_height, int unit_length, int z_max, list lattice_first, int num_grids):
+
+cdef vector[vector[double]] lattice_full_layers(double unit_height, int unit_length, int z_max, vector[vector[vector[double]]] lattice_first, int num_grids):
     cdef int x, y, z, index, index_xy
-    cdef list lattice = [[]]*num_grids
+    cdef vector[vector[double]] lattice = [[]]*num_grids
     for x in range(0, unit_length):
         for y in range(0, unit_length):
             for z in range(0, z_max):
@@ -39,11 +40,10 @@ cpdef list lattice_full_layers(double unit_height, int unit_length, int z_max, l
     return lattice
 
 
-
-cpdef list neighbor_points(
+cdef vector[int] neighbor_points(
     int x, int y, int z, int unit_length, int z_max
 ):
-    cdef list neighbors
+    cdef vector[int] neighbors
     cdef int z_judge
     z_judge = z % 6
     if z == z_max - 1:
@@ -59,7 +59,7 @@ cpdef list neighbor_points(
             grid_num(x, y, z + 1, unit_length),
         ]
         if z != 0:
-            neighbors.append(grid_num(x, y, z - 1, unit_length))
+            neighbors.push_back(grid_num(x, y, z - 1, unit_length))
     elif z_judge in (1, 3):
         neighbors = [
             grid_num((x + 1) % unit_length, y, z - 1, unit_length),
@@ -86,10 +86,10 @@ cpdef list neighbor_points(
     return neighbors
 
 
-cpdef list search_bond(int unit_length, int z_max, int num_grids):
+cdef vector[vector[int]] search_bond(int unit_length, int z_max, int num_grids):
     # Search for bonding atoms for all the atoms
     cdef int x, y, z, index
-    cdef list bonds = [[]]*num_grids
+    cdef vector[vector[int]] bonds = [[]]*num_grids
     for x in range(0, unit_length):
         for y in range(0, unit_length):
             for z in range(0, z_max):
@@ -97,63 +97,83 @@ cpdef list search_bond(int unit_length, int z_max, int num_grids):
                 bonds[index] = neighbor_points(x, y, z, unit_length, z_max)
     return bonds
 
-
-cpdef tuple lattice_form(input_params):
-    cdef int unit_length, z_units, z_max, num_one_layer, num_grids, i, j, k, index
-    cdef double z_inter, z_intra, unit_height
-    cdef list lattice_first
-    cdef list lattice
-    cdef list atom_set
-    cdef list bonds
-    cdef list event
-    cdef list event_time
-    cdef list event_time_tot
-    cdef list site_list_correspondance
-    cdef list list_site_correspondance
-    cdef list diffuse_candidates
-    cdef list highest_atom
-    cdef list index_list
-    #
-    unit_length = input_params.cell_size_xy
-    z_units = input_params.cell_size_z
-    z_intra = float(input_params.distance_intra)
-    z_inter = float(input_params.distance_inter)
-    unit_height = 3 * (z_intra + z_inter)
-    z_max = z_units * 6 -1
-    #
-    num_one_layer = unit_length**2
-    num_grids = num_one_layer * z_max
-    #
-    highest_atom = [0]*num_one_layer
-    atom_set = [0]*num_grids
-    event = [[]]*num_grids
-    event_time = [[]]*num_grids
-    event_time_tot = [0]*num_grids
-    diffuse_candidates = [[]]*num_grids
-    index_list = [(int, int, int)]*num_grids
+cdef vector[vector[double]] lattice_form_lattice(
+    int unit_length, 
+    int z_units, 
+    double z_intra, 
+    double z_inter, 
+    double unit_height, 
+    int z_max,
+    int num_one_layer,
+    int num_grids
+    ):
+    cdef vector[vector[vector[double]]] lattice_first
+    cdef vector[vector[double]] lattice
     #
     lattice_first = form_first_3BL(z_intra, z_inter, unit_length)
     lattice = lattice_full_layers(unit_height, unit_length, z_max, lattice_first, num_grids)
+
+    return lattice
+
+cdef vector[vector[int]] lattice_form_bonds(int unit_length, int num_grids, int z_max):
+    cdef vector[vector[int]] bonds
     bonds = search_bond(unit_length, z_max, num_grids)
-    #
+    return bonds
+
+cdef vector[int] lattice_form_atom_set(int num_grids):
+    cdef vector[int] atom_set
+    atom_set = [0]*num_grids
+    return atom_set
+
+cdef vector[vector[int]] lattice_form_event(int num_grids):
+    cdef vector[vector[int]] event
+    event = [[]]*num_grids
+    return event
+
+
+cdef vector[vector[double]] lattice_form_event_time(int num_grids):
+    cdef vector[vector[double]] event_time
+    event_time = [[]]*num_grids
+    return event_time
+
+cdef vector[double] lattice_form_event_time_tot(int num_grids):
+    cdef vector[double] event_time_tot
+    event_time_tot = [0]*num_grids
+    return event_time_tot
+
+
+cdef vector[vector[int]] lattice_form_index_list(int unit_length, int num_grids, int z_max):
+    cdef int x, y, z, index
+    cdef vector[vector[int]] index_list
+    index_list = [[]]*num_grids
     for x in range(unit_length):
         for y in range(unit_length):
             for z in range(z_max):
                 index = grid_num(x, y, z, unit_length)
-                index_list[index] = (x, y, z)
+                index_list[index] = [x, y, z]
+    return index_list
+
+
+cdef vector[vector[int]] lattice_form_diffuse_candidates(
+    int unit_length,
+    int num_grids,
+    int z_max, 
+    vector[vector[int]] bonds, 
+    vector[vector[int]] index_list
+    ):
+    cdef vector[vector[int]] diffuse_candidates
+    cdef int x, y, z, index
+    diffuse_candidates = [[]]*num_grids
     for x in range(unit_length):
         for y in range(unit_length):
             for z in range(z_max):
                 index = grid_num(x, y, z, unit_length)
                 diffuse_candidates[index] = find_candidates(bonds, index_list, x, y, z, unit_length, z_max)
-    return (
-        lattice,
-        bonds,
-        atom_set,
-        event,
-        event_time,
-        event_time_tot,
-        diffuse_candidates,
-        highest_atom,
-        index_list,
-    )
+    return diffuse_candidates
+
+
+cdef vector[int] lattice_form_highest_atom(int num_one_layer):
+    cdef vector[int] highest_atom
+    highest_atom = [0]*num_one_layer
+    return highest_atom
+

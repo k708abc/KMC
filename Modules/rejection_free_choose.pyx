@@ -1,9 +1,11 @@
+# distutils: language = c++
 # cython: language_level=3, boundscheck=False, wraparound=False
 
-
+from libcpp.vector cimport vector
+from libcpp.pair cimport pair
 import random
 
-cdef int choose_an_event(double r_tot, list event_rates):
+cdef int choose_an_event(double r_tot, vector[double] event_rates):
     cdef int i
     cdef double event_rate 
     for i, event_rate in enumerate(event_rates):
@@ -13,10 +15,10 @@ cdef int choose_an_event(double r_tot, list event_rates):
             r_tot -= event_rate
 
 
-cpdef tuple rejection_free_choise(
+cdef pair[int, int] rejection_free_choise(
     double total_event_time,
-    list event_time,
-    list event_time_tot,
+    vector[vector[double]] event_time,
+    vector[double] event_time_tot,
     double dep_rate,
 ):
     cdef double random_val, r_tot, rate

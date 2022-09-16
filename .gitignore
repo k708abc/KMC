@@ -18,6 +18,8 @@ build/
 *.c
 *.h
 *.html
+*.cpp
+*.obj
 
 # Distribution / packaging
 .Python

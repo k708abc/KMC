@@ -1,9 +1,10 @@
+# distutils: language = c++
 # cython: language_level=3, boundscheck=False, wraparound=False
 
 
 import math
 
-cpdef double rate(double pre, kbt, energy):
+cdef double rate(double pre, kbt, energy):
     """Return reaction the rate.
 
     Parameters
