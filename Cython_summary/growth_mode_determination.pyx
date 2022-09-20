@@ -2,7 +2,7 @@
 # cython: language_level=3, boundscheck=False, wraparound=False
 
 from typing import ValuesView
-from Modules.Calc_grid_index import grid_num
+from Calc_grid_index cimport grid_num
 
 def height_check(pos_x, pos_y, pos, maxz, unit_length):
     max_pos = -1

@@ -34,7 +34,7 @@ cdef class Params:
         return int(round(self.total_atoms() * self.img_per / 100))
 
     cdef int num_one_layer(self):
-        return self.unit_length**2
+        return self.cell_size_xy**2
 
     cdef int num_grids(self):
         return self.num_one_layer() * self.z_max()

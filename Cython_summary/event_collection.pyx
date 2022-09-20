@@ -8,11 +8,6 @@ from libcpp.vector cimport vector
 from libcpp.pair cimport pair
 
 
-cdef struct ext_params:
-    double prefactor
-    double temperature_eV
-
-
 cdef double total_energy(
     vector[int] atom_set, vector[vector[int]] bonds, int target, vector[double] energy_bonding, vector[double] energy_diffuse, vector[int] highest_atom, vector[vector[int]] index_list, int unit_length
 ):
@@ -127,17 +122,16 @@ cdef pair[vector[int], vector[double]] possible_events(
     vector[int] atom_set,
     vector[vector[int]] bonds,
     int target,
-    ext_params params,
+    double pre,
+    double kbt,
     double energy,
     vector[vector[int]] diffuse_candidates,
     vector[vector[int]] index_list
 ):
-    cdef double pre, kbt,rearange_rate
+    cdef double rearange_rate
     cdef vector[int] eve_rate, nn_atom, event_f
     cdef vector[double] rates_f
     cdef int cand, nonused
-    pre = float(params.prefactor)
-    kbt = params.temperature_eV
     eve_rate = []
     rearange_rate = rate(pre, kbt, energy)
     nn_atom = find_filled_sites(atom_set, bonds[target])
@@ -152,7 +146,9 @@ cdef pair[vector[int], vector[int]] site_events(
     vector[int] atom_set,
     vector[vector[int]] bonds,
     int target,
-    ext_params params,
+    int unit_length,
+    double pre,
+    double kbt,
     vector[double] energy_bonding,
     vector[double] energy_diffuse,
     vector[vector[int]] diffuse_candidates,
@@ -170,10 +166,10 @@ cdef pair[vector[int], vector[int]] site_events(
         energy_diffuse,
         highest_atom,
         index_list,
-        params.cell_size_xy
+        unit_length
     )
     # calculate possible events
     event_list, rate_list = possible_events(
-        atom_set, bonds, target, params, energy, diffuse_candidates, index_list
+        atom_set, bonds, target, pre, kbt, energy, diffuse_candidates, index_list
     )
     return event_list, rate_list

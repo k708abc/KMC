@@ -22,8 +22,8 @@ from event_collection cimport site_events
 from Calc_grid_index cimport grid_num
 import math
 import copy
-from Modules.recording import record_data
-from Modules.recording import rec_events_per_dep
+from recording import record_data
+from recording import rec_events_per_dep
 
 import pickle
 
@@ -31,6 +31,7 @@ from libcpp.vector cimport vector
 from vector_operation cimport search, remove_element, remove_duplicate
 
 cdef class common_functions:
+
     def __init__(self):
         self.init_value = Params("kmc_input.yml")
         self.unit_length = self.init_value.cell_size_xy
@@ -39,6 +40,8 @@ cdef class common_functions:
         self.z_units = self.init_value.cell_size_z
         self.z_intra = self.init_value.distance_intra
         self.z_inter = self.init_value.distance_inter
+        self.prefactor = self.init_value.prefactor
+        self.kbt = self.init_value.temperature_eV()
         self.unit_height = self.init_value.unit_height()
         self.z_max = self.init_value.z_max()
         self.num_one_layer = self.init_value.num_one_layer()
@@ -197,7 +200,9 @@ cdef class common_functions:
                     self.atom_set,
                     self.bonds,
                     target_rel,
-                    self.init_value,
+                    self.unit_length,
+                    self.prefactor,
+                    self.kbt,
                     self.energy_bonding,
                     self.energy_diffuse,
                     self.diffuse_candidates,
@@ -219,7 +224,7 @@ cdef class common_functions:
 
     cdef recalculate_total_rate(self):
         cdef double rate
-        self.total_event_time = self.init_value.dep_rate_atoms_persec
+        self.total_event_time = self.init_value.dep_rate_atoms_persec()
         for rate in self.event_time_tot:
             self.total_event_time += rate
 
@@ -333,7 +338,7 @@ cdef class common_functions:
             self.total_event_time,
             self.event_time,
             self.event_time_tot,
-            self.init_value.dep_rate_atoms_persec,
+            self.init_value.dep_rate_atoms_persec(),
         )
         if self.target == -1:
             self.rejection_free_deposition()
@@ -341,7 +346,7 @@ cdef class common_functions:
             self.rejection_free_event()
 
         if self.n_atoms >= self.rec_num_atoms:
-            self.rec_num_atoms += self.init_value.rec_num_atom_interval
+            self.rec_num_atoms += self.init_value.rec_num_atom_interval()
             self.record_position()
             if self.setting_value != -1:
                 self.parameter_record()
@@ -349,7 +354,7 @@ cdef class common_functions:
     cpdef record_position(self):
         self.pos_rec.push_back(copy.copy(self.atom_set))
         self.time_rec.push_back(self.prog_time)
-        self.cov_rec.push_back(self.n_atoms / self.init_value.atoms_in_BL)
+        self.cov_rec.push_back(self.n_atoms / self.init_value.atoms_in_BL())
 
     cpdef end_of_loop(self):
         cdef double total_time_dir, diff

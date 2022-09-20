@@ -5,13 +5,13 @@ from typing import List, Dict
 import matplotlib.pyplot as plt
 import matplotlib.patches as pat
 import math
-from Modules.record_ppt import rec_ppt
-from Modules.Calc_grid_index import grid_num
+from record_ppt import rec_ppt
+from Calc_grid_index cimport grid_num
 import os
 import glob
 from multiprocessing import Pool
 import yaml
-from Modules.growth_mode_determination import (
+from growth_mode_determination import (
     growth_check,
     mode_check_prev,
     mode_check_1,

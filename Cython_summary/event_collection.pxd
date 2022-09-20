@@ -3,10 +3,6 @@
 from libcpp.vector cimport vector
 from libcpp.pair cimport pair
 
-cdef struct ext_params:
-    double prefactor
-    double temperature_eV
-
 cdef double total_energy(
     vector[int] atom_set, vector[vector[int]] bonds, int target, vector[double] energy_bonding, vector[double] energy_diffuse, vector[int] highest_atom, vector[vector[int]] index_list, int unit_length
 )
@@ -30,7 +26,8 @@ cdef pair[vector[int], vector[double]] possible_events(
     vector[int] atom_set,
     vector[vector[int]] bonds,
     int target,
-    ext_params params,
+    double pre,
+    double kbt,
     double energy,
     vector[vector[int]] diffuse_candidates,
     vector[vector[int]] index_list
@@ -40,7 +37,9 @@ cdef pair[vector[int], vector[int]] site_events(
     vector[int] atom_set,
     vector[vector[int]] bonds,
     int target,
-    ext_params params,
+    int unit_length,
+    double pre,
+    double kbt,
     vector[double] energy_bonding,
     vector[double] energy_diffuse,
     vector[vector[int]] diffuse_candidates,

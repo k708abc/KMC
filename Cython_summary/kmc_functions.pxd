@@ -1,21 +1,13 @@
 # distutils: language = c++
 # cython: language_level=3, boundscheck=False, wraparound=False
+from InputParameter cimport Params
 from libcpp.vector cimport vector
 
-cdef class Params:
-    cdef int cell_size_xy, cell_size_z, first_put_num, max_workers_val, repeat_val, trans_num
-    cdef double dep_rate, dep_time, img_par, distance_inter, distance_intra, img_per, prefactor
-    cdef double repeat_E1_diff, repeat_E1_end, repeat_E1_start, repeat_E2_diff, repeat_E2_end, repeat_E2_start, temperature
-    cdef str comments, record_name
-    cdef bint first_put_check, start_from_middle, trans_check
-    cdef dict energies_binding
-    cdef dict energies_diffusion
-    cdef list repeat_combos
-
 cdef class common_functions:
-    cdef double start_time, total_event_time, elapsed_time, prog_time, z_intra, z_inter
-    cdef int n_atoms, n_events, rec_num_atoms, n_events_perdep, event_number, setting_value, unit_length, total_time
-    cdef int z_units, unit_height, z_max, num_one_layer, num_grids, index
+    cdef Params init_value
+    cdef double start_time, total_event_time, elapsed_time, prog_time, z_intra, z_inter, unit_height, prefactor, kbt
+    cdef int unit_length, n_atoms, n_events, rec_num_atoms, n_events_perdep, event_number, setting_value, total_time
+    cdef int z_units,  z_max, num_one_layer, num_grids, index
     cdef int move_atom, target
     cdef bint height_change_rem, height_change_add
     cdef vector[vector[int]] pos_rec
@@ -36,7 +28,7 @@ cdef class common_functions:
     cdef vector[double] energy_diffuse
     cdef vector[int] related_atoms
     cdef vector[int] related_atoms_move
-    cdef Params init_value
+
     cpdef loop(self)
     cpdef start_setting(self)
     cdef update_progress(self)
