@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import tkinter as tk
-from Modules.preference_window import Window
+from preference_window import Window
 
 
 class App(Window):

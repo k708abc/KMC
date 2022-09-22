@@ -1,5 +1,6 @@
 # distutils: language = c++
 # cython: language_level=3, boundscheck=False, wraparound=False
+# cython: cdivision=True
 
 import os
 from InputParameter cimport Params
@@ -20,8 +21,6 @@ from atoms_recalculate cimport recalculate
 from rejection_free_choose cimport rejection_free_choise
 from event_collection cimport site_events
 from Calc_grid_index cimport grid_num
-import math
-import copy
 from recording import record_data
 from recording import rec_events_per_dep
 
@@ -46,10 +45,11 @@ cdef class common_functions:
         self.z_max = self.init_value.z_max()
         self.num_one_layer = self.init_value.num_one_layer()
         self.num_grids = self.init_value.num_grids()
+        self.rec_interval =  self.init_value.rec_num_atom_interval()
 
 
     cpdef loop(self):
-        while int(self.prog_time) <= self.total_time:
+        while self.prog_time <= self.total_time:
             self.rejection_free_loop()
             self.update_progress()
             #
@@ -64,13 +64,13 @@ cdef class common_functions:
         self.prog_time = 0
         self.n_atoms = 0
         self.n_events = 0
-        self.pos_rec = []
-        self.time_rec = []
-        self.cov_rec = []
+        self.pos_rec.clear()
+        self.time_rec.clear()
+        self.cov_rec.clear()
         self.rec_num_atoms = 0
         self.n_events_perdep = 0
-        self.n_events_rec = []
-        self.num_atoms_rec = []
+        self.n_events_rec.clear()
+        self.num_atoms_rec.clear()
         # self.record_middle = 0
         if os.path.exists("Record") is False:
             os.mkdir("Record")
@@ -83,7 +83,7 @@ cdef class common_functions:
     cdef update_progress(self):
         self.n_events += 1
         self.n_events_perdep += 1
-        if self.n_events % 100000 == 0:
+        if self.n_events % 10000 == 0:
             self.recalculate_total_rate()
         """      
         if self.n_events % 1000 == 0:
@@ -135,10 +135,8 @@ cdef class common_functions:
             / 2,  # inter third and fourth
         ]
         #
-        self.energy_bonding = self.energy_bonding + [
-            self.init_value.energies_binding["upper"]
-            for _ in range(self.init_value.cell_size_z * 6 - 2)
-        ]
+        for _ in range(self.init_value.cell_size_z * 6 - 2):
+            self.energy_bonding.push_back(self.init_value.energies_binding["upper"])
         #
 
         self.energy_diffuse = [
@@ -150,17 +148,17 @@ cdef class common_functions:
             self.init_value.energies_diffusion["third"],
         ]
         #
-        self.energy_diffuse = self.energy_diffuse + [
-            self.init_value.energies_diffusion["upper"]
-            for _ in range(self.init_value.cell_size_z * 6 - 2)
-        ]
-
-        for i in range(len(self.energy_diffuse)):
+        for _ in range(self.init_value.cell_size_z * 6 - 2):
+            self.energy_diffuse.push_back(self.init_value.energies_diffusion["upper"])
+            
+        for i in range(self.energy_diffuse.size()):
             self.energy_diffuse[i] -= self.energy_bonding[i]
 
     cdef bint height_check_add(self, int pos):
         cdef int x, y, z, grid_index
-        x, y, z = self.index_list[pos]
+        x = self.index_list[pos][0]
+        y = self.index_list[pos][1]
+        z = self.index_list[pos][2]
         if z >= self.init_value.trans_num:
             grid_index = grid_num(x, y, 0, self.unit_length)
             self.highest_atom[grid_index] += 1
@@ -173,7 +171,9 @@ cdef class common_functions:
 
     cdef bint height_check_remove(self, int pos):
         cdef int x, y, z, grid_index
-        x, y, z = self.index_list[pos]
+        x = self.index_list[pos][0]
+        y = self.index_list[pos][1]
+        z = self.index_list[pos][2]
         if z >= self.init_value.trans_num:
             grid_index = grid_num(x, y, 0, self.unit_length)
             self.highest_atom[grid_index] -= 1
@@ -190,12 +190,12 @@ cdef class common_functions:
         cdef vector[int] events
         cdef vector[double] rates
         cdef int list_num 
+        cdef double rate, tot
         self.related_atoms = remove_duplicate(self.related_atoms)
         for target_rel in self.related_atoms:
-            if self.atom_set[target_rel] == 0:
-                events = []
-                rates = []
-            else:
+            events.clear()
+            rates.clear()
+            if self.atom_set[target_rel] != 0:
                 events, rates = site_events(
                     self.atom_set,
                     self.bonds,
@@ -211,11 +211,17 @@ cdef class common_functions:
                 )
 
             self.total_event_time -= self.event_time_tot[target_rel]
+
             self.event[target_rel] = events
             self.event_time[target_rel] = rates
-            self.event_time_tot[target_rel] = sum(rates)
-            self.total_event_time += self.event_time_tot[target_rel]
-        self.related_atoms = []
+            tot = 0.0
+            for rate in rates:
+                tot += rate
+            self.event_time_tot[target_rel] = tot
+
+            self.total_event_time += tot
+
+        self.related_atoms.clear()
         """
         self.total_event_time = self.init_value.dep_rate_atoms_persec
         for _, rate in self.event_time_tot.items():
@@ -237,8 +243,8 @@ cdef class common_functions:
 
 
     cdef update_after_deposition(self, int dep_pos):
-        #
         self.n_events_rec.push_back(self.n_events_perdep)
+        self.recalculate_total_rate()
         self.n_events_perdep = 0
         self.num_atoms_rec.push_back(self.n_atoms)
         self.n_atoms += 1
@@ -249,6 +255,9 @@ cdef class common_functions:
         self.prog_time += 1 / (self.init_value.dep_rate_atoms_persec())
         print(self.n_atoms)
 
+
+
+
     cdef int deposition(self):
         cdef int dep_pos
         dep_pos = deposit_an_atom(
@@ -258,7 +267,6 @@ cdef class common_functions:
         )
         self.update_after_deposition(dep_pos)
         return dep_pos
-
 
     cdef rejection_free_deposition(self):
         cdef int dep_pos
@@ -309,9 +317,11 @@ cdef class common_functions:
             self.index_list,
             self.unit_length,
         )
+
         for index in self.related_atoms_move:
             self.related_atoms.push_back(index)
         self.update_events()
+
 
     cdef event_progress(self):
         self.atom_set[self.target] = 0
@@ -346,13 +356,13 @@ cdef class common_functions:
             self.rejection_free_event()
 
         if self.n_atoms >= self.rec_num_atoms:
-            self.rec_num_atoms += self.init_value.rec_num_atom_interval()
+            self.rec_num_atoms += self.rec_interval
             self.record_position()
             if self.setting_value != -1:
                 self.parameter_record()
 
     cpdef record_position(self):
-        self.pos_rec.push_back(copy.copy(self.atom_set))
+        self.pos_rec.push_back(self.atom_set)
         self.time_rec.push_back(self.prog_time)
         self.cov_rec.push_back(self.n_atoms / self.init_value.atoms_in_BL())
 
@@ -360,11 +370,11 @@ cdef class common_functions:
         cdef double total_time_dir, diff
         self.record_position()
         self.elapsed_time = time.time() - self.start_time
-        self.minute = math.floor(self.elapsed_time / 60)
+        self.minute = int(self.elapsed_time / 60)
         self.second = int(self.elapsed_time % 60)
         self.time_per_event = round(self.elapsed_time / self.n_events * 1000, 3)
         rec_events_per_dep(self.n_events_rec, self.num_atoms_rec, self.init_value)
-
+        """
         self.mode_val, self.other_modes = record_data(
             self.pos_rec,
             self.time_rec,
@@ -383,6 +393,7 @@ cdef class common_functions:
         )
         diff = self.total_event_time - total_time_dir
         print("diff_time = " + str(diff))
+        """
 
     """
     def middle_check(self, val):

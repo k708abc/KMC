@@ -1,5 +1,7 @@
 # distutils: language = c++
 # cython: language_level=3, boundscheck=False, wraparound=False
+# cython: cdivision=True
+
 from InputParameter cimport Params
 from libcpp.vector cimport vector
 
@@ -7,7 +9,7 @@ cdef class common_functions:
     cdef Params init_value
     cdef double start_time, total_event_time, elapsed_time, prog_time, z_intra, z_inter, unit_height, prefactor, kbt
     cdef int unit_length, n_atoms, n_events, rec_num_atoms, n_events_perdep, event_number, setting_value, total_time
-    cdef int z_units,  z_max, num_one_layer, num_grids, index
+    cdef int z_units,  z_max, num_one_layer, num_grids, index, rec_interval
     cdef int move_atom, target
     cdef bint height_change_rem, height_change_add
     cdef vector[vector[int]] pos_rec
@@ -28,7 +30,7 @@ cdef class common_functions:
     cdef vector[double] energy_diffuse
     cdef vector[int] related_atoms
     cdef vector[int] related_atoms_move
-
+    #
     cpdef loop(self)
     cpdef start_setting(self)
     cdef update_progress(self)

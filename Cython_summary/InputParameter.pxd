@@ -1,5 +1,6 @@
 # distutils: language = c++
 # cython: language_level=3, boundscheck=False, wraparound=False
+# cython: cdivision=True
 
 cdef class Params:
     cdef double temperature_eV(self)

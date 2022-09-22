@@ -1,7 +1,6 @@
 # distutils: language = c++
 # cython: language_level=3, boundscheck=False, wraparound=False
 
-from InputParameter cimport Params
 from find_candidates cimport find_candidates
 from Calc_grid_index cimport grid_num
 from libcpp.vector cimport vector

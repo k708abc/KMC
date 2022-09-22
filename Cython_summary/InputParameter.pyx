@@ -1,8 +1,9 @@
-﻿# import decimal
-# distutils: language = c++
+﻿# distutils: language = c++
 # cython: language_level=3, boundscheck=False, wraparound=False
+# cython: cdivision=True
 
 import yaml
+from libc.math cimport round
 
 cdef class Params:
     def __init__(self, str filename):

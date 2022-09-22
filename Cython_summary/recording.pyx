@@ -368,7 +368,7 @@ def record_data(
     maxz_unit = params.cell_size_z * 6
     unit_length = params.cell_size_xy
     rec_name_body = params.record_name
-    n_BL = params.atoms_in_BL
+    n_BL = params.atoms_in_BL()
     img_names: List[str] = []
     hist_names: List[str] = []
     dir_name = "Record/" + params.record_name + "/"

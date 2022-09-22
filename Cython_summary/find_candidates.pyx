@@ -1,37 +1,55 @@
 # distutils: language = c++
 # cython: language_level=3, boundscheck=False, wraparound=False
-import collections
+
+
 from Calc_grid_index cimport grid_num
 from libcpp.vector cimport vector
 from vector_operation cimport remove_duplicate
 
 cdef vector[int] find_aboves(vector[int] indexes, vector[vector[int]] index_list, int unit_length):
-    cdef vector[int] above_list = []
+    cdef vector[int] above_list, t_list
     cdef int x, y, z, new_index, index
     for index in indexes:
-        x, y, z = index_list[index]
+        t_list = index_list[index]
+        x = t_list[0]
+        y = t_list[1]
+        z = t_list[2]
         new_index = grid_num(x, y, z + 1, unit_length)
         above_list.push_back(new_index)
     return above_list
 
 
 cdef vector[int] find_lower_sites(vector[int] indexes, vector[vector[int]] index_list, int unit_length):
-    cdef vector[int] below_list = []
+    cdef vector[int] below_list, t_list
     cdef int x, y, z, new_index, index
     for index in indexes:
-        x, y, z = index_list[index]
+        t_list = index_list[index]
+        x = t_list[0]
+        y = t_list[1]
+        z = t_list[2]
         new_index = grid_num(x, y, z - 1, unit_length)
         below_list.push_back(new_index)
     return below_list
 
+cdef vector[int] get_duplicate(vector[int] all_bonds):
+    cdef vector[int] dup
+    cdef int i, count, k
+    for i in all_bonds:
+        count = 0
+        for k in all_bonds:
+            if i == k:
+                count += 1
+        if count >= 2:
+            dup.push_back(i)
+    return remove_duplicate(dup)
+
 
 cdef vector[int] find_shares(vector[int] sites_list, vector[vector[int]] bonds):
-    cdef vector[int] all_bonds = [], sfared_sites
+    cdef vector[int] all_bonds, shared_sites
     cdef int index, count, site
     for index in sites_list:
         all_bonds.insert(all_bonds.end(), bonds[index].begin(), bonds[index].end())
-    counts = collections.Counter(all_bonds)
-    shared_sites = [site for site, count in counts.items() if count >= 2]
+    shared_sites = get_duplicate(all_bonds)
     return shared_sites
 
 
@@ -39,35 +57,28 @@ cdef vector[int] find_candidates(vector[vector[int]] bonds, vector[vector[int]] 
     cdef vector[int] nnn_sites, nn_sites, above_layer, lower_layer, nn_vert, shared, shared_nnn_nighbor, candidates
     cdef int index
     index = grid_num(atom_x, atom_y, atom_z, unit_length)
-    nnn_sites = [
-        grid_num((atom_x - 1) % unit_length, atom_y, atom_z, unit_length),
-        grid_num(atom_x, (atom_y - 1) % unit_length, atom_z, unit_length),
-        grid_num((atom_x + 1) % unit_length, atom_y, atom_z, unit_length),
-        grid_num(atom_x, (atom_y + 1) % unit_length, atom_z, unit_length),
-        grid_num((atom_x + 1) % unit_length, (atom_y - 1) % unit_length, atom_z, unit_length),
-        grid_num((atom_x - 1) % unit_length, (atom_y + 1) % unit_length, atom_z, unit_length),
-    ]
+    #
+    nnn_sites.push_back(grid_num((atom_x - 1) % unit_length, atom_y, atom_z, unit_length))
+    nnn_sites.push_back(grid_num(atom_x, (atom_y - 1) % unit_length, atom_z, unit_length))
+    nnn_sites.push_back(grid_num((atom_x + 1) % unit_length, atom_y, atom_z, unit_length))
+    nnn_sites.push_back(grid_num(atom_x, (atom_y + 1) % unit_length, atom_z, unit_length))
+    nnn_sites.push_back(grid_num((atom_x + 1) % unit_length, (atom_y - 1) % unit_length, atom_z, unit_length))
+    nnn_sites.push_back(grid_num((atom_x - 1) % unit_length, (atom_y + 1) % unit_length, atom_z, unit_length))
+    #
     nn_sites = bonds[index]
+
     if atom_z == 0:
         above_layer = find_aboves(nn_sites, index_list, unit_length)
         shared = find_shares(above_layer, bonds)
-        lower_layer = []
-        nn_vert = []
     elif atom_z == 1:
         above_layer = find_aboves(nnn_sites, index_list, unit_length)
-        lower_layer = []
-        shared = []
         nn_vert = bonds[grid_num(atom_x, atom_y, atom_z + 1, unit_length)]
     elif atom_z == z_max:
-        above_layer = []
         lower_layer = find_lower_sites(nn_sites, index_list, unit_length)
-        nn_vert = []
         shared = find_shares(lower_layer, bonds)
     elif atom_z == z_max - 1:
-        above_layer = []
         lower_layer = find_lower_sites(nnn_sites, index_list, unit_length)
         nn_vert = bonds[grid_num(atom_x, atom_y, atom_z - 1, unit_length)]
-        shared = []
     elif atom_z % 2 == 1:
         above_layer = find_aboves(nnn_sites, index_list, unit_length)
         lower_layer = find_lower_sites(nn_sites, index_list, unit_length)

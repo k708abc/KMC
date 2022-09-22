@@ -4,10 +4,14 @@ from distutils.extension import Extension
 import Cython.Compiler.Options
 
 Cython.Compiler.Options.annotate = True
+#
+#
+#
 ext_modules = [
     Extension("kmc_functions", ["kmc_functions.pyx"]),
 ]
 setup(ext_modules=cythonize(ext_modules, annotate=True))
+#
 #
 """
 ext_modules = [

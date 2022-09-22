@@ -1,7 +1,8 @@
 # distutils: language = c++
 # cython: language_level=3, boundscheck=False, wraparound=False
+# cython: cdivision=True
+
 from libcpp.vector cimport vector
-from libcpp.pair cimport pair
 
 cdef double total_energy(
     vector[int] atom_set, vector[vector[int]] bonds, int target, vector[double] energy_bonding, vector[double] energy_diffuse, vector[int] highest_atom, vector[vector[int]] index_list, int unit_length
@@ -11,7 +12,7 @@ cdef vector[int] find_filled_sites(vector[int] atom_set, vector[int] indexes)
 
 cdef vector[int] find_empty_sites(vector[int] atom_set, vector[int] indexes)
 
-cdef pair[vector[int], bint] check_cluster(int c_target, vector[int] atom_set, vector[vector[int]] bonds, vector[int] cluster_start, vector[vector[int]] index_list)
+cdef (vector[int], bint) check_cluster(int c_target, vector[int] atom_set, vector[vector[int]] bonds, vector[int] cluster_start, vector[vector[int]] index_list)
 
 cdef vector[int] judge_isolation(
     vector[int] atom_set,
@@ -22,7 +23,7 @@ cdef vector[int] judge_isolation(
     vector[vector[int]] index_list
 )
 
-cdef pair[vector[int], vector[double]] possible_events(
+cdef (vector[int], vector[double]) possible_events(
     vector[int] atom_set,
     vector[vector[int]] bonds,
     int target,
@@ -33,7 +34,7 @@ cdef pair[vector[int], vector[double]] possible_events(
     vector[vector[int]] index_list
 )
 
-cdef pair[vector[int], vector[int]] site_events(
+cdef (vector[int], vector[double]) site_events(
     vector[int] atom_set,
     vector[vector[int]] bonds,
     int target,

@@ -1,27 +1,11 @@
 # distutils: language = c++
 # cython: language_level=3, boundscheck=False, wraparound=False
+# cython: cdivision=True
 
+from libc.math cimport exp
 
-import math
-
-cdef double rate(double pre, kbt, energy):
-    """Return reaction the rate.
-
-    Parameters
-    ----------
-    pre : float
-        Prefactor
-    kbt : float
-        temperature in eV unit. (k_B T)
-    energy : float
-        Energy in eV unit
-
-    Returns
-    -------
-    float
-        reaction rate
-    """
-    return pre * math.exp((-1) * energy / kbt)
+cdef double rate(double pre, double kbt, double energy):
+    return pre * exp((-1)* energy / kbt)
 
 
 """
