@@ -5,7 +5,20 @@ import datetime
 
 
 def rec_ppt(
-    params,
+    unit_length,
+    cell_size_z,
+    temperature,
+    temperature_eV,
+    dep_rate,
+    dep_time,
+    prefactor,
+    first_put_check,
+    trans_check,
+    first_put_num,
+    trans_num,
+    energies_diffusion,
+    energies_bonding,
+    comments,
     minute,
     second,
     img_names,
@@ -58,13 +71,13 @@ def rec_ppt(
     table0.cell(0, 6).text = "prefactor"
     table0.cell(0, 7).text = "Cal. time (s)"
     table0.cell(0, 8).text = "Finishing time"
-    table0.cell(1, 0).text = str(params.cell_size_xy)
-    table0.cell(1, 1).text = str(params.cell_size_z)
-    table0.cell(1, 2).text = str(params.temperature)
-    table0.cell(1, 3).text = str("{:.3g}".format(params.temperature_eV))
-    table0.cell(1, 4).text = str(params.dep_rate)
-    table0.cell(1, 5).text = str(params.dep_time)
-    table0.cell(1, 6).text = str("{:.1E}".format(float(params.prefactor)))
+    table0.cell(1, 0).text = str(unit_length)
+    table0.cell(1, 1).text = str(cell_size_z)
+    table0.cell(1, 2).text = str(temperature)
+    table0.cell(1, 3).text = str("{:.3g}".format(temperature_eV))
+    table0.cell(1, 4).text = str(dep_rate)
+    table0.cell(1, 5).text = str(dep_time)
+    table0.cell(1, 6).text = str("{:.1E}".format(float(prefactor)))
     table0.cell(1, 7).text = str(minute) + " m " + str(second) + " s"
     dt_now = datetime.datetime.now()
     table0.cell(1, 8).text = str(dt_now.strftime("%Y/%m/%d/ %H:%M:%S"))
@@ -80,10 +93,10 @@ def rec_ppt(
     table.cell(0, 0).text = "Put at first"
     table.cell(0, 1).text = "Transformation"
     table.cell(0, 2).text = "time/event (ms)"
-    table.cell(1, 0).text = str(params.first_put_check)
-    table.cell(1, 1).text = str(params.trans_check)
-    table.cell(2, 0).text = str(params.first_put_num)
-    table.cell(2, 1).text = str(params.trans_num)
+    table.cell(1, 0).text = str(first_put_check)
+    table.cell(1, 1).text = str(trans_check)
+    table.cell(2, 0).text = str(first_put_num)
+    table.cell(2, 1).text = str(trans_num)
     table.cell(2, 2).text = str(time_per_dep)
     #
     left = Inches(0.1)
@@ -98,17 +111,17 @@ def rec_ppt(
     table.cell(0, 3).text = "Third"
     table.cell(0, 4).text = "Else"
     table.cell(1, 0).text = "Diffusion (eV)"
-    table.cell(1, 1).text = str(params.energies_diffusion["first"])
-    table.cell(1, 2).text = str(params.energies_diffusion["second"])
-    table.cell(1, 3).text = str(params.energies_diffusion["third"])
-    table.cell(1, 4).text = str(params.energies_diffusion["upper"])
+    table.cell(1, 1).text = str(energies_diffusion["first"])
+    table.cell(1, 2).text = str(energies_diffusion["second"])
+    table.cell(1, 3).text = str(energies_diffusion["third"])
+    table.cell(1, 4).text = str(energies_diffusion["upper"])
 
     #
     table.cell(2, 0).text = "Binding (eV)"
-    table.cell(2, 1).text = str(params.energies_binding["first"])
-    table.cell(2, 2).text = str(params.energies_binding["second"])
-    table.cell(2, 3).text = str(params.energies_binding["third"])
-    table.cell(2, 4).text = str(params.energies_binding["upper"])
+    table.cell(2, 1).text = str(energies_bonding["first"])
+    table.cell(2, 2).text = str(energies_bonding["second"])
+    table.cell(2, 3).text = str(energies_bonding["third"])
+    table.cell(2, 4).text = str(energies_bonding["upper"])
     ##
 
     width = height = Inches(1)
@@ -117,7 +130,7 @@ def rec_ppt(
     txBox = slide.shapes.add_textbox(left, top, width, height)
     tf = txBox.text_frame
     p = tf.add_paragraph()
-    p.text = "Comment: " + "\n" + params.comments
+    p.text = "Comment: " + "\n" + comments
     p.font.size = Pt(20)
 
     #

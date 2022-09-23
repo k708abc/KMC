@@ -313,7 +313,7 @@ def rec_events_per_dep(num_events: List[int], atoms: List[int], params):
 
 
 def rec_growth_mode(args):
-    growth_mode, coverage, params = args
+    growth_mode, coverage, record_name = args
     ag = []
     first = []
     multi = []
@@ -322,7 +322,7 @@ def rec_growth_mode(args):
         first.append(i[1])
         multi.append(i[2])
     #
-    dir_name = "Record/" + params.record_name + "/"
+    dir_name = "Record/" + record_name + "/"
     if os.path.exists(dir_name) is False:
         os.mkdir(dir_name)
     fig = plt.figure()
@@ -357,7 +357,24 @@ def record_data(
     time: List,
     coverage: List,
     lattice: List,
-    params,
+    maxz_unit: int,
+    unit_length: int,
+    rec_name_body: str,
+    n_BL: int,
+    middle_check: bool,
+    z_units: int,
+    temperature: float,
+    temperature_eV: float,
+    dep_rate: float,
+    dep_time: float,
+    prefactor: float,
+    first_put_check: bool,
+    trans_check: bool,
+    first_put_num: int,
+    trans_num: int,
+    energies_diffusion: Dict,
+    energies_bonding: Dict,
+    comments: str,
     minute: int,
     second: float,
     time_per_eve,
@@ -365,13 +382,13 @@ def record_data(
     index_list: List,
 ):
     maxz = highest_z(pos_all, index_list)
-    maxz_unit = params.cell_size_z * 6
-    unit_length = params.cell_size_xy
-    rec_name_body = params.record_name
-    n_BL = params.atoms_in_BL()
+    # maxz_unit = params.cell_size_z * 6
+    # unit_length = params.cell_size_xy
+    # rec_name_body = params.record_name
+    #n_BL = params.atoms_in_BL()
     img_names: List[str] = []
     hist_names: List[str] = []
-    dir_name = "Record/" + params.record_name + "/"
+    dir_name = "Record/" + rec_name_body + "/"
 
     dir_formarion(dir_name)
     growth_mode = []
@@ -391,7 +408,7 @@ def record_data(
         #
         img_name = dir_name + rec_name + ".png"
         #
-        if params.start_from_middle is False:
+        if middle_check is False:
             p_image = Pool(1)
             p_image.map(
                 image_formaiton, [[pos_i, lattice, unit_length, maxz, img_name]]
@@ -405,7 +422,7 @@ def record_data(
         img_names.append(img_name)
         #
         hist_name = dir_name + rec_name + "_hist.png"
-        if params.start_from_middle is False:
+        if middle_check is False:
             p_hist = Pool(1)
             p_hist.map(hist_formation, [[pos_i, maxz_unit, n_BL, hist_name, index_list]])
             p_hist.close()
@@ -419,16 +436,16 @@ def record_data(
         poscar_name = dir_name + rec_name + "_poscar.vasp"
         rec_poscar(pos_i, lattice, unit_length, maxz, poscar_name, index_list)
         #
-        growth_mode.append(growth_check(pos_i, unit_length, maxz, params.atoms_in_BL, index_list))
+        growth_mode.append(growth_check(pos_i, unit_length, maxz, n_BL, index_list))
         occupation.append(occupation_of_layers(maxz_unit, pos_i, n_BL, index_list))
     #
-    if params.start_from_middle is False:
+    if middle_check is False:
         p_mode = Pool(1)
-        p_mode.map(rec_growth_mode, [[growth_mode, coverage, params]])
+        p_mode.map(rec_growth_mode, [[growth_mode, coverage, rec_name_body]])
         p_mode.close()
         # p.join()
     else:
-        rec_growth_mode([growth_mode, coverage, params])
+        rec_growth_mode([growth_mode, coverage, rec_name_body])
         plt.clf()
         plt.close()
     mode_val = mode_check_prev(growth_mode, coverage)
@@ -450,7 +467,20 @@ def record_data(
     ]
     #
     rec_ppt(
-        params,
+        unit_length,
+        z_units,
+        temperature,
+        temperature_eV,
+        dep_rate,
+        dep_time,
+        prefactor,
+        first_put_check,
+        trans_check,
+        first_put_num,
+        trans_num,
+        energies_diffusion,
+        energies_bonding,
+        comments,
         minute,
         second,
         img_names,
@@ -465,5 +495,5 @@ def record_data(
     )
     delete_images(dir_name)
     #
-    rec_yaml(init_value, dir_name)
+    # rec_yaml(init_value, dir_name)
     return mode_val, other_mode_vals

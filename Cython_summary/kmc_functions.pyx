@@ -374,13 +374,30 @@ cdef class common_functions:
         self.second = int(self.elapsed_time % 60)
         self.time_per_event = round(self.elapsed_time / self.n_events * 1000, 3)
         rec_events_per_dep(self.n_events_rec, self.num_atoms_rec, self.init_value)
-        """
+
         self.mode_val, self.other_modes = record_data(
             self.pos_rec,
             self.time_rec,
             self.cov_rec,
             self.lattice,
-            self.init_value,
+            self.init_value.cell_size_z * 6,
+            self.unit_length,
+            self.init_value.record_name,
+            self.init_value.atoms_in_BL(),
+            self.init_value.start_from_middle,
+            self.z_units,
+            self.init_value.temperature,
+            self.kbt,
+            self.init_value.dep_rate,
+            self.init_value.dep_time,
+            self.prefactor,
+            self.init_value.first_put_check,
+            self.init_value.trans_check,
+            self.init_value.first_put_num,
+            self.init_value.trans_num,
+            self.init_value.energies_diffusion,
+            self.init_value.energies_binding,
+            self.init_value.comments,
             self.minute,
             self.second,
             self.time_per_event,
@@ -389,11 +406,10 @@ cdef class common_functions:
         )
 
         total_time_dir = (
-            sum(self.event_time_tot) + self.init_value.dep_rate_atoms_persec
+            sum(self.event_time_tot) + self.init_value.dep_rate_atoms_persec()
         )
         diff = self.total_event_time - total_time_dir
         print("diff_time = " + str(diff))
-        """
 
     """
     def middle_check(self, val):
