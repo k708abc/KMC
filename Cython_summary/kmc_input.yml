@@ -1,8 +1,8 @@
-cell_size_xy: 10
+cell_size_xy: 3
 cell_size_z: 5
 comments: 'Full c++ description check'
-dep_rate: 0.1
-dep_time: 20
+dep_rate: 0.5
+dep_time: 4
 distance_inter: 0.612
 distance_intra: 0.204
 energies_binding:

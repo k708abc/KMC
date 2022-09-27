@@ -1,6 +1,5 @@
 # distutils: language = c++
 # cython: language_level=3, boundscheck=False, wraparound=False
-# cython: cdivision=True
 
 import os
 from InputParameter cimport Params
@@ -193,9 +192,10 @@ cdef class common_functions:
         cdef double rate, tot
         self.related_atoms = remove_duplicate(self.related_atoms)
         for target_rel in self.related_atoms:
-            events.clear()
-            rates.clear()
-            if self.atom_set[target_rel] != 0:
+            if self.atom_set[target_rel] == 0:
+                events.clear()
+                rates.clear()
+            else:
                 events, rates = site_events(
                     self.atom_set,
                     self.bonds,
@@ -211,7 +211,6 @@ cdef class common_functions:
                 )
 
             self.total_event_time -= self.event_time_tot[target_rel]
-
             self.event[target_rel] = events
             self.event_time[target_rel] = rates
             tot = 0.0
@@ -254,8 +253,11 @@ cdef class common_functions:
         # self.n_events += 1
         self.prog_time += 1 / (self.init_value.dep_rate_atoms_persec())
         print(self.n_atoms)
-
-
+        if self.n_atoms >= self.rec_num_atoms:
+            self.rec_num_atoms += self.rec_interval
+            self.record_position()
+            if self.setting_value != -1:
+                self.parameter_record()
 
 
     cdef int deposition(self):
@@ -355,16 +357,12 @@ cdef class common_functions:
         else:
             self.rejection_free_event()
 
-        if self.n_atoms >= self.rec_num_atoms:
-            self.rec_num_atoms += self.rec_interval
-            self.record_position()
-            if self.setting_value != -1:
-                self.parameter_record()
 
     cpdef record_position(self):
         self.pos_rec.push_back(self.atom_set)
         self.time_rec.push_back(self.prog_time)
         self.cov_rec.push_back(self.n_atoms / self.init_value.atoms_in_BL())
+        
 
     cpdef end_of_loop(self):
         cdef double total_time_dir, diff

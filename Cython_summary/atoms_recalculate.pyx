@@ -1,6 +1,5 @@
 # distutils: language = c++
 # cython: language_level=3, boundscheck=False, wraparound=False
-# cython: cdivision=True
 
 from Calc_grid_index cimport grid_num
 from libcpp.vector cimport vector
