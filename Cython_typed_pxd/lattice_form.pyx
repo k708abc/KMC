@@ -1,12 +1,11 @@
 # cython: language_level=3, boundscheck=False, wraparound=False
 
 
-from Modules.InputParameter import Params
-from Modules.find_candidates import find_candidates
-from Modules.Calc_grid_index import grid_num
+from find_candidates cimport find_candidates
+from Calc_grid_index cimport grid_num
 
 
-cpdef list form_first_3BL(double z_intra, double z_inter, int unit_length):
+cdef list form_first_3BL(double z_intra, double z_inter, int unit_length):
     cdef int x, y, index
     cdef list lattice_first = [[]]*unit_length**2
     for x in range(0, unit_length):
@@ -23,7 +22,7 @@ cpdef list form_first_3BL(double z_intra, double z_inter, int unit_length):
     return lattice_first
 
 
-cpdef list lattice_full_layers(double unit_height, int unit_length, int z_max, list lattice_first, int num_grids):
+cdef list lattice_full_layers(double unit_height, int unit_length, int z_max, list lattice_first, int num_grids):
     cdef int x, y, z, index, index_xy
     cdef list lattice = [[]]*num_grids
     for x in range(0, unit_length):
@@ -40,7 +39,7 @@ cpdef list lattice_full_layers(double unit_height, int unit_length, int z_max, l
 
 
 
-cpdef list neighbor_points(
+cdef list neighbor_points(
     int x, int y, int z, int unit_length, int z_max
 ):
     cdef list neighbors
@@ -86,7 +85,7 @@ cpdef list neighbor_points(
     return neighbors
 
 
-cpdef list search_bond(int unit_length, int z_max, int num_grids):
+cdef list search_bond(int unit_length, int z_max, int num_grids):
     # Search for bonding atoms for all the atoms
     cdef int x, y, z, index
     cdef list bonds = [[]]*num_grids
@@ -98,7 +97,7 @@ cpdef list search_bond(int unit_length, int z_max, int num_grids):
     return bonds
 
 
-cpdef tuple lattice_form(input_params):
+cdef tuple lattice_form(input_params):
     cdef int unit_length, z_units, z_max, num_one_layer, num_grids, i, j, k, index
     cdef double z_inter, z_intra, unit_height
     cdef list lattice_first

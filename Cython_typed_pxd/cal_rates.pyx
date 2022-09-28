@@ -3,7 +3,7 @@
 
 import math
 
-cpdef double rate(double pre, kbt, energy):
+cdef double rate(double pre, kbt, energy):
     """Return reaction the rate.
 
     Parameters

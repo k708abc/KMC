@@ -1,10 +1,10 @@
 # cython: language_level=3, boundscheck=False, wraparound=False
 
 
-from Modules.Calc_grid_index import grid_num
+from Calc_grid_index cimport grid_num
 
 
-cpdef list recalculate(
+cdef list recalculate(
     int target,
     list atom_set,
     list bonds,

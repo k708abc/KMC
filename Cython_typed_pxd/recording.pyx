@@ -1,16 +1,14 @@
 # cython: language_level=3, boundscheck=False, wraparound=False
 
-from typing import List, Dict
 import matplotlib.pyplot as plt
 import matplotlib.patches as pat
 import math
-from Modules.record_ppt import rec_ppt
-from Modules.Calc_grid_index import grid_num
+from record_ppt cimport rec_ppt
+from Calc_grid_index cimport grid_num
 import os
 import glob
-from multiprocessing import Pool
 import yaml
-from Modules.growth_mode_determination import (
+from growth_mode_determination import (
     growth_check,
     mode_check_prev,
     mode_check_1,
@@ -20,12 +18,13 @@ from Modules.growth_mode_determination import (
     mode_check_5,
     mode_check_6,
 )
-
-unit_x: List[float] = [1, 0, 0]
-unit_y: List[float] = [0.5, 0.866, 0]
+from InputParameter cimport Params
 
 
-def highest_z(pos_all: List[List], index_list: List[tuple]) -> int:
+cdef int highest_z(list pos_all, list index_list):
+    cdef int maxz
+    cdef list positions
+    cdef int index, state, _, z
     maxz = 0
     for positions in pos_all:
         for index, state in enumerate(positions):
@@ -35,11 +34,14 @@ def highest_z(pos_all: List[List], index_list: List[tuple]) -> int:
     return maxz
 
 
-def dir_formarion(name: str):
+cdef dir_formarion(str name):
     os.makedirs(name, exist_ok=True)
 
 
-def triangle(xp, yp, z):
+cdef list[tuple] triangle(double xp, double yp, int z):
+    cdef double t1x, t1y, t2x, t2y, t3x, t3y
+    cdef list unit_x = [1.0, 0, 0]
+    cdef list unit_y = [0.5, 0.866, 0]
     if z % 2 == 0:
         t1x = xp * unit_x[0] + yp * unit_y[0] - (unit_x[0] + unit_y[0]) / 3
         t1y = xp * unit_x[1] + yp * unit_y[1] - (unit_x[1] + unit_y[1]) / 3
@@ -57,8 +59,9 @@ def triangle(xp, yp, z):
     return [(t1x, t1y), (t2x, t2y), (t3x, t3y)]
 
 
-def color_determinate(z, maxz):
-
+cdef list color_determinate(int z, int maxz):
+    cdef double color_num, maxz_BL
+    cdef list color
     color_num = math.floor(z / 2)
     maxz_BL = math.floor(maxz / 2) - 0.999
     if color_num == 0:
@@ -68,11 +71,14 @@ def color_determinate(z, maxz):
     return color
 
 
-def image_formaiton(args):
-    pos, lattice, length, maxz, img_name = args
+cdef image_formaiton(list pos, list lattice, int length, int maxz, str img_name):
 
-    unit_x: List[float] = [1, 0, 0]
-    unit_y: List[float] = [0.5, 0.866, 0]
+    cdef int x, y, z, max_z, index
+    cdef double xp, yp
+    cdef list tri_pos
+    cdef list color
+    cdef list unit_x = [1.0, 0, 0]
+    cdef list unit_y = [0.5, 0.866, 0]
     fig = plt.figure()
     ax = fig.add_subplot(111)
     #
@@ -167,7 +173,6 @@ def image_formaiton(args):
         ec=(0, 0, 0),
     )
     ax.add_patch(p)
-
     ax.set_xlim(0, (unit_x[0] + unit_y[0]) * length)
     ax.set_ylim(0, (unit_x[1] + unit_y[1]) * length)
     ax.axes.xaxis.set_visible(False)
@@ -176,8 +181,9 @@ def image_formaiton(args):
     fig.savefig(img_name)
 
 
-def occupation_of_layers(maxz, pos, n_BL, index_list):
-    hist: List[float] = [0 for _ in range(math.floor(maxz / 2))]
+cdef list occupation_of_layers(int maxz, pos, int n_BL, list index_list):
+    cdef int _, 
+    cdef list hist = [0 for _ in range(math.floor(maxz / 2))]
     for pos_index, atom_state in enumerate(pos):
         if atom_state == 1:
             _, _, z = index_list[pos_index]
@@ -185,9 +191,10 @@ def occupation_of_layers(maxz, pos, n_BL, index_list):
     return hist
 
 
-def hist_formation(args):
-    pos, maxz, n_BL, img_name, index_list = args
-    left: List[float] = [i + 1 for i in range(math.floor(maxz / 2))]
+cdef hist_formation(list pos, int maxz, int n_BL, str img_name, list index_list):
+    cdef list hist
+    cdef list left
+    left= [i + 1 for i in range(math.floor(maxz / 2))]
     #
     hist = occupation_of_layers(maxz, pos, n_BL, index_list)
     #
@@ -206,10 +213,18 @@ def hist_formation(args):
     fig.savefig(img_name)
 
 
-def rec_poscar(pos: List, lattice: List, unit_length: int, maxz: int, rec_name: str, index_list: List):
-    xp: list[float] = [[]]
-    yp: list[float] = [[]]
-    zp: list[float] = [[]]
+cdef rec_poscar(list pos, list lattice, int unit_length, int maxz, str rec_name, list index_list):
+    cdef list xp = [[]]
+    cdef list yp = [[]]
+    cdef list zp = [[]]
+    cdef int zmax
+    cdef list atom_list
+    cdef list x_Ag = []
+    cdef list y_Ag = []
+    cdef double Si_unit = 0.384
+    cdef double Ag_unit = 0.289
+    cdef double unit_size
+
     zmax = 1
     atom_list = [
         "B",
@@ -229,10 +244,6 @@ def rec_poscar(pos: List, lattice: List, unit_length: int, maxz: int, rec_name: 
         "Br",
     ]
     #
-    x_Ag: list[float] = []
-    y_Ag: list[float] = []
-    Si_unit = 0.384
-    Ag_unit = 0.289
     unit_size = unit_length * Si_unit
     Ag_num = round(unit_size / Ag_unit)
     x_Ag = [i / Ag_num for i in range(Ag_num) for _ in range(Ag_num)]
@@ -279,8 +290,7 @@ def rec_poscar(pos: List, lattice: List, unit_length: int, maxz: int, rec_name: 
     file_data.close()
 
 
-def rec_events_per_dep_fig(args):
-    atoms, num_events, fig_name = args
+cdef rec_events_per_dep_fig(list atoms, list num_events, str fig_name):
     fig = plt.figure()
     plt.plot(atoms, num_events)
     plt.xlabel("Num. Atoms")
@@ -290,18 +300,23 @@ def rec_events_per_dep_fig(args):
     plt.savefig(fig_name)
 
 
-def rec_events_per_dep(num_events: List[int], atoms: List[int], params):
-    dir_name = "Record/" + params.record_name + "/"
+cdef rec_events_per_dep(list num_events, list atoms, str rec_name):
+    cdef str dir_name, fig_name
+    cdef int i
+    dir_name = "Record/" + rec_name + "/"
     if os.path.exists(dir_name) is False:
         os.mkdir(dir_name)
     fig_name = dir_name + "Num_events_per_dep.png"
     #
+    """
     if params.start_from_middle is False:
         p_eve = Pool(1)
         p_eve.map(rec_events_per_dep_fig, [[atoms, num_events, fig_name]])
         p_eve.close()
     else:
         rec_events_per_dep_fig([atoms, num_events, fig_name])
+    """
+    rec_events_per_dep_fig(atoms, num_events, fig_name)
     #
     file_data = open(dir_name + "Num_events_per_dep.txt", "w")
     file_data.write("atoms" + "\t" + "events" + "\n")
@@ -311,8 +326,7 @@ def rec_events_per_dep(num_events: List[int], atoms: List[int], params):
     file_data.close()
 
 
-def rec_growth_mode(args):
-    growth_mode, coverage, params = args
+cdef rec_growth_mode(list growth_mode, list coverage, Params params):
     ag = []
     first = []
     multi = []
@@ -337,37 +351,43 @@ def rec_growth_mode(args):
     plt.savefig(dir_name + "Coverage_change.png")
 
 
-def delete_images(dir_name, recursive=True):
-    dir_name = dir_name + "*.png"
-    for p in glob.glob(dir_name, recursive=recursive):
+cdef delete_images(str dir_name):
+    cdef bint recursive=True
+    cdef dir_name2 = dir_name + "*.png"
+    for p in glob.glob(dir_name2, recursive=recursive):
         if os.path.isfile(p):
             os.remove(p)
 
 
-def rec_yaml(init_value, dir_name):
+cdef rec_yaml(Params init_value, str dir_name):
+    cdef str file_name
     file_name = dir_name + "kmc_input.yml"
     yml_write = {key: val for key, val in init_value.__dict__.items()}
     with open(file_name, "w") as file:
         yaml.dump(yml_write, file)
 
 
-def record_data(
-    pos_all: List[List],
-    time: List,
-    coverage: List,
-    lattice: List,
-    params,
-    minute: int,
-    second: float,
+cdef record_data(
+    list pos_all,
+    list time,
+    list coverage,
+    list lattice,
+    Params params,
+    int minute,
+    int second,
     time_per_eve,
-    init_value,
-    index_list: List,
+    Params init_value,
+    list index_list,
 ):
+    cdef list pos_i
+    cdef double time_i
+    cdef double cov_i
+    cdef int rec_num
     maxz = highest_z(pos_all, index_list)
     maxz_unit = params.cell_size_z * 6
     unit_length = params.cell_size_xy
     rec_name_body = params.record_name
-    n_BL = params.atoms_in_BL
+    n_BL = params.atoms_in_BL()
     img_names: List[str] = []
     hist_names: List[str] = []
     dir_name = "Record/" + params.record_name + "/"
@@ -390,6 +410,7 @@ def record_data(
         #
         img_name = dir_name + rec_name + ".png"
         #
+        """
         if params.start_from_middle is False:
             p_image = Pool(1)
             p_image.map(
@@ -401,9 +422,15 @@ def record_data(
             plt.clf()
             plt.close()
         # p.join()
+        """
+        image_formaiton(pos_i, lattice, unit_length, maxz, img_name)
+        plt.clf()
+        plt.close()
+
         img_names.append(img_name)
         #
         hist_name = dir_name + rec_name + "_hist.png"
+        """
         if params.start_from_middle is False:
             p_hist = Pool(1)
             p_hist.map(hist_formation, [[pos_i, maxz_unit, n_BL, hist_name, index_list]])
@@ -413,14 +440,20 @@ def record_data(
             hist_formation([pos_i, maxz_unit, n_BL, hist_name, index_list])
             plt.clf()
             plt.close()
+        """
+        hist_formation(pos_i, maxz_unit, n_BL, hist_name, index_list)
+        plt.clf()
+        plt.close()
+
         hist_names.append(hist_name)
         #
         poscar_name = dir_name + rec_name + "_poscar.vasp"
         rec_poscar(pos_i, lattice, unit_length, maxz, poscar_name, index_list)
         #
-        growth_mode.append(growth_check(pos_i, unit_length, maxz, params.atoms_in_BL, index_list))
+        growth_mode.append(growth_check(pos_i, unit_length, maxz, params.atoms_in_BL(), index_list))
         occupation.append(occupation_of_layers(maxz_unit, pos_i, n_BL, index_list))
     #
+    """
     if params.start_from_middle is False:
         p_mode = Pool(1)
         p_mode.map(rec_growth_mode, [[growth_mode, coverage, params]])
@@ -430,6 +463,10 @@ def record_data(
         rec_growth_mode([growth_mode, coverage, params])
         plt.clf()
         plt.close()
+    """
+    rec_growth_mode(growth_mode, coverage, params)
+    plt.clf()
+    plt.close()
     mode_val = mode_check_prev(growth_mode, coverage)
     #
     # 2022/1/7 Other judgement
@@ -464,5 +501,5 @@ def record_data(
     )
     delete_images(dir_name)
     #
-    rec_yaml(init_value, dir_name)
+    #rec_yaml(init_value, dir_name)
     return mode_val, other_mode_vals

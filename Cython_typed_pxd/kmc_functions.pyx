@@ -1,34 +1,27 @@
 # cython: language_level=3, boundscheck=False, wraparound=False
 
-from Modules.InputParameter import Params
+from InputParameter cimport Params
 import time
-from Modules.lattice_form import lattice_form
-from Modules.deposition import deposit_an_atom
-from Modules.atoms_recalculate import recalculate
-from Modules.rejection_free_choose import rejection_free_choise
-from Modules.event_collection import site_events
-from Modules.Calc_grid_index import grid_num
+from lattice_form cimport lattice_form
+from deposition cimport deposit_an_atom
+from atoms_recalculate cimport recalculate
+from rejection_free_choose cimport rejection_free_choise
+from event_collection cimport site_events
+from Calc_grid_index cimport grid_num
 import math
 import copy
-from Modules.recording import record_data
-from Modules.recording import rec_events_per_dep
+from recording cimport record_data
+from recording cimport rec_events_per_dep
 import os
 import pickle
 
 
+
 cdef class common_functions:
-    cdef double start_time, total_event_time, elapsed_time, prog_time
-    cdef int n_atoms, n_events, rec_num_atoms, n_events_perdep, event_number, setting_value, unit_length, total_time
-    cdef list pos_rec, time_rec, cov_rec, n_events_rec, num_atoms_rec, event_time_tot, energy_bonding, energy_diffuse, related_atoms
-    cdef list lattice, bonds, atom_set, event, event_time, site_list_correspondance, diffuse_candidates,highest_atom, index_list
-    cdef bint height_change_rem, height_change_add
-    cdef int move_atom, target
-
-
     def __init__(self):
         self.init_value = Params("kmc_input.yml")
         self.unit_length = self.init_value.cell_size_xy
-        self.total_time = int(self.init_value.total_time)
+        self.total_time = int(self.init_value.total_time())
 
     cpdef loop(self):
         while int(self.prog_time) <= self.total_time:
@@ -63,7 +56,7 @@ cdef class common_functions:
         self.eve_num_rec = []
         """
 
-    cpdef update_progress(self):
+    cdef update_progress(self):
         self.n_events += 1
         self.n_events_perdep += 1
         if self.n_events % 100000 == 0:
@@ -77,7 +70,7 @@ cdef class common_functions:
         """
 
     cpdef start_rejection_free(self):
-        self.total_event_time = self.init_value.dep_rate_atoms_persec
+        self.total_event_time = self.init_value.dep_rate_atoms_persec()
         # self.atom_exist: List[Tuple[int, int, int]] = []
         (
             self.lattice,
@@ -96,7 +89,7 @@ cdef class common_functions:
         if self.init_value.trans_check is False:
             self.init_value.trans_num = 100
 
-    cpdef energy_summarize(self):
+    cdef energy_summarize(self):
         cdef int _, i
         # interlayer bonding is the average of the intralayer bonding
         self.energy_bonding = [
@@ -144,7 +137,7 @@ cdef class common_functions:
         for i in range(len(self.energy_diffuse)):
             self.energy_diffuse[i] -= self.energy_bonding[i]
 
-    cpdef bint height_check_add(self, int pos):
+    cdef bint height_check_add(self, int pos):
         cdef int x, y, z, grid_index
         x, y, z = self.index_list[pos]
         if z >= self.init_value.trans_num:
@@ -157,7 +150,7 @@ cdef class common_functions:
         else:
             return False
 
-    cpdef bint height_check_remove(self, int pos):
+    cdef bint height_check_remove(self, int pos):
         cdef int x, y, z, grid_index
         x, y, z = self.index_list[pos]
         if z >= self.init_value.trans_num:
@@ -171,7 +164,7 @@ cdef class common_functions:
             return False
 
 
-    cpdef update_events(self):
+    cdef update_events(self):
         cdef int target_rel
         cdef list events, rates
         cdef int list_num 
@@ -205,21 +198,21 @@ cdef class common_functions:
             self.total_event_time += rate
         """
 
-    cpdef recalculate_total_rate(self):
+    cdef recalculate_total_rate(self):
         cdef double rate
-        self.total_event_time = self.init_value.dep_rate_atoms_persec
+        self.total_event_time = self.init_value.dep_rate_atoms_persec()
         for rate in self.event_time_tot:
             self.total_event_time += rate
 
-    cpdef double compare_rate(self):
+    cdef double compare_rate(self):
         cdef double total_event_time, rate
-        total_event_time = self.init_value.dep_rate_atoms_persec
+        total_event_time = self.init_value.dep_rate_atoms_persec()
         for rate in self.event_time_tot:
             total_event_time += rate
         return total_event_time
 
 
-    cpdef update_after_deposition(self, int dep_pos):
+    cdef update_after_deposition(self, int dep_pos):
         #
         self.n_events_rec.append(self.n_events_perdep)
         self.n_events_perdep = 0
@@ -229,10 +222,10 @@ cdef class common_functions:
         self.atom_set[dep_pos] = 1
         # self.atom_exist.append(dep_pos)
         # self.n_events += 1
-        self.prog_time += 1 / (self.init_value.dep_rate_atoms_persec)
+        self.prog_time += 1 / (self.init_value.dep_rate_atoms_persec())
         print(self.n_atoms)
 
-    cpdef int deposition(self):
+    cdef int deposition(self):
         cdef int dep_pos
         dep_pos = deposit_an_atom(
             self.atom_set,
@@ -243,7 +236,7 @@ cdef class common_functions:
         return dep_pos
 
 
-    cpdef rejection_free_deposition(self):
+    cdef rejection_free_deposition(self):
         cdef int dep_pos
         dep_pos = self.deposition()
         self.move_atom = dep_pos
@@ -269,7 +262,7 @@ cdef class common_functions:
             for _ in range(int(self.init_value.first_put_num)):
                 self.rejection_free_deposition()
 
-    cpdef rejection_free_event(self):
+    cdef rejection_free_event(self):
         self.move_atom = self.event[self.target][self.event_number]
         self.event_progress()
         self.related_atoms = recalculate(
@@ -294,7 +287,7 @@ cdef class common_functions:
         )
         self.update_events()
 
-    cpdef event_progress(self):
+    cdef event_progress(self):
         self.atom_set[self.target] = 0
         self.atom_set[self.move_atom] = 1
         # self.atom_exist.remove(self.target)
@@ -303,23 +296,23 @@ cdef class common_functions:
         self.height_change_rem = self.height_check_remove(self.target)
         self.height_change_add = self.height_check_add(self.move_atom)
 
-    cpdef pickle_dump(self, obj, path):
+    cdef pickle_dump(self, obj, path):
         with open(path, mode="wb") as f:
             pickle.dump(obj, f)
 
-    cpdef parameter_record(self):
+    cdef parameter_record(self):
         cdef unicode dir_name, file_name
         dir_name = "Record/" + self.init_value.record_name + "/"
         os.makedirs(dir_name, exist_ok=True)
         file_name = dir_name + "selfdata.pickle"
         self.pickle_dump(self, file_name)
 
-    cpdef rejection_free_loop(self):
+    cdef rejection_free_loop(self):
         self.target, self.event_number = rejection_free_choise(
             self.total_event_time,
             self.event_time,
             self.event_time_tot,
-            self.init_value.dep_rate_atoms_persec,
+            self.init_value.dep_rate_atoms_persec(),
         )
         if self.target == -1:
             self.rejection_free_deposition()
@@ -327,15 +320,15 @@ cdef class common_functions:
             self.rejection_free_event()
 
         if self.n_atoms >= self.rec_num_atoms:
-            self.rec_num_atoms += self.init_value.rec_num_atom_interval
+            self.rec_num_atoms += self.init_value.rec_num_atom_interval()
             self.record_position()
             if self.setting_value != -1:
                 self.parameter_record()
 
-    cpdef record_position(self):
+    cdef record_position(self):
         self.pos_rec.append(copy.copy(self.atom_set))
         self.time_rec.append(self.prog_time)
-        self.cov_rec.append(self.n_atoms / self.init_value.atoms_in_BL)
+        self.cov_rec.append(self.n_atoms / self.init_value.atoms_in_BL())
 
     cpdef end_of_loop(self):
         cdef double total_time_dir, diff
@@ -344,7 +337,7 @@ cdef class common_functions:
         self.minute = math.floor(self.elapsed_time / 60)
         self.second = int(self.elapsed_time % 60)
         self.time_per_event = round(self.elapsed_time / self.n_events * 1000, 3)
-        rec_events_per_dep(self.n_events_rec, self.num_atoms_rec, self.init_value)
+        rec_events_per_dep(self.n_events_rec, self.num_atoms_rec, self.init_value.record_name)
 
         self.mode_val, self.other_modes = record_data(
             self.pos_rec,
@@ -360,7 +353,7 @@ cdef class common_functions:
         )
 
         total_time_dir = (
-            sum(self.event_time_tot) + self.init_value.dep_rate_atoms_persec
+            sum(self.event_time_tot) + self.init_value.dep_rate_atoms_persec()
         )
         diff = self.total_event_time - total_time_dir
         print("diff_time = " + str(diff))

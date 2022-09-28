@@ -1,8 +1,8 @@
-cell_size_xy: 10
+cell_size_xy: 20
 cell_size_z: 5
-comments: 'calculation speed test: type specified'
+comments: 'calculation speed test: pxd prepared, compariosn'
 dep_rate: 0.1
-dep_time: 20.0
+dep_time: 20
 distance_inter: 0.612
 distance_intra: 0.204
 energies_binding:
@@ -11,10 +11,10 @@ energies_binding:
   third: 0.2
   upper: 0.2
 energies_diffusion:
-  first: 1.0
+  first: 1.06
   second: 1.0
-  third: 1.0
-  upper: 1.0
+  third: 1.12
+  upper: 1.12
 first_put_check: true
 first_put_num: 10
 img_per: 5.0
@@ -32,6 +32,6 @@ repeat_combos:
 - 'Diffuse E1: 2nd, E2: multi'
 repeat_val: 1
 start_from_middle: false
-temperature: 500.0
+temperature: 550.0
 trans_check: true
 trans_num: 4

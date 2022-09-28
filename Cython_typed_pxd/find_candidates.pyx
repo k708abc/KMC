@@ -1,9 +1,9 @@
 # cython: language_level=3, boundscheck=False, wraparound=False
 
 import collections
-from Modules.Calc_grid_index import grid_num
+from Calc_grid_index cimport grid_num
 
-cpdef list find_aboves(list indexes, list index_list, int unit_length):
+cdef list find_aboves(list indexes, list index_list, int unit_length):
     cdef list above_list
     cdef int x, y, z, new_index, index
     above_list = []
@@ -14,7 +14,7 @@ cpdef list find_aboves(list indexes, list index_list, int unit_length):
     return above_list
 
 
-cpdef list find_lower_sites(list indexes, list index_list, int unit_length):
+cdef list find_lower_sites(list indexes, list index_list, int unit_length):
     cdef list below_list = []
     cdef int x, y, z, new_index, index
     for index in indexes:
@@ -24,7 +24,7 @@ cpdef list find_lower_sites(list indexes, list index_list, int unit_length):
     return below_list
 
 
-cpdef list find_shares(list sites_list, list bonds):
+cdef list find_shares(list sites_list, list bonds):
     cdef list all_bonds = [], sfared_sites
     cdef int index, count, site
     for index in sites_list:
@@ -34,7 +34,7 @@ cpdef list find_shares(list sites_list, list bonds):
     return shared_sites
 
 
-cpdef list find_candidates(list bonds, list index_list, int atom_x, int atom_y, int atom_z, int unit_length, int z_max):
+cdef list find_candidates(list bonds, list index_list, int atom_x, int atom_y, int atom_z, int unit_length, int z_max):
     cdef list nnn_sites, nn_sites, above_layer, lower_layer, nn_vert, shared, shared_nnn_nighbor, candidates
     cdef int index
     index = grid_num(atom_x, atom_y, atom_z, unit_length)

@@ -13,7 +13,7 @@ cdef int choose_an_event(double r_tot, list event_rates):
             r_tot -= event_rate
 
 
-cpdef tuple rejection_free_choise(
+cdef tuple rejection_free_choise(
     double total_event_time,
     list event_time,
     list event_time_tot,

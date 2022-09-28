@@ -27,7 +27,7 @@ cdef int dep_position(list candidate):
     return candidate[math.floor(random.random() * len(candidate))]
 
 
-cpdef int deposit_an_atom(list atom_set, list bonds, list index_list):
+cdef int deposit_an_atom(list atom_set, list bonds, list index_list):
     cdef list caindidate 
     cdef int dep_pos
     candidate = find_candidates(atom_set, bonds, index_list)

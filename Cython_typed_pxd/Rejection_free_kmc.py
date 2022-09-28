@@ -1,4 +1,4 @@
-from Modules.kmc_functions import common_functions
+from kmc_functions import common_functions
 import datetime
 
 # import matplotlib.pyplot as plt

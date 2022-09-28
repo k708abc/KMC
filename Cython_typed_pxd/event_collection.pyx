@@ -1,9 +1,10 @@
 # cython: language_level=3, boundscheck=False, wraparound=False
 
-from Modules.cal_rates import rate
-from Modules.Calc_grid_index import grid_num
+from cal_rates cimport rate
+from Calc_grid_index cimport grid_num
+from InputParameter cimport Params
 
-cpdef double total_energy(
+cdef double total_energy(
     list atom_set, list bonds, int target, list energy_bonding, list energy_diffuse, list highest_atom, list index_list, int unit_length
 ):
     cdef double bond_energy = 0
@@ -59,7 +60,7 @@ cdef tuple check_cluster(int c_target, list atom_set, list bonds, list cluster_s
 
 
 # Remove events which cause isolated atoms
-cpdef list judge_isolation(
+cdef list judge_isolation(
     list atom_set,
     list bonds,
     int target,
@@ -111,11 +112,11 @@ cpdef list judge_isolation(
     return events
 
 
-cpdef tuple possible_events(
+cdef tuple possible_events(
     list atom_set,
     list bonds,
     int target,
-    params,
+    Params params,
     double energy,
     list diffuse_candidates,
     list index_list
@@ -124,7 +125,7 @@ cpdef tuple possible_events(
     cdef list eve_rate, nn_atom,event_f, rates_f
     cdef int cand, nonused
     pre = float(params.prefactor)
-    kbt = params.temperature_eV
+    kbt = params.temperature_eV()
     eve_rate = []
     rearange_rate = rate(pre, kbt, energy)
     nn_atom = find_filled_sites(atom_set, bonds[target])
@@ -136,11 +137,11 @@ cpdef tuple possible_events(
     return event_f, rates_f
 
 
-cpdef tuple site_events(
+cdef tuple site_events(
     list atom_set,
     list bonds,
     int target,
-    params,
+    Params params,
     list energy_bonding,
     list energy_diffuse,
     list diffuse_candidates,
