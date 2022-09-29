@@ -97,11 +97,11 @@ cdef class common_functions:
         self.lattice = lattice_form_lattice(self.unit_length, self.z_units, self.z_intra, self.z_inter, self.unit_height, self.z_max, self.num_one_layer, self.num_grids)
         self.bonds = lattice_form_bonds(self.unit_length, self.num_grids, self.z_max)
         self.atom_set = lattice_form_atom_set(self.num_grids)
-        self.event = lattice_form_event(self.num_grids)
-        self.event_time = lattice_form_event_time(self.num_grids)
-        self.event_time_tot = lattice_form_event_time_tot(self.num_grids)
         self.index_list = lattice_form_index_list(self.unit_length, self.num_grids, self.z_max)
         self.diffuse_candidates = lattice_form_diffuse_candidates(self.unit_length, self.num_grids, self.z_max, self.bonds, self.index_list)
+        self.event = lattice_form_event(self.num_grids, self.diffuse_candidates)
+        # self.event_time = lattice_form_event_time(self.num_grids)
+        self.event_time_tot = lattice_form_event_time_tot(self.num_grids)
         self.highest_atom = lattice_form_highest_atom(self.num_one_layer)
         self.energy_summarize()
         self.height_change_rem = False
@@ -188,38 +188,32 @@ cdef class common_functions:
         cdef int target_rel
         cdef vector[int] events
         cdef vector[double] rates
-        cdef int list_num 
+        cdef int list_num, i
         cdef double rate, tot
         self.related_atoms = remove_duplicate(self.related_atoms)
         for target_rel in self.related_atoms:
-            if self.atom_set[target_rel] == 0:
-                events.clear()
-                rates.clear()
-            else:
-                events, rates = site_events(
-                    self.atom_set,
-                    self.bonds,
-                    target_rel,
-                    self.unit_length,
-                    self.prefactor,
-                    self.kbt,
-                    self.energy_bonding,
-                    self.energy_diffuse,
-                    self.diffuse_candidates,
-                    self.highest_atom,
-                    self.index_list
-                )
-
+            events = site_events(
+                self.atom_set,
+                self.bonds,
+                target_rel,
+                self.unit_length,
+                self.prefactor,
+                self.kbt,
+                self.energy_bonding,
+                self.energy_diffuse,
+                self.diffuse_candidates,
+                self.highest_atom,
+                self.index_list
+            )
             self.total_event_time -= self.event_time_tot[target_rel]
-            self.event[target_rel] = events
-            self.event_time[target_rel] = rates
+            i = 0
             tot = 0.0
-            for rate in rates:
+            for rate in events:
+                self.event[target_rel][i] = rate
                 tot += rate
+                i += 1
             self.event_time_tot[target_rel] = tot
-
             self.total_event_time += tot
-
         self.related_atoms.clear()
         """
         self.total_event_time = self.init_value.dep_rate_atoms_persec
@@ -297,7 +291,7 @@ cdef class common_functions:
                 self.rejection_free_deposition()
 
     cdef rejection_free_event(self):
-        self.move_atom = self.event[self.target][self.event_number]
+        self.move_atom = self.diffuse_candidates[self.target][self.event_number]
         self.event_progress()
         self.related_atoms = recalculate(
             self.target,
@@ -348,7 +342,7 @@ cdef class common_functions:
     cdef rejection_free_loop(self):
         self.target, self.event_number = rejection_free_choise(
             self.total_event_time,
-            self.event_time,
+            self.event,
             self.event_time_tot,
             self.init_value.dep_rate_atoms_persec(),
         )

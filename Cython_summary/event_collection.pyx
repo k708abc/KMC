@@ -77,6 +77,7 @@ cdef (vector[int], bint) check_cluster(int c_target, vector[int] atom_set, vecto
 
 # Remove events which cause isolated atoms
 # eventsのうち、拡散後に結合がなくなるものを排除する
+"""
 cdef vector[int] judge_isolation(
     vector[int] atom_set,
     vector[vector[int]] bonds,
@@ -133,38 +134,110 @@ cdef vector[int] judge_isolation(
     events = remove_element(events, remove)
     atom_set[target] = 1
     return events
+"""
+
+cdef vector[vector[int]] clusters_form(vector[int] atom_set, vector[int] nn_atoms, vector[vector[int]] bonds, vector[vector[int]] index_list):
+    cdef vector[int] checked, cluster, empty
+    cdef vector[vector[int]] clusters
+    cdef int nn_atom
+    cdef bint z_judge
+    #拡散後にはtargetから原子は無くなる
+    atom_set[target] = 0
+    #nn_atomは、targetの結合サイトで占有されているもの。targetの消失で浮く可能性あり
+    for nn_atom in nn_atoms:
+        #クラスターに属するか未確認のサイトについて
+        if search(checked, nn_atom) is False:
+            cluster, z_judge = check_cluster(nn_atom, atom_set, bonds, empty, index_list)
+            #checkedはクラスターに属するか確認済みのサイト
+            checked.insert(checked.end(), cluster.begin(), cluster.end())
+            #浮いてるクラスターがclustersに
+            if z_judge is True:
+                clusters.push_back(cluster)
+        else:
+            pass
+    return clusters
+
+
+cdef bint judge_isolation2(
+    vector[int] atom_set,
+    vector[vector[int]] bonds,
+    int target,
+    int cand,
+    vector[vector[int]] index_list,
+    vector[vector[int]] clusters
+):
+    cdef vector[int]  remove, cluster, nn_nn_list, common, nonused
+    cdef int event, nn_nn, i, e_z
+    cdef bint z_judge
+    #拡散後にはtargetから原子は無くなる
+    atom_set[target] = 0
+    #
+    if clusters.size() == 0:
+        e_z = index_list[cand][2]
+        for nn_nn in bonds[cand]:
+            if atom_set[nn_nn] == 1:
+                nn_nn_list.push_back(nn_nn)
+        if (nn_nn_list.size() == 0) and (e_z != 0):
+            #孤立する
+            return False
+        else:
+            #孤立しない
+            return True
+    else:
+        atom_set[cand] = 1
+        for cluster in clusters:
+            common.clear()
+            for bond in bonds[cand]:
+                if search(cluster, bond):
+                    common.push_back(cand)
+            if common.size() == 0:
+                #孤立する
+                return False
+            else:
+                nonused, z_judge = check_cluster(cand, atom_set, bonds, cluster, index_list)
+                if z_judge:
+                    #孤立する
+                    return False
+        return True
+
 
 # targetで起こりうるベントを求める
-cdef (vector[int], vector[double]) possible_events(
+cdef vector[double] possible_events(
     vector[int] atom_set,
     vector[vector[int]] bonds,
     int target,
     double pre,
     double kbt,
-    double energy,
-    vector[vector[int]] diffuse_candidates,
+    double rearange_rate,
+    vector[int] diffuse_candidates,
     vector[vector[int]] index_list
 ):
-    cdef double rearange_rate
-    cdef vector[int] eve_rate, nn_atom, event_f, event_test
+    cdef vector[double] eve_rate = [0]*diffuse_candidates.size()
+    cdef vector[int] nn_atom, event_f, event_test
     cdef vector[double] rates_f
+    cdef vector[vector[int]] clusters
     cdef int cand, nonused
     cdef int i, k, j
-    rearange_rate = rate(pre, kbt, energy)
     nn_atom = find_filled_sites(atom_set, bonds[target])
     #
-    for cand in diffuse_candidates[target]:
-        if atom_set[cand] == 0:
-            #candidateのうち占有されていないサイトは拡散先の候補→eve_rate
-            eve_rate.push_back(cand)
-    #eve_rateのうち、拡散後に結合がなくなるものを排除する
-    event_f = judge_isolation(atom_set, bonds, target, nn_atom, eve_rate, index_list)
-    for nonused in event_f:
-        rates_f.push_back(rearange_rate)
-    return event_f, rates_f
+    if rearrange_rate == 0:
+        return eve_rate
+    else:
+        clusters = clusters_form(atom_set, nn_atoms, bonds, index_list)
+        i = 0
+        for cand in diffuse_candidates:
+            if atom_set[cand] == 1:
+                pass
+            else:
+                if judge_isolation2(atom_set, bonds, target, cand, index_list, clusters):
+                    eve_rate[i] = rearange_rate
+                else:
+                    pass
+            i += 1
+    return eve_rate
 
 
-cdef (vector[int], vector[double]) site_events(
+cdef vector[double] site_events(
     vector[int] atom_set,
     vector[vector[int]] bonds,
     int target,
@@ -177,22 +250,26 @@ cdef (vector[int], vector[double]) site_events(
     vector[int] highest_atom,
     vector[vector[int]] index_list
 ):
-    cdef vector[int] event_list
-    cdef vector[double] rate_list
-    cdef double energy
+    cdef vector[double] event_list
+    # cdef vector[double] rate_list
+    cdef double energy, rearange_rate = 0
     cdef int bond, atom, i
-    energy = total_energy(
-        atom_set,
-        bonds,
-        target,
-        energy_bonding,
-        energy_diffuse,
-        highest_atom,
-        index_list,
-        unit_length
-    )
+    if atom_set[target] == 1:
+        energy = total_energy(
+            atom_set,
+            bonds,
+            target,
+            energy_bonding,
+            energy_diffuse,
+            highest_atom,
+            index_list,
+            unit_length
+        )
+        rearange_rate = rate(pre, kbt, energy)
+    else:
+        rearange_rate = 0
     # calculate possible events
-    event_list, rate_list = possible_events(
-        atom_set, bonds, target, pre, kbt, energy, diffuse_candidates, index_list
+    event_list = possible_events(
+        atom_set, bonds, target, pre, kbt, rearange_rate, diffuse_candidates[target], index_list
     )
-    return event_list, rate_list
+    return event_list

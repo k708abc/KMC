@@ -124,16 +124,21 @@ cdef vector[int] lattice_form_atom_set(int num_grids):
     atom_set = [0]*num_grids
     return atom_set
 
-cdef vector[vector[int]] lattice_form_event(int num_grids):
-    cdef vector[vector[int]] event
+cdef vector[vector[double]] lattice_form_event(int num_grids, vector[vector[int]] diffuse_candidates):
+    cdef vector[vector[double]] event
+    cdef int i, k
     event = [[]]*num_grids
+    for i in range(num_grids):
+        for k in range(len(diffuse_candidates[i]))
+            event[i].push_back(0.0)
     return event
 
-
+"""
 cdef vector[vector[double]] lattice_form_event_time(int num_grids):
     cdef vector[vector[double]] event_time
     event_time = [[]]*num_grids
     return event_time
+"""
 
 cdef vector[double] lattice_form_event_time_tot(int num_grids):
     cdef vector[double] event_time_tot

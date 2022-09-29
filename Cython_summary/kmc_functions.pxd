@@ -21,7 +21,7 @@ cdef class common_functions:
     cdef vector[vector[int]] bonds
     cdef vector[int] atom_set
     cdef vector[vector[int]] event
-    cdef vector[vector[double]] event_time
+    # cdef vector[vector[double]] event_time
     cdef vector[double] event_time_tot
     cdef vector[vector[int]] index_list
     cdef vector[vector[int]] diffuse_candidates

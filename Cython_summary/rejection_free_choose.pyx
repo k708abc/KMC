@@ -10,7 +10,9 @@ cdef int choose_an_event(double r_tot, vector[double] event_rates):
     cdef double event_rate 
     i = 0
     for event_rate in event_rates:
-        if event_rate >= r_tot:
+        if event_rate == 0:
+            pass
+        elif event_rate >= r_tot:
             return i
         else:
             r_tot -= event_rate
