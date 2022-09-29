@@ -6,7 +6,7 @@ import Cython.Compiler.Options
 Cython.Compiler.Options.annotate = True
 
 ext_modules = [
-    Extension("recording", ["recording.pyx"]),
+    Extension("lattice_form", ["lattice_form.pyx"]),
 ]
 setup(ext_modules=cythonize(ext_modules, annotate=True))
 #
